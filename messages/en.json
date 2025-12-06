@@ -1,0 +1,301 @@
+{
+  "nav": {
+    "browseForms": "Browse Forms",
+    "pricing": "Pricing",
+    "login": "Login",
+    "signup": "Sign Up",
+    "dashboard": "Dashboard",
+    "logout": "Logout",
+    "myPurchases": "My Purchases"
+  },
+  "landing": {
+    "trustBadge": "Trusted by 10,000+ Applicants",
+    "heroTitle": "Immigration Forms",
+    "heroTitleHighlight": "Made Simple",
+    "heroSubtitle": "Prepare USCIS forms yourself with guided assistance. No lawyer needed. Save thousands.",
+    "getStarted": "Get Started Free",
+    "browseAllForms": "Browse All Forms",
+    "disclaimer": "⚠️ We are not a law firm. You prepare your own forms using our software.",
+    "situationTitle": "What's Your Situation?",
+    "situationSubtitle": "Select the option that best describes your situation to get started with the right forms.",
+    "howItWorksTitle": "How It Works",
+    "howItWorksSubtitle": "Three simple steps to prepare your immigration forms",
+    "step1Title": "Choose Your Forms",
+    "step1Description": "Select from 18 USCIS forms or convenient packages tailored to your specific immigration situation.",
+    "step2Title": "Answer Questions",
+    "step2Description": "Fill out our plain-English questionnaire with auto-save. Resume anytime from where you left off.",
+    "step3Title": "Download & File",
+    "step3Description": "Get your completed, USCIS-ready forms with instructions. Print, sign, and mail to USCIS.",
+    "featuresTitle": "Why Choose Us",
+    "feature1Title": "18 USCIS Forms",
+    "feature1Description": "Access all major USCIS forms with guided questionnaires and step-by-step assistance.",
+    "feature2Title": "Auto-Save Progress",
+    "feature2Description": "Your answers are automatically saved as you type. Resume anytime from where you left off.",
+    "feature3Title": "Package Deals",
+    "feature3Description": "Save time with bundled form packages designed for common immigration situations.",
+    "feature4Title": "Secure & Private",
+    "feature4Description": "Your information is encrypted and never shared with third parties.",
+    "ctaTitle": "Ready to Get Started?",
+    "ctaSubtitle": "Join thousands who have successfully prepared their immigration forms with ImmigrationPrep.",
+    "createAccount": "Create Free Account",
+    "ctaBenefits": "✓ No credit card required  ✓ Start for free  ✓ 24/7 access",
+    "footerDisclaimerTitle": "Disclaimer:",
+    "footerDisclaimerText": "ImmigrationPrep is a self-help software tool. We are NOT a law firm and do NOT provide legal advice. By using this service, you agree that you are preparing your own immigration forms. For legal advice specific to your situation, consult with a licensed immigration attorney.",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "copyright": "© 2025 ImmigrationPrep. All rights reserved."
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "createAccount": "Create Account",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "forgotPassword": "Forgot Password?",
+    "noAccount": "Don't have an account?",
+    "haveAccount": "Already have an account?",
+    "continue": "Continue",
+    "or": "or"
+  },
+  "dashboard": {
+    "welcome": "Welcome",
+    "myForms": "My Forms",
+    "recentApplications": "Recent Applications",
+    "allForms": "All Forms",
+    "startForm": "Start Form",
+    "continueForm": "Continue",
+    "preview": "Preview",
+    "viewDetails": "View Details"
+  },
+  "forms": {
+    "buyNow": "Buy for ${price}",
+    "buyPackage": "Buy Package",
+    "startApplication": "Start Application",
+    "continueApplication": "Continue Application",
+    "reviewForm": "Review Form",
+    "downloadPDF": "Download PDF",
+    "estimatedTime": "Estimated Time",
+    "filingFee": "Filing Fee",
+    "status": {
+      "active": "Active",
+      "beta": "Beta"
+    },
+    "category": {
+      "family": "Family",
+      "citizenship": "Citizenship",
+      "work_authorization": "Work Auth",
+      "employment": "Employment",
+      "travel": "Travel",
+      "humanitarian": "Humanitarian",
+      "status_change": "Status Change",
+      "other": "Other"
+    },
+    "fields": {
+      "firstName": "First Name",
+      "middleName": "Middle Name",
+      "lastName": "Last Name",
+      "dateOfBirth": "Date of Birth",
+      "alienNumber": "Alien Number",
+      "currentAddress": "Current Address",
+      "mailingAddress": "Mailing Address",
+      "city": "City",
+      "state": "State",
+      "zipCode": "ZIP Code",
+      "country": "Country",
+      "phoneNumber": "Phone Number",
+      "email": "Email Address"
+    },
+    "instructions": {
+      "answerInEnglish": "⚠️ All answers must be written in ENGLISH for USCIS forms",
+      "answerInEnglishShort": "Answer in English",
+      "requiredField": "This field is required"
+    }
+  },
+  "pricing": {
+    "title": "Simple Pricing - All Forms $70",
+    "subtitle": "Buy multiple forms and save automatically!",
+    "oneForm": "1 Form",
+    "twoForms": "2 Forms",
+    "threeForms": "3 Forms",
+    "fourPlusForms": "4+ Forms",
+    "save": "Save"
+  },
+  "browse": {
+    "title": "Browse All Immigration Forms",
+    "subtitle": "Explore our complete collection of 18 USCIS forms and convenient packages. Sign up to get started.",
+    "individualForms": "Individual Forms",
+    "individualFormsSubtitle": "Or start with a single form application",
+    "allForms": "All Forms",
+    "noFormsFound": "No forms found in this category",
+    "signUpToStart": "Sign Up to Start",
+    "tryPreview": "Try Preview",
+    "goToDashboard": "Go to Dashboard",
+    "go": "Go"
+  },
+  "common": {
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success"
+  },
+  "quiz": {
+    "questions": {
+      "current_status": "What is your current immigration status?",
+      "location": "Where are you currently located?",
+      "goal": "What are you trying to do?",
+      "relationship": "What is your relationship to the U.S. citizen or green card holder?",
+      "marriage_duration": "How long have you been married?",
+      "criminal_history": "Have you ever been arrested, cited, or detained by law enforcement?",
+      "immigration_violations": "Have you ever overstayed a visa or been out of status?",
+      "previous_applications": "Have you previously applied for any immigration benefits?"
+    },
+    "options": {
+      "us_citizen": "U.S. Citizen",
+      "green_card": "Green Card Holder (Permanent Resident)",
+      "visa_holder": "Visa Holder (F1, H1B, etc.)",
+      "no_status": "No current status / Undocumented",
+      "other": "Other",
+      "inside_us": "Inside the United States",
+      "outside_us": "Outside the United States",
+      "spouse_greencard": "Get a green card for my spouse",
+      "my_greencard": "Get a green card for myself",
+      "citizenship": "Become a U.S. citizen",
+      "work_permit": "Get a work permit",
+      "travel_document": "Get a travel document",
+      "spouse": "Spouse (married)",
+      "fiance": "Fiancé(e) (engaged, not yet married)",
+      "parent": "Parent",
+      "child": "Child",
+      "sibling": "Sibling",
+      "less_than_2_years": "Less than 2 years",
+      "more_than_2_years": "2 years or more",
+      "no": "No",
+      "yes": "Yes",
+      "not_sure": "I'm not sure",
+      "first_time": "No, this is my first time",
+      "applied_before": "Yes, I have applied before",
+      "something_else": "Something else"
+    }
+  },
+  "formSteps": {
+    "i130": {
+      "petitioner_basic": {
+        "title": "Your Basic Information",
+        "description": "Tell us about yourself (the U.S. citizen petitioner)"
+      },
+      "petitioner_address": {
+        "title": "Your Current Address",
+        "description": "Where do you currently live?"
+      },
+      "beneficiary_basic": {
+        "title": "Your Spouse's Information",
+        "description": "Tell us about your spouse (the beneficiary)"
+      },
+      "marriage_info": {
+        "title": "Marriage Information",
+        "description": "Tell us about your marriage"
+      }
+    }
+  },
+  "formFields": {
+    "petitioner": {
+      "lastName": {
+        "label": "Legal Last Name",
+        "help": "Enter your name exactly as it appears on your birth certificate or naturalization certificate"
+      },
+      "firstName": {
+        "label": "Legal First Name"
+      },
+      "middleName": {
+        "label": "Middle Name",
+        "help": "Leave blank if you don't have a middle name"
+      },
+      "dateOfBirth": {
+        "label": "Date of Birth"
+      },
+      "email": {
+        "label": "Email Address"
+      },
+      "address": {
+        "street": {
+          "label": "Street Address"
+        },
+        "apt": {
+          "label": "Apartment/Unit Number"
+        },
+        "city": {
+          "label": "City"
+        },
+        "state": {
+          "label": "State"
+        },
+        "zipCode": {
+          "label": "ZIP Code"
+        }
+      }
+    },
+    "beneficiary": {
+      "lastName": {
+        "label": "Legal Last Name"
+      },
+      "firstName": {
+        "label": "Legal First Name"
+      },
+      "middleName": {
+        "label": "Middle Name"
+      },
+      "dateOfBirth": {
+        "label": "Date of Birth"
+      },
+      "countryOfBirth": {
+        "label": "Country of Birth"
+      }
+    },
+    "marriage": {
+      "dateOfMarriage": {
+        "label": "Date of Marriage"
+      },
+      "placeOfMarriage": {
+        "label": "City and Country Where You Were Married"
+      },
+      "previousMarriages": {
+        "label": "Have you or your spouse been married before?",
+        "options": {
+          "no": "No, this is the first marriage for both of us",
+          "petitioner": "Yes, I (petitioner) was married before",
+          "beneficiary": "Yes, my spouse (beneficiary) was married before",
+          "both": "Yes, we were both married before"
+        }
+      }
+    }
+  },
+  "purchaseRequired": {
+    "title": "Purchase Required",
+    "authenticationRequired": "Authentication Required",
+    "signIn": "Sign In",
+    "createAccount": "Create Account",
+    "backToDashboard": "Back to Dashboard",
+    "buyNow": "Buy Now",
+    "processing": "Processing...",
+    "includes": "Includes",
+    "save": "Save",
+    "messages": {
+      "notAuthenticated": "Please sign in to access this form.",
+      "accessRevoked": "Your access to this form has been revoked. Please contact support.",
+      "expired": "Your access to this form has expired.",
+      "noPurchase": "You need to purchase a package that includes this form to access it.",
+      "tryingToAccess": "You're trying to access:",
+      "purchasePackage": "Purchase a package that includes this form:",
+      "needHelp": "Need help?",
+      "contactSupport": "If you believe this is an error, please contact our support team for assistance."
+    }
+  }
+}

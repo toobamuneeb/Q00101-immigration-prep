@@ -1,0 +1,301 @@
+{
+  "nav": {
+    "browseForms": "Ver Formularios",
+    "pricing": "Precios",
+    "login": "Iniciar Sesión",
+    "signup": "Crear Cuenta",
+    "dashboard": "Panel Principal",
+    "logout": "Cerrar Sesión",
+    "myPurchases": "Mis Compras"
+  },
+  "landing": {
+    "trustBadge": "Más de 10,000 solicitantes confían en nosotros",
+    "heroTitle": "Formularios de Inmigración",
+    "heroTitleHighlight": "Simplificados",
+    "heroSubtitle": "Prepare los formularios de USCIS usted mismo con asistencia guiada. No necesita abogado. Ahorre miles.",
+    "getStarted": "Comenzar Gratis",
+    "browseAllForms": "Ver Todos los Formularios",
+    "disclaimer": "⚠️ No somos un bufete de abogados. Usted prepara sus propios formularios usando nuestro software.",
+    "situationTitle": "¿Cuál es su Situación?",
+    "situationSubtitle": "Seleccione la opción que mejor describa su situación para comenzar con los formularios correctos.",
+    "howItWorksTitle": "Cómo Funciona",
+    "howItWorksSubtitle": "Tres pasos simples para preparar sus formularios de inmigración",
+    "step1Title": "Elija sus Formularios",
+    "step1Description": "Seleccione entre 18 formularios de USCIS o paquetes convenientes adaptados a su situación de inmigración específica.",
+    "step2Title": "Responda las Preguntas",
+    "step2Description": "Complete nuestro cuestionario en lenguaje claro con guardado automático. Continúe en cualquier momento desde donde lo dejó.",
+    "step3Title": "Descargue y Envíe",
+    "step3Description": "Obtenga sus formularios completos listos para USCIS con instrucciones. Imprima, firme y envíe a USCIS.",
+    "featuresTitle": "Por Qué Elegirnos",
+    "feature1Title": "18 Formularios de USCIS",
+    "feature1Description": "Acceda a todos los formularios principales de USCIS con cuestionarios guiados y asistencia paso a paso.",
+    "feature2Title": "Guardado Automático",
+    "feature2Description": "Sus respuestas se guardan automáticamente mientras escribe. Continúe en cualquier momento desde donde lo dejó.",
+    "feature3Title": "Paquetes de Formularios",
+    "feature3Description": "Ahorre tiempo con paquetes de formularios diseñados para situaciones comunes de inmigración.",
+    "feature4Title": "Seguro y Privado",
+    "feature4Description": "Su información está encriptada y nunca se comparte con terceros.",
+    "ctaTitle": "¿Listo para Comenzar?",
+    "ctaSubtitle": "Únase a miles que han preparado exitosamente sus formularios de inmigración con ImmigrationPrep.",
+    "createAccount": "Crear Cuenta Gratuita",
+    "ctaBenefits": "✓ No se requiere tarjeta de crédito  ✓ Comience gratis  ✓ Acceso 24/7",
+    "footerDisclaimerTitle": "Aviso Legal:",
+    "footerDisclaimerText": "ImmigrationPrep es una herramienta de software de autoayuda. NO somos un bufete de abogados y NO proporcionamos asesoramiento legal. Al usar este servicio, usted acepta que está preparando sus propios formularios de inmigración. Para asesoramiento legal específico para su situación, consulte con un abogado de inmigración licenciado.",
+    "privacyPolicy": "Política de Privacidad",
+    "termsOfService": "Términos de Servicio",
+    "copyright": "© 2025 ImmigrationPrep. Todos los derechos reservados."
+  },
+  "auth": {
+    "signIn": "Iniciar Sesión",
+    "signUp": "Crear Cuenta",
+    "createAccount": "Crear Cuenta",
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar Contraseña",
+    "forgotPassword": "¿Olvidó su Contraseña?",
+    "noAccount": "¿No tiene una cuenta?",
+    "haveAccount": "¿Ya tiene una cuenta?",
+    "continue": "Continuar",
+    "or": "o"
+  },
+  "dashboard": {
+    "welcome": "Bienvenido",
+    "myForms": "Mis Formularios",
+    "recentApplications": "Solicitudes Recientes",
+    "allForms": "Todos los Formularios",
+    "startForm": "Comenzar Formulario",
+    "continueForm": "Continuar",
+    "preview": "Vista Previa",
+    "viewDetails": "Ver Detalles"
+  },
+  "forms": {
+    "buyNow": "Comprar por ${price}",
+    "buyPackage": "Comprar Paquete",
+    "startApplication": "Comenzar Solicitud",
+    "continueApplication": "Continuar Solicitud",
+    "reviewForm": "Revisar Formulario",
+    "downloadPDF": "Descargar PDF",
+    "estimatedTime": "Tiempo Estimado",
+    "filingFee": "Tarifa de Presentación",
+    "status": {
+      "active": "Activo",
+      "beta": "Beta"
+    },
+    "category": {
+      "family": "Familia",
+      "citizenship": "Ciudadanía",
+      "work_authorization": "Autorización de Trabajo",
+      "employment": "Empleo",
+      "travel": "Viaje",
+      "humanitarian": "Humanitario",
+      "status_change": "Cambio de Estado",
+      "other": "Otro"
+    },
+    "fields": {
+      "firstName": "Nombre (First Name)",
+      "middleName": "Segundo Nombre (Middle Name)",
+      "lastName": "Apellido (Last Name)",
+      "dateOfBirth": "Fecha de Nacimiento (Date of Birth)",
+      "alienNumber": "Número de Extranjero (Alien Number)",
+      "currentAddress": "Dirección Actual (Current Address)",
+      "mailingAddress": "Dirección Postal (Mailing Address)",
+      "city": "Ciudad (City)",
+      "state": "Estado (State)",
+      "zipCode": "Código Postal (ZIP Code)",
+      "country": "País (Country)",
+      "phoneNumber": "Número de Teléfono (Phone Number)",
+      "email": "Correo Electrónico (Email Address)"
+    },
+    "instructions": {
+      "answerInEnglish": "⚠️ Todas las respuestas deben escribirse en INGLÉS para los formularios de USCIS",
+      "answerInEnglishShort": "Responda en inglés",
+      "requiredField": "Este campo es obligatorio"
+    }
+  },
+  "pricing": {
+    "title": "Precios Simples - Todos los Formularios $70",
+    "subtitle": "¡Compre múltiples formularios y ahorre automáticamente!",
+    "oneForm": "1 Formulario",
+    "twoForms": "2 Formularios",
+    "threeForms": "3 Formularios",
+    "fourPlusForms": "4+ Formularios",
+    "save": "Ahorre"
+  },
+  "browse": {
+    "title": "Ver Todos los Formularios de Inmigración",
+    "subtitle": "Explore nuestra colección completa de 18 formularios de USCIS. Regístrese para comenzar.",
+    "individualForms": "Formularios Individuales",
+    "individualFormsSubtitle": "O comience con una solicitud de formulario único",
+    "allForms": "Todos los Formularios",
+    "noFormsFound": "No se encontraron formularios en esta categoría",
+    "signUpToStart": "Regístrese para Comenzar",
+    "tryPreview": "Pruebe Vista Previa",
+    "goToDashboard": "Ir al Panel Principal",
+    "go": "Ir"
+  },
+  "common": {
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "submit": "Enviar",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "close": "Cerrar",
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito"
+  },
+  "quiz": {
+    "questions": {
+      "current_status": "¿Cuál es su estatus migratorio actual?",
+      "location": "¿Dónde se encuentra actualmente?",
+      "goal": "¿Qué está tratando de hacer?",
+      "relationship": "¿Cuál es su relación con el ciudadano estadounidense o residente permanente?",
+      "marriage_duration": "¿Cuánto tiempo ha estado casado?",
+      "criminal_history": "¿Alguna vez ha sido arrestado, citado o detenido por la policía?",
+      "immigration_violations": "¿Alguna vez se ha quedado más tiempo del permitido por su visa o ha estado fuera de estatus?",
+      "previous_applications": "¿Ha solicitado anteriormente algún beneficio de inmigración?"
+    },
+    "options": {
+      "us_citizen": "Ciudadano de EE.UU.",
+      "green_card": "Residente Permanente (Green Card)",
+      "visa_holder": "Titular de Visa (F1, H1B, etc.)",
+      "no_status": "Sin estatus actual / Indocumentado",
+      "other": "Otro",
+      "inside_us": "Dentro de los Estados Unidos",
+      "outside_us": "Fuera de los Estados Unidos",
+      "spouse_greencard": "Obtener una Green Card para mi cónyuge",
+      "my_greencard": "Obtener una Green Card para mí",
+      "citizenship": "Convertirme en ciudadano de EE.UU.",
+      "work_permit": "Obtener un permiso de trabajo",
+      "travel_document": "Obtener un documento de viaje",
+      "spouse": "Cónyuge (casado)",
+      "fiance": "Prometido/a (comprometido, aún no casado)",
+      "parent": "Padre/Madre",
+      "child": "Hijo/a",
+      "sibling": "Hermano/a",
+      "less_than_2_years": "Menos de 2 años",
+      "more_than_2_years": "2 años o más",
+      "no": "No",
+      "yes": "Sí",
+      "not_sure": "No estoy seguro",
+      "first_time": "No, esta es mi primera vez",
+      "applied_before": "Sí, he solicitado antes",
+      "something_else": "Algo más"
+    }
+  },
+  "formSteps": {
+    "i130": {
+      "petitioner_basic": {
+        "title": "Su Información Básica",
+        "description": "Cuéntenos sobre usted (el peticionario ciudadano de EE.UU.)"
+      },
+      "petitioner_address": {
+        "title": "Su Dirección Actual",
+        "description": "¿Dónde vive actualmente?"
+      },
+      "beneficiary_basic": {
+        "title": "Información de su Cónyuge",
+        "description": "Cuéntenos sobre su cónyuge (el beneficiario)"
+      },
+      "marriage_info": {
+        "title": "Información del Matrimonio",
+        "description": "Cuéntenos sobre su matrimonio"
+      }
+    }
+  },
+  "formFields": {
+    "petitioner": {
+      "lastName": {
+        "label": "Apellido Legal (Last Name)",
+        "help": "Ingrese su nombre exactamente como aparece en su certificado de nacimiento o naturalización"
+      },
+      "firstName": {
+        "label": "Primer Nombre Legal (First Name)"
+      },
+      "middleName": {
+        "label": "Segundo Nombre (Middle Name)",
+        "help": "Deje en blanco si no tiene segundo nombre"
+      },
+      "dateOfBirth": {
+        "label": "Fecha de Nacimiento (Date of Birth)"
+      },
+      "email": {
+        "label": "Correo Electrónico (Email Address)"
+      },
+      "address": {
+        "street": {
+          "label": "Dirección (Street Address)"
+        },
+        "apt": {
+          "label": "Apartamento/Unidad (Apt/Unit)"
+        },
+        "city": {
+          "label": "Ciudad (City)"
+        },
+        "state": {
+          "label": "Estado (State)"
+        },
+        "zipCode": {
+          "label": "Código Postal (ZIP Code)"
+        }
+      }
+    },
+    "beneficiary": {
+      "lastName": {
+        "label": "Apellido Legal (Last Name)"
+      },
+      "firstName": {
+        "label": "Primer Nombre Legal (First Name)"
+      },
+      "middleName": {
+        "label": "Segundo Nombre (Middle Name)"
+      },
+      "dateOfBirth": {
+        "label": "Fecha de Nacimiento (Date of Birth)"
+      },
+      "countryOfBirth": {
+        "label": "País de Nacimiento (Country of Birth)"
+      }
+    },
+    "marriage": {
+      "dateOfMarriage": {
+        "label": "Fecha de Matrimonio (Date of Marriage)"
+      },
+      "placeOfMarriage": {
+        "label": "Ciudad y País Donde Se Casaron"
+      },
+      "previousMarriages": {
+        "label": "¿Usted o su cónyuge han estado casados antes?",
+        "options": {
+          "no": "No, este es el primer matrimonio para ambos",
+          "petitioner": "Sí, yo (peticionario) estuve casado antes",
+          "beneficiary": "Sí, mi cónyuge (beneficiario) estuvo casado antes",
+          "both": "Sí, ambos estuvimos casados antes"
+        }
+      }
+    }
+  },
+  "purchaseRequired": {
+    "title": "Compra Requerida",
+    "authenticationRequired": "Autenticación Requerida",
+    "signIn": "Iniciar Sesión",
+    "createAccount": "Crear Cuenta",
+    "backToDashboard": "Volver al Panel",
+    "buyNow": "Comprar Ahora",
+    "processing": "Procesando...",
+    "includes": "Incluye",
+    "save": "Ahorre",
+    "messages": {
+      "notAuthenticated": "Por favor inicie sesión para acceder a este formulario.",
+      "accessRevoked": "Su acceso a este formulario ha sido revocado. Por favor contacte soporte.",
+      "expired": "Su acceso a este formulario ha expirado.",
+      "noPurchase": "Necesita comprar un paquete que incluya este formulario para acceder a él.",
+      "tryingToAccess": "Está intentando acceder a:",
+      "purchasePackage": "Compre un paquete que incluya este formulario:",
+      "needHelp": "¿Necesita ayuda?",
+      "contactSupport": "Si cree que esto es un error, por favor contacte a nuestro equipo de soporte."
+    }
+  }
+}
