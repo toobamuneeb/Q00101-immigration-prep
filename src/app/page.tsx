@@ -1,5 +1,5 @@
-import { Navigation } from '@/components/Navigation';
-import { LandingClient } from './LandingClient';
+import { Navigation } from "@/components/Navigation";
+import { LandingClient } from "./LandingClient";
 
 export default function HomePage() {
   return (

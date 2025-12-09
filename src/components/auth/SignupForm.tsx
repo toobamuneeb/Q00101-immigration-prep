@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Alert } from '@/components/ui/alert';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import Link from 'next/link';
 
 export function SignupForm() {
@@ -68,15 +68,17 @@ export function SignupForm() {
   if (success) {
     return (
       <Alert>
-        <p className="font-medium">Check your email!</p>
-        <p className="text-sm mt-2">
-          We've sent you a confirmation link. Please check your email to verify your account.
-        </p>
-        <Link href="/auth/login">
-          <Button variant="outline" className="mt-4">
-            Go to Login
-          </Button>
-        </Link>
+        <AlertTitle>Check your email!</AlertTitle>
+        <AlertDescription>
+          <p className="text-sm">
+            We've sent you a confirmation link. Please check your email to verify your account.
+          </p>
+          <Link href="/auth/login">
+            <Button variant="outline" className="mt-4">
+              Go to Login
+            </Button>
+          </Link>
+        </AlertDescription>
       </Alert>
     );
   }
@@ -85,7 +87,10 @@ export function SignupForm() {
     <form onSubmit={handleSignup} className="space-y-4">
       {error && (
         <Alert variant="destructive">
-          <p className="text-sm">{error}</p>
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>
+            <p className="text-sm">{error}</p>
+          </AlertDescription>
         </Alert>
       )}
 

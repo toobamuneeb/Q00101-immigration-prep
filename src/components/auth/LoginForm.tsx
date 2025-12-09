@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Alert } from '@/components/ui/alert';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import Link from 'next/link';
 
 export function LoginForm() {
@@ -77,7 +77,10 @@ export function LoginForm() {
     <form onSubmit={handleLogin} className="space-y-4">
       {error && (
         <Alert variant="destructive">
-          <p className="text-sm">{error}</p>
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>
+            <p className="text-sm">{error}</p>
+          </AlertDescription>
         </Alert>
       )}
 
@@ -111,12 +114,17 @@ export function LoginForm() {
         {loading ? 'Signing in...' : 'Sign In'}
       </Button>
 
-      <p className="text-center text-sm text-muted-foreground">
-        Don't have an account?{' '}
-        <Link href="/auth/signup" className="text-primary hover:underline">
-          Sign up
+      <div className="flex items-center justify-between text-sm">
+        <Link href="/auth/forgot-password" className="text-primary hover:underline">
+          Forgot password?
         </Link>
-      </p>
+        <p className="text-muted-foreground">
+          Don't have an account?{' '}
+          <Link href="/auth/signup" className="text-primary hover:underline">
+            Sign up
+          </Link>
+        </p>
+      </div>
     </form>
   );
 }
