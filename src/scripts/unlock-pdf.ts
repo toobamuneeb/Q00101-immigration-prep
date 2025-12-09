@@ -10,10 +10,10 @@
  *   npx tsx src/scripts/unlock-pdf.ts <input.pdf> <output.pdf>
  *   npx tsx src/scripts/unlock-pdf.ts public/pdf-templates/i-130.pdf public/pdf-templates/i-130-unlocked.pdf
  */
-
-import { execSync } from 'child_process';
-import { existsSync } from 'fs';
-import { resolve } from 'path';
+import "module-alias/register";
+import { execSync } from "child_process";
+import { existsSync } from "fs";
+import { resolve } from "path";
 
 async function unlockPDF(inputPath: string, outputPath: string): Promise<void> {
   // Resolve paths
@@ -28,7 +28,7 @@ async function unlockPDF(inputPath: string, outputPath: string): Promise<void> {
 
   // Check if qpdf is installed
   try {
-    execSync('which qpdf', { stdio: 'ignore' });
+    execSync("which qpdf", { stdio: "ignore" });
   } catch (error) {
     console.error(`❌ Error: qpdf is not installed`);
     console.log(`\nInstall qpdf:`);
@@ -46,7 +46,7 @@ async function unlockPDF(inputPath: string, outputPath: string): Promise<void> {
     // Run qpdf to decrypt the PDF
     const command = `qpdf --decrypt "${input}" "${output}"`;
 
-    execSync(command, { stdio: 'inherit' });
+    execSync(command, { stdio: "inherit" });
 
     console.log(`\n✅ PDF unlocked successfully!`);
     console.log(`   Saved to: ${output}\n`);

@@ -10,13 +10,13 @@
  *   npx tsx src/scripts/unlock-all-pdfs.ts
  *   npx tsx src/scripts/unlock-all-pdfs.ts --overwrite
  */
-
-import { execSync } from 'child_process';
-import { readdirSync, existsSync, renameSync } from 'fs';
-import { join, basename, extname } from 'path';
+import "module-alias/register";
+import { execSync } from "child_process";
+import { readdirSync, existsSync, renameSync } from "fs";
+import { join, basename, extname } from "path";
 
 async function unlockAllPDFs(overwrite: boolean = false): Promise<void> {
-  const pdfDir = join(process.cwd(), 'public', 'pdf-templates');
+  const pdfDir = join(process.cwd(), "public", "pdf-templates");
 
   // Check if directory exists
   if (!existsSync(pdfDir)) {
@@ -26,7 +26,7 @@ async function unlockAllPDFs(overwrite: boolean = false): Promise<void> {
 
   // Check if qpdf is installed
   try {
-    execSync('which qpdf', { stdio: 'ignore' });
+    execSync("which qpdf", { stdio: "ignore" });
   } catch (error) {
     console.error(`❌ Error: qpdf is not installed`);
     console.log(`\nInstall qpdf:`);
@@ -37,7 +37,7 @@ async function unlockAllPDFs(overwrite: boolean = false): Promise<void> {
   }
 
   // Get all PDF files
-  const files = readdirSync(pdfDir).filter((file) => file.endsWith('.pdf'));
+  const files = readdirSync(pdfDir).filter((file) => file.endsWith(".pdf"));
 
   if (files.length === 0) {
     console.log(`⚠️  No PDF files found in ${pdfDir}`);
@@ -53,13 +53,13 @@ async function unlockAllPDFs(overwrite: boolean = false): Promise<void> {
 
   for (const file of files) {
     // Skip already unlocked files
-    if (file.includes('-unlocked')) {
+    if (file.includes("-unlocked")) {
       skipCount++;
       continue;
     }
 
     // Skip field list JSON files
-    if (file.includes('_fields.json')) {
+    if (file.includes("_fields.json")) {
       skipCount++;
       continue;
     }
@@ -74,7 +74,7 @@ async function unlockAllPDFs(overwrite: boolean = false): Promise<void> {
 
       // Unlock the PDF
       const command = `qpdf --decrypt "${inputPath}" "${tempPath}"`;
-      execSync(command, { stdio: 'pipe' });
+      execSync(command, { stdio: "pipe" });
 
       if (overwrite) {
         // Overwrite original file
@@ -88,7 +88,11 @@ async function unlockAllPDFs(overwrite: boolean = false): Promise<void> {
 
       successCount++;
     } catch (error) {
-      console.error(`  ❌ Failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error(
+        `  ❌ Failed: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
       errorCount++;
 
       // Clean up temp file if it exists
@@ -102,12 +106,12 @@ async function unlockAllPDFs(overwrite: boolean = false): Promise<void> {
     }
   }
 
-  console.log(`\n${'='.repeat(60)}`);
+  console.log(`\n${"=".repeat(60)}`);
   console.log(`Summary:`);
   console.log(`  ✅ Successfully unlocked: ${successCount}`);
   console.log(`  ⏭️  Skipped: ${skipCount}`);
   console.log(`  ❌ Failed: ${errorCount}`);
-  console.log(`${'='.repeat(60)}\n`);
+  console.log(`${"=".repeat(60)}\n`);
 
   if (overwrite) {
     console.log(`Original PDFs have been replaced with unlocked versions.`);
@@ -124,7 +128,7 @@ async function unlockAllPDFs(overwrite: boolean = false): Promise<void> {
 // Main execution
 async function main() {
   const args = process.argv.slice(2);
-  const overwrite = args.includes('--overwrite');
+  const overwrite = args.includes("--overwrite");
 
   if (overwrite) {
     console.log(`\n⚠️  WARNING: This will OVERWRITE original PDF files!`);
