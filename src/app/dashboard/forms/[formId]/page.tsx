@@ -84,6 +84,7 @@ export default async function FormPage({ params }: PageProps) {
   return (
     <UniversalFormWizard
       formDefinition={formDefinition}
+      formId={formId}
       applicationId={application?.id || ""}
       initialAnswers={initialAnswers || {}}
     />

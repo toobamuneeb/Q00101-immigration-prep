@@ -27,17 +27,21 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslations } from "next-intl";
+import { fillPDFAndDownload } from "@/lib/pdf/download-pdf";
 
 interface UniversalFormWizardProps {
   formDefinition: FormDefinition;
   applicationId: string | null;
   initialAnswers?: Record<string, any>;
+  onComplete?: () => void;
+  formId: string;
 }
 
 export function UniversalFormWizard({
   formDefinition,
   applicationId,
   initialAnswers = {},
+  formId,
   onComplete,
 }: UniversalFormWizardProps) {
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
@@ -270,88 +274,100 @@ export function UniversalFormWizard({
       // Complete the form
       console.log("Form complete, final answers:", answers);
       setIsSubmitting(true);
+      onComplete?.();
     }
   };
 
   const handleDownloadPDF = async () => {
-    try {
-      setIsDownloading(true);
+    await fillPDFAndDownload(formId, answers);
 
-      // First, validate all sections
-      for (let i = 0; i < formDefinition.sections.length; i++) {
-        const section = formDefinition.sections[i];
-        const requiredFields = section.questions
-          .filter((q) => q.required)
-          .map((q) => q.id);
+    // setIsDownloading(true);
 
-        const missingFields = requiredFields.filter((fieldId) => {
-          const value = answers[fieldId];
-          return (
-            !value || value === "" || value === undefined || value === null
-          );
-        });
+    // First, validate all sections
+    //   for (let i = 0; i < formDefinition.sections.length; i++) {
+    //     const section = formDefinition.sections[i];
+    //     const requiredFields = section.questions
+    //       .filter((q) => q.required)
+    //       .map((q) => q.id);
 
-        if (missingFields.length > 0) {
-          setCurrentSectionIndex(i);
-          toast({
-            title: "Missing Required Fields",
-            description: `Please complete section "${section?.title}" before downloading.`,
-            variant: "destructive",
-          });
-          setIsDownloading(false);
-          return;
-        }
-      }
+    //     const missingFields = requiredFields.filter((fieldId) => {
+    //       const value = answers[fieldId];
+    //       return (
+    //         !value || value === "" || value === undefined || value === null
+    //       );
+    //     });
 
-      // Generate PDF
-      const response = await fetch("/api/forms/generate-pdf", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          formId: formDefinition.id,
-          answers: answers,
-          timestamp: new Date().toISOString(),
-        }),
-      });
+    //     if (missingFields.length > 0) {
+    //       setCurrentSectionIndex(i);
+    //       toast({
+    //         title: "Missing Required Fields",
+    //         description: `Please complete section "${section?.title}" before downloading.`,
+    //         variant: "destructive",
+    //       });
+    //       setIsDownloading(false);
+    //       return;
+    //     }
+    //   }
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to generate PDF");
-      }
+    //   // Generate PDF
+    //   const response = await fetch("/api/forms/generate-pdf", {
+    //     method: "POST",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify({
+    //       formId: formDefinition.id,
+    //       answers: answers,
+    //       timestamp: new Date().toISOString(),
+    //     }),
+    //   });
 
-      // Create and download the PDF
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `${formDefinition.code.toUpperCase()}-filled-${new Date()
-        .toISOString()
-        .slice(0, 10)}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+    //   if (!response.ok) {
+    //     let message = `Failed to generate PDF (${response.status})`;
+    //     try {
+    //       const ct = response.headers.get("content-type") || "";
+    //       if (ct.includes("application/json")) {
+    //         const errorData = await response.json();
+    //         message = (errorData && errorData.error) || message;
+    //       } else {
+    //         const text = await response.text();
+    //         if (text) message = text;
+    //       }
+    //     } catch (_) {}
+    //     throw new Error(message);
+    //   }
 
-      toast({
-        title: "Success",
-        description: "PDF downloaded successfully!",
-      });
+    //   // Create and download the PDF
+    //   const blob = await response.blob();
+    //   const url = URL.createObjectURL(blob);
+    //   const link = document.createElement("a");
+    //   link.href = url;
+    //   link.download = `${formDefinition.code.toUpperCase()}-filled-${new Date()
+    //     .toISOString()
+    //     .slice(0, 10)}.pdf`;
+    //   document.body.appendChild(link);
+    //   link.click();
+    //   document.body.removeChild(link);
+    //   URL.revokeObjectURL(url);
 
-      // Optionally save to database
-      if (applicationId) {
-        await saveAnswersToDatabase(answers);
-      }
-    } catch (error) {
-      console.error("PDF download error:", error);
-      toast({
-        title: "Error",
-        description:
-          error instanceof Error ? error?.message : "Failed to generate PDF",
-        variant: "destructive",
-      });
-    } finally {
-      setIsDownloading(false);
-    }
+    //   toast({
+    //     title: "Success",
+    //     description: "PDF downloaded successfully!",
+    //   });
+
+    //   // Optionally save to database
+    //   if (applicationId) {
+    //     await saveAnswersToDatabase(answers);
+    //   }
+    // } catch (error) {
+    //   console.error("PDF download error:", error);
+    //   toast({
+    //     title: "Error",
+    //     description:
+    //       error instanceof Error ? error?.message : "Failed to generate PDF",
+    //     variant: "destructive",
+    //   });
+    // } finally {
+    //   setIsDownloading(false);
+    // }
   };
 
   // Helper function to save answers
