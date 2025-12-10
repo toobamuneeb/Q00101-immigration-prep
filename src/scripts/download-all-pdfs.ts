@@ -8,10 +8,10 @@
  * Usage:
  *   npx tsx src/scripts/download-all-pdfs.ts
  */
-
-import { FORM_VERSIONS } from '@/lib/uscis/form-versions';
-import { writeFileSync, existsSync, mkdirSync } from 'fs';
-import { join } from 'path';
+import "module-alias/register";
+import { FORM_VERSIONS } from "@/lib/uscis/form-versions";
+import { writeFileSync, existsSync, mkdirSync } from "fs";
+import { join } from "path";
 
 async function downloadPDF(url: string, outputPath: string): Promise<boolean> {
   try {
@@ -28,15 +28,17 @@ async function downloadPDF(url: string, outputPath: string): Promise<boolean> {
     writeFileSync(outputPath, buffer);
     return true;
   } catch (error) {
-    console.error(`  ❌ Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    console.error(
+      `  ❌ Error: ${error instanceof Error ? error.message : "Unknown error"}`
+    );
     return false;
   }
 }
 
 async function downloadAllPDFs() {
-  console.log('\n📥 Downloading all USCIS PDFs...\n');
+  console.log("\n📥 Downloading all USCIS PDFs...\n");
 
-  const templatesDir = join(process.cwd(), 'public', 'pdf-templates');
+  const templatesDir = join(process.cwd(), "public", "pdf-templates");
 
   // Ensure directory exists
   if (!existsSync(templatesDir)) {
@@ -60,7 +62,9 @@ async function downloadAllPDFs() {
       continue;
     }
 
-    console.log(`📄 ${formId.toUpperCase()}: Downloading from ${formInfo.pdfUrl}`);
+    console.log(
+      `📄 ${formId.toUpperCase()}: Downloading from ${formInfo.pdfUrl}`
+    );
 
     const success = await downloadPDF(formInfo.pdfUrl, outputPath);
 
@@ -73,21 +77,25 @@ async function downloadAllPDFs() {
     }
 
     // Add a small delay to be nice to USCIS servers
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 500));
   }
 
-  console.log(`\n${'='.repeat(60)}`);
+  console.log(`\n${"=".repeat(60)}`);
   console.log(`Summary:`);
   console.log(`  ✅ Downloaded: ${successCount}`);
   console.log(`  ⏭️  Skipped (already exist): ${skipCount}`);
   console.log(`  ❌ Failed: ${failCount}`);
-  console.log(`${'='.repeat(60)}\n`);
+  console.log(`${"=".repeat(60)}\n`);
 
   if (successCount > 0) {
     console.log(`Next steps:`);
     console.log(`  1. Unlock PDFs: npx tsx src/scripts/unlock-all-pdfs.ts`);
-    console.log(`  2. Extract fields: npx tsx src/scripts/list-pdf-fields.ts <pdf> --json`);
-    console.log(`  3. Auto-map fields: npx tsx src/scripts/auto-map-fields.ts <formId> <fields.json>\n`);
+    console.log(
+      `  2. Extract fields: npx tsx src/scripts/list-pdf-fields.ts <pdf> --json`
+    );
+    console.log(
+      `  3. Auto-map fields: npx tsx src/scripts/auto-map-fields.ts <formId> <fields.json>\n`
+    );
   }
 }
 

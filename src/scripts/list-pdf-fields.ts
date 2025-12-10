@@ -11,10 +11,10 @@
  *   npx tsx src/scripts/list-pdf-fields.ts public/pdf-templates/i-130.pdf
  *   npx tsx src/scripts/list-pdf-fields.ts public/pdf-templates/i-130.pdf --json
  */
-
-import { PDFDocument } from 'pdf-lib';
-import { readFileSync, writeFileSync } from 'fs';
-import { resolve } from 'path';
+import "module-alias/register";
+import { PDFDocument } from "pdf-lib";
+import { readFileSync, writeFileSync } from "fs";
+import { resolve } from "path";
 
 interface FieldInfo {
   name: string;
@@ -23,7 +23,10 @@ interface FieldInfo {
   options?: string[];
 }
 
-async function listPdfFields(pdfPath: string, outputJson = false): Promise<void> {
+async function listPdfFields(
+  pdfPath: string,
+  outputJson = false
+): Promise<void> {
   try {
     // Read the PDF file
     const pdfBytes = readFileSync(pdfPath);
@@ -55,31 +58,33 @@ async function listPdfFields(pdfPath: string, outputJson = false): Promise<void>
       // Get field-specific information
       try {
         // Text fields
-        if (fieldType === 'PDFTextField') {
+        if (fieldType === "PDFTextField") {
           const textField = form.getTextField(fieldName);
-          fieldInfo.value = textField.getText() || '';
+          fieldInfo.value = textField.getText() || "";
         }
 
         // Checkboxes
-        if (fieldType === 'PDFCheckBox') {
+        if (fieldType === "PDFCheckBox") {
           const checkbox = form.getCheckBox(fieldName);
-          fieldInfo.value = checkbox.isChecked() ? 'checked' : 'unchecked';
+          fieldInfo.value = checkbox.isChecked() ? "checked" : "unchecked";
         }
 
         // Radio groups
-        if (fieldType === 'PDFRadioGroup') {
+        if (fieldType === "PDFRadioGroup") {
           const radioGroup = form.getRadioGroup(fieldName);
           const options = radioGroup.getOptions();
           fieldInfo.options = options;
-          fieldInfo.value = radioGroup.getSelected() || '';
+          fieldInfo.value = radioGroup.getSelected() || "";
         }
 
         // Dropdowns
-        if (fieldType === 'PDFDropdown') {
+        if (fieldType === "PDFDropdown") {
           const dropdown = form.getDropdown(fieldName);
           const options = dropdown.getOptions();
           fieldInfo.options = options;
-          fieldInfo.value = dropdown.getSelected() ? dropdown.getSelected()[0] : '';
+          fieldInfo.value = dropdown.getSelected()
+            ? dropdown.getSelected()[0]
+            : "";
         }
       } catch (error) {
         // Some fields might not support certain operations
@@ -96,14 +101,14 @@ async function listPdfFields(pdfPath: string, outputJson = false): Promise<void>
         fields: fieldInfos,
       };
 
-      const outputPath = pdfPath.replace('.pdf', '_fields.json');
+      const outputPath = pdfPath.replace(".pdf", "_fields.json");
       writeFileSync(outputPath, JSON.stringify(jsonOutput, null, 2));
       console.log(`✅ Field list saved to: ${outputPath}\n`);
       return;
     }
 
     // Output to console in readable format
-    console.log('Fields by Type:\n');
+    console.log("Fields by Type:\n");
 
     // Group by type
     const fieldsByType: Record<string, FieldInfo[]> = {};
@@ -117,7 +122,7 @@ async function listPdfFields(pdfPath: string, outputJson = false): Promise<void>
     // Display grouped fields
     for (const [type, typeFields] of Object.entries(fieldsByType)) {
       console.log(`\n${type} (${typeFields.length}):`);
-      console.log('─'.repeat(80));
+      console.log("─".repeat(80));
 
       for (const field of typeFields) {
         console.log(`  ${field.name}`);
@@ -127,28 +132,30 @@ async function listPdfFields(pdfPath: string, outputJson = false): Promise<void>
         }
 
         if (field.options && field.options.length > 0) {
-          console.log(`    Options: ${field.options.join(', ')}`);
+          console.log(`    Options: ${field.options.join(", ")}`);
         }
       }
     }
 
     // Generate mapping template
-    console.log('\n\n📝 TypeScript Mapping Template:\n');
-    console.log('pdfFieldMappings: [');
+    console.log("\n\n📝 TypeScript Mapping Template:\n");
+    console.log("pdfFieldMappings: [");
 
-    const textFields = fieldInfos.filter((f) => f.type === 'PDFTextField');
+    const textFields = fieldInfos.filter((f) => f.type === "PDFTextField");
     for (let i = 0; i < Math.min(10, textFields.length); i++) {
       const field = textFields[i];
-      console.log(`  { questionId: 'your_question_id', pdfField: '${field.name}' },`);
+      console.log(
+        `  { questionId: 'your_question_id', pdfField: '${field.name}' },`
+      );
     }
 
     if (textFields.length > 10) {
       console.log(`  // ... ${textFields.length - 10} more text fields`);
     }
 
-    console.log('],\n');
+    console.log("],\n");
   } catch (error) {
-    console.error('❌ Error reading PDF:', error);
+    console.error("❌ Error reading PDF:", error);
     process.exit(1);
   }
 }
@@ -171,6 +178,6 @@ Options:
 }
 
 const pdfPath = resolve(args[0]);
-const outputJson = args.includes('--json');
+const outputJson = args.includes("--json");
 
 listPdfFields(pdfPath, outputJson);
