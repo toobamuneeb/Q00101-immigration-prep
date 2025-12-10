@@ -6,6 +6,7 @@ import { readFile, writeFile } from "fs/promises";
 import { join } from "path";
 import { FORM_REGISTRY } from "@/lib/constants/forms-registry";
 import PDFKit from "pdfkit";
+export const runtime = "nodejs";
 
 export async function POST(request: NextRequest) {
   try {
