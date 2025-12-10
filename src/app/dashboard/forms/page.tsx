@@ -1,7 +1,7 @@
 // @ts-nocheck - Supabase generated types causing build issues
-import { redirect } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
-import { FormsListingClient } from './FormsListingClient';
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
+import { FormsListingClient } from "./FormsListingClient";
 
 export default async function FormsListingPage() {
   const supabase = await createClient();
@@ -13,23 +13,23 @@ export default async function FormsListingPage() {
   } = await supabase.auth.getUser();
 
   if (authError || !user) {
-    redirect('/login');
+    redirect("/login");
   }
 
   // Fetch all user's applications
   const { data: applications } = await supabase
-    .from('form_applications')
-    .select('*')
-    .eq('user_id', user.id)
-    .order('updated_at', { ascending: false });
+    .from("form_applications")
+    .select("*")
+    .eq("user_id", user.id)
+    .order("updated_at", { ascending: false });
 
   // Fetch answer counts for progress calculation
   const applicationsWithProgress = await Promise.all(
     (applications || []).map(async (app) => {
       const { count } = await supabase
-        .from('form_answers')
-        .select('*', { count: 'exact', head: true })
-        .eq('application_id', app.id);
+        .from("form_answers")
+        .select("*", { count: "exact", head: true })
+        .eq("application_id", app.id);
 
       return {
         ...app,

@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 import { CHAT_SYSTEM_PROMPT } from '@/lib/constants/prompts';
 import { Database } from '@/types/database';
 import { SupabaseClient } from '@supabase/supabase-js';
+export const runtime = 'nodejs';
 
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
@@ -23,34 +24,57 @@ export async function POST(request: NextRequest) {
         // Rate limiting check (simple implementation)
         // In production, use Redis or similar
 
-        const supabase: SupabaseClient<Database> = await createClient();
+        let supabase: SupabaseClient<Database> | null = null;
+        try {
+            supabase = await createClient();
+        } catch (_) {
+            supabase = null;
+        }
 
         // Get or create conversation
         let convId = conversationId;
         if (!convId) {
-            const { data: { user } } = await supabase.auth.getUser();
+            let userId: string | null = null;
+            try {
+                if (supabase) {
+                    const { data: { user } } = await supabase.auth.getUser();
+                    userId = user?.id || null;
+                }
+            } catch (_) {}
 
-            const { data: conv, error } = await supabase
-                .from('chat_conversations')
-                .insert({
-                    user_id: user?.id || null,
-                    session_id: user ? null : crypto.randomUUID(),
-                    context_type: 'general',
-                } as any)
-                .select()
-                .single() as any;
-
-            if (error) throw error;
-            convId = conv.id;
+            if (supabase) {
+                try {
+                    const { data: conv } = await supabase
+                        .from('chat_conversations')
+                        .insert({
+                            user_id: userId,
+                            session_id: userId ? null : crypto.randomUUID(),
+                            context_type: 'general',
+                        } as any)
+                        .select()
+                        .single() as any;
+                    convId = conv?.id || crypto.randomUUID();
+                } catch (_) {
+                    convId = crypto.randomUUID();
+                }
+            } else {
+                convId = crypto.randomUUID();
+            }
         }
 
         // Get conversation history (last 10 messages for context)
-        const { data: history } = await supabase
-            .from('chat_messages')
-            .select('role, content')
-            .eq('conversation_id', convId)
-            .order('created_at', { ascending: true })
-            .limit(10) as any;
+        let history: any[] | null = null;
+        try {
+            if (supabase) {
+                const { data } = await supabase
+                    .from('chat_messages')
+                    .select('role, content')
+                    .eq('conversation_id', convId)
+                    .order('created_at', { ascending: true })
+                    .limit(10) as any;
+                history = data || null;
+            }
+        } catch (_) {}
 
         // Build messages array
         const messages: OpenAI.Chat.ChatCompletionMessageParam[] = [
@@ -63,31 +87,43 @@ export async function POST(request: NextRequest) {
         ];
 
         // Call OpenAI
-        const completion = await openai.chat.completions.create({
-            model: 'gpt-4-turbo-preview',
-            messages,
-            temperature: 0.7,
-            max_tokens: 800,
-        });
-
-        const reply = completion.choices[0].message.content || 'I apologize, I was unable to generate a response.';
+        let reply = '';
+        let completionUsagePrompt: number | undefined;
+        let completionUsageCompletion: number | undefined;
+        try {
+            const completion = await openai.chat.completions.create({
+                model: 'gpt-4-turbo-preview',
+                messages,
+                temperature: 0.7,
+                max_tokens: 800,
+            });
+            reply = completion.choices[0].message.content || 'I apologize, I was unable to generate a response.';
+            completionUsagePrompt = completion.usage?.prompt_tokens;
+            completionUsageCompletion = completion.usage?.completion_tokens;
+        } catch (_) {
+            reply = 'Sorry, the assistant is unavailable right now. Please try again later.';
+        }
 
         // Save messages to database
-        await supabase.from('chat_messages').insert([
-            {
-                conversation_id: convId,
-                role: 'user',
-                content: message,
-                tokens_used: completion.usage?.prompt_tokens,
-            },
-            {
-                conversation_id: convId,
-                role: 'assistant',
-                content: reply,
-                tokens_used: completion.usage?.completion_tokens,
-                model_used: 'gpt-4-turbo-preview',
-            },
-        ] as any);
+        try {
+            if (supabase) {
+                await supabase.from('chat_messages').insert([
+                    {
+                        conversation_id: convId,
+                        role: 'user',
+                        content: message,
+                        tokens_used: completionUsagePrompt,
+                    },
+                    {
+                        conversation_id: convId,
+                        role: 'assistant',
+                        content: reply,
+                        tokens_used: completionUsageCompletion,
+                        model_used: 'gpt-4-turbo-preview',
+                    },
+                ] as any);
+            }
+        } catch (_) {}
 
         return NextResponse.json({
             reply,
