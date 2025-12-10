@@ -1,16 +1,28 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useRef } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
-import { IndividualFormCard } from '@/components/dashboard/IndividualFormCard';
-import { FORM_REGISTRY } from '@/lib/constants/forms-registry';
-import { FileText, ArrowRight, Clock, CheckCircle2, AlertCircle } from 'lucide-react';
-import Link from 'next/link';
-import { User } from '@supabase/supabase-js';
-import { AuthButton } from '@/components/auth/AuthButton';
+import { useState, useEffect, useRef } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { IndividualFormCard } from "@/components/dashboard/IndividualFormCard";
+import { FORM_REGISTRY } from "@/lib/constants/forms-registry";
+import {
+  FileText,
+  ArrowRight,
+  Clock,
+  CheckCircle2,
+  AlertCircle,
+} from "lucide-react";
+import Link from "next/link";
+import { User } from "@supabase/supabase-js";
+import { AuthButton } from "@/components/auth/AuthButton";
 
 interface DashboardClientProps {
   applications: any[];
@@ -25,7 +37,7 @@ export function DashboardClient({
   highlightCategory,
   highlightForm,
 }: DashboardClientProps) {
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const highlightRef = useRef<HTMLDivElement>(null);
 
   // Handle URL params for highlighting
@@ -37,45 +49,52 @@ export function DashboardClient({
     // Scroll to highlighted element after a short delay
     if (highlightCategory || highlightForm) {
       setTimeout(() => {
-        highlightRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        highlightRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
       }, 100);
     }
   }, [highlightCategory, highlightForm]);
 
   // Category display mapping
   const categoryLabels: Record<string, string> = {
-    all: 'All Forms',
-    family: 'Family Immigration',
-    employment: 'Employment',
-    work_authorization: 'Work Authorization',
-    citizenship: 'Citizenship',
-    travel: 'Travel',
-    humanitarian: 'Humanitarian',
-    status_change: 'Status Change',
-    other: 'Other',
+    all: "All Forms",
+    family: "Family Immigration",
+    employment: "Employment",
+    work_authorization: "Work Authorization",
+    citizenship: "Citizenship",
+    travel: "Travel",
+    humanitarian: "Humanitarian",
+    status_change: "Status Change",
+    other: "Other",
   };
 
   // Get unique categories from forms
-  const categories = ['all', ...new Set(Object.values(FORM_REGISTRY).map((f) => f.category))];
+  const categories = [
+    "all",
+    ...new Set(Object.values(FORM_REGISTRY).map((f) => f.category)),
+  ];
 
   // Filter forms by category
   const filteredForms = Object.values(FORM_REGISTRY).filter(
-    (form) => selectedCategory === 'all' || form.category === selectedCategory
+    (form) => selectedCategory === "all" || form.category === selectedCategory
   );
 
   // Count forms in each category
   const getCategoryCount = (category: string) => {
-    if (category === 'all') return Object.values(FORM_REGISTRY).length;
-    return Object.values(FORM_REGISTRY).filter((f) => f.category === category).length;
+    if (category === "all") return Object.values(FORM_REGISTRY).length;
+    return Object.values(FORM_REGISTRY).filter((f) => f.category === category)
+      .length;
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'completed':
+      case "completed":
         return <CheckCircle2 className="h-4 w-4 text-green-600" />;
-      case 'in_review':
+      case "in_review":
         return <Clock className="h-4 w-4 text-blue-600" />;
-      case 'draft':
+      case "draft":
         return <FileText className="h-4 w-4 text-orange-600" />;
       default:
         return <AlertCircle className="h-4 w-4 text-gray-600" />;
@@ -84,12 +103,12 @@ export function DashboardClient({
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'completed':
-        return 'Completed';
-      case 'in_review':
-        return 'In Review';
-      case 'draft':
-        return 'Draft';
+      case "completed":
+        return "Completed";
+      case "in_review":
+        return "In Review";
+      case "draft":
+        return "Draft";
       default:
         return status;
     }
@@ -97,14 +116,14 @@ export function DashboardClient({
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed':
-        return 'bg-green-100 text-green-800 border-green-200';
-      case 'in_review':
-        return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'draft':
-        return 'bg-orange-100 text-orange-800 border-orange-200';
+      case "completed":
+        return "bg-green-100 text-green-800 border-green-200";
+      case "in_review":
+        return "bg-blue-100 text-blue-800 border-blue-200";
+      case "draft":
+        return "bg-orange-100 text-orange-800 border-orange-200";
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
+        return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
 
@@ -135,7 +154,8 @@ export function DashboardClient({
               Prepare Your Immigration Forms
             </h1>
             <p className="text-xl text-muted-foreground">
-              Access all 18 USCIS forms with guided assistance and auto-save. Start your application today.
+              Access all 18 USCIS forms with guided assistance and auto-save.
+              Start your application today.
             </p>
           </div>
         </div>
@@ -147,8 +167,12 @@ export function DashboardClient({
           <section className="mb-12">
             <div className="flex items-center justify-between mb-6">
               <div>
-                <h2 className="text-2xl font-bold tracking-tight">Your Applications</h2>
-                <p className="text-muted-foreground">Continue where you left off</p>
+                <h2 className="text-2xl font-bold tracking-tight">
+                  Your Applications
+                </h2>
+                <p className="text-muted-foreground">
+                  Continue where you left off
+                </p>
               </div>
               <Button asChild variant="outline">
                 <Link href="/dashboard/forms">
@@ -164,7 +188,10 @@ export function DashboardClient({
                 if (!form) return null;
 
                 return (
-                  <Card key={app.id} className="hover:shadow-md transition-shadow">
+                  <Card
+                    key={app.id}
+                    className="hover:shadow-md transition-shadow"
+                  >
                     <CardHeader className="pb-3">
                       <div className="flex items-start justify-between gap-2">
                         <div className="flex-1">
@@ -185,18 +212,18 @@ export function DashboardClient({
                           {getStatusLabel(app.status)}
                         </Badge>
                         <div className="text-sm text-muted-foreground">
-                          Last updated:{' '}
+                          Last updated:{" "}
                           {new Date(app.updated_at).toLocaleDateString()}
                         </div>
                         <Button asChild className="w-full" size="sm">
                           <Link
                             href={
-                              app.status === 'completed'
+                              app.status === "completed"
                                 ? `/dashboard/forms/${form.id}/review?applicationId=${app.id}`
                                 : `/dashboard/forms/${form.id}?applicationId=${app.id}`
                             }
                           >
-                            {app.status === 'completed' ? 'Review' : 'Continue'}
+                            {app.status === "completed" ? "Review" : "Continue"}
                           </Link>
                         </Button>
                       </div>
@@ -214,7 +241,8 @@ export function DashboardClient({
             <CardHeader>
               <CardTitle className="text-2xl">Simple Pricing</CardTitle>
               <CardDescription className="text-base">
-                All forms are $60 each. Buy multiple forms and save automatically!
+                All forms are $60 each. Buy multiple forms and save
+                automatically!
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -226,17 +254,23 @@ export function DashboardClient({
                 <div className="text-center p-4 bg-white rounded-lg shadow-sm">
                   <div className="text-3xl font-bold text-blue-600">$100</div>
                   <div className="text-sm text-gray-600 mt-1">2 Forms</div>
-                  <div className="text-xs text-green-600 font-medium mt-1">Save $20</div>
+                  <div className="text-xs text-green-600 font-medium mt-1">
+                    Save $20
+                  </div>
                 </div>
                 <div className="text-center p-4 bg-white rounded-lg shadow-sm">
                   <div className="text-3xl font-bold text-blue-600">$140</div>
                   <div className="text-sm text-gray-600 mt-1">3 Forms</div>
-                  <div className="text-xs text-green-600 font-medium mt-1">Save $40</div>
+                  <div className="text-xs text-green-600 font-medium mt-1">
+                    Save $40
+                  </div>
                 </div>
                 <div className="text-center p-4 bg-white rounded-lg shadow-sm">
                   <div className="text-3xl font-bold text-blue-600">$200</div>
                   <div className="text-sm text-gray-600 mt-1">4+ Forms</div>
-                  <div className="text-xs text-green-600 font-medium mt-1">Save $40+</div>
+                  <div className="text-xs text-green-600 font-medium mt-1">
+                    Save $40+
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -281,9 +315,9 @@ export function DashboardClient({
               <div
                 key={form.id}
                 ref={highlightForm === form.id ? highlightRef : null}
-                className={highlightForm === form.id ? 'animate-pulse' : ''}
+                className={highlightForm === form.id ? "animate-pulse" : ""}
               >
-                <IndividualFormCard form={form} />
+                {/* <IndividualFormCard form={form} /> */}
               </div>
             ))}
           </div>

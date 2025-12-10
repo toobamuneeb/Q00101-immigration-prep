@@ -32,6 +32,7 @@ interface UniversalFormWizardProps {
   formDefinition: FormDefinition;
   applicationId: string | null;
   initialAnswers?: Record<string, any>;
+  onComplete?: any;
 }
 
 export function UniversalFormWizard({
