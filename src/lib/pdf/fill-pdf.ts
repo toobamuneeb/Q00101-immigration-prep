@@ -18,7 +18,7 @@ import { I_131_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-131-auto-ma
 import { I_864_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-864-auto-mappings";
 import { N_400_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/n-400-auto-mappings";
 import { I_751_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-751-auto-mappings";
-import { I_90_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-90-auto-mappings";
+
 import { I_129_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-129-auto-mappings";
 import { I_140_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-140-auto-mappings";
 import { I_539_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-539-auto-mappings";
@@ -33,12 +33,15 @@ import { I_129F_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-129f-auto-
 import { I_360_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-360-auto-mappings";
 import { I_600_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-600-auto-mappings";
 import { I_589_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-589-auto-mappings";
+import { I_90_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-90-auto-mappings";
 
 /**
  * Get field mappings for a specific form
  */
 function getFormMappings(formId: string): FieldMapping[] {
   switch (formId.toLowerCase()) {
+    case "i-90":
+      return I_90_AUTO_MAPPINGS;
     case "i-130":
       return I_130_AUTO_MAPPINGS;
     case "i-485":

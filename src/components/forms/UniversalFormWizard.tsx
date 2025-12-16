@@ -48,6 +48,8 @@ export function UniversalFormWizard({
   const [answers, setAnswers] = useState<Record<string, any>>(initialAnswers);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
   const { toast } = useToast();
   const t = useTranslations();
 
@@ -56,11 +58,75 @@ export function UniversalFormWizard({
   const isLastSection = currentSectionIndex === totalSections - 1;
   const progress = ((currentSectionIndex + 1) / totalSections) * 100;
 
+  // Validate a single field
+  const validateField = (question: Question, value: any): string | null => {
+    if (question.required) {
+      if (!value || (typeof value === 'string' && value.trim() === '')) {
+        return `${question.label} is required`;
+      }
+      if (Array.isArray(value) && value.length === 0) {
+        return `${question.label} is required`;
+      }
+    }
+    
+    // Email validation
+    if (question.type === 'email' && value) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(value)) {
+        return 'Please enter a valid email address';
+      }
+    }
+    
+    return null;
+  };
+
+  // Validate current section
+  const validateCurrentSection = (): boolean => {
+    const newErrors: Record<string, string> = {};
+    let isValid = true;
+
+    currentSection.questions.forEach((question) => {
+      const value = answers[question.id];
+      const error = validateField(question, value);
+      if (error) {
+        newErrors[question.id] = error;
+        isValid = false;
+      }
+    });
+
+    setErrors(newErrors);
+    
+    if (!isValid) {
+      toast({
+        title: "Missing Required Fields",
+        description: "Please fill in all required fields before continuing.",
+        variant: "destructive",
+      });
+    }
+    
+    return isValid;
+  };
+
   // Update answer for a field
   const updateAnswer = (questionId: string, value: any) => {
     setAnswers((prev) => ({
       ...prev,
       [questionId]: value,
+    }));
+    
+    // Clear error when user starts typing
+    if (errors[questionId]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[questionId];
+        return newErrors;
+      });
+    }
+    
+    // Mark field as touched
+    setTouched((prev) => ({
+      ...prev,
+      [questionId]: true,
     }));
   };
 
@@ -75,6 +141,8 @@ export function UniversalFormWizard({
   // Render a single question field
   const renderQuestion = (question: Question) => {
     const value = answers[question.id] || "";
+    const hasError = !!errors[question.id];
+    const errorMessage = errors[question.id];
 
     const renderField = () => {
       switch (question.type) {
@@ -86,6 +154,7 @@ export function UniversalFormWizard({
               value={value}
               onChange={(e) => updateAnswer(question.id, e.target.value)}
               placeholder={question.placeholder || ""}
+              className={hasError ? "border-red-500 focus-visible:ring-red-500" : ""}
             />
           );
 
@@ -97,6 +166,7 @@ export function UniversalFormWizard({
               value={value}
               onChange={(e) => updateAnswer(question.id, e.target.value)}
               placeholder={question.placeholder || ""}
+              className={hasError ? "border-red-500 focus-visible:ring-red-500" : ""}
             />
           );
 
@@ -106,6 +176,7 @@ export function UniversalFormWizard({
               type="date"
               value={value}
               onChange={(e) => updateAnswer(question.id, e.target.value)}
+              className={hasError ? "border-red-500 focus-visible:ring-red-500" : ""}
             />
           );
 
@@ -116,6 +187,7 @@ export function UniversalFormWizard({
               onChange={(e) => updateAnswer(question.id, e.target.value)}
               placeholder={question.placeholder || ""}
               rows={4}
+              className={hasError ? "border-red-500 focus-visible:ring-red-500" : ""}
             />
           );
 
@@ -125,7 +197,7 @@ export function UniversalFormWizard({
               value={value}
               onValueChange={(val) => updateAnswer(question.id, val)}
             >
-              <SelectTrigger>
+              <SelectTrigger className={hasError ? "border-red-500 focus-visible:ring-red-500" : ""}>
                 <SelectValue
                   placeholder={question.placeholder || "Select..."}
                 />
@@ -148,6 +220,7 @@ export function UniversalFormWizard({
             <RadioGroup
               value={value}
               onValueChange={(val) => updateAnswer(question.id, val)}
+              className={hasError ? "border border-red-500 rounded-md p-3" : ""}
             >
               {question.options?.map((option) => (
                 <div key={option.value} className="flex items-center space-x-2">
@@ -190,6 +263,7 @@ export function UniversalFormWizard({
             <Input
               type="file"
               onChange={(e) => updateAnswer(question.id, e.target.files?.[0])}
+              className={hasError ? "border-red-500 focus-visible:ring-red-500" : ""}
             />
           );
 
@@ -199,6 +273,7 @@ export function UniversalFormWizard({
               value={value}
               onChange={(e) => updateAnswer(question.id, e.target.value)}
               placeholder={question.placeholder || ""}
+              className={hasError ? "border-red-500 focus-visible:ring-red-500" : ""}
             />
           );
       }
@@ -214,6 +289,9 @@ export function UniversalFormWizard({
             </p>
           )}
           {renderField()}
+          {hasError && (
+            <p className="text-sm text-red-500 mt-1">{errorMessage}</p>
+          )}
         </div>
       );
     }
@@ -232,31 +310,11 @@ export function UniversalFormWizard({
           </p>
         )}
         {renderField()}
+        {hasError && (
+          <p className="text-sm text-red-500 mt-1">{errorMessage}</p>
+        )}
       </div>
     );
-  };
-
-  // Simple validation - just check if required fields have values
-  const validateCurrentSection = () => {
-    const requiredFields = currentSection.questions
-      .filter((q) => q.required)
-      .map((q) => q.id);
-
-    const missingFields = requiredFields.filter((fieldId) => {
-      const value = answers[fieldId];
-      return !value || value === "" || value === undefined || value === null;
-    });
-
-    if (missingFields.length > 0) {
-      toast({
-        title: "Missing Required Fields",
-        description: "Please fill in all required fields before continuing.",
-        variant: "destructive",
-      });
-      return false;
-    }
-
-    return true;
   };
 
   // Navigation handlers

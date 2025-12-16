@@ -16,16 +16,19 @@ export interface FieldMapping {
 }
 
 export const I_485_AUTO_MAPPINGS: FieldMapping[] = [
+  { questionId: 'part1.familyName', pdfField: 'form1[0].#subform[0].Pt1Line1_FamilyName[0]' },
+  { questionId: 'part1.givenName', pdfField: 'form1[0].#subform[0].Pt1Line1_GivenName[0]' },
+  { questionId: 'part1.middleName', pdfField: 'form1[0].#subform[0].Pt1Line1_MiddleName[0]' },
   { questionId: 'part1.dob', pdfField: 'form1[0].#subform[0].Pt1Line3_DOB[0]', }, // Confidence: 10
   { questionId: 'part1.cityOfBirth', pdfField: 'form1[0].#subform[1].Pt1Line7_CityTownOfBirth[0]', }, // Confidence: 10
   { questionId: 'part1.countryOfBirth', pdfField: 'form1[0].#subform[1].Pt1Line7_CountryOfBirth[0]', }, // Confidence: 10
   { questionId: 'part1.countryOfCitizenship', pdfField: 'form1[0].#subform[1].Pt1Line8_CountryofCitizenshipNationality[0]', }, // Confidence: 10
   { questionId: 'part1.ssn', pdfField: 'form1[0].#subform[3].Pt1Line19_SSN[0]', }, // Confidence: 10
-  { questionId: 'part1.mailingCity', pdfField: 'form1[0].#subform[1].Pt1Line10_CityTown[0]', }, // Confidence: 10
-  { questionId: 'part1.mailingState', pdfField: 'form1[0].#subform[0].AttorneyStateBarNumber[0]', }, // Confidence: 10
+  { questionId: 'part1.mailingCity', pdfField: 'form1[0].#subform[2].Pt1Line18_CityOrTown[0]' },
+  { questionId: 'part1.mailingState', pdfField: 'form1[0].#subform[2].Pt1Line18_State[0]' },
   { questionId: 'part1.mailingZip', pdfField: 'form1[0].#subform[2].Pt1Line18_ZipCode[0]', }, // Confidence: 10
-  { questionId: 'part1.passportCountry', pdfField: 'form1[0].#subform[3].Pt1Line18_PriorCountry[0]', }, // Confidence: 10
-  { questionId: 'part1.entryCity', pdfField: 'form1[0].#subform[2].Pt1Line18_CityOrTown[0]', }, // Confidence: 10
+  { questionId: 'part1.passportCountry', pdfField: 'form1[0].#subform[1].Pt1Line10_Passport[0]' },
+  { questionId: 'part1.entryCity', pdfField: 'form1[0].#subform[1].Pt1Line10_CityTown[0]' },
   { questionId: 'part1.entryState', pdfField: 'form1[0].#subform[1].Pt1Line10_State[0]', }, // Confidence: 10
   { questionId: 'part4.parent1Dob', pdfField: 'form1[0].#subform[0].Pt1Line3A_OtherDOB[0]', }, // Confidence: 10
   { questionId: 'part4.parent1CountryOfBirth', pdfField: 'form1[0].#subform[3].Pt1Line18_RecentCountry[0]', }, // Confidence: 10
@@ -34,13 +37,38 @@ export const I_485_AUTO_MAPPINGS: FieldMapping[] = [
   { questionId: 'part4.parent2Dob', pdfField: 'form1[0].#subform[0].Pt1Line3B_OtherDOB[0]', }, // Confidence: 10
   { questionId: 'part4.parent2CountryOfBirth', pdfField: 'form1[0].#subform[8].P4Line8_Country[0]', }, // Confidence: 10
   { questionId: 'part6.totalChildren', pdfField: 'form1[0].#subform[11].Pt6Line1_TotalChildren[0]', }, // Confidence: 10
-  { questionId: 'part7.ethnicity', pdfField: 'form1[0].#subform[3].Pt1Line18_PriorCity[0]', }, // Confidence: 10
-  { questionId: 'part1.mailingStreet', pdfField: 'form1[0].#subform[2].Pt1Line18_StreetNumberName[0]', }, // Confidence: 9
-  { questionId: 'part1.mailingAptType', pdfField: 'form1[0].#subform[2].Pt1Line18US_Unit[0]', type: 'checkbox', }, // Confidence: 9
-  { questionId: 'part1.mailingAptNumber', pdfField: 'form1[0].#subform[2].Pt1Line18US_Unit[1]', type: 'checkbox', }, // Confidence: 9
-  { questionId: 'part1.passportNumber', pdfField: 'form1[0].#subform[1].Pt1Line10_PassportNum[0]', }, // Confidence: 9
-  { questionId: 'part1.passportExpiration', pdfField: 'form1[0].#subform[1].Pt1Line10_Passport[0]', }, // Confidence: 9
-  { questionId: 'part1.sex', pdfField: 'form1[0].#subform[1].Pt1Line6_CB_Sex[0]', type: 'checkbox', }, // Confidence: 8
+  { questionId: 'part7.ethnicity', pdfField: 'form1[0].#subform[12].Pt7Line1_Ethnicity[0]', type: 'checkbox', value: 'hispanic' },
+  { questionId: 'part7.ethnicity', pdfField: 'form1[0].#subform[12].Pt7Line1_Ethnicity[1]', type: 'checkbox', value: 'not-hispanic' },
+  { questionId: 'part1.mailingStreet', pdfField: 'form1[0].#subform[2].Pt1Line18_StreetNumberName[0]' },
+  { questionId: 'part1.mailingAptType', pdfField: 'form1[0].#subform[2].Pt1Line18US_Unit[0]', type: 'checkbox', value: 'apt' },
+  { questionId: 'part1.mailingAptType', pdfField: 'form1[0].#subform[2].Pt1Line18US_Unit[1]', type: 'checkbox', value: 'ste' },
+  { questionId: 'part1.mailingAptType', pdfField: 'form1[0].#subform[2].Pt1Line18US_Unit[2]', type: 'checkbox', value: 'flr' },
+  { questionId: 'part1.mailingAptNumber', pdfField: 'form1[0].#subform[2].Pt1Line18US_AptSteFlrNumber[0]' },
+  { questionId: 'part1.passportNumber', pdfField: 'form1[0].#subform[1].Pt1Line10_PassportNum[0]' },
+  { questionId: 'part1.passportExpiration', pdfField: 'form1[0].#subform[1].Pt1Line10_ExpDate[0]' },
+  { questionId: 'part1.sex', pdfField: 'form1[0].#subform[1].Pt1Line6_CB_Sex[0]', type: 'checkbox', value: 'male' },
+  { questionId: 'part1.sex', pdfField: 'form1[0].#subform[1].Pt1Line6_CB_Sex[1]', type: 'checkbox', value: 'female' },
+  { questionId: 'part1.alienNumber', pdfField: 'form1[0].#subform[1].Pt1Line4_AlienNumber[0]' },
+  { questionId: 'part1.uscisAccount', pdfField: 'form1[0].#subform[1].Pt1Line9_USCISAccountNumber[0]' },
+  { questionId: 'part1.mailingCareOfName', pdfField: 'form1[0].#subform[2].Part1_Item18_InCareOfName[0]' },
+  { questionId: 'part1.visaNumber', pdfField: 'form1[0].#subform[1].Pt1Line10_VisaNum[0]' },
+  { questionId: 'part1.dateOfLastEntry', pdfField: 'form1[0].#subform[1].Pt1Line10_DateofArrival[0]' },
+  { questionId: 'part1.i94Number', pdfField: 'form1[0].#subform[2].P1Line12_I94[0]' },
+  { questionId: 'part1.statusAtEntry', pdfField: 'form1[0].#subform[2].Pt1Line12_Status[0]' },
+  { questionId: 'part1.currentStatus', pdfField: 'form1[0].#subform[2].Pt1Line14_Status[0]' },
+  { questionId: 'part4.parent1FamilyName', pdfField: 'form1[0].#subform[8].Pt5Line1_FamilyName[0]' },
+  { questionId: 'part4.parent1GivenName', pdfField: 'form1[0].#subform[8].Pt5Line1_GivenName[0]' },
+  { questionId: 'part4.parent2FamilyName', pdfField: 'form1[0].#subform[9].Pt5Line6_FamilyName[0]' },
+  { questionId: 'part4.parent2GivenName', pdfField: 'form1[0].#subform[9].Pt5Line6_GivenName[0]' },
+  { questionId: 'part5.currentMaritalStatus', pdfField: 'form1[0].#subform[9].Pt6Line1_MaritalStatus[0]', type: 'checkbox', value: 'single' },
+  { questionId: 'part5.currentMaritalStatus', pdfField: 'form1[0].#subform[9].Pt6Line1_MaritalStatus[1]', type: 'checkbox', value: 'married' },
+  { questionId: 'part5.currentMaritalStatus', pdfField: 'form1[0].#subform[9].Pt6Line1_MaritalStatus[2]', type: 'checkbox', value: 'divorced' },
+  { questionId: 'part5.currentMaritalStatus', pdfField: 'form1[0].#subform[9].Pt6Line1_MaritalStatus[3]', type: 'checkbox', value: 'widowed' },
+  { questionId: 'part5.currentMaritalStatus', pdfField: 'form1[0].#subform[9].Pt6Line1_MaritalStatus[4]', type: 'checkbox', value: 'annulled' },
+  { questionId: 'part5.currentMaritalStatus', pdfField: 'form1[0].#subform[9].Pt6Line1_MaritalStatus[5]', type: 'checkbox', value: 'separated' },
+  { questionId: 'part5.timesMarried', pdfField: 'form1[0].#subform[9].Pt6Line3_TimesMarried[0]' },
+  { questionId: 'part5.currentSpouseFamilyName', pdfField: 'form1[0].#subform[9].Pt6Line4_FamilyName[0]' },
+  { questionId: 'part5.currentSpouseGivenName', pdfField: 'form1[0].#subform[9].Pt6Line4_GivenName[0]' },
 ];
 
 /**
