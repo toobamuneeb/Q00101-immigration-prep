@@ -56,8 +56,6 @@ function getFormMappings(formId: string): FieldMapping[] {
       return N_400_AUTO_MAPPINGS;
     case "i-751":
       return I_751_AUTO_MAPPINGS;
-    case "i-90":
-      return I_90_AUTO_MAPPINGS;
     case "i-129":
       return I_129_AUTO_MAPPINGS;
     case "i-140":
@@ -136,6 +134,16 @@ function formatAlienNumber(alienNumber: any): string {
 }
 
 /**
+ * Format ZIP code for PDF (ensure 5 digits only)
+ */
+function formatZipCode(zipCode: any): string {
+  if (!zipCode) return "";
+  // Remove all non-digits and take only first 5 digits
+  const digits = String(zipCode).replace(/\D/g, "");
+  return digits.substring(0, 5);
+}
+
+/**
  * Fill a PDF form with user answers
  */
 export async function fillPDF(
@@ -153,6 +161,12 @@ export async function fillPDF(
   // Get field mappings
   const mappings = getFormMappings(formId);
 
+  // Debug logging
+  console.log(`\n📋 Form ID: ${formId}`);
+  console.log(`📋 Total mappings:`, JSON.stringify(mappings, 2, null));
+  console.log(`📋 Answer keys:`, Object.keys(answers));
+  console.log(`📋 Sample answers:`, Object.keys(answers).slice(0, 5));
+
   // Track filled fields for debugging
   const filledFields: string[] = [];
   const failedFields: Array<{ field: string; error: string }> = [];
@@ -168,11 +182,11 @@ export async function fillPDF(
       }
 
       // Handle different field types
-      if (mapping.type === "checkbox") {
-        // Checkbox field
+      if (mapping.type === "radio") {
+        // Radio button field
         const checkbox = form.getCheckBox(mapping.pdfField);
 
-        // Check if this is a conditional checkbox (e.g., relationship type)
+        // Check if this is the selected radio option
         if (mapping.value) {
           // Only check if the answer matches the mapping's value
           if (
@@ -180,7 +194,39 @@ export async function fillPDF(
             value === mapping.value.toLowerCase()
           ) {
             checkbox.check();
-            filledFields.push(`${mapping.pdfField} = checked`);
+            filledFields.push(
+              `${mapping.pdfField} = checked (radio: ${mapping.value})`
+            );
+          } else {
+            checkbox.uncheck();
+          }
+        }
+      } else if (mapping.type === "checkbox") {
+        // Checkbox field
+        const checkbox = form.getCheckBox(mapping.pdfField);
+
+        // Check if this is a conditional checkbox (e.g., multi-select)
+        if (mapping.value) {
+          // For multi-select checkboxes, value can be an array
+          let isChecked = false;
+          
+          if (Array.isArray(value)) {
+            // Check if array contains the mapping value (case-insensitive)
+            isChecked = value.some(v => 
+              String(v).toLowerCase() === mapping.value.toLowerCase()
+            );
+          } else {
+            // Single value comparison (case-insensitive)
+            isChecked = String(value).toLowerCase() === mapping.value.toLowerCase();
+          }
+
+          if (isChecked) {
+            checkbox.check();
+            filledFields.push(
+              `${mapping.pdfField} = checked (${mapping.value})`
+            );
+          } else {
+            checkbox.uncheck();
           }
         } else {
           // Simple boolean checkbox
@@ -216,9 +262,16 @@ export async function fillPDF(
               formattedValue = formatSSN(value);
             } else if (
               mapping.questionId.includes("alienNumber") ||
-              mapping.questionId.includes("AlienNumber")
+              mapping.questionId.includes("AlienNumber") ||
+              mapping.questionId.includes("aliennumber")
             ) {
               formattedValue = formatAlienNumber(value);
+            } else if (
+              mapping.questionId.includes("zipcode") ||
+              mapping.questionId.includes("ZipCode") ||
+              mapping.questionId.includes("zipCode")
+            ) {
+              formattedValue = formatZipCode(value);
             } else if (
               mapping.questionId.includes("date") ||
               mapping.questionId.includes("Date")
