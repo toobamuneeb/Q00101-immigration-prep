@@ -1,6 +1,7 @@
 # Stripe Setup Instructions
 
 ## Problem
+
 The Buy Now button is failing because the Stripe API key is set to a placeholder value.
 
 **Error**: "An error occurred with our connection to Stripe. Request was retried 2 times."
@@ -15,7 +16,7 @@ You need a REAL Stripe API key. Here's how to get one:
 2. **Go to API Keys page**: https://dashboard.stripe.com/test/apikeys
 3. **Copy your "Secret key"** (it starts with `sk_test_...`)
    - Click "Reveal test key" if it's hidden
-   - It looks like: `sk_test_51Abc123...`
+   - It looks like: `sk_test.`
 
 ### Step 2: Update Your .env.local File
 
@@ -26,7 +27,7 @@ Replace the placeholder in `.env.local`:
 STRIPE_SECRET_KEY=your_stripe_secret_key_here
 
 # AFTER (real test key):
-STRIPE_SECRET_KEY=sk_test_51Abc123YourActualKeyHere
+STRIPE_SECRET_KEY=sk_test_
 ```
 
 ### Step 3: Restart Your Dev Server
@@ -67,7 +68,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
 SUPABASE_SERVICE_ROLE_KEY=eyJ...
 
 # Stripe (needs update ⚠️)
-STRIPE_SECRET_KEY=sk_test_51Abc123YourActualKeyHere  # ← UPDATE THIS
+STRIPE_SECRET_KEY=sk_  # ← UPDATE THIS
 
 # App URL (already configured ✅)
 NEXT_PUBLIC_APP_URL=http://localhost:3000
@@ -92,6 +93,7 @@ When you're ready to go live:
 ### Still getting 500 error after updating key?
 
 Check server logs:
+
 ```bash
 # In terminal where npm run dev is running
 # Look for emoji logs: 🛒 📤 📥 ✅ ❌

@@ -26,7 +26,7 @@ export function PurchaseRequired({ formId, reason }: PurchaseRequiredProps) {
     pkg.formIds.some((f) => f.toLowerCase() === formId.toLowerCase())
   );
 
-  const handlePurchase = async (packageId: string) => {
+  const handlePurchase = async (packageId: string, isSingleForm: boolean = false) => {
     setIsPurchasing(packageId);
 
     try {
@@ -35,7 +35,10 @@ export function PurchaseRequired({ formId, reason }: PurchaseRequiredProps) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ packageId }),
+        body: JSON.stringify({ 
+          packageId,
+          singleFormId: isSingleForm ? formId : undefined 
+        }),
       });
 
       if (!response.ok) {
@@ -125,32 +128,82 @@ export function PurchaseRequired({ formId, reason }: PurchaseRequiredProps) {
               </div>
             )}
 
+            {/* Single Form Purchase Option */}
+            {form && (
+              <div>
+                <h3 className="font-semibold mb-4">Option 1: Buy This Form Only</h3>
+                <Card className="border-2 border-primary">
+                  <CardContent className="p-4">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-lg">{formId.toUpperCase()} - Single Form</h4>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          {form.name}
+                        </p>
+                        <p className="text-sm text-muted-foreground mt-2">
+                          Access to this form only
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-2xl font-bold">$60</p>
+                        <Button
+                          className="mt-2"
+                          onClick={() => handlePurchase(`single-form-${formId}`, true)}
+                          disabled={isPurchasing === `single-form-${formId}`}
+                        >
+                          {isPurchasing === `single-form-${formId}` ? (
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          ) : (
+                            <ShoppingCart className="mr-2 h-4 w-4" />
+                          )}
+                          {isPurchasing === `single-form-${formId}` ? t('processing') : 'Buy Single Form'}
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
             {/* Available Packages */}
             {availablePackages.length > 0 && (
               <div>
                 <h3 className="font-semibold mb-4">
-                  {t('messages.purchasePackage')}
+                  Option 2: Buy a Package (Better Value!)
                 </h3>
                 <div className="grid gap-4">
                   {availablePackages.map((pkg) => (
-                    <Card key={pkg.id} className="border-primary/20">
+                    <Card key={pkg.id} className="border-green-200 bg-green-50/50">
                       <CardContent className="p-4">
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex-1">
-                            <h4 className="font-semibold text-lg">{pkg.name}</h4>
+                            <div className="flex items-center gap-2">
+                              <h4 className="font-semibold text-lg">{pkg.name}</h4>
+                              {pkg.popular && (
+                                <span className="text-xs bg-green-600 text-white px-2 py-1 rounded">
+                                  POPULAR
+                                </span>
+                              )}
+                            </div>
                             <p className="text-sm text-muted-foreground mt-1">
                               {pkg.description}
                             </p>
-                            <p className="text-sm text-muted-foreground mt-2">
+                            <p className="text-sm font-medium text-green-700 mt-2">
                               {t('includes')} {pkg.formIds.length} forms:{' '}
                               {pkg.formIds.map((f) => f.toUpperCase()).join(', ')}
                             </p>
+                            {pkg.formIds.length > 1 && (
+                              <p className="text-xs text-green-600 font-semibold mt-1">
+                                💰 Save ${(pkg.formIds.length * 60) - pkg.price} vs buying individually!
+                              </p>
+                            )}
                           </div>
                           <div className="text-right">
-                            <p className="text-2xl font-bold">${pkg.price}</p>
+                            <p className="text-2xl font-bold text-green-700">${pkg.price}</p>
+                            <p className="text-xs text-muted-foreground">${Math.round(pkg.price / pkg.formIds.length)}/form</p>
                             <Button
-                              className="mt-2"
-                              onClick={() => handlePurchase(pkg.id)}
+                              className="mt-2 bg-green-600 hover:bg-green-700"
+                              onClick={() => handlePurchase(pkg.id, false)}
                               disabled={isPurchasing === pkg.id}
                             >
                               {isPurchasing === pkg.id ? (
@@ -158,7 +211,7 @@ export function PurchaseRequired({ formId, reason }: PurchaseRequiredProps) {
                               ) : (
                                 <ShoppingCart className="mr-2 h-4 w-4" />
                               )}
-                              {isPurchasing === pkg.id ? t('processing') : t('buyNow')}
+                              {isPurchasing === pkg.id ? t('processing') : 'Buy Package'}
                             </Button>
                           </div>
                         </div>
