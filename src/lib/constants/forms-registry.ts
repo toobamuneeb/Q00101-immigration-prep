@@ -5219,6 +5219,21 @@ const I129_DEFINITION: FormDefinition = {
           ],
         },
         {
+          id: "part2.1a.familyName",
+          type: "text",
+          label: "1.a. Family Name (if individual)",
+        },
+        {
+          id: "part2.1b.givenName",
+          type: "text",
+          label: "1.b. Given Name (if individual)",
+        },
+        {
+          id: "part2.1c.middleName",
+          type: "text",
+          label: "1.c. Middle Name (if individual)",
+        },
+        {
           id: "part2.2a.legalName",
           type: "text",
           label: "2.a. Company/Organization Legal Name",
@@ -5238,6 +5253,11 @@ const I129_DEFINITION: FormDefinition = {
           helpText: "IRS Tax ID Number",
         },
         {
+          id: "part2.3.inCareOf",
+          type: "text",
+          label: "3. In Care Of Name (if any)",
+        },
+        {
           id: "part2.4a.street",
           type: "text",
           label: "4.a. Street Number and Name",
@@ -5245,7 +5265,7 @@ const I129_DEFINITION: FormDefinition = {
         },
         {
           id: "part2.4b.aptSteFlr",
-          type: "select",
+          type: "radio",
           label: "4.b. Unit Type",
           options: [
             { value: "apt", label: "Apt." },
@@ -5278,10 +5298,35 @@ const I129_DEFINITION: FormDefinition = {
           required: true,
         },
         {
+          id: "part2.4g.province",
+          type: "text",
+          label: "4.g. Province (if outside US)",
+        },
+        {
+          id: "part2.4h.postalCode",
+          type: "text",
+          label: "4.h. Postal Code (if outside US)",
+        },
+        {
+          id: "part2.4i.country",
+          type: "text",
+          label: "4.i. Country",
+        },
+        {
           id: "part2.5.phone",
           type: "tel",
           label: "5. Business Telephone Number",
           required: true,
+        },
+        {
+          id: "part2.6.mobile",
+          type: "tel",
+          label: "6. Mobile Telephone Number",
+        },
+        {
+          id: "part2.7.email",
+          type: "email",
+          label: "7. Email Address",
         },
       ],
     },
@@ -6401,9 +6446,28 @@ const I129F_DEFINITION: FormDefinition = {
       description: "U.S. citizen petitioner information",
       questions: [
         {
-          id: "part1.1.classification",
+          id: "part1.1.alienNumber",
+          type: "text",
+          label: "1. Alien Registration Number (A-Number) (if any)",
+          placeholder: "A-",
+          helpText: "Only if you have one",
+        },
+        {
+          id: "part1.2.uscisAccountNumber",
+          type: "text",
+          label: "2. USCIS Online Account Number (if any)",
+          helpText: "If you have a USCIS online account",
+        },
+        {
+          id: "part1.3.ssn",
+          type: "ssn",
+          label: "3. U.S. Social Security Number",
+          required: true,
+        },
+        {
+          id: "part1.4.classification",
           type: "select",
-          label: "1. Classification Sought for Your Beneficiary",
+          label: "4. Classification Sought for Your Beneficiary",
           required: true,
           options: [
             { value: "k1", label: "K-1 - Fiancé(e)" },
@@ -6413,66 +6477,33 @@ const I129F_DEFINITION: FormDefinition = {
             "K-1 is for fiancé(e) you plan to marry in U.S. K-3 is for spouse of pending I-130",
         },
         {
-          id: "part1.2a.familyName",
+          id: "part1.6a.familyName",
           type: "text",
-          label: "2.a. Family Name (Last Name)",
+          label: "6.a. Family Name (Last Name)",
           required: true,
         },
         {
-          id: "part1.2b.givenName",
+          id: "part1.6b.givenName",
           type: "text",
-          label: "2.b. Given Name (First Name)",
+          label: "6.b. Given Name (First Name)",
           required: true,
         },
         {
-          id: "part1.2c.middleName",
+          id: "part1.6c.middleName",
           type: "text",
-          label: "2.c. Middle Name",
+          label: "6.c. Middle Name",
         },
         {
-          id: "part1.3.otherNamesUsed",
+          id: "part1.7.otherNamesUsed",
           type: "text",
-          label: "3. Other Names Used (if any)",
-          helpText: "Include maiden name, aliases, or nicknames",
+          label: "7. Other Names Used (if any)",
+          helpText: "Include maiden name, aliases, or nicknames. Provide family name, given name, and middle name if applicable.",
         },
         {
           id: "part1.4.ssn",
           type: "ssn",
-          label: "4. U.S. Social Security Number",
-          required: true,
-        },
-        {
-          id: "part1.5.dateOfBirth",
-          type: "date",
-          label: "5. Date of Birth",
-          required: true,
-        },
-        {
-          id: "part1.6.placeOfBirth.city",
-          type: "text",
-          label: "6.a. City/Town of Birth",
-          required: true,
-        },
-        {
-          id: "part1.6.placeOfBirth.country",
-          type: "text",
-          label: "6.b. Country of Birth",
-          required: true,
-        },
-        {
-          id: "part1.7.howCitizenshipObtained",
-          type: "select",
-          label: "7. How Did You Acquire U.S. Citizenship?",
-          required: true,
-          options: [
-            { value: "birth-us", label: "Birth in the United States" },
-            {
-              value: "birth-abroad",
-              label: "Birth Abroad to U.S. Citizen Parents",
-            },
-            { value: "naturalization", label: "Naturalization" },
-            { value: "parents", label: "Through Parents" },
-          ],
+          label: "3. U.S. Social Security Number (if any)",
+          required: false,
         },
       ],
     },

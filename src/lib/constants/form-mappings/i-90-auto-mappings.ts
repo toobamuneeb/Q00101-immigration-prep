@@ -12,8 +12,11 @@ export interface FieldMapping {
 }
 
 export const I_90_AUTO_MAPPINGS: FieldMapping[] = [
+  // Gender - Support both old and new field naming conventions
   { questionId: "part1.line8.gender", pdfField: "form1[0].#subform[1].P1_Line8_male[0]", type: "radio", value: "male" },
+  { questionId: "part1.gender", pdfField: "form1[0].#subform[1].P1_Line8_male[0]", type: "radio", value: "male" },
   { questionId: "part1.line8.gender", pdfField: "form1[0].#subform[1].P1_Line8_female[0]", type: "radio", value: "female" },
+  { questionId: "part1.gender", pdfField: "form1[0].#subform[1].P1_Line8_female[0]", type: "radio", value: "female" },
   
   // Ethnicity (radio buttons)
   { questionId: "part3.ethnicity", pdfField: "form1[0].#subform[2].P3_checkbox6[0]", type: "radio", value: "hispanic" },
@@ -48,49 +51,118 @@ export const I_90_AUTO_MAPPINGS: FieldMapping[] = [
   
   { questionId: "part7.representation.extends", pdfField: "form1[0].#subform[5].P7_checkbox7Extend[0]", type: "radio", value: "extends" },
   { questionId: "part7.representation.extends", pdfField: "form1[0].#subform[5].P7_checkbox7Extend[1]", type: "radio", value: "does-not-extend" },
+  // Full Name - Support both old and new field naming conventions
   { questionId: "part1.line3a.familyname", pdfField: "form1[0].#subform[0].P1_Line3a_FamilyName[0]" },
+  { questionId: "part1.familyName", pdfField: "form1[0].#subform[0].P1_Line3a_FamilyName[0]" },
+  
   { questionId: "part1.line3b.givenname", pdfField: "form1[0].#subform[0].P1_Line3b_GivenName[0]" },
+  { questionId: "part1.givenName", pdfField: "form1[0].#subform[0].P1_Line3b_GivenName[0]" },
+  
   { questionId: "part1.line3c.middlename", pdfField: "form1[0].#subform[0].P1_Line3c_MiddleName[0]" },
+  { questionId: "part1.middleName", pdfField: "form1[0].#subform[0].P1_Line3c_MiddleName[0]" },
+  // Mailing Address - Support both old and new field naming conventions
   { questionId: "part1.line6a.incareofname", pdfField: "form1[0].#subform[0].P1_Line6a_InCareofName[0]" },
+  { questionId: "part1.mailingInCareOf", pdfField: "form1[0].#subform[0].P1_Line6a_InCareofName[0]" },
+  
   { questionId: "part1.line6b.streetnumbername", pdfField: "form1[0].#subform[0].P1_Line6b_StreetNumberName[0]" },
+  { questionId: "part1.mailingStreetNumber", pdfField: "form1[0].#subform[0].P1_Line6b_StreetNumberName[0]" },
+  
   // Part 1 - Mailing Unit Type (radio buttons)
   { questionId: "part1.mailingUnitType", pdfField: "form1[0].#subform[0].P1_checkbox6c_Unit[0]", type: "radio", value: "apt" },
   { questionId: "part1.mailingUnitType", pdfField: "form1[0].#subform[0].P1_checkbox6c_Unit[1]", type: "radio", value: "ste" },
   { questionId: "part1.mailingUnitType", pdfField: "form1[0].#subform[0].P1_checkbox6c_Unit[2]", type: "radio", value: "flr" },
   
   { questionId: "part1.line6c.aptsteflrnumber", pdfField: "form1[0].#subform[0].P1_Line6c_AptSteFlrNumber[0]" },
+  { questionId: "part1.mailingAptNumber", pdfField: "form1[0].#subform[0].P1_Line6c_AptSteFlrNumber[0]" },
+  
   { questionId: "part1.line6d.cityortown", pdfField: "form1[0].#subform[0].P1_Line6d_CityOrTown[0]" },
-  { questionId: "part1.line6h.postalcode", pdfField: "form1[0].#subform[0].P1_Line6h_PostalCode[0]" },
-  { questionId: "part1.line6f.zipcode", pdfField: "form1[0].#subform[0].P1_Line6f_ZipCode[0]" },
+  { questionId: "part1.mailingCity", pdfField: "form1[0].#subform[0].P1_Line6d_CityOrTown[0]" },
+  
   { questionId: "part1.line6e.state", pdfField: "form1[0].#subform[0].P1_Line6e_State[0]" },
-  { questionId: "part1.line6i.country", pdfField: "form1[0].#subform[0].P1_Line6i_Country[0]" },
-  { questionId: "part1.line5a.familyname", pdfField: "form1[0].#subform[0].P1_Line5a_FamilyName[0]" },
-  { questionId: "part1.line5b.givenname", pdfField: "form1[0].#subform[0].P1_Line5b_GivenName[0]" },
-  { questionId: "part1.line5c.middlename", pdfField: "form1[0].#subform[0].P1_Line5c_MiddleName[0]" },
-  { questionId: "part1.line2.acctidentifier", pdfField: "form1[0].#subform[0].P1_Line2_AcctIdentifier[0]" },
+  { questionId: "part1.mailingState", pdfField: "form1[0].#subform[0].P1_Line6e_State[0]" },
+  
+  { questionId: "part1.line6f.zipcode", pdfField: "form1[0].#subform[0].P1_Line6f_ZipCode[0]" },
+  { questionId: "part1.mailingZipCode", pdfField: "form1[0].#subform[0].P1_Line6f_ZipCode[0]" },
+  
   { questionId: "part1.line6g.province", pdfField: "form1[0].#subform[0].P1_Line6g_Province[0]" },
+  { questionId: "part1.mailingProvince", pdfField: "form1[0].#subform[0].P1_Line6g_Province[0]" },
+  
+  { questionId: "part1.line6h.postalcode", pdfField: "form1[0].#subform[0].P1_Line6h_PostalCode[0]" },
+  { questionId: "part1.mailingPostalCode", pdfField: "form1[0].#subform[0].P1_Line6h_PostalCode[0]" },
+  
+  { questionId: "part1.line6i.country", pdfField: "form1[0].#subform[0].P1_Line6i_Country[0]" },
+  { questionId: "part1.mailingCountry", pdfField: "form1[0].#subform[0].P1_Line6i_Country[0]" },
+  // Name at Admission - Support both old and new field naming conventions
+  { questionId: "part1.line5a.familyname", pdfField: "form1[0].#subform[0].P1_Line5a_FamilyName[0]" },
+  { questionId: "part1.admissionFamilyName", pdfField: "form1[0].#subform[0].P1_Line5a_FamilyName[0]" },
+  
+  { questionId: "part1.line5b.givenname", pdfField: "form1[0].#subform[0].P1_Line5b_GivenName[0]" },
+  { questionId: "part1.admissionGivenName", pdfField: "form1[0].#subform[0].P1_Line5b_GivenName[0]" },
+  
+  { questionId: "part1.line5c.middlename", pdfField: "form1[0].#subform[0].P1_Line5c_MiddleName[0]" },
+  { questionId: "part1.admissionMiddleName", pdfField: "form1[0].#subform[0].P1_Line5c_MiddleName[0]" },
+  
+  // USCIS Account Number
+  { questionId: "part1.line2.acctidentifier", pdfField: "form1[0].#subform[0].P1_Line2_AcctIdentifier[0]" },
+  { questionId: "part1.uscisAccountNumber", pdfField: "form1[0].#subform[0].P1_Line2_AcctIdentifier[0]" },
+  { questionId: "part1.line6g.province", pdfField: "form1[0].#subform[0].P1_Line6g_Province[0]" },
+  // A-Number - Support both old and new field naming conventions
   { questionId: "part1.line1.aliennumber", pdfField: "form1[0].#subform[0].#area[1].P1_Line1_AlienNumber[0]" },
+  { questionId: "part1.alienNumber", pdfField: "form1[0].#subform[0].#area[1].P1_Line1_AlienNumber[0]" },
+  
+  // Physical Address - Support both old and new field naming conventions
   { questionId: "part1.line7a.streetnumbername", pdfField: "form1[0].#subform[0].P1_Line7a_StreetNumberName[0]" },
-  { questionId: "part1.line7c.cityortown", pdfField: "form1[0].#subform[0].P1_Line7c_CityOrTown[0]" },
-  { questionId: "part1.line7e.zipcode", pdfField: "form1[0].#subform[0].P1_Line7e_ZipCode[0]" },
+  { questionId: "part1.physicalStreetNumber", pdfField: "form1[0].#subform[0].P1_Line7a_StreetNumberName[0]" },
+  
   // Part 1 - Physical Address Unit Type (radio buttons)
   { questionId: "part1.physicalUnitType", pdfField: "form1[0].#subform[0].P1_checkbox7b_Unit[0]", type: "radio", value: "apt" },
   { questionId: "part1.physicalUnitType", pdfField: "form1[0].#subform[0].P1_checkbox7b_Unit[1]", type: "radio", value: "ste" },
   { questionId: "part1.physicalUnitType", pdfField: "form1[0].#subform[0].P1_checkbox7b_Unit[2]", type: "radio", value: "flr" },
   
   { questionId: "part1.line7b.aptsteflrnumber", pdfField: "form1[0].#subform[0].P1_Line7b_AptSteFlrNumber[0]" },
-  { questionId: "part1.line7h.country", pdfField: "form1[0].#subform[0].P1_Line7h_Country[0]" },
-  { questionId: "part1.line7g.postalcode", pdfField: "form1[0].#subform[0].P1_Line7g_PostalCode[0]" },
-  { questionId: "part1.line7f.province", pdfField: "form1[0].#subform[0].P1_Line7f_Province[0]" },
+  { questionId: "part1.physicalAptNumber", pdfField: "form1[0].#subform[0].P1_Line7b_AptSteFlrNumber[0]" },
+  
+  { questionId: "part1.line7c.cityortown", pdfField: "form1[0].#subform[0].P1_Line7c_CityOrTown[0]" },
+  { questionId: "part1.physicalCity", pdfField: "form1[0].#subform[0].P1_Line7c_CityOrTown[0]" },
+  
   { questionId: "part1.line7d.state", pdfField: "form1[0].#subform[0].P1_Line7d_State[0]" },
+  { questionId: "part1.physicalState", pdfField: "form1[0].#subform[0].P1_Line7d_State[0]" },
+  
+  { questionId: "part1.line7e.zipcode", pdfField: "form1[0].#subform[0].P1_Line7e_ZipCode[0]" },
+  { questionId: "part1.physicalZipCode", pdfField: "form1[0].#subform[0].P1_Line7e_ZipCode[0]" },
+  
+  { questionId: "part1.line7f.province", pdfField: "form1[0].#subform[0].P1_Line7f_Province[0]" },
+  { questionId: "part1.physicalProvince", pdfField: "form1[0].#subform[0].P1_Line7f_Province[0]" },
+  
+  { questionId: "part1.line7g.postalcode", pdfField: "form1[0].#subform[0].P1_Line7g_PostalCode[0]" },
+  { questionId: "part1.physicalPostalCode", pdfField: "form1[0].#subform[0].P1_Line7g_PostalCode[0]" },
+  
+  { questionId: "part1.line7h.country", pdfField: "form1[0].#subform[0].P1_Line7h_Country[0]" },
+  { questionId: "part1.physicalCountry", pdfField: "form1[0].#subform[0].P1_Line7h_Country[0]" },
+  // Personal Information - Support both old and new field naming conventions
   { questionId: "part1.line9.dateofbirth", pdfField: "form1[0].#subform[1].P1_Line9_DateOfBirth[0]" },
+  { questionId: "part1.dateOfBirth", pdfField: "form1[0].#subform[1].P1_Line9_DateOfBirth[0]" },
+  
   { questionId: "part1.line10.citytownofbirth", pdfField: "form1[0].#subform[1].P1_Line10_CityTownOfBirth[0]" },
+  { questionId: "part1.cityOfBirth", pdfField: "form1[0].#subform[1].P1_Line10_CityTownOfBirth[0]" },
+  
   { questionId: "part1.line11.countryofbirth", pdfField: "form1[0].#subform[1].P1_Line11_CountryofBirth[0]" },
-  { questionId: "part1.line16.ssn", pdfField: "form1[0].#subform[1].P1_Line16_SSN[0]" },
-  { questionId: "part1.line15.dateofadmission", pdfField: "form1[0].#subform[1].P1_Line15_DateOfAdmission[0]" },
-  { questionId: "part1.line14.classofadmission", pdfField: "form1[0].#subform[1].P1_Line14_ClassOfAdmission[0]" },
+  { questionId: "part1.countryOfBirth", pdfField: "form1[0].#subform[1].P1_Line11_CountryofBirth[0]" },
+  // Additional Personal Information - Support both old and new field naming conventions
   { questionId: "part1.line12.mothergivenname", pdfField: "form1[0].#subform[1].P1_Line12_MotherGivenName[0]" },
+  { questionId: "part1.motherGivenName", pdfField: "form1[0].#subform[1].P1_Line12_MotherGivenName[0]" },
+  
   { questionId: "part1.line13.fathergivenname", pdfField: "form1[0].#subform[1].P1_Line13_FatherGivenName[0]" },
+  { questionId: "part1.fatherGivenName", pdfField: "form1[0].#subform[1].P1_Line13_FatherGivenName[0]" },
+  
+  { questionId: "part1.line14.classofadmission", pdfField: "form1[0].#subform[1].P1_Line14_ClassOfAdmission[0]" },
+  { questionId: "part1.classOfAdmission", pdfField: "form1[0].#subform[1].P1_Line14_ClassOfAdmission[0]" },
+  
+  { questionId: "part1.line15.dateofadmission", pdfField: "form1[0].#subform[1].P1_Line15_DateOfAdmission[0]" },
+  { questionId: "part1.dateOfAdmission", pdfField: "form1[0].#subform[1].P1_Line15_DateOfAdmission[0]" },
+  
+  { questionId: "part1.line16.ssn", pdfField: "form1[0].#subform[1].P1_Line16_SSN[0]" },
+  { questionId: "part1.ssn", pdfField: "form1[0].#subform[1].P1_Line16_SSN[0]" },
   
   // Part 2 - Application Type (radio buttons) - Status
   { questionId: "part2.applicationType", pdfField: "form1[0].#subform[1].P2_checkbox1[0]", type: "radio", value: "lawful_permanent_resident" },
