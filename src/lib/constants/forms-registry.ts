@@ -171,521 +171,6 @@ const US_STATES = [
 
 // Form I-130: Petition for Alien Relative
 // Based on actual USCIS form structure and fields
-const I130_DEFINITION: FormDefinition = {
-  id: "i-130",
-  code: "I-130",
-  name: "Petition for Alien Relative",
-  description:
-    "Petition to establish a qualifying family relationship for immigration",
-  category: "family",
-  estimatedTime: "45-60 minutes",
-  filingFee: 535,
-  price: 70,
-  sections: [
-    {
-      id: "part1-relationship",
-      title: "Part 1: Relationship",
-      description:
-        "Identify the relationship between you (the petitioner) and your relative (the beneficiary)",
-      questions: [
-        {
-          id: "part1.relationship",
-          type: "select",
-          label: "I am filing this petition for my:",
-          required: true,
-          options: [
-            { value: "spouse", label: "Spouse" },
-            { value: "parent", label: "Parent" },
-            { value: "child", label: "Child" },
-            { value: "sibling", label: "Brother or Sister" },
-          ],
-          helpText: "Select the relationship of the beneficiary to you",
-        },
-        {
-          id: "part1.petitionerStatus",
-          type: "radio",
-          label: "I am:",
-          required: true,
-          options: [
-            { value: "citizen", label: "A U.S. Citizen" },
-            {
-              value: "lpr",
-              label: "A Lawful Permanent Resident of the United States",
-            },
-          ],
-        },
-        {
-          id: "part1.gainedLPRThroughAdoption",
-          type: "radio",
-          label:
-            "Did you gain lawful permanent resident status through adoption?",
-          required: true,
-          options: [
-            { value: "yes", label: "Yes" },
-            { value: "no", label: "No" },
-          ],
-          helpText: "Answer only if you are a lawful permanent resident",
-        },
-      ],
-    },
-    {
-      id: "part2-petitioner-info",
-      title: "Part 2: Information About You (Petitioner)",
-      description: "Provide your personal information",
-      questions: [
-        {
-          id: "part2.alienNumber",
-          type: "text",
-          label: "Alien Registration Number (A-Number)",
-          placeholder: "A-",
-          helpText: "If you have one. Leave blank if not applicable.",
-        },
-        {
-          id: "part2.uscisOnlineAccount",
-          type: "text",
-          label: "USCIS Online Account Number",
-          helpText: "If you have a USCIS online account",
-        },
-        {
-          id: "part2.ssn",
-          type: "ssn",
-          label: "U.S. Social Security Number",
-          placeholder: "###-##-####",
-          helpText: "If you have one",
-        },
-        {
-          id: "part2.lastName",
-          type: "text",
-          label: "Family Name (Last Name)",
-          required: true,
-        },
-        {
-          id: "part2.firstName",
-          type: "text",
-          label: "Given Name (First Name)",
-          required: true,
-        },
-        {
-          id: "part2.middleName",
-          type: "text",
-          label: "Middle Name",
-        },
-        {
-          id: "part2.otherNamesUsed",
-          type: "textarea",
-          label: "Other Names Used",
-          helpText:
-            "Provide all other names you have ever used, including aliases, maiden name, and nicknames. Separate with commas.",
-          placeholder: "e.g., Smith, Jane M.; Johnson, Jane",
-        },
-        {
-          id: "part2.cityOfBirth",
-          type: "text",
-          label: "City or Town of Birth",
-          required: true,
-        },
-        {
-          id: "part2.countryOfBirth",
-          type: "text",
-          label: "Country of Birth",
-          required: true,
-        },
-        {
-          id: "part2.dateOfBirth",
-          type: "date",
-          label: "Date of Birth",
-          required: true,
-        },
-        {
-          id: "part2.sex",
-          type: "radio",
-          label: "Sex",
-          required: true,
-          options: [
-            { value: "male", label: "Male" },
-            { value: "female", label: "Female" },
-          ],
-        },
-      ],
-    },
-    {
-      id: "part2-mailing-address",
-      title: "Part 2: Your Mailing Address",
-      questions: [
-        {
-          id: "part2.mailingInCareOf",
-          type: "text",
-          label: "In Care Of Name",
-          helpText: "Optional - if mail should be sent c/o someone else",
-        },
-        {
-          id: "part2.mailingStreet",
-          type: "text",
-          label: "Street Number and Name",
-          required: true,
-        },
-        {
-          id: "part2.mailingAptType",
-          type: "select",
-          label: "Apt/Ste/Flr",
-          options: [
-            { value: "", label: "None" },
-            { value: "apt", label: "Apt." },
-            { value: "ste", label: "Ste." },
-            { value: "flr", label: "Flr." },
-          ],
-        },
-        {
-          id: "part2.mailingAptNumber",
-          type: "text",
-          label: "Apartment/Suite/Floor Number",
-        },
-        {
-          id: "part2.mailingCity",
-          type: "text",
-          label: "City or Town",
-          required: true,
-        },
-        {
-          id: "part2.mailingState",
-          type: "select",
-          label: "State",
-          required: true,
-          options: US_STATES,
-        },
-        {
-          id: "part2.mailingZip",
-          type: "text",
-          label: "ZIP Code",
-          required: true,
-          placeholder: "12345",
-        },
-        {
-          id: "part2.province",
-          type: "text",
-          label: "Province",
-          helpText: "For foreign addresses only",
-        },
-        {
-          id: "part2.postalCode",
-          type: "text",
-          label: "Postal Code",
-          helpText: "For foreign addresses only",
-        },
-        {
-          id: "part2.country",
-          type: "text",
-          label: "Country",
-          helpText: "For foreign addresses only",
-        },
-      ],
-    },
-    {
-      id: "part2-marital-info",
-      title: "Part 2: Your Marital Information",
-      questions: [
-        {
-          id: "part2.timesMarried",
-          type: "text",
-          label: "How many times have you been married?",
-          required: true,
-          placeholder: "Enter a number",
-        },
-        {
-          id: "part2.currentMaritalStatus",
-          type: "select",
-          label: "Current Marital Status",
-          required: true,
-          options: [
-            { value: "single", label: "Single, Never Married" },
-            { value: "married", label: "Married" },
-            { value: "divorced", label: "Divorced" },
-            { value: "widowed", label: "Widowed" },
-            { value: "separated", label: "Marriage Annulled or Other" },
-          ],
-        },
-        {
-          id: "part2.currentSpouseName",
-          type: "text",
-          label: "Current Spouse's Full Name",
-          helpText: "If currently married",
-        },
-        {
-          id: "part2.dateOfMarriage",
-          type: "date",
-          label: "Date of Current Marriage",
-          helpText: "If currently married",
-        },
-        {
-          id: "part2.placeOfMarriage",
-          type: "text",
-          label: "Place of Current Marriage (City, State, Country)",
-          helpText: "If currently married",
-        },
-      ],
-    },
-    {
-      id: "part2-citizenship",
-      title: "Part 2: Information About Your U.S. Citizenship",
-      description: "Complete this section if you are a U.S. citizen",
-      questions: [
-        {
-          id: "part2.citizenshipThrough",
-          type: "radio",
-          label: "How did you acquire U.S. citizenship?",
-          options: [
-            { value: "birth-us", label: "Birth in the United States" },
-            { value: "naturalization", label: "Naturalization" },
-            {
-              value: "parents",
-              label:
-                "Parents (acquired after birth through U.S. citizen parents)",
-            },
-          ],
-          helpText: "Select one",
-        },
-        {
-          id: "part2.certificateNumber",
-          type: "text",
-          label:
-            "Certificate of Naturalization Number or Certificate of Citizenship Number",
-          helpText: "If you naturalized or acquired citizenship",
-        },
-        {
-          id: "part2.placeOfNaturalization",
-          type: "text",
-          label: "Place of Naturalization or Acquisition (City, State)",
-          helpText: "If you naturalized or acquired citizenship",
-        },
-      ],
-    },
-    {
-      id: "part4-beneficiary-info",
-      title: "Part 4: Information About Your Relative (Beneficiary)",
-      description:
-        "Provide information about the person you are petitioning for",
-      questions: [
-        {
-          id: "part4.alienNumber",
-          type: "text",
-          label: "Beneficiary's Alien Registration Number (A-Number)",
-          placeholder: "A-",
-          helpText: "If they have one",
-        },
-        {
-          id: "part4.uscisOnlineAccount",
-          type: "text",
-          label: "Beneficiary's USCIS Online Account Number",
-        },
-        {
-          id: "part4.ssn",
-          type: "ssn",
-          label: "Beneficiary's U.S. Social Security Number",
-          helpText: "If they have one",
-        },
-        {
-          id: "part4.lastName",
-          type: "text",
-          label: "Beneficiary's Family Name (Last Name)",
-          required: true,
-        },
-        {
-          id: "part4.firstName",
-          type: "text",
-          label: "Beneficiary's Given Name (First Name)",
-          required: true,
-        },
-        {
-          id: "part4.middleName",
-          type: "text",
-          label: "Beneficiary's Middle Name",
-        },
-        {
-          id: "part4.cityOfBirth",
-          type: "text",
-          label: "Beneficiary's City or Town of Birth",
-          required: true,
-        },
-        {
-          id: "part4.countryOfBirth",
-          type: "text",
-          label: "Beneficiary's Country of Birth",
-          required: true,
-        },
-        {
-          id: "part4.dateOfBirth",
-          type: "date",
-          label: "Beneficiary's Date of Birth",
-          required: true,
-        },
-        {
-          id: "part4.sex",
-          type: "radio",
-          label: "Beneficiary's Sex",
-          required: true,
-          options: [
-            { value: "male", label: "Male" },
-            { value: "female", label: "Female" },
-          ],
-        },
-        {
-          id: "part4.hasOtherNames",
-          type: "radio",
-          label: "Has your relative ever used other names?",
-          required: true,
-          options: [
-            { value: "yes", label: "Yes" },
-            { value: "no", label: "No" },
-          ],
-        },
-        {
-          id: "part4.otherNames",
-          type: "textarea",
-          label: "Other Names Used by Beneficiary",
-          helpText: "If yes, list all other names",
-        },
-      ],
-    },
-    {
-      id: "part4-beneficiary-address",
-      title: "Part 4: Beneficiary's Address",
-      questions: [
-        {
-          id: "part4.street",
-          type: "text",
-          label: "Street Number and Name",
-          required: true,
-        },
-        {
-          id: "part4.aptType",
-          type: "select",
-          label: "Apt/Ste/Flr",
-          options: [
-            { value: "", label: "None" },
-            { value: "apt", label: "Apt." },
-            { value: "ste", label: "Ste." },
-            { value: "flr", label: "Flr." },
-          ],
-        },
-        {
-          id: "part4.aptNumber",
-          type: "text",
-          label: "Apartment/Suite/Floor Number",
-        },
-        {
-          id: "part4.city",
-          type: "text",
-          label: "City or Town",
-          required: true,
-        },
-        {
-          id: "part4.state",
-          type: "text",
-          label: "State or Province",
-        },
-        {
-          id: "part4.zip",
-          type: "text",
-          label: "ZIP or Postal Code",
-        },
-        {
-          id: "part4.country",
-          type: "text",
-          label: "Country",
-          required: true,
-        },
-      ],
-    },
-    {
-      id: "part4-beneficiary-marital",
-      title: "Part 4: Beneficiary's Marital Information",
-      questions: [
-        {
-          id: "part4.timesMarried",
-          type: "text",
-          label: "How many times has the beneficiary been married?",
-          required: true,
-        },
-        {
-          id: "part4.currentMaritalStatus",
-          type: "select",
-          label: "Beneficiary's Current Marital Status",
-          required: true,
-          options: [
-            { value: "single", label: "Single, Never Married" },
-            { value: "married", label: "Married" },
-            { value: "divorced", label: "Divorced" },
-            { value: "widowed", label: "Widowed" },
-            { value: "separated", label: "Marriage Annulled or Other" },
-          ],
-        },
-        {
-          id: "part4.spouseName",
-          type: "text",
-          label: "Beneficiary's Current Spouse's Full Name",
-          helpText: "If currently married",
-        },
-        {
-          id: "part4.dateOfMarriage",
-          type: "date",
-          label: "Date of Marriage",
-          helpText: "If currently married",
-        },
-      ],
-    },
-    {
-      id: "part4-immigration-intent",
-      title: "Part 4: Immigration Intent",
-      description: "Indicate how the beneficiary will immigrate",
-      questions: [
-        {
-          id: "part4.immigrationPath",
-          type: "radio",
-          label: "The beneficiary will apply for:",
-          required: true,
-          options: [
-            {
-              value: "adjustment",
-              label: "Adjustment of status in the United States (Form I-485)",
-            },
-            {
-              value: "consular",
-              label: "An immigrant visa abroad at a U.S. Embassy or consulate",
-            },
-          ],
-          helpText: "IMPORTANT: You must select only ONE option",
-        },
-        {
-          id: "part4.consularLocation",
-          type: "text",
-          label:
-            "If applying for an immigrant visa abroad, provide the location (City, Country) where the beneficiary will apply",
-          helpText: "E.g., London, United Kingdom",
-        },
-      ],
-    },
-  ],
-  pdfFieldMappings: [
-    // { questionId: "part2.lastName", pdfFieldName: "Pt2Line4a_FamilyName" },
-    // { questionId: "part2.firstName", pdfFieldName: "Pt2Line4b_GivenName" },
-    // { questionId: "part2.middleName", pdfFieldName: "Pt2Line4c_MiddleName" },
-    // { questionId: "part4.lastName", pdfFieldName: "Pt4Line4a_FamilyName" },
-    // { questionId: "part4.firstName", pdfFieldName: "Pt4Line4b_GivenName" },
-  ],
-  requiredDocuments: [
-    "Proof of your U.S. citizenship (birth certificate, naturalization certificate, or U.S. passport)",
-    "Proof of relationship to beneficiary (birth certificate, marriage certificate, etc.)",
-    "Evidence of legal name change (if applicable)",
-    "Two passport-style photos of the beneficiary",
-  ],
-  instructions: [
-    "Complete all applicable sections",
-    "Answer all questions - use N/A if not applicable",
-    "Sign and date Part 6",
-    "Include the $535 filing fee",
-    "Mail to the appropriate USCIS Lockbox facility",
-  ],
-};
 
 // const I485_DEFINITION: FormDefinition = {
 //   id: "i-485",
@@ -6497,7 +5982,8 @@ const I129F_DEFINITION: FormDefinition = {
           id: "part1.7.otherNamesUsed",
           type: "text",
           label: "7. Other Names Used (if any)",
-          helpText: "Include maiden name, aliases, or nicknames. Provide family name, given name, and middle name if applicable.",
+          helpText:
+            "Include maiden name, aliases, or nicknames. Provide family name, given name, and middle name if applicable.",
         },
         {
           id: "part1.4.ssn",
@@ -11281,8 +10767,7 @@ const I_90_DEFINITION: FormDefinition = {
         {
           id: "part4.accommodationOther",
           type: "checkbox",
-          label:
-            "I have another type of disability and/or impairment",
+          label: "I have another type of disability and/or impairment",
           required: false,
         },
       ],
@@ -11801,6 +11286,2725 @@ const I_90_DEFINITION: FormDefinition = {
     "Submit required supporting documents with your application",
     "Pay the required filing fee",
     "Sign and date your application",
+  ],
+};
+
+export const I_130_DEFINITION: FormDefinition = {
+  id: "i-130",
+  code: "I-130",
+  name: "I-130 Form",
+  description: "Complete I-130 form with all fields",
+  category: "family",
+  estimatedTime: "60-90 minutes",
+  filingFee: 0,
+  price: 60,
+  sections: [
+    {
+      id: "part2",
+      title: "Part 2",
+      description: "Complete all fields in Part 2",
+      questions: [
+        {
+          id: "part2.line11.sSN",
+          type: "radio",
+          label: "S S N",
+          required: false,
+          options: [
+            {
+              value: "yes",
+              label: "Yes",
+            },
+            {
+              value: "no",
+              label: "No",
+            },
+          ],
+        },
+        {
+          id: "part2.line4a.familyName",
+          type: "text",
+          label: "Family Name",
+          required: true,
+        },
+        {
+          id: "part2.line4b.givenName",
+          type: "text",
+          label: "Given Name",
+          required: true,
+        },
+        {
+          id: "part2.line4c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part2.line1.alienNumber",
+          type: "text",
+          label: "Alien Number",
+          required: true,
+        },
+        {
+          id: "part2.line2.uSCISOnlineActNumber",
+          type: "text",
+          label: "U S C I S Online Act Number",
+          required: true,
+        },
+        {
+          id: "part2.line8.dateofBirth",
+          type: "date",
+          label: "Dateof Birth",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.line9.male",
+          type: "radio",
+          label: "Male",
+          required: true,
+          options: [
+            {
+              value: "male",
+              label: "Male",
+            },
+            {
+              value: "female",
+              label: "Female",
+            },
+          ],
+        },
+        {
+          id: "part2.line7.countryofBirth",
+          type: "select",
+          label: "Countryof Birth",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select Country",
+            },
+            {
+              value: "US",
+              label: "United States",
+            },
+            {
+              value: "CA",
+              label: "Canada",
+            },
+            {
+              value: "MX",
+              label: "Mexico",
+            },
+            {
+              value: "UK",
+              label: "United Kingdom",
+            },
+          ],
+        },
+        {
+          id: "part2.line10.streetNumberName",
+          type: "text",
+          label: "Street Number Name",
+          required: true,
+        },
+        {
+          id: "part2.line14.streetNumberName",
+          type: "text",
+          label: "Street Number Name",
+          required: true,
+        },
+        {
+          id: "part2.line13a.dateFrom",
+          type: "date",
+          label: "Date From",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.line15a.dateFrom",
+          type: "date",
+          label: "Date From",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.line15b.dateTo",
+          type: "date",
+          label: "Date To",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.line12.streetNumberName",
+          type: "text",
+          label: "Street Number Name",
+          required: true,
+        },
+        {
+          id: "part2.line6.cityTownOfBirth",
+          type: "radio",
+          label: "City Town Of Birth",
+          required: true,
+          options: [
+            {
+              value: "yes",
+              label: "Yes",
+            },
+            {
+              value: "no",
+              label: "No",
+            },
+          ],
+        },
+        {
+          id: "part2.line5a.familyName",
+          type: "text",
+          label: "Family Name",
+          required: true,
+        },
+        {
+          id: "part2.line5b.givenName",
+          type: "text",
+          label: "Given Name",
+          required: true,
+        },
+        {
+          id: "part2.line5c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part2.line16.numberofMarriages",
+          type: "text",
+          label: "Numberof Marriages",
+          required: false,
+        },
+        {
+          id: "part2.line17.widowed",
+          type: "text",
+          label: "Widowed",
+          required: false,
+        },
+        {
+          id: "part2.line13b.dateTo",
+          type: "date",
+          label: "Date To",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.line20b.givenName",
+          type: "text",
+          label: "Given Name",
+          required: true,
+        },
+        {
+          id: "part2.line20c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part2.line23.dateMarriageEnded",
+          type: "date",
+          label: "Date Marriage Ended",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.line22c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part2.line22b.givenName",
+          type: "text",
+          label: "Given Name",
+          required: true,
+        },
+        {
+          id: "part2.line22a.familyName",
+          type: "text",
+          label: "Family Name",
+          required: true,
+        },
+        {
+          id: "part2.line21.dateMarriageEnded",
+          type: "date",
+          label: "Date Marriage Ended",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.line18.dateOfMarriage",
+          type: "date",
+          label: "Date Of Marriage",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.line24.familyName",
+          type: "text",
+          label: "Family Name",
+          required: true,
+        },
+        {
+          id: "part2.line25.dateofBirth",
+          type: "date",
+          label: "Dateof Birth",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.line28.cityTownOrVillageOfResidence",
+          type: "radio",
+          label: "City Town Or Village Of Residence",
+          required: true,
+          options: [
+            {
+              value: "yes",
+              label: "Yes",
+            },
+            {
+              value: "no",
+              label: "No",
+            },
+          ],
+        },
+        {
+          id: "part2.line29.countryOfResidence",
+          type: "select",
+          label: "Country Of Residence",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select Country",
+            },
+            {
+              value: "US",
+              label: "United States",
+            },
+            {
+              value: "CA",
+              label: "Canada",
+            },
+            {
+              value: "MX",
+              label: "Mexico",
+            },
+            {
+              value: "UK",
+              label: "United Kingdom",
+            },
+          ],
+        },
+        {
+          id: "part2.line27.countryofBirth",
+          type: "select",
+          label: "Countryof Birth",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select Country",
+            },
+            {
+              value: "US",
+              label: "United States",
+            },
+            {
+              value: "CA",
+              label: "Canada",
+            },
+            {
+              value: "MX",
+              label: "Mexico",
+            },
+            {
+              value: "UK",
+              label: "United Kingdom",
+            },
+          ],
+        },
+        {
+          id: "part2.line30b.givenName",
+          type: "text",
+          label: "Given Name",
+          required: true,
+        },
+        {
+          id: "part2.line30c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part2.line30a.familyName",
+          type: "text",
+          label: "Family Name",
+          required: true,
+        },
+        {
+          id: "part2.line31.dateofBirth",
+          type: "date",
+          label: "Dateof Birth",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.line34.cityTownOrVillageOfResidence",
+          type: "radio",
+          label: "City Town Or Village Of Residence",
+          required: true,
+          options: [
+            {
+              value: "yes",
+              label: "Yes",
+            },
+            {
+              value: "no",
+              label: "No",
+            },
+          ],
+        },
+        {
+          id: "part2.line35.countryOfResidence",
+          type: "select",
+          label: "Country Of Residence",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select Country",
+            },
+            {
+              value: "US",
+              label: "United States",
+            },
+            {
+              value: "CA",
+              label: "Canada",
+            },
+            {
+              value: "MX",
+              label: "Mexico",
+            },
+            {
+              value: "UK",
+              label: "United Kingdom",
+            },
+          ],
+        },
+        {
+          id: "part2.line33.countryofBirth",
+          type: "select",
+          label: "Countryof Birth",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select Country",
+            },
+            {
+              value: "US",
+              label: "United States",
+            },
+            {
+              value: "CA",
+              label: "Canada",
+            },
+            {
+              value: "MX",
+              label: "Mexico",
+            },
+            {
+              value: "UK",
+              label: "United Kingdom",
+            },
+          ],
+        },
+        {
+          id: "part2.line36.uSCitizen",
+          type: "radio",
+          label: "U S Citizen",
+          required: false,
+          options: [
+            {
+              value: "yes",
+              label: "Yes",
+            },
+            {
+              value: "no",
+              label: "No",
+            },
+          ],
+        },
+        {
+          id: "part2.line23a.checkbox",
+          type: "checkbox",
+          label: "Checkbox",
+          required: false,
+        },
+        {
+          id: "part2.line23b.checkbox",
+          type: "checkbox",
+          label: "Checkbox",
+          required: false,
+        },
+        {
+          id: "part2.line23c.checkbox",
+          type: "checkbox",
+          label: "Checkbox",
+          required: false,
+        },
+        {
+          id: "part2.line37a.certificateNumber",
+          type: "text",
+          label: "Certificate Number",
+          required: false,
+        },
+        {
+          id: "part2.line37c.dateOfIssuance",
+          type: "date",
+          label: "Date Of Issuance",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.line37b.placeOfIssuance",
+          type: "text",
+          label: "Place Of Issuance",
+          required: false,
+        },
+        {
+          id: "part2.line26.male",
+          type: "radio",
+          label: "Male",
+          required: true,
+          options: [
+            {
+              value: "male",
+              label: "Male",
+            },
+            {
+              value: "female",
+              label: "Female",
+            },
+          ],
+        },
+        {
+          id: "part2.line32.male",
+          type: "radio",
+          label: "Male",
+          required: true,
+          options: [
+            {
+              value: "male",
+              label: "Male",
+            },
+            {
+              value: "female",
+              label: "Female",
+            },
+          ],
+        },
+        {
+          id: "part2.line19a.cityTown",
+          type: "text",
+          label: "City Town",
+          required: true,
+        },
+        {
+          id: "part2.line19b.state",
+          type: "select",
+          label: "State",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select State",
+            },
+            {
+              value: "AL",
+              label: "Alabama",
+            },
+            {
+              value: "AK",
+              label: "Alaska",
+            },
+            {
+              value: "AZ",
+              label: "Arizona",
+            },
+            {
+              value: "CA",
+              label: "California",
+            },
+            {
+              value: "NY",
+              label: "New York",
+            },
+            {
+              value: "TX",
+              label: "Texas",
+            },
+          ],
+        },
+        {
+          id: "part2.line19c.province",
+          type: "text",
+          label: "Province",
+          required: false,
+        },
+        {
+          id: "part2.line19d.country",
+          type: "select",
+          label: "Country",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select Country",
+            },
+            {
+              value: "US",
+              label: "United States",
+            },
+            {
+              value: "CA",
+              label: "Canada",
+            },
+            {
+              value: "MX",
+              label: "Mexico",
+            },
+            {
+              value: "UK",
+              label: "United Kingdom",
+            },
+          ],
+        },
+        {
+          id: "part2.line40a.classOfAdmission",
+          type: "text",
+          label: "Class Of Admission",
+          required: false,
+        },
+        {
+          id: "part2.line40b.dateOfAdmission",
+          type: "date",
+          label: "Date Of Admission",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.line40d.cityOrTown",
+          type: "text",
+          label: "City Or Town",
+          required: true,
+        },
+        {
+          id: "part2.line41.no",
+          type: "radio",
+          label: "No",
+          required: false,
+          options: [
+            {
+              value: "yes",
+              label: "Yes",
+            },
+            {
+              value: "no",
+              label: "No",
+            },
+          ],
+        },
+        {
+          id: "part2.line40.employerOrCompName",
+          type: "text",
+          label: "Employer Or Comp Name",
+          required: true,
+        },
+        {
+          id: "part2.line45.streetNumberName",
+          type: "text",
+          label: "Street Number Name",
+          required: true,
+        },
+        {
+          id: "part2.line46.occupation",
+          type: "text",
+          label: "Occupation",
+          required: false,
+        },
+        {
+          id: "part2.line47a.dateFrom",
+          type: "date",
+          label: "Date From",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.line47b.dateTo",
+          type: "date",
+          label: "Date To",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.line44.employerOrOrgName",
+          type: "text",
+          label: "Employer Or Org Name",
+          required: true,
+        },
+        {
+          id: "part2.line42.occupation",
+          type: "text",
+          label: "Occupation",
+          required: false,
+        },
+        {
+          id: "part2.line43a.dateFrom",
+          type: "date",
+          label: "Date From",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.line43b.dateTo",
+          type: "date",
+          label: "Date To",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.line40e.state",
+          type: "select",
+          label: "State",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select State",
+            },
+            {
+              value: "AL",
+              label: "Alabama",
+            },
+            {
+              value: "AK",
+              label: "Alaska",
+            },
+            {
+              value: "AZ",
+              label: "Arizona",
+            },
+            {
+              value: "CA",
+              label: "California",
+            },
+            {
+              value: "NY",
+              label: "New York",
+            },
+            {
+              value: "TX",
+              label: "Texas",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part1",
+      title: "Part 1",
+      description: "Complete all fields in Part 1",
+      questions: [
+        {
+          id: "part1.line1.spouse",
+          type: "text",
+          label: "Spouse",
+          required: true,
+        },
+        {
+          id: "part1.line2.inWedlock",
+          type: "text",
+          label: "In Wedlock",
+          required: true,
+        },
+        {
+          id: "part1.line3.yes",
+          type: "radio",
+          label: "Yes",
+          required: true,
+          options: [
+            {
+              value: "yes",
+              label: "Yes",
+            },
+            {
+              value: "no",
+              label: "No",
+            },
+          ],
+        },
+        {
+          id: "part1.line4.no",
+          type: "radio",
+          label: "No",
+          required: true,
+          options: [
+            {
+              value: "yes",
+              label: "Yes",
+            },
+            {
+              value: "no",
+              label: "No",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part3",
+      title: "Part 3",
+      description: "Complete all fields in Part 3",
+      questions: [
+        {
+          id: "part3.line1.ethnicity",
+          type: "text",
+          label: "Ethnicity",
+          required: true,
+        },
+        {
+          id: "part3.line2.race_Black",
+          type: "radio",
+          label: "Race_ Black",
+          required: true,
+          options: [
+            {
+              value: "yes",
+              label: "Yes",
+            },
+            {
+              value: "no",
+              label: "No",
+            },
+          ],
+        },
+        {
+          id: "part3.line3.heightFeet",
+          type: "text",
+          label: "Height Feet",
+          required: true,
+        },
+        {
+          id: "part3.line4.pound1",
+          type: "text",
+          label: "Pound1",
+          required: true,
+        },
+        {
+          id: "part3.line5.eyeColor",
+          type: "text",
+          label: "Eye Color",
+          required: true,
+        },
+        {
+          id: "part3.line6.hairColor",
+          type: "text",
+          label: "Hair Color",
+          required: true,
+        },
+      ],
+    },
+    {
+      id: "part4",
+      title: "Part 4",
+      description: "Complete all fields in Part 4",
+      questions: [
+        {
+          id: "part4.line1.alienNumber",
+          type: "text",
+          label: "Alien Number",
+          required: true,
+        },
+        {
+          id: "part4.line2.uSCISOnlineActNumber",
+          type: "text",
+          label: "U S C I S Online Act Number",
+          required: true,
+        },
+        {
+          id: "part4.line4a.familyName",
+          type: "text",
+          label: "Family Name",
+          required: true,
+        },
+        {
+          id: "part4.line4b.givenName",
+          type: "text",
+          label: "Given Name",
+          required: true,
+        },
+        {
+          id: "part4.line4c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part4.line5b.givenName",
+          type: "text",
+          label: "Given Name",
+          required: true,
+        },
+        {
+          id: "part4.line5c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part4.line7.cityTownOfBirth",
+          type: "radio",
+          label: "City Town Of Birth",
+          required: true,
+          options: [
+            {
+              value: "yes",
+              label: "Yes",
+            },
+            {
+              value: "no",
+              label: "No",
+            },
+          ],
+        },
+        {
+          id: "part4.line8.countryOfBirth",
+          type: "select",
+          label: "Country Of Birth",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select Country",
+            },
+            {
+              value: "US",
+              label: "United States",
+            },
+            {
+              value: "CA",
+              label: "Canada",
+            },
+            {
+              value: "MX",
+              label: "Mexico",
+            },
+            {
+              value: "UK",
+              label: "United Kingdom",
+            },
+          ],
+        },
+        {
+          id: "part4.line11.province",
+          type: "text",
+          label: "Province",
+          required: false,
+        },
+        {
+          id: "part4.line12a.streetNumberName",
+          type: "text",
+          label: "Street Number Name",
+          required: true,
+        },
+        {
+          id: "part4.line12b.unit",
+          type: "text",
+          label: "Unit",
+          required: false,
+        },
+        {
+          id: "part4.line12c.cityOrTown",
+          type: "text",
+          label: "City Or Town",
+          required: true,
+        },
+        {
+          id: "part4.line12e.zipCode",
+          type: "text",
+          label: "Zip Code",
+          required: true,
+        },
+        {
+          id: "part4.line12d.state",
+          type: "select",
+          label: "State",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select State",
+            },
+            {
+              value: "AL",
+              label: "Alabama",
+            },
+            {
+              value: "AK",
+              label: "Alaska",
+            },
+            {
+              value: "AZ",
+              label: "Arizona",
+            },
+            {
+              value: "CA",
+              label: "California",
+            },
+            {
+              value: "NY",
+              label: "New York",
+            },
+            {
+              value: "TX",
+              label: "Texas",
+            },
+          ],
+        },
+        {
+          id: "part4.line13.postalCode",
+          type: "text",
+          label: "Postal Code",
+          required: false,
+        },
+        {
+          id: "part4.line9.dateOfBirth",
+          type: "radio",
+          label: "Date Of Birth",
+          required: true,
+          options: [
+            {
+              value: "male",
+              label: "Male",
+            },
+            {
+              value: "female",
+              label: "Female",
+            },
+          ],
+        },
+        {
+          id: "part4.line10.yes",
+          type: "radio",
+          label: "Yes",
+          required: false,
+          options: [
+            {
+              value: "yes",
+              label: "Yes",
+            },
+            {
+              value: "no",
+              label: "No",
+            },
+          ],
+        },
+        {
+          id: "part4.line14.daytimePhoneNumber",
+          type: "tel",
+          label: "Daytime Phone Number",
+          required: false,
+          placeholder: "(###) ###-####",
+        },
+        {
+          id: "part4.line3.sSN",
+          type: "ssn",
+          label: "S S N",
+          required: true,
+          placeholder: "###-##-####",
+        },
+        {
+          id: "part4.line20c.province",
+          type: "text",
+          label: "Province",
+          required: false,
+        },
+        {
+          id: "part4.line17.numberofMarriages",
+          type: "text",
+          label: "Numberof Marriages",
+          required: false,
+        },
+        {
+          id: "part4.line18.maritalStatus",
+          type: "select",
+          label: "Marital Status",
+          required: true,
+          options: [
+            {
+              value: "single",
+              label: "Single, Never Married",
+            },
+            {
+              value: "married",
+              label: "Married",
+            },
+            {
+              value: "divorced",
+              label: "Divorced",
+            },
+            {
+              value: "widowed",
+              label: "Widowed",
+            },
+            {
+              value: "separated",
+              label: "Separated",
+            },
+          ],
+        },
+        {
+          id: "part4.line15.mobilePhoneNumber",
+          type: "tel",
+          label: "Mobile Phone Number",
+          required: false,
+          placeholder: "(###) ###-####",
+        },
+        {
+          id: "part4.line16.emailAddress",
+          type: "email",
+          label: "Email Address",
+          required: true,
+          placeholder: "email@example.com",
+        },
+        {
+          id: "part4.line19.dateOfMarriage",
+          type: "date",
+          label: "Date Of Marriage",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part4.line18a.familyName",
+          type: "text",
+          label: "Family Name",
+          required: true,
+        },
+        {
+          id: "part4.line18b.givenName",
+          type: "text",
+          label: "Given Name",
+          required: true,
+        },
+        {
+          id: "part4.line18c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part4.line16a.familyName",
+          type: "text",
+          label: "Family Name",
+          required: true,
+        },
+        {
+          id: "part4.line16b.givenName",
+          type: "text",
+          label: "Given Name",
+          required: true,
+        },
+        {
+          id: "part4.line16c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part4.line31.relationship",
+          type: "text",
+          label: "Relationship",
+          required: true,
+        },
+        {
+          id: "part4.line30a.familyName",
+          type: "text",
+          label: "Family Name",
+          required: true,
+        },
+        {
+          id: "part4.line30b.givenName",
+          type: "text",
+          label: "Given Name",
+          required: true,
+        },
+        {
+          id: "part4.line30c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part4.line32.dateOfBirth",
+          type: "date",
+          label: "Date Of Birth",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part4.line49.countryOfBirth",
+          type: "select",
+          label: "Country Of Birth",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select Country",
+            },
+            {
+              value: "US",
+              label: "United States",
+            },
+            {
+              value: "CA",
+              label: "Canada",
+            },
+            {
+              value: "MX",
+              label: "Mexico",
+            },
+            {
+              value: "UK",
+              label: "United Kingdom",
+            },
+          ],
+        },
+        {
+          id: "part4.line35.relationship",
+          type: "text",
+          label: "Relationship",
+          required: true,
+        },
+        {
+          id: "part4.line36.dateOfBirth",
+          type: "date",
+          label: "Date Of Birth",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part4.line37.countryOfBirth",
+          type: "select",
+          label: "Country Of Birth",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select Country",
+            },
+            {
+              value: "US",
+              label: "United States",
+            },
+            {
+              value: "CA",
+              label: "Canada",
+            },
+            {
+              value: "MX",
+              label: "Mexico",
+            },
+            {
+              value: "UK",
+              label: "United Kingdom",
+            },
+          ],
+        },
+        {
+          id: "part4.line34a.familyName",
+          type: "text",
+          label: "Family Name",
+          required: true,
+        },
+        {
+          id: "part4.line34b.givenName",
+          type: "text",
+          label: "Given Name",
+          required: true,
+        },
+        {
+          id: "part4.line34c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part4.line38b.givenName",
+          type: "text",
+          label: "Given Name",
+          required: true,
+        },
+        {
+          id: "part4.line38c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part4.line38a.familyName",
+          type: "text",
+          label: "Family Name",
+          required: true,
+        },
+        {
+          id: "part4.line41.countryOfBirth",
+          type: "select",
+          label: "Country Of Birth",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select Country",
+            },
+            {
+              value: "US",
+              label: "United States",
+            },
+            {
+              value: "CA",
+              label: "Canada",
+            },
+            {
+              value: "MX",
+              label: "Mexico",
+            },
+            {
+              value: "UK",
+              label: "United Kingdom",
+            },
+          ],
+        },
+        {
+          id: "part4.line40.dateOfBirth",
+          type: "date",
+          label: "Date Of Birth",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part4.line39.relationship",
+          type: "text",
+          label: "Relationship",
+          required: true,
+        },
+        {
+          id: "part4.line20a.cityTown",
+          type: "text",
+          label: "City Town",
+          required: true,
+        },
+        {
+          id: "part4.line20b.state",
+          type: "select",
+          label: "State",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select State",
+            },
+            {
+              value: "AL",
+              label: "Alabama",
+            },
+            {
+              value: "AK",
+              label: "Alaska",
+            },
+            {
+              value: "AZ",
+              label: "Arizona",
+            },
+            {
+              value: "CA",
+              label: "California",
+            },
+            {
+              value: "NY",
+              label: "New York",
+            },
+            {
+              value: "TX",
+              label: "Texas",
+            },
+          ],
+        },
+        {
+          id: "part4.line20d.country",
+          type: "select",
+          label: "Country",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select Country",
+            },
+            {
+              value: "US",
+              label: "United States",
+            },
+            {
+              value: "CA",
+              label: "Canada",
+            },
+            {
+              value: "MX",
+              label: "Mexico",
+            },
+            {
+              value: "UK",
+              label: "United Kingdom",
+            },
+          ],
+        },
+        {
+          id: "part4.line42c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part4.line42b.givenName",
+          type: "text",
+          label: "Given Name",
+          required: true,
+        },
+        {
+          id: "part4.line42a.familyName",
+          type: "text",
+          label: "Family Name",
+          required: true,
+        },
+        {
+          id: "part4.line45.countryOfBirth",
+          type: "select",
+          label: "Country Of Birth",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select Country",
+            },
+            {
+              value: "US",
+              label: "United States",
+            },
+            {
+              value: "CA",
+              label: "Canada",
+            },
+            {
+              value: "MX",
+              label: "Mexico",
+            },
+            {
+              value: "UK",
+              label: "United Kingdom",
+            },
+          ],
+        },
+        {
+          id: "part4.line44.dateOfBirth",
+          type: "date",
+          label: "Date Of Birth",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part4.line43.relationship",
+          type: "text",
+          label: "Relationship",
+          required: true,
+        },
+        {
+          id: "part4.line46a.familyName",
+          type: "text",
+          label: "Family Name",
+          required: true,
+        },
+        {
+          id: "part4.line46b.givenName",
+          type: "text",
+          label: "Given Name",
+          required: true,
+        },
+        {
+          id: "part4.line46c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part4.line47.relationship",
+          type: "text",
+          label: "Relationship",
+          required: true,
+        },
+        {
+          id: "part4.line48.dateOfBirth",
+          type: "date",
+          label: "Date Of Birth",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part4.line20.yes",
+          type: "radio",
+          label: "Yes",
+          required: false,
+          options: [
+            {
+              value: "yes",
+              label: "Yes",
+            },
+            {
+              value: "no",
+              label: "No",
+            },
+          ],
+        },
+        {
+          id: "part4.line21d.dateExpired",
+          type: "date",
+          label: "Date Expired",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part4.line21a.classOfAdmission",
+          type: "text",
+          label: "Class Of Admission",
+          required: false,
+        },
+        {
+          id: "part4.line21b.arrivalDeparture",
+          type: "text",
+          label: "Arrival Departure",
+          required: false,
+        },
+        {
+          id: "part4.line21c.dateOfArrival",
+          type: "date",
+          label: "Date Of Arrival",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part4.line22.passportNumber",
+          type: "text",
+          label: "Passport Number",
+          required: false,
+        },
+        {
+          id: "part4.line23.travelDocNumber",
+          type: "text",
+          label: "Travel Doc Number",
+          required: false,
+        },
+        {
+          id: "part4.line24.countryOfIssuance",
+          type: "select",
+          label: "Country Of Issuance",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select Country",
+            },
+            {
+              value: "US",
+              label: "United States",
+            },
+            {
+              value: "CA",
+              label: "Canada",
+            },
+            {
+              value: "MX",
+              label: "Mexico",
+            },
+            {
+              value: "UK",
+              label: "United Kingdom",
+            },
+          ],
+        },
+        {
+          id: "part4.line25.expDate",
+          type: "date",
+          label: "Exp Date",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part4.line26.nameOfCompany",
+          type: "text",
+          label: "Name Of Company",
+          required: true,
+        },
+        {
+          id: "part4.line27.dateEmploymentBegan",
+          type: "date",
+          label: "Date Employment Began",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part4.line28.no",
+          type: "radio",
+          label: "No",
+          required: false,
+          options: [
+            {
+              value: "yes",
+              label: "Yes",
+            },
+            {
+              value: "no",
+              label: "No",
+            },
+          ],
+        },
+        {
+          id: "part4.line54.removal",
+          type: "text",
+          label: "Removal",
+          required: false,
+        },
+        {
+          id: "part4.line55a.cityOrTown",
+          type: "text",
+          label: "City Or Town",
+          required: true,
+        },
+        {
+          id: "part4.line55b.state",
+          type: "select",
+          label: "State",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select State",
+            },
+            {
+              value: "AL",
+              label: "Alabama",
+            },
+            {
+              value: "AK",
+              label: "Alaska",
+            },
+            {
+              value: "AZ",
+              label: "Arizona",
+            },
+            {
+              value: "CA",
+              label: "California",
+            },
+            {
+              value: "NY",
+              label: "New York",
+            },
+            {
+              value: "TX",
+              label: "Texas",
+            },
+          ],
+        },
+        {
+          id: "part4.line56.date",
+          type: "date",
+          label: "Date",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part4.line55c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part4.line57.unit",
+          type: "text",
+          label: "Unit",
+          required: false,
+        },
+        {
+          id: "part4.line58a.dateFrom",
+          type: "date",
+          label: "Date From",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part4.line58b.dateTo",
+          type: "date",
+          label: "Date To",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part4.line61a.cityOrTown",
+          type: "text",
+          label: "City Or Town",
+          required: true,
+        },
+        {
+          id: "part4.line61b.province",
+          type: "text",
+          label: "Province",
+          required: false,
+        },
+        {
+          id: "part4.line61c.country",
+          type: "select",
+          label: "Country",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select Country",
+            },
+            {
+              value: "US",
+              label: "United States",
+            },
+            {
+              value: "CA",
+              label: "Canada",
+            },
+            {
+              value: "MX",
+              label: "Mexico",
+            },
+            {
+              value: "UK",
+              label: "United Kingdom",
+            },
+          ],
+        },
+        {
+          id: "part4.line60a.cityOrTown",
+          type: "text",
+          label: "City Or Town",
+          required: true,
+        },
+        {
+          id: "part4.line60b.state",
+          type: "select",
+          label: "State",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select State",
+            },
+            {
+              value: "AL",
+              label: "Alabama",
+            },
+            {
+              value: "AK",
+              label: "Alaska",
+            },
+            {
+              value: "AZ",
+              label: "Arizona",
+            },
+            {
+              value: "CA",
+              label: "California",
+            },
+            {
+              value: "NY",
+              label: "New York",
+            },
+            {
+              value: "TX",
+              label: "Texas",
+            },
+          ],
+        },
+        {
+          id: "part4.line6a.familyName",
+          type: "text",
+          label: "Family Name",
+          required: true,
+        },
+        {
+          id: "part4.line6b.givenName",
+          type: "text",
+          label: "Given Name",
+          required: true,
+        },
+        {
+          id: "part4.line6c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part4.line8c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part4.line8b.givenName",
+          type: "text",
+          label: "Given Name",
+          required: true,
+        },
+        {
+          id: "part4.line8a.familyName",
+          type: "text",
+          label: "Family Name",
+          required: true,
+        },
+        {
+          id: "part4.line53.daytimePhoneNumber",
+          type: "tel",
+          label: "Daytime Phone Number",
+          required: false,
+          placeholder: "(###) ###-####",
+        },
+      ],
+    },
+    {
+      id: "part5",
+      title: "Part 5",
+      description: "Complete all fields in Part 5",
+      questions: [
+        {
+          id: "part5.line2a.familyName",
+          type: "text",
+          label: "Family Name",
+          required: true,
+        },
+        {
+          id: "part5.line2b.givenName",
+          type: "text",
+          label: "Given Name",
+          required: true,
+        },
+        {
+          id: "part5.line2c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part5.line5.result",
+          type: "text",
+          label: "Result",
+          required: true,
+        },
+        {
+          id: "part5.line4.dateFiled",
+          type: "date",
+          label: "Date Filed",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part5.line3a.cityOrTown",
+          type: "text",
+          label: "City Or Town",
+          required: true,
+        },
+        {
+          id: "part5.line3b.state",
+          type: "select",
+          label: "State",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select State",
+            },
+            {
+              value: "AL",
+              label: "Alabama",
+            },
+            {
+              value: "AK",
+              label: "Alaska",
+            },
+            {
+              value: "AZ",
+              label: "Arizona",
+            },
+            {
+              value: "CA",
+              label: "California",
+            },
+            {
+              value: "NY",
+              label: "New York",
+            },
+            {
+              value: "TX",
+              label: "Texas",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part6",
+      title: "Part 6",
+      description: "Complete all fields in Part 6",
+      questions: [
+        {
+          id: "part6.line3.daytimePhoneNumber",
+          type: "tel",
+          label: "Daytime Phone Number",
+          required: true,
+          placeholder: "(###) ###-####",
+        },
+        {
+          id: "part6.line5.email",
+          type: "email",
+          label: "Email",
+          required: true,
+          placeholder: "email@example.com",
+        },
+        {
+          id: "part6.line4.mobileNumber",
+          type: "text",
+          label: "Mobile Number",
+          required: true,
+        },
+        {
+          id: "part6.line1b.language",
+          type: "text",
+          label: "Language",
+          required: false,
+        },
+        {
+          id: "part6.line2.checkbox",
+          type: "checkbox",
+          label: "Checkbox",
+          required: true,
+        },
+      ],
+    },
+    {
+      id: "part7",
+      title: "Part 7",
+      description: "Complete all fields in Part 7",
+      questions: [
+        {
+          id: "part7.line1b.interpreterGivenName",
+          type: "text",
+          label: "Interpreter Given Name",
+          required: true,
+        },
+        {
+          id: "part7.line1a.interpreterFamilyName",
+          type: "text",
+          label: "Interpreter Family Name",
+          required: true,
+        },
+        {
+          id: "part7.line2.interpreterBusinessorOrg",
+          type: "text",
+          label: "Interpreter Businessor Org",
+          required: true,
+        },
+        {
+          id: "part7.line3.cityOrTown",
+          type: "text",
+          label: "City Or Town",
+          required: true,
+        },
+        {
+          id: "part7.line4.interpreterDaytimeTelephone",
+          type: "tel",
+          label: "Interpreter Daytime Telephone",
+          required: true,
+          placeholder: "(###) ###-####",
+        },
+        {
+          id: "part7.line5.email",
+          type: "email",
+          label: "Email",
+          required: true,
+          placeholder: "email@example.com",
+        },
+      ],
+    },
+    {
+      id: "part8",
+      title: "Part 8",
+      description: "Complete all fields in Part 8",
+      questions: [
+        {
+          id: "part8.line1b.preparerGivenName",
+          type: "text",
+          label: "Preparer Given Name",
+          required: true,
+        },
+        {
+          id: "part8.line2.businessName",
+          type: "ssn",
+          label: "Business Name",
+          required: true,
+          placeholder: "###-##-####",
+        },
+        {
+          id: "part8.line1a.preparerFamilyName",
+          type: "text",
+          label: "Preparer Family Name",
+          required: true,
+        },
+        {
+          id: "part8.line3.cityOrTown",
+          type: "text",
+          label: "City Or Town",
+          required: true,
+        },
+        {
+          id: "part8.line5.preparerFaxNumber",
+          type: "text",
+          label: "Preparer Fax Number",
+          required: true,
+        },
+        {
+          id: "part8.line4.daytimePhoneNumber",
+          type: "tel",
+          label: "Daytime Phone Number",
+          required: true,
+          placeholder: "(###) ###-####",
+        },
+        {
+          id: "part8.line6.email",
+          type: "email",
+          label: "Email",
+          required: true,
+          placeholder: "email@example.com",
+        },
+        {
+          id: "part8.line7.checkbox",
+          type: "checkbox",
+          label: "Checkbox",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "",
+            },
+            {
+              value: "",
+              label: "",
+            },
+          ],
+        },
+        {
+          id: "part8.line7b.checkbox",
+          type: "checkbox",
+          label: "Checkbox",
+          required: false,
+          options: [
+            {
+              value: "",
+              label: "",
+            },
+            {
+              value: "",
+              label: "",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part9",
+      title: "Part 9",
+      description: "Complete all fields in Part 9",
+      questions: [
+        {
+          id: "part9.line3a.pageNumber",
+          type: "text",
+          label: "Page Number",
+          required: false,
+        },
+        {
+          id: "part9.line3b.partNumber",
+          type: "text",
+          label: "Part Number",
+          required: false,
+        },
+        {
+          id: "part9.line3c.itemNumber",
+          type: "text",
+          label: "Item Number",
+          required: false,
+        },
+        {
+          id: "part9.line3d.additionalInfo",
+          type: "text",
+          label: "Additional Info",
+          required: false,
+        },
+        {
+          id: "part9.line4a.pageNumber",
+          type: "text",
+          label: "Page Number",
+          required: false,
+        },
+        {
+          id: "part9.line4b.partNumber",
+          type: "text",
+          label: "Part Number",
+          required: false,
+        },
+        {
+          id: "part9.line4c.itemNumber",
+          type: "text",
+          label: "Item Number",
+          required: false,
+        },
+        {
+          id: "part9.line4d.additionalInfo",
+          type: "text",
+          label: "Additional Info",
+          required: false,
+        },
+        {
+          id: "part9.line5a.pageNumber",
+          type: "text",
+          label: "Page Number",
+          required: false,
+        },
+        {
+          id: "part9.line5b.partNumber",
+          type: "text",
+          label: "Part Number",
+          required: false,
+        },
+        {
+          id: "part9.line5c.itemNumber",
+          type: "text",
+          label: "Item Number",
+          required: false,
+        },
+        {
+          id: "part9.line6a.pageNumber",
+          type: "text",
+          label: "Page Number",
+          required: false,
+        },
+        {
+          id: "part9.line6b.partNumber",
+          type: "text",
+          label: "Part Number",
+          required: false,
+        },
+        {
+          id: "part9.line6c.itemNumber",
+          type: "text",
+          label: "Item Number",
+          required: false,
+        },
+        {
+          id: "part9.line6d.additionalInfo",
+          type: "text",
+          label: "Additional Info",
+          required: false,
+        },
+        {
+          id: "part9.line5d.additionalInfo",
+          type: "text",
+          label: "Additional Info",
+          required: false,
+        },
+        {
+          id: "part9.line9a.pageNumber",
+          type: "text",
+          label: "Page Number",
+          required: false,
+        },
+        {
+          id: "part9.line7b.partNumber",
+          type: "text",
+          label: "Part Number",
+          required: false,
+        },
+        {
+          id: "part9.line7c.itemNumber",
+          type: "text",
+          label: "Item Number",
+          required: false,
+        },
+        {
+          id: "part9.line7d.additionalInfo",
+          type: "text",
+          label: "Additional Info",
+          required: false,
+        },
+      ],
+    },
+  ],
+  pdfFieldMappings: [],
+  requiredDocuments: [],
+  instructions: [
+    "Complete all applicable sections",
+    "Answer all questions accurately",
+    "Sign and date the form",
+  ],
+  status: "active",
+};
+
+const I130_DEFINITION: FormDefinition = {
+  id: "i-130",
+  code: "I-130",
+  name: "Petition for Alien Relative",
+  description:
+    "Petition to establish a qualifying family relationship for immigration",
+  category: "family",
+  estimatedTime: "45-60 minutes",
+  filingFee: 535,
+  price: 70,
+  sections: [
+    {
+      id: "part1-relationship",
+      title: "Part 1: Relationship",
+      description:
+        "Identify the relationship between you (the petitioner) and your relative (the beneficiary)",
+      questions: [
+        {
+          id: "part1.relationship",
+          type: "select",
+          label: "I am filing this petition for my:",
+          required: true,
+          options: [
+            { value: "spouse", label: "Spouse" },
+            { value: "parent", label: "Parent" },
+            { value: "child", label: "Child" },
+            { value: "sibling", label: "Brother or Sister" },
+          ],
+          helpText: "Select the relationship of the beneficiary to you",
+        },
+        {
+          id: "part1.petitionerStatus",
+          type: "radio",
+          label: "I am:",
+          required: true,
+          options: [
+            { value: "citizen", label: "A U.S. Citizen" },
+            {
+              value: "lpr",
+              label: "A Lawful Permanent Resident of the United States",
+            },
+          ],
+        },
+        {
+          id: "part1.gainedLPRThroughAdoption",
+          type: "radio",
+          label:
+            "Did you gain lawful permanent resident status through adoption?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+          helpText: "Answer only if you are a lawful permanent resident",
+        },
+      ],
+    },
+    {
+      id: "part2-petitioner-info",
+      title: "Part 2: Information About You (Petitioner)",
+      description: "Provide your personal information",
+      questions: [
+        {
+          id: "part2.alienNumber",
+          type: "text",
+          label: "Alien Registration Number (A-Number)",
+          placeholder: "A-",
+          helpText: "If you have one. Leave blank if not applicable.",
+        },
+        {
+          id: "part2.uscisOnlineAccount",
+          type: "text",
+          label: "USCIS Online Account Number",
+          helpText: "If you have a USCIS online account",
+        },
+        {
+          id: "part2.ssn",
+          type: "ssn",
+          label: "U.S. Social Security Number",
+          placeholder: "###-##-####",
+          helpText: "If you have one",
+        },
+        {
+          id: "part2.lastName",
+          type: "text",
+          label: "Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part2.firstName",
+          type: "text",
+          label: "Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part2.middleName",
+          type: "text",
+          label: "Middle Name",
+        },
+
+        {
+          id: "part2.cityOfBirth",
+          type: "text",
+          label: "City or Town of Birth",
+          required: true,
+        },
+        {
+          id: "part2.countryOfBirth",
+          type: "text",
+          label: "Country of Birth",
+          required: true,
+        },
+        {
+          id: "part2.dateOfBirth",
+          type: "date",
+          label: "Date of Birth",
+          required: true,
+        },
+        {
+          id: "part2.sex",
+          type: "radio",
+          label: "Sex",
+          required: true,
+          options: [
+            { value: "male", label: "Male" },
+            { value: "female", label: "Female" },
+          ],
+        },
+        {
+          id: "part2.otherGivenName",
+          type: "text",
+          label: "Given Name (If any other)",
+          helpText: "Provide any other given name",
+          required: false,
+        },
+        {
+          id: "part2.otherMiddleName",
+          type: "text",
+          label: "Middle Name (If any other)",
+          helpText: "Provide any other middle name",
+          required: false,
+        },
+        {
+          id: "part2.otherfamilyName",
+          type: "text",
+          label: "Family Name (If any other)",
+          required: false,
+          helpText: "Provide any other family name",
+        },
+      ],
+    },
+
+    // {
+    //   id: "part2-mailing-address",
+    //   title: "Part 2: Your Mailing Address",
+    //   questions: [
+    //     {
+    //       id: "part2.mailingInCareOf",
+    //       type: "text",
+    //       label: "In Care Of Name",
+    //       helpText: "Optional - if mail should be sent c/o someone else",
+    //     },
+    //     {
+    //       id: "part2.mailingStreet",
+    //       type: "text",
+    //       label: "Street Number and Name",
+    //       required: true,
+    //     },
+    //     {
+    //       id: "part2.mailingAptType",
+    //       type: "select",
+    //       label: "Apt/Ste/Flr",
+    //       options: [
+    //         { value: "", label: "None" },
+    //         { value: "apt", label: "Apt." },
+    //         { value: "ste", label: "Ste." },
+    //         { value: "flr", label: "Flr." },
+    //       ],
+    //     },
+    //     {
+    //       id: "part2.mailingAptNumber",
+    //       type: "text",
+    //       label: "Apartment/Suite/Floor Number",
+    //     },
+    //     {
+    //       id: "part2.mailingCity",
+    //       type: "text",
+    //       label: "City or Town",
+    //       required: true,
+    //     },
+    //     {
+    //       id: "part2.mailingState",
+    //       type: "select",
+    //       label: "State",
+    //       required: true,
+    //       options: US_STATES,
+    //     },
+    //     {
+    //       id: "part2.mailingZip",
+    //       type: "text",
+    //       label: "ZIP Code",
+    //       required: true,
+    //       placeholder: "12345",
+    //     },
+    //     {
+    //       id: "part2.province",
+    //       type: "text",
+    //       label: "Province",
+    //       helpText: "For foreign addresses only",
+    //     },
+    //     {
+    //       id: "part2.postalCode",
+    //       type: "text",
+    //       label: "Postal Code",
+    //       helpText: "For foreign addresses only",
+    //     },
+    //     {
+    //       id: "part2.country",
+    //       type: "text",
+    //       label: "Country",
+    //       helpText: "For foreign addresses only",
+    //     },
+    //   ],
+    // },
+    // {
+    //   id: "part2-marital-info",
+    //   title: "Part 2: Your Marital Information",
+    //   questions: [
+    //     {
+    //       id: "part2.timesMarried",
+    //       type: "text",
+    //       label: "How many times have you been married?",
+    //       required: true,
+    //       placeholder: "Enter a number",
+    //     },
+    //     {
+    //       id: "part2.currentMaritalStatus",
+    //       type: "select",
+    //       label: "Current Marital Status",
+    //       required: true,
+    //       options: [
+    //         { value: "single", label: "Single, Never Married" },
+    //         { value: "married", label: "Married" },
+    //         { value: "divorced", label: "Divorced" },
+    //         { value: "widowed", label: "Widowed" },
+    //         { value: "separated", label: "Marriage Annulled or Other" },
+    //       ],
+    //     },
+    //     {
+    //       id: "part2.currentSpouseName",
+    //       type: "text",
+    //       label: "Current Spouse's Full Name",
+    //       helpText: "If currently married",
+    //     },
+    //     {
+    //       id: "part2.dateOfMarriage",
+    //       type: "date",
+    //       label: "Date of Current Marriage",
+    //       helpText: "If currently married",
+    //     },
+    //     {
+    //       id: "part2.placeOfMarriage",
+    //       type: "text",
+    //       label: "Place of Current Marriage (City, State, Country)",
+    //       helpText: "If currently married",
+    //     },
+    //   ],
+    // },
+    // {
+    //   id: "part2-citizenship",
+    //   title: "Part 2: Information About Your U.S. Citizenship",
+    //   description: "Complete this section if you are a U.S. citizen",
+    //   questions: [
+    //     {
+    //       id: "part2.citizenshipThrough",
+    //       type: "radio",
+    //       label: "How did you acquire U.S. citizenship?",
+    //       options: [
+    //         { value: "birth-us", label: "Birth in the United States" },
+    //         { value: "naturalization", label: "Naturalization" },
+    //         {
+    //           value: "parents",
+    //           label:
+    //             "Parents (acquired after birth through U.S. citizen parents)",
+    //         },
+    //       ],
+    //       helpText: "Select one",
+    //     },
+    //     {
+    //       id: "part2.certificateNumber",
+    //       type: "text",
+    //       label:
+    //         "Certificate of Naturalization Number or Certificate of Citizenship Number",
+    //       helpText: "If you naturalized or acquired citizenship",
+    //     },
+    //     {
+    //       id: "part2.placeOfNaturalization",
+    //       type: "text",
+    //       label: "Place of Naturalization or Acquisition (City, State)",
+    //       helpText: "If you naturalized or acquired citizenship",
+    //     },
+    //   ],
+    // },
+    // {
+    //   id: "part4-beneficiary-info",
+    //   title: "Part 4: Information About Your Relative (Beneficiary)",
+    //   description:
+    //     "Provide information about the person you are petitioning for",
+    //   questions: [
+    //     {
+    //       id: "part4.alienNumber",
+    //       type: "text",
+    //       label: "Beneficiary's Alien Registration Number (A-Number)",
+    //       placeholder: "A-",
+    //       helpText: "If they have one",
+    //     },
+    //     {
+    //       id: "part4.uscisOnlineAccount",
+    //       type: "text",
+    //       label: "Beneficiary's USCIS Online Account Number",
+    //     },
+    //     {
+    //       id: "part4.ssn",
+    //       type: "ssn",
+    //       label: "Beneficiary's U.S. Social Security Number",
+    //       helpText: "If they have one",
+    //     },
+    //     {
+    //       id: "part4.lastName",
+    //       type: "text",
+    //       label: "Beneficiary's Family Name (Last Name)",
+    //       required: true,
+    //     },
+    //     {
+    //       id: "part4.firstName",
+    //       type: "text",
+    //       label: "Beneficiary's Given Name (First Name)",
+    //       required: true,
+    //     },
+    //     {
+    //       id: "part4.middleName",
+    //       type: "text",
+    //       label: "Beneficiary's Middle Name",
+    //     },
+    //     {
+    //       id: "part4.cityOfBirth",
+    //       type: "text",
+    //       label: "Beneficiary's City or Town of Birth",
+    //       required: true,
+    //     },
+    //     {
+    //       id: "part4.countryOfBirth",
+    //       type: "text",
+    //       label: "Beneficiary's Country of Birth",
+    //       required: true,
+    //     },
+    //     {
+    //       id: "part4.dateOfBirth",
+    //       type: "date",
+    //       label: "Beneficiary's Date of Birth",
+    //       required: true,
+    //     },
+    //     {
+    //       id: "part4.sex",
+    //       type: "radio",
+    //       label: "Beneficiary's Sex",
+    //       required: true,
+    //       options: [
+    //         { value: "male", label: "Male" },
+    //         { value: "female", label: "Female" },
+    //       ],
+    //     },
+    //     {
+    //       id: "part4.hasOtherNames",
+    //       type: "radio",
+    //       label: "Has your relative ever used other names?",
+    //       required: true,
+    //       options: [
+    //         { value: "yes", label: "Yes" },
+    //         { value: "no", label: "No" },
+    //       ],
+    //     },
+    //     {
+    //       id: "part4.otherNames",
+    //       type: "textarea",
+    //       label: "Other Names Used by Beneficiary",
+    //       helpText: "If yes, list all other names",
+    //     },
+    //   ],
+    // },
+    // {
+    //   id: "part4-beneficiary-address",
+    //   title: "Part 4: Beneficiary's Address",
+    //   questions: [
+    //     {
+    //       id: "part4.street",
+    //       type: "text",
+    //       label: "Street Number and Name",
+    //       required: true,
+    //     },
+    //     {
+    //       id: "part4.aptType",
+    //       type: "select",
+    //       label: "Apt/Ste/Flr",
+    //       options: [
+    //         { value: "", label: "None" },
+    //         { value: "apt", label: "Apt." },
+    //         { value: "ste", label: "Ste." },
+    //         { value: "flr", label: "Flr." },
+    //       ],
+    //     },
+    //     {
+    //       id: "part4.aptNumber",
+    //       type: "text",
+    //       label: "Apartment/Suite/Floor Number",
+    //     },
+    //     {
+    //       id: "part4.city",
+    //       type: "text",
+    //       label: "City or Town",
+    //       required: true,
+    //     },
+    //     {
+    //       id: "part4.state",
+    //       type: "text",
+    //       label: "State or Province",
+    //     },
+    //     {
+    //       id: "part4.zip",
+    //       type: "text",
+    //       label: "ZIP or Postal Code",
+    //     },
+    //     {
+    //       id: "part4.country",
+    //       type: "text",
+    //       label: "Country",
+    //       required: true,
+    //     },
+    //   ],
+    // },
+    // {
+    //   id: "part4-beneficiary-marital",
+    //   title: "Part 4: Beneficiary's Marital Information",
+    //   questions: [
+    //     {
+    //       id: "part4.timesMarried",
+    //       type: "text",
+    //       label: "How many times has the beneficiary been married?",
+    //       required: true,
+    //     },
+    //     {
+    //       id: "part4.currentMaritalStatus",
+    //       type: "select",
+    //       label: "Beneficiary's Current Marital Status",
+    //       required: true,
+    //       options: [
+    //         { value: "single", label: "Single, Never Married" },
+    //         { value: "married", label: "Married" },
+    //         { value: "divorced", label: "Divorced" },
+    //         { value: "widowed", label: "Widowed" },
+    //         { value: "separated", label: "Marriage Annulled or Other" },
+    //       ],
+    //     },
+    //     {
+    //       id: "part4.spouseName",
+    //       type: "text",
+    //       label: "Beneficiary's Current Spouse's Full Name",
+    //       helpText: "If currently married",
+    //     },
+    //     {
+    //       id: "part4.dateOfMarriage",
+    //       type: "date",
+    //       label: "Date of Marriage",
+    //       helpText: "If currently married",
+    //     },
+    //   ],
+    // },
+    // {
+    //   id: "part4-immigration-intent",
+    //   title: "Part 4: Immigration Intent",
+    //   description: "Indicate how the beneficiary will immigrate",
+    //   questions: [
+    //     {
+    //       id: "part4.immigrationPath",
+    //       type: "radio",
+    //       label: "The beneficiary will apply for:",
+    //       required: true,
+    //       options: [
+    //         {
+    //           value: "adjustment",
+    //           label: "Adjustment of status in the United States (Form I-485)",
+    //         },
+    //         {
+    //           value: "consular",
+    //           label: "An immigrant visa abroad at a U.S. Embassy or consulate",
+    //         },
+    //       ],
+    //       helpText: "IMPORTANT: You must select only ONE option",
+    //     },
+    //     {
+    //       id: "part4.consularLocation",
+    //       type: "text",
+    //       label:
+    //         "If applying for an immigrant visa abroad, provide the location (City, Country) where the beneficiary will apply",
+    //       helpText: "E.g., London, United Kingdom",
+    //     },
+    //   ],
+    // },
+  ],
+  pdfFieldMappings: [
+    // { questionId: "part2.lastName", pdfFieldName: "Pt2Line4a_FamilyName" },
+    // { questionId: "part2.firstName", pdfFieldName: "Pt2Line4b_GivenName" },
+    // { questionId: "part2.middleName", pdfFieldName: "Pt2Line4c_MiddleName" },
+    // { questionId: "part4.lastName", pdfFieldName: "Pt4Line4a_FamilyName" },
+    // { questionId: "part4.firstName", pdfFieldName: "Pt4Line4b_GivenName" },
+  ],
+  requiredDocuments: [
+    "Proof of your U.S. citizenship (birth certificate, naturalization certificate, or U.S. passport)",
+    "Proof of relationship to beneficiary (birth certificate, marriage certificate, etc.)",
+    "Evidence of legal name change (if applicable)",
+    "Two passport-style photos of the beneficiary",
+  ],
+  instructions: [
+    "Complete all applicable sections",
+    "Answer all questions - use N/A if not applicable",
+    "Sign and date Part 6",
+    "Include the $535 filing fee",
+    "Mail to the appropriate USCIS Lockbox facility",
   ],
 };
 

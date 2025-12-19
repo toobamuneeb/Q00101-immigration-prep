@@ -61,22 +61,22 @@ export function UniversalFormWizard({
   // Validate a single field
   const validateField = (question: Question, value: any): string | null => {
     if (question.required) {
-      if (!value || (typeof value === 'string' && value.trim() === '')) {
+      if (!value || (typeof value === "string" && value.trim() === "")) {
         return `${question.label} is required`;
       }
       if (Array.isArray(value) && value.length === 0) {
         return `${question.label} is required`;
       }
     }
-    
+
     // Email validation
-    if (question.type === 'email' && value) {
+    if (question.type === "email" && value) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(value)) {
-        return 'Please enter a valid email address';
+        return "Please enter a valid email address";
       }
     }
-    
+
     return null;
   };
 
@@ -95,7 +95,7 @@ export function UniversalFormWizard({
     });
 
     setErrors(newErrors);
-    
+
     if (!isValid) {
       toast({
         title: "Missing Required Fields",
@@ -103,7 +103,7 @@ export function UniversalFormWizard({
         variant: "destructive",
       });
     }
-    
+
     return isValid;
   };
 
@@ -113,7 +113,7 @@ export function UniversalFormWizard({
       ...prev,
       [questionId]: value,
     }));
-    
+
     // Clear error when user starts typing
     if (errors[questionId]) {
       setErrors((prev) => {
@@ -122,7 +122,7 @@ export function UniversalFormWizard({
         return newErrors;
       });
     }
-    
+
     // Mark field as touched
     setTouched((prev) => ({
       ...prev,
@@ -154,7 +154,9 @@ export function UniversalFormWizard({
               value={value}
               onChange={(e) => updateAnswer(question.id, e.target.value)}
               placeholder={question.placeholder || ""}
-              className={hasError ? "border-red-500 focus-visible:ring-red-500" : ""}
+              className={
+                hasError ? "border-red-500 focus-visible:ring-red-500" : ""
+              }
             />
           );
 
@@ -166,7 +168,9 @@ export function UniversalFormWizard({
               value={value}
               onChange={(e) => updateAnswer(question.id, e.target.value)}
               placeholder={question.placeholder || ""}
-              className={hasError ? "border-red-500 focus-visible:ring-red-500" : ""}
+              className={
+                hasError ? "border-red-500 focus-visible:ring-red-500" : ""
+              }
             />
           );
 
@@ -176,7 +180,9 @@ export function UniversalFormWizard({
               type="date"
               value={value}
               onChange={(e) => updateAnswer(question.id, e.target.value)}
-              className={hasError ? "border-red-500 focus-visible:ring-red-500" : ""}
+              className={
+                hasError ? "border-red-500 focus-visible:ring-red-500" : ""
+              }
             />
           );
 
@@ -187,7 +193,9 @@ export function UniversalFormWizard({
               onChange={(e) => updateAnswer(question.id, e.target.value)}
               placeholder={question.placeholder || ""}
               rows={4}
-              className={hasError ? "border-red-500 focus-visible:ring-red-500" : ""}
+              className={
+                hasError ? "border-red-500 focus-visible:ring-red-500" : ""
+              }
             />
           );
 
@@ -197,7 +205,11 @@ export function UniversalFormWizard({
               value={value}
               onValueChange={(val) => updateAnswer(question.id, val)}
             >
-              <SelectTrigger className={hasError ? "border-red-500 focus-visible:ring-red-500" : ""}>
+              <SelectTrigger
+                className={
+                  hasError ? "border-red-500 focus-visible:ring-red-500" : ""
+                }
+              >
                 <SelectValue
                   placeholder={question.placeholder || "Select..."}
                 />
@@ -263,7 +275,9 @@ export function UniversalFormWizard({
             <Input
               type="file"
               onChange={(e) => updateAnswer(question.id, e.target.files?.[0])}
-              className={hasError ? "border-red-500 focus-visible:ring-red-500" : ""}
+              className={
+                hasError ? "border-red-500 focus-visible:ring-red-500" : ""
+              }
             />
           );
 
@@ -273,7 +287,9 @@ export function UniversalFormWizard({
               value={value}
               onChange={(e) => updateAnswer(question.id, e.target.value)}
               placeholder={question.placeholder || ""}
-              className={hasError ? "border-red-500 focus-visible:ring-red-500" : ""}
+              className={
+                hasError ? "border-red-500 focus-visible:ring-red-500" : ""
+              }
             />
           );
       }

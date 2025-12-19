@@ -12,6 +12,7 @@ import {
   I_130_AUTO_MAPPINGS,
   type FieldMapping,
 } from "@/lib/constants/form-mappings/i-130-auto-mappings";
+import { I_130_FIELD_MAPPINGS } from "@/lib/constants/form-mappings/i-130-field-mappings";
 import { I_485_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-485-auto-mappings";
 import { I_765_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-765-auto-mappings";
 import { I_131_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-131-auto-mappings";
@@ -43,7 +44,7 @@ function getFormMappings(formId: string): FieldMapping[] {
     case "i-90":
       return I_90_AUTO_MAPPINGS;
     case "i-130":
-      return I_130_AUTO_MAPPINGS;
+      return I_130_FIELD_MAPPINGS;
     case "i-485":
       return I_485_AUTO_MAPPINGS;
     case "i-765":
