@@ -7,8 +7,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { FormField as FormFieldType } from '@/lib/constants/forms';
-import { Info } from 'lucide-react';
+import { Info, AlertCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { cn } from '@/lib/utils';
 
 interface FormFieldProps {
     field: FormFieldType;
@@ -21,6 +22,9 @@ export default function FormField({ field, value, onChange, error }: FormFieldPr
     const t = useTranslations();
 
     const renderInput = () => {
+        const hasError = !!error;
+        const errorClass = hasError ? 'border-red-500 focus-visible:ring-red-500' : '';
+
         switch (field.type) {
             case 'text':
             case 'email':
@@ -32,7 +36,8 @@ export default function FormField({ field, value, onChange, error }: FormFieldPr
                         placeholder={field.placeholder ? t(field.placeholder) : ''}
                         value={value || ''}
                         onChange={(e) => onChange(e.target.value)}
-                        className={error ? 'border-red-500' : ''}
+                        className={cn(errorClass)}
+                        aria-invalid={hasError}
                     />
                 );
 
@@ -43,15 +48,16 @@ export default function FormField({ field, value, onChange, error }: FormFieldPr
                         placeholder={field.placeholder ? t(field.placeholder) : ''}
                         value={value || ''}
                         onChange={(e) => onChange(e.target.value)}
-                        className={error ? 'border-red-500' : ''}
+                        className={cn(errorClass)}
                         rows={4}
+                        aria-invalid={hasError}
                     />
                 );
 
             case 'select':
                 return (
                     <Select value={value || ''} onValueChange={onChange}>
-                        <SelectTrigger className={error ? 'border-red-500' : ''}>
+                        <SelectTrigger className={cn(errorClass)}>
                             <SelectValue placeholder={t('common.selectOption') || "Select an option"} />
                         </SelectTrigger>
                         <SelectContent>
@@ -66,7 +72,11 @@ export default function FormField({ field, value, onChange, error }: FormFieldPr
 
             case 'radio':
                 return (
-                    <RadioGroup value={value || ''} onValueChange={onChange}>
+                    <RadioGroup 
+                        value={value || ''} 
+                        onValueChange={onChange}
+                        className={hasError ? 'border border-red-500 rounded-md p-3' : ''}
+                    >
                         {field.options?.map((option) => (
                             <div key={option.value} className="flex items-center space-x-2">
                                 <RadioGroupItem value={option.value} id={`${field.id}-${option.value}`} />
@@ -85,6 +95,7 @@ export default function FormField({ field, value, onChange, error }: FormFieldPr
                             id={field.id}
                             checked={value === 'true'}
                             onCheckedChange={(checked) => onChange(checked ? 'true' : 'false')}
+                            className={hasError ? 'border-red-500' : ''}
                         />
                         <Label htmlFor={field.id} className="font-normal cursor-pointer">
                             {t(field.label)}
@@ -108,7 +119,7 @@ export default function FormField({ field, value, onChange, error }: FormFieldPr
 
             {renderInput()}
 
-            {field.helpText && (
+            {field.helpText && !error && (
                 <div className="flex items-start gap-2 text-sm text-gray-500">
                     <Info className="w-4 h-4 mt-0.5 flex-shrink-0" />
                     <span>{t(field.helpText)}</span>
@@ -116,7 +127,10 @@ export default function FormField({ field, value, onChange, error }: FormFieldPr
             )}
 
             {error && (
-                <p className="text-sm text-red-500">{error}</p>
+                <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-md">
+                    <AlertCircle className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" />
+                    <p className="text-sm text-red-600 font-medium">{error}</p>
+                </div>
             )}
         </div>
     );

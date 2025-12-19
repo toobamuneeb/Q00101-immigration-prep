@@ -14,12 +14,15 @@ import {
 } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
+import { AlertCircle } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface QuestionRendererProps {
   question: Question;
+  error?: string;
 }
 
-export function QuestionRenderer({ question }: QuestionRendererProps) {
+export function QuestionRenderer({ question, error }: QuestionRendererProps) {
   const { register, setValue, watch } = useFormContext();
   const value = watch(question.id);
 
@@ -32,6 +35,8 @@ export function QuestionRenderer({ question }: QuestionRendererProps) {
             {...register(question.id)}
             type={question.type}
             placeholder={question.placeholder}
+            className={cn(error && 'border-red-500 focus-visible:ring-red-500')}
+            aria-invalid={!!error}
           />
         );
 
@@ -42,6 +47,8 @@ export function QuestionRenderer({ question }: QuestionRendererProps) {
             {...register(question.id)}
             type="tel"
             placeholder={question.placeholder}
+            className={cn(error && 'border-red-500 focus-visible:ring-red-500')}
+            aria-invalid={!!error}
           />
         );
 
@@ -50,6 +57,8 @@ export function QuestionRenderer({ question }: QuestionRendererProps) {
           <Input
             {...register(question.id)}
             type="date"
+            className={cn(error && 'border-red-500 focus-visible:ring-red-500')}
+            aria-invalid={!!error}
           />
         );
 
@@ -59,6 +68,8 @@ export function QuestionRenderer({ question }: QuestionRendererProps) {
             {...register(question.id)}
             placeholder={question.placeholder}
             rows={4}
+            className={cn(error && 'border-red-500 focus-visible:ring-red-500')}
+            aria-invalid={!!error}
           />
         );
 
@@ -68,7 +79,7 @@ export function QuestionRenderer({ question }: QuestionRendererProps) {
             value={value || ''}
             onValueChange={(val) => setValue(question.id, val)}
           >
-            <SelectTrigger>
+            <SelectTrigger className={cn(error && 'border-red-500 focus-visible:ring-red-500')}>
               <SelectValue placeholder={question.placeholder || 'Select...'} />
             </SelectTrigger>
             <SelectContent>
@@ -86,6 +97,7 @@ export function QuestionRenderer({ question }: QuestionRendererProps) {
           <RadioGroup
             value={value || ''}
             onValueChange={(val) => setValue(question.id, val)}
+            className={cn(error && 'border border-red-500 rounded-md p-3')}
           >
             {question.options?.map((option) => (
               <div key={option.value} className="flex items-center space-x-2">
@@ -105,6 +117,7 @@ export function QuestionRenderer({ question }: QuestionRendererProps) {
               id={question.id}
               checked={value || false}
               onCheckedChange={(checked) => setValue(question.id, checked)}
+              className={cn(error && 'border-red-500')}
             />
             <Label htmlFor={question.id} className="font-normal cursor-pointer">
               {question.label}
@@ -117,6 +130,8 @@ export function QuestionRenderer({ question }: QuestionRendererProps) {
           <Input
             {...register(question.id)}
             type="file"
+            className={cn(error && 'border-red-500 focus-visible:ring-red-500')}
+            aria-invalid={!!error}
           />
         );
 
@@ -125,6 +140,8 @@ export function QuestionRenderer({ question }: QuestionRendererProps) {
           <Input
             {...register(question.id)}
             placeholder={question.placeholder}
+            className={cn(error && 'border-red-500 focus-visible:ring-red-500')}
+            aria-invalid={!!error}
           />
         );
     }
@@ -138,6 +155,12 @@ export function QuestionRenderer({ question }: QuestionRendererProps) {
           <p className="text-sm text-muted-foreground">{question.helpText}</p>
         )}
         {renderField()}
+        {error && (
+          <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-md">
+            <AlertCircle className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" />
+            <p className="text-sm text-red-600 font-medium">{error}</p>
+          </div>
+        )}
       </div>
     );
   }
@@ -154,6 +177,13 @@ export function QuestionRenderer({ question }: QuestionRendererProps) {
       )}
 
       {renderField()}
+
+      {error && (
+        <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-md">
+          <AlertCircle className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" />
+          <p className="text-sm text-red-600 font-medium">{error}</p>
+        </div>
+      )}
     </div>
   );
 }
