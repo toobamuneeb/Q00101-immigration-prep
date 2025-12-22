@@ -137,6 +137,11 @@ function generateMappingFile(fields, formName) {
   content += ` *\n`;
   content += ` * Generated on: ${new Date().toISOString()}\n`;
   content += ` * Total fields: ${fields.length}\n`;
+  content += ` *\n`;
+  content += ` * ⚠️  IMPORTANT: These are RAW PDF field mappings!\n`;
+  content += ` * - Question IDs are auto-generated from PDF field names\n`;
+  content += ` * - DO NOT copy "unmapped questions" from forms-registry\n`;
+  content += ` * - Only use the mappings below that match actual PDF fields\n`;
   content += ` */\n\n`;
   
   content += `export interface FieldMapping {\n`;
@@ -146,7 +151,7 @@ function generateMappingFile(fields, formName) {
   content += `  value?: string;\n`;
   content += `}\n\n`;
   
-  content += `export const ${upperFormName}_AUTO_MAPPINGS: FieldMapping[] = [\n`;
+  content += `export const ${upperFormName}_FIELD_MAPPINGS: FieldMapping[] = [\n`;
   
   for (const field of fields) {
     const questionId = pdfFieldToQuestionId(field.name);
@@ -161,7 +166,17 @@ function generateMappingFile(fields, formName) {
     }
   }
   
-  content += `];\n`;
+  content += `];\n\n`;
+  
+  content += `/**\n`;
+  content += ` * USAGE NOTES:\n`;
+  content += ` * \n`;
+  content += ` * 1. These mappings are based ONLY on actual PDF fields\n`;
+  content += ` * 2. Question IDs are auto-generated and may need adjustment\n`;
+  content += ` * 3. Review each mapping to ensure it matches your form definition\n`;
+  content += ` * 4. If you see "unmapped questions" elsewhere, those are from\n`;
+  content += ` *    the forms-registry and should NOT be copied here\n`;
+  content += ` */\n`;
   
   return content;
 }
@@ -295,7 +310,11 @@ function main() {
     console.log('2. Update form name, description, and fees in definition');
     console.log('3. Copy definition to src/lib/constants/forms-registry.ts');
     console.log('4. Import mapping in src/lib/pdf/fill-pdf.ts');
-    console.log(`5. Add case "${formName}": return ${formName.toUpperCase().replace(/[^A-Z0-9]/g, '_')}_AUTO_MAPPINGS;\n`);
+    console.log(`5. Add case "${formName}": return ${formName.toUpperCase().replace(/[^A-Z0-9]/g, '_')}_FIELD_MAPPINGS;\n`);
+    console.log('⚠️  IMPORTANT:');
+    console.log('   - These mappings are based ONLY on actual PDF fields');
+    console.log('   - DO NOT copy "unmapped questions" from other files');
+    console.log('   - Only use the mappings that match real PDF fields\n');
     
   } catch (error) {
     console.error('❌ Error:', error.message);

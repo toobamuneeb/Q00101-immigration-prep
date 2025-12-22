@@ -1,5 +1,7 @@
 // @ts-nocheck - Form definitions have some type inconsistencies
 import { z } from "zod";
+import { I_600_FIELD_MAPPINGS } from "./form-mappings/i-600-field-mappings";
+import { I_129_FIELD_MAPPINGS } from "./form-mappings/i-129-field-mappings";
 
 /**
  * MULTI-FORM SYSTEM ARCHITECTURE
@@ -2741,416 +2743,6 @@ const I765_DEFINITION: FormDefinition = {
     "Copy of pending I-485 receipt notice (if applying under category (c)(9))",
     "Copy of previous EAD (if renewing)",
     "Proof of eligibility for your specific category",
-  ],
-  instructions: [],
-};
-
-const I131_DEFINITION: FormDefinition = {
-  id: "i-131",
-  code: "I-131",
-  name: "Application for Travel Document",
-  description:
-    "Apply for advance parole, reentry permit, or refugee travel document",
-  category: "travel",
-  estimatedTime: "30-45 minutes",
-  filingFee: 575,
-  price: 60,
-  sections: [
-    // PART 1: Application Type
-    {
-      id: "part1-application-type",
-      title: "Part 1: Application Type",
-      description: "What type of travel document are you applying for?",
-      questions: [
-        {
-          id: "part1.documentType",
-          type: "select",
-          label: "I am applying for (select one):",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "1. A Reentry Permit (for LPRs who will be outside U.S. for 1-2 years)",
-            },
-            {
-              value: "2",
-              label: "2. A Refugee Travel Document (for refugees/asylees)",
-            },
-            {
-              value: "3",
-              label: "3. A TPS Travel Authorization Document (for TPS holders)",
-            },
-            {
-              value: "4",
-              label:
-                "4. Advance Parole Document to allow me to return to the U.S. after temporary foreign travel",
-            },
-            {
-              value: "5a",
-              label:
-                "5.a. Advance Parole Document for a person outside the United States (Humanitarian Parole, Cuban Family Reunification Parole, Filipino World War II Veterans Parole, etc.)",
-            },
-            {
-              value: "5b",
-              label:
-                "5.b. Advance Parole Document for a person in the United States",
-            },
-            {
-              value: "6",
-              label:
-                "6. Initial Parole Document for an Alien Outside the United States",
-            },
-            {
-              value: "7",
-              label: "7. A Document for Parole In Place or Re-parole",
-            },
-            { value: "8", label: "8. An Arrival/Departure Record (Form I-94)" },
-          ],
-          helpText:
-            "Most marriage-based green card applicants select option 4 or 5.b (Advance Parole)",
-        },
-      ],
-    },
-    // PART 2: Information About You
-    {
-      id: "part2-personal-info",
-      title: "Part 2: Your Legal Name",
-      description: "Enter your current legal name",
-      questions: [
-        {
-          id: "part2.familyName",
-          type: "text",
-          label: "1.a. Family Name (Last Name)",
-          required: true,
-        },
-        {
-          id: "part2.givenName",
-          type: "text",
-          label: "1.b. Given Name (First Name)",
-          required: true,
-        },
-        {
-          id: "part2.middleName",
-          type: "text",
-          label: "1.c. Middle Name",
-        },
-      ],
-    },
-    {
-      id: "part2-address",
-      title: "Part 2: U.S. Mailing Address",
-      description: "Where should USCIS mail your travel document?",
-      questions: [
-        {
-          id: "part2.mailingCareOfName",
-          type: "text",
-          label: "2.a. In Care Of Name",
-          helpText: "Only if receiving mail at someone else's address",
-        },
-        {
-          id: "part2.mailingStreet",
-          type: "text",
-          label: "2.b. Street Number and Name",
-          required: true,
-        },
-        {
-          id: "part2.mailingAptType",
-          type: "select",
-          label: "2.c. Unit Type",
-          options: [
-            { value: "", label: "Select if applicable" },
-            { value: "apt", label: "Apt." },
-            { value: "ste", label: "Ste." },
-            { value: "flr", label: "Flr." },
-          ],
-        },
-        {
-          id: "part2.mailingAptNumber",
-          type: "text",
-          label: "2.d. Unit Number",
-        },
-        {
-          id: "part2.mailingCity",
-          type: "text",
-          label: "2.e. City or Town",
-          required: true,
-        },
-        {
-          id: "part2.mailingState",
-          type: "select",
-          label: "2.f. State",
-          required: true,
-          options: US_STATES,
-        },
-        {
-          id: "part2.mailingZip",
-          type: "text",
-          label: "2.g. ZIP Code",
-          required: true,
-          placeholder: "12345",
-        },
-      ],
-    },
-    {
-      id: "part2-identification",
-      title: "Part 2: Identification",
-      description:
-        "Provide your identification numbers and personal information",
-      questions: [
-        {
-          id: "part2.dob",
-          type: "date",
-          label: "6. Date of Birth (mm/dd/yyyy)",
-          required: true,
-        },
-        {
-          id: "part2.countryOfBirth",
-          type: "text",
-          label: "7. Country of Birth",
-          required: true,
-        },
-        {
-          id: "part2.gender",
-          type: "radio",
-          label: "8. Gender",
-          required: true,
-          options: [
-            { value: "male", label: "Male" },
-            { value: "female", label: "Female" },
-          ],
-          helpText: "Must match your birth certificate",
-        },
-        {
-          id: "part2.countryOfCitizenship",
-          type: "text",
-          label: "9. Country of Citizenship or Nationality",
-          required: true,
-        },
-        {
-          id: "part2.ssn",
-          type: "ssn",
-          label: "10. U.S. Social Security Number (if any)",
-          placeholder: "###-##-####",
-          helpText: "Leave blank if you do not have one",
-        },
-        {
-          id: "part2.alienNumber",
-          type: "text",
-          label: "11. Alien Registration Number (A-Number)",
-          placeholder: "A-",
-          helpText: "Found on your EAD, green card, or other USCIS documents",
-        },
-        {
-          id: "part2.classOfAdmission",
-          type: "text",
-          label: "12. Class of Admission",
-          helpText:
-            "Your visa category when you last entered (e.g., F-1, B-2, H-1B)",
-        },
-        {
-          id: "part2.i94Number",
-          type: "text",
-          label: "13. I-94 Arrival-Departure Record Number",
-          helpText: "Find this at https://i94.cbp.dhs.gov",
-        },
-      ],
-    },
-    // PART 3: Biographic Information
-    {
-      id: "part3-biographic",
-      title: "Part 3: Biographic Information",
-      description: "Physical characteristics and demographic information",
-      questions: [
-        {
-          id: "part3.ethnicity",
-          type: "radio",
-          label: "1. Ethnicity (Select only one box)",
-          required: true,
-          options: [
-            { value: "hispanic", label: "Hispanic or Latino" },
-            { value: "not-hispanic", label: "Not Hispanic or Latino" },
-          ],
-        },
-        {
-          id: "part3.race",
-          type: "select",
-          label: "2. Race (Select all that apply)",
-          required: true,
-          options: [
-            { value: "white", label: "White" },
-            { value: "asian", label: "Asian" },
-            { value: "black", label: "Black or African American" },
-            {
-              value: "native-american",
-              label: "American Indian or Alaska Native",
-            },
-            {
-              value: "pacific",
-              label: "Native Hawaiian or Other Pacific Islander",
-            },
-          ],
-        },
-        {
-          id: "part3.height",
-          type: "text",
-          label: "3. Height (feet and inches)",
-          required: true,
-          placeholder: "e.g., 5 feet 8 inches",
-        },
-        {
-          id: "part3.weight",
-          type: "text",
-          label: "4. Weight (pounds)",
-          required: true,
-          placeholder: "e.g., 150",
-        },
-        {
-          id: "part3.eyeColor",
-          type: "select",
-          label: "5. Eye Color",
-          required: true,
-          options: [
-            { value: "black", label: "Black" },
-            { value: "blue", label: "Blue" },
-            { value: "brown", label: "Brown" },
-            { value: "gray", label: "Gray" },
-            { value: "green", label: "Green" },
-            { value: "hazel", label: "Hazel" },
-            { value: "maroon", label: "Maroon" },
-            { value: "pink", label: "Pink" },
-            { value: "unknown", label: "Unknown/Other" },
-          ],
-        },
-        {
-          id: "part3.hairColor",
-          type: "select",
-          label: "6. Hair Color",
-          required: true,
-          options: [
-            { value: "bald", label: "Bald (No hair)" },
-            { value: "black", label: "Black" },
-            { value: "blond", label: "Blond" },
-            { value: "brown", label: "Brown" },
-            { value: "gray", label: "Gray" },
-            { value: "red", label: "Red" },
-            { value: "sandy", label: "Sandy" },
-            { value: "white", label: "White" },
-            { value: "unknown", label: "Unknown/Other" },
-          ],
-        },
-      ],
-    },
-    // PART 4: Processing Information
-    {
-      id: "part4-processing",
-      title: "Part 4: Processing Information",
-      description: "Important questions about your immigration history",
-      questions: [
-        {
-          id: "part4.inRemovalProceedings",
-          type: "radio",
-          label:
-            "1. Are you now in exclusion, deportation, removal, or rescission proceedings?",
-          required: true,
-          options: [
-            { value: "yes", label: "Yes" },
-            { value: "no", label: "No" },
-          ],
-          helpText: "If Yes, you may not be eligible for this benefit",
-        },
-        {
-          id: "part4.previouslyIssuedReentryPermit",
-          type: "radio",
-          label:
-            "2. Have you ever been issued a Reentry Permit or Refugee Travel Document?",
-          required: true,
-          options: [
-            { value: "yes", label: "Yes" },
-            { value: "no", label: "No" },
-          ],
-        },
-        {
-          id: "part4.previouslyIssuedAdvanceParole",
-          type: "radio",
-          label: "4. Have you ever been issued an Advance Parole Document?",
-          required: true,
-          options: [
-            { value: "yes", label: "Yes" },
-            { value: "no", label: "No" },
-          ],
-        },
-      ],
-    },
-    // PART 7: Information About Your Proposed Travel (for Advance Parole)
-    {
-      id: "part7-travel-info",
-      title: "Part 7: Information About Your Proposed Travel",
-      description:
-        "Details about your planned travel (complete if applying for Advance Parole)",
-      questions: [
-        {
-          id: "part7.purposeOfTrip",
-          type: "textarea",
-          label: "1. Purpose of Trip",
-          required: true,
-          placeholder:
-            "Explain the reason for your travel (e.g., family emergency, business, tourism, medical treatment)",
-          helpText: "Be specific about why you need to travel",
-        },
-        {
-          id: "part7.countriesVisit",
-          type: "textarea",
-          label: "2. List the countries you intend to visit",
-          required: true,
-          placeholder: "List all countries you plan to visit during your trip",
-        },
-        {
-          id: "part7.intendedDeparture",
-          type: "date",
-          label: "3. Intended Date of Departure from the United States",
-          helpText: "Approximate date is acceptable",
-        },
-        {
-          id: "part7.intendedLength",
-          type: "text",
-          label: "4. Intended Length of Trip",
-          placeholder: "e.g., 2 weeks, 1 month",
-          helpText: "How long will you be outside the U.S.?",
-        },
-        {
-          id: "part7.howManyTrips",
-          type: "radio",
-          label: "5. How many trips do you intend to use this document?",
-          required: true,
-          options: [
-            { value: "one", label: "One trip only" },
-            { value: "multiple", label: "More than one trip" },
-          ],
-          helpText: "Advance Parole is typically valid for multiple trips",
-        },
-        {
-          id: "part7.needsReplacement",
-          type: "radio",
-          label:
-            '6. If you answered "One trip only", is this a replacement for a document that was lost, stolen, or destroyed?',
-          options: [
-            { value: "yes", label: "Yes" },
-            { value: "no", label: "No" },
-          ],
-          helpText: 'Only answer if you selected "One trip only" above',
-        },
-      ],
-    },
-  ],
-  pdfFieldMappings: [],
-  requiredDocuments: [
-    "Two passport-style photos",
-    "Copy of your I-94 Arrival-Departure Record",
-    "Copy of passport biographical page",
-    "Copy of pending I-485 receipt notice (if applying for advance parole while I-485 is pending)",
-    "Copy of current EAD (if you have one)",
-    "Evidence supporting the purpose of your trip (invitation letters, medical records, etc.)",
   ],
   instructions: [],
 };
@@ -13629,362 +13221,1017 @@ const I130_DEFINITION: FormDefinition = {
       ],
     },
 
-    // {
-    //   id: "part2-mailing-address",
-    //   title: "Part 2: Your Mailing Address",
-    //   questions: [
-    //     {
-    //       id: "part2.mailingInCareOf",
-    //       type: "text",
-    //       label: "In Care Of Name",
-    //       helpText: "Optional - if mail should be sent c/o someone else",
-    //     },
-    //     {
-    //       id: "part2.mailingStreet",
-    //       type: "text",
-    //       label: "Street Number and Name",
-    //       required: true,
-    //     },
-    //     {
-    //       id: "part2.mailingAptType",
-    //       type: "select",
-    //       label: "Apt/Ste/Flr",
-    //       options: [
-    //         { value: "", label: "None" },
-    //         { value: "apt", label: "Apt." },
-    //         { value: "ste", label: "Ste." },
-    //         { value: "flr", label: "Flr." },
-    //       ],
-    //     },
-    //     {
-    //       id: "part2.mailingAptNumber",
-    //       type: "text",
-    //       label: "Apartment/Suite/Floor Number",
-    //     },
-    //     {
-    //       id: "part2.mailingCity",
-    //       type: "text",
-    //       label: "City or Town",
-    //       required: true,
-    //     },
-    //     {
-    //       id: "part2.mailingState",
-    //       type: "select",
-    //       label: "State",
-    //       required: true,
-    //       options: US_STATES,
-    //     },
-    //     {
-    //       id: "part2.mailingZip",
-    //       type: "text",
-    //       label: "ZIP Code",
-    //       required: true,
-    //       placeholder: "12345",
-    //     },
-    //     {
-    //       id: "part2.province",
-    //       type: "text",
-    //       label: "Province",
-    //       helpText: "For foreign addresses only",
-    //     },
-    //     {
-    //       id: "part2.postalCode",
-    //       type: "text",
-    //       label: "Postal Code",
-    //       helpText: "For foreign addresses only",
-    //     },
-    //     {
-    //       id: "part2.country",
-    //       type: "text",
-    //       label: "Country",
-    //       helpText: "For foreign addresses only",
-    //     },
-    //   ],
-    // },
-    // {
-    //   id: "part2-marital-info",
-    //   title: "Part 2: Your Marital Information",
-    //   questions: [
-    //     {
-    //       id: "part2.timesMarried",
-    //       type: "text",
-    //       label: "How many times have you been married?",
-    //       required: true,
-    //       placeholder: "Enter a number",
-    //     },
-    //     {
-    //       id: "part2.currentMaritalStatus",
-    //       type: "select",
-    //       label: "Current Marital Status",
-    //       required: true,
-    //       options: [
-    //         { value: "single", label: "Single, Never Married" },
-    //         { value: "married", label: "Married" },
-    //         { value: "divorced", label: "Divorced" },
-    //         { value: "widowed", label: "Widowed" },
-    //         { value: "separated", label: "Marriage Annulled or Other" },
-    //       ],
-    //     },
-    //     {
-    //       id: "part2.currentSpouseName",
-    //       type: "text",
-    //       label: "Current Spouse's Full Name",
-    //       helpText: "If currently married",
-    //     },
-    //     {
-    //       id: "part2.dateOfMarriage",
-    //       type: "date",
-    //       label: "Date of Current Marriage",
-    //       helpText: "If currently married",
-    //     },
-    //     {
-    //       id: "part2.placeOfMarriage",
-    //       type: "text",
-    //       label: "Place of Current Marriage (City, State, Country)",
-    //       helpText: "If currently married",
-    //     },
-    //   ],
-    // },
-    // {
-    //   id: "part2-citizenship",
-    //   title: "Part 2: Information About Your U.S. Citizenship",
-    //   description: "Complete this section if you are a U.S. citizen",
-    //   questions: [
-    //     {
-    //       id: "part2.citizenshipThrough",
-    //       type: "radio",
-    //       label: "How did you acquire U.S. citizenship?",
-    //       options: [
-    //         { value: "birth-us", label: "Birth in the United States" },
-    //         { value: "naturalization", label: "Naturalization" },
-    //         {
-    //           value: "parents",
-    //           label:
-    //             "Parents (acquired after birth through U.S. citizen parents)",
-    //         },
-    //       ],
-    //       helpText: "Select one",
-    //     },
-    //     {
-    //       id: "part2.certificateNumber",
-    //       type: "text",
-    //       label:
-    //         "Certificate of Naturalization Number or Certificate of Citizenship Number",
-    //       helpText: "If you naturalized or acquired citizenship",
-    //     },
-    //     {
-    //       id: "part2.placeOfNaturalization",
-    //       type: "text",
-    //       label: "Place of Naturalization or Acquisition (City, State)",
-    //       helpText: "If you naturalized or acquired citizenship",
-    //     },
-    //   ],
-    // },
-    // {
-    //   id: "part4-beneficiary-info",
-    //   title: "Part 4: Information About Your Relative (Beneficiary)",
-    //   description:
-    //     "Provide information about the person you are petitioning for",
-    //   questions: [
-    //     {
-    //       id: "part4.alienNumber",
-    //       type: "text",
-    //       label: "Beneficiary's Alien Registration Number (A-Number)",
-    //       placeholder: "A-",
-    //       helpText: "If they have one",
-    //     },
-    //     {
-    //       id: "part4.uscisOnlineAccount",
-    //       type: "text",
-    //       label: "Beneficiary's USCIS Online Account Number",
-    //     },
-    //     {
-    //       id: "part4.ssn",
-    //       type: "ssn",
-    //       label: "Beneficiary's U.S. Social Security Number",
-    //       helpText: "If they have one",
-    //     },
-    //     {
-    //       id: "part4.lastName",
-    //       type: "text",
-    //       label: "Beneficiary's Family Name (Last Name)",
-    //       required: true,
-    //     },
-    //     {
-    //       id: "part4.firstName",
-    //       type: "text",
-    //       label: "Beneficiary's Given Name (First Name)",
-    //       required: true,
-    //     },
-    //     {
-    //       id: "part4.middleName",
-    //       type: "text",
-    //       label: "Beneficiary's Middle Name",
-    //     },
-    //     {
-    //       id: "part4.cityOfBirth",
-    //       type: "text",
-    //       label: "Beneficiary's City or Town of Birth",
-    //       required: true,
-    //     },
-    //     {
-    //       id: "part4.countryOfBirth",
-    //       type: "text",
-    //       label: "Beneficiary's Country of Birth",
-    //       required: true,
-    //     },
-    //     {
-    //       id: "part4.dateOfBirth",
-    //       type: "date",
-    //       label: "Beneficiary's Date of Birth",
-    //       required: true,
-    //     },
-    //     {
-    //       id: "part4.sex",
-    //       type: "radio",
-    //       label: "Beneficiary's Sex",
-    //       required: true,
-    //       options: [
-    //         { value: "male", label: "Male" },
-    //         { value: "female", label: "Female" },
-    //       ],
-    //     },
-    //     {
-    //       id: "part4.hasOtherNames",
-    //       type: "radio",
-    //       label: "Has your relative ever used other names?",
-    //       required: true,
-    //       options: [
-    //         { value: "yes", label: "Yes" },
-    //         { value: "no", label: "No" },
-    //       ],
-    //     },
-    //     {
-    //       id: "part4.otherNames",
-    //       type: "textarea",
-    //       label: "Other Names Used by Beneficiary",
-    //       helpText: "If yes, list all other names",
-    //     },
-    //   ],
-    // },
-    // {
-    //   id: "part4-beneficiary-address",
-    //   title: "Part 4: Beneficiary's Address",
-    //   questions: [
-    //     {
-    //       id: "part4.street",
-    //       type: "text",
-    //       label: "Street Number and Name",
-    //       required: true,
-    //     },
-    //     {
-    //       id: "part4.aptType",
-    //       type: "select",
-    //       label: "Apt/Ste/Flr",
-    //       options: [
-    //         { value: "", label: "None" },
-    //         { value: "apt", label: "Apt." },
-    //         { value: "ste", label: "Ste." },
-    //         { value: "flr", label: "Flr." },
-    //       ],
-    //     },
-    //     {
-    //       id: "part4.aptNumber",
-    //       type: "text",
-    //       label: "Apartment/Suite/Floor Number",
-    //     },
-    //     {
-    //       id: "part4.city",
-    //       type: "text",
-    //       label: "City or Town",
-    //       required: true,
-    //     },
-    //     {
-    //       id: "part4.state",
-    //       type: "text",
-    //       label: "State or Province",
-    //     },
-    //     {
-    //       id: "part4.zip",
-    //       type: "text",
-    //       label: "ZIP or Postal Code",
-    //     },
-    //     {
-    //       id: "part4.country",
-    //       type: "text",
-    //       label: "Country",
-    //       required: true,
-    //     },
-    //   ],
-    // },
-    // {
-    //   id: "part4-beneficiary-marital",
-    //   title: "Part 4: Beneficiary's Marital Information",
-    //   questions: [
-    //     {
-    //       id: "part4.timesMarried",
-    //       type: "text",
-    //       label: "How many times has the beneficiary been married?",
-    //       required: true,
-    //     },
-    //     {
-    //       id: "part4.currentMaritalStatus",
-    //       type: "select",
-    //       label: "Beneficiary's Current Marital Status",
-    //       required: true,
-    //       options: [
-    //         { value: "single", label: "Single, Never Married" },
-    //         { value: "married", label: "Married" },
-    //         { value: "divorced", label: "Divorced" },
-    //         { value: "widowed", label: "Widowed" },
-    //         { value: "separated", label: "Marriage Annulled or Other" },
-    //       ],
-    //     },
-    //     {
-    //       id: "part4.spouseName",
-    //       type: "text",
-    //       label: "Beneficiary's Current Spouse's Full Name",
-    //       helpText: "If currently married",
-    //     },
-    //     {
-    //       id: "part4.dateOfMarriage",
-    //       type: "date",
-    //       label: "Date of Marriage",
-    //       helpText: "If currently married",
-    //     },
-    //   ],
-    // },
-    // {
-    //   id: "part4-immigration-intent",
-    //   title: "Part 4: Immigration Intent",
-    //   description: "Indicate how the beneficiary will immigrate",
-    //   questions: [
-    //     {
-    //       id: "part4.immigrationPath",
-    //       type: "radio",
-    //       label: "The beneficiary will apply for:",
-    //       required: true,
-    //       options: [
-    //         {
-    //           value: "adjustment",
-    //           label: "Adjustment of status in the United States (Form I-485)",
-    //         },
-    //         {
-    //           value: "consular",
-    //           label: "An immigrant visa abroad at a U.S. Embassy or consulate",
-    //         },
-    //       ],
-    //       helpText: "IMPORTANT: You must select only ONE option",
-    //     },
-    //     {
-    //       id: "part4.consularLocation",
-    //       type: "text",
-    //       label:
-    //         "If applying for an immigrant visa abroad, provide the location (City, Country) where the beneficiary will apply",
-    //       helpText: "E.g., London, United Kingdom",
-    //     },
-    //   ],
-    // },
+    {
+      id: "part2-mailing-address",
+      title: "Part 2: Your Mailing Address",
+      questions: [
+        {
+          id: "part2.mailingInCareOf",
+          type: "text",
+          label: "In Care Of Name",
+          helpText: "Optional - if mail should be sent c/o someone else",
+        },
+        {
+          id: "part2.mailingStreet",
+          type: "text",
+          label: "Street Number and Name",
+          required: true,
+        },
+        {
+          id: "part2.mailingAptType",
+          type: "select",
+          label: "Apt/Ste/Flr",
+          options: [
+            { value: "", label: "None" },
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part2.mailingAptNumber",
+          type: "text",
+          label: "Apartment/Suite/Floor Number",
+        },
+        {
+          id: "part2.mailingCity",
+          type: "text",
+          label: "City or Town",
+          required: true,
+        },
+        {
+          id: "part2.mailingState",
+          type: "select",
+          label: "State",
+          required: true,
+          options: US_STATES,
+        },
+        {
+          id: "part2.mailingZip",
+          type: "text",
+          label: "ZIP Code",
+          required: true,
+          placeholder: "12345",
+        },
+        {
+          id: "part2.province",
+          type: "text",
+          label: "Province",
+          helpText: "For foreign addresses only",
+        },
+        {
+          id: "part2.postalCode",
+          type: "text",
+          label: "Postal Code",
+          helpText: "For foreign addresses only",
+        },
+        {
+          id: "part2.country",
+          type: "text",
+          label: "Country",
+          helpText: "For foreign addresses only",
+        },
+
+        {
+          id: "part2.addressSame",
+          type: "radio",
+          label:
+            "Is your current mailing address the same as your physical address?",
+          helpText: "Select 'No' to provide your physical address",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+      ],
+    },
+
+    {
+      id: "part2-physical-address",
+      description:
+        "Provide your physical addresses for the last five years, whether inside or outside the United States.",
+
+      title: `Part 2: Your Physical Address,-Is your current mailing address the same as your physical address? If Yes Skip it`,
+      questions: [
+        {
+          id: "part2.physicalStreet",
+          type: "text",
+          label: "Street Number and Name (physical address)",
+          helpText: "Provide your current physical address",
+          required: true,
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+        {
+          id: "part2.physicalAptType",
+          type: "select",
+          label: "Apt/Ste/Flr",
+          helpText: "Provide your current physical Apt/Ste/Flr",
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+          options: [
+            { value: "", label: "None" },
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part2.physicalAptNumber",
+          type: "text",
+          label: "Apartment/Suite/Floor Number",
+          required: false, // Changed to optional
+          helpText:
+            "Provide your current physical Apartment/Suite/Floor Number",
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+        {
+          id: "part2.physicalCity",
+          type: "text",
+          label: "City or Town",
+          required: true,
+          helpText: "Provide your current physical city or town",
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+        {
+          id: "part2.physicalState",
+          type: "select",
+          label: "State",
+          required: false, // Changed to optional (for foreign addresses)
+          options: US_STATES,
+          helpText: "Provide your current physical state",
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+        {
+          id: "part2.physicalZip",
+          type: "text",
+          label: "ZIP Code",
+          helpText: "Provide your current physical ZIP Code",
+          required: false, // Changed to optional (for foreign addresses)
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+          placeholder: "12345",
+        },
+        {
+          id: "part2.physicalProvince",
+          type: "text",
+          label: "Province",
+          required: false,
+          placeholder: "For foreign addresses only",
+          helpText: "For foreign addresses only",
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+        {
+          id: "part2.physicalPostalCode",
+          type: "text",
+          label: "Postal Code",
+          placeholder: "For foreign addresses only",
+          required: false,
+          helpText: "For foreign addresses only",
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+        {
+          id: "part2.physicalCountry",
+          type: "text",
+          label: "Country",
+          required: true,
+          helpText: "For foreign addresses only",
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+
+        {
+          id: "part2.dateFrom",
+          type: "date",
+          label: "Date From",
+          required: true,
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+        {
+          id: "part2.dateTo",
+          type: "date",
+          label: "Date To",
+          required: true,
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+
+        {
+          id: "part2.physicalStreet2",
+          type: "text",
+          label: "Street Number and Name",
+          helpText: "Provide your previous physical address if any other",
+          required: false,
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+        {
+          id: "part2.physicalAptType2",
+          type: "select",
+          label: "Apt/Ste/Flr",
+          required: false,
+          helpText: "Provide your previous physical Apt/Ste/Flr if any other",
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+          options: [
+            { value: "", label: "None" },
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part2.physicalAptNumber2",
+          type: "text",
+          label: "Apartment/Suite/Floor Number",
+          helpText:
+            "Provide your previous physical Apartment/Suite/Floor Number if any other",
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+        {
+          id: "part2.physicalCity2",
+          type: "text",
+
+          label: "City or Town",
+          helpText:
+            "Provide your previous physical city or town (if any other)",
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+        {
+          id: "part2.physicalState2",
+          type: "select",
+          label: "State",
+
+          options: US_STATES,
+          helpText: "Provide your previous physical state(if any other)",
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+        {
+          id: "part2.physicalZip2",
+          type: "text",
+          label: "ZIP Code",
+
+          placeholder: "12345",
+          helpText: "Provide your previous physical ZIP Code(if any other)",
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+        {
+          id: "part2.physicalProvince2",
+          type: "text",
+          label: "Province",
+
+          helpText: "For foreign addresses only(if any other)",
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+        {
+          id: "part2.physicalPostalCode2",
+          type: "text",
+          label: "Postal Code",
+
+          helpText: "For foreign addresses only(if any other)",
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+        {
+          id: "part2.physicalCountry2",
+          type: "text",
+          label: "Country ",
+
+          helpText: "For foreign addresses only (if any other)",
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+        {
+          id: "part2.dateFrom2",
+          type: "date",
+
+          label: "Date From (if any other)",
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+        {
+          id: "part2.dateTo2",
+          type: "date",
+
+          label: "Date To (if any other)",
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+      ],
+    },
+    // ================================= MMM ==========================================
+    {
+      id: "part2-marital-info",
+      title: "Part 2: Your Marital Information",
+      questions: [
+        {
+          id: "part2.timesMarried",
+          type: "text",
+          label: "How many times have you been married?",
+          required: true,
+          placeholder: "Enter a number",
+        },
+        {
+          id: "part2.currentMaritalStatus",
+          type: "select",
+          label: "Current Marital Status",
+          required: true,
+          options: [
+            { value: "single", label: "Single, Never Married" },
+            { value: "married", label: "Married" },
+            { value: "divorced", label: "Divorced" },
+            { value: "widowed", label: "Widowed" },
+            { value: "separated", label: "Marriage Annulled or Other" },
+          ],
+        },
+
+        {
+          id: "part2.dateOfMarriage",
+          type: "date",
+          label: "Date of Current Marriage",
+          helpText: "If currently married",
+        },
+        {
+          id: "part2.placeOfMarriage",
+          type: "text",
+          label: "Place of Current Marriage (City, State, Country)",
+          helpText: "If currently married",
+        },
+        //
+        {
+          id: "part2.placeState",
+          type: "select",
+          label: "Place of Current Marriage (State)",
+          helpText: "If currently married",
+          options: US_STATES,
+        },
+        {
+          id: "part2.placeProvince",
+          type: "text",
+          label: "Place of Current Marriage (Province)",
+          helpText: "If currently married",
+        },
+        {
+          id: "part2.placeCountry",
+          type: "text",
+          label: "Place of Current Marriage (Country)",
+          helpText: "If currently married",
+        },
+      ],
+    },
+
+    // ================================ MMM ==========================================
+
+    {
+      id: "part2-marital-info",
+      title: "Part 2: Your Marital Information",
+      questions: [
+        {
+          id: "part2.timesMarried",
+          type: "text",
+          label: "How many times have you been married?",
+          required: true,
+          placeholder: "Enter a number",
+        },
+        {
+          id: "part2.currentMaritalStatus",
+          type: "select",
+          label: "Current Marital Status",
+          required: true,
+          options: [
+            { value: "single", label: "Single, Never Married" },
+            { value: "married", label: "Married" },
+            { value: "divorced", label: "Divorced" },
+            { value: "widowed", label: "Widowed" },
+            { value: "separated", label: "Marriage Annulled or Other" },
+          ],
+        },
+
+        {
+          id: "part2.dateOfMarriage",
+          type: "date",
+          label: "Date of Current Marriage",
+          helpText: "If currently married",
+        },
+        {
+          id: "part2.placeOfMarriage",
+          type: "text",
+          label: "Place of Current Marriage (City, State, Country)",
+          helpText: "If currently married",
+        },
+        //
+        {
+          id: "part2.placeState",
+          type: "select",
+          label: "Place of Current Marriage (State)",
+          helpText: "If currently married",
+          options: US_STATES,
+        },
+        {
+          id: "part2.placeProvince",
+          type: "text",
+          label: "Place of Current Marriage (Province)",
+          helpText: "If currently married",
+        },
+        {
+          id: "part2.placeCountry",
+          type: "text",
+          label: "Place of Current Marriage (Country)",
+          helpText: "If currently married",
+        },
+      ],
+    },
+    // ================================ MMM ==========================================
+
+    {
+      id: "part2-Spouse-info",
+      title: "Part 2: Your Spouse Information (if any)",
+      questions: [
+        {
+          id: "part2.currentSpouseName",
+          type: "text",
+          label: "Current Spouse's Name",
+        },
+        {
+          id: "part2.currentSpouseGivenName",
+          type: "text",
+          label: "Current Spouse's Given Name",
+        },
+        {
+          id: "part2.currentSpouseMiddleName",
+          type: "text",
+          label: "Current Spouse's Middle Name",
+        },
+        {
+          id: "part2.dateMarriageEnded",
+          type: "date",
+          label: "Date Marriage Ended",
+        },
+
+        {
+          id: "part1.currentSpouseFamilyNameOther",
+          type: "text",
+          label: "Current Spouse's Family Name (Other)",
+        },
+        {
+          id: "part1.currentSpouseGivenNameOther",
+          type: "text",
+          label: "Current Spouse's Given Name (Other)",
+        },
+        {
+          id: "part1.currentSpouseMiddleNameOther",
+          type: "text",
+          label: "Current Spouse's Middle Name (Other)",
+        },
+        {
+          id: "part1.dateMarriageEndedOther",
+          type: "text",
+          label: "Date Marriage Ended (Other)",
+        },
+      ],
+    },
+
+    // =====================================================================
+    {
+      id: "part2-parent-info",
+      title: "Part 2: Information About Your Parents",
+      description: "Provide information about your parents",
+      questions: [
+        {
+          id: "part2.fatherLastName",
+          type: "text",
+          label: "24.a. Father's Family Name (Last Name)",
+        },
+        {
+          id: "part2.fatherFirstName",
+          type: "text",
+          label: "24.b. Father's Given Name (First Name)",
+        },
+        {
+          id: "part2.fatherMiddleName",
+          type: "text",
+          label: "24.c. Father's Middle Name",
+        },
+        {
+          id: "part2.fatherDateOfBirth",
+          type: "date",
+          label: "25. Father's Date of Birth (mm/dd/yyyy)",
+        },
+        {
+          id: "part2.fatherSex",
+          type: "radio",
+          label: "26. Father's Sex",
+
+          options: [
+            { value: "male", label: "Male" },
+            { value: "female", label: "Female" },
+          ],
+        },
+        {
+          id: "part2.fatherCountryOfBirth",
+          type: "text",
+          label: "27. Father's Country of Birth",
+        },
+        {
+          id: "part2.fatherCityOfResidence",
+          type: "text",
+          label: "28. Father's City/Town/Village of Residence",
+        },
+        {
+          id: "part2.fatherCountryOfResidence",
+          type: "text",
+          label: "29. Father's Country of Residence",
+        },
+        {
+          id: "part2.motherLastName",
+          type: "text",
+          label: "30.a. Mother's Family Name (Last Name)",
+        },
+        {
+          id: "part2.motherFirstName",
+          type: "text",
+          label: "30.b. Mother's Given Name (First Name)",
+        },
+        {
+          id: "part2.motherMiddleName",
+          type: "text",
+          label: "30.c. Mother's Middle Name",
+        },
+        {
+          id: "part2.motherDateOfBirth",
+          type: "date",
+          label: "31. Mother's Date of Birth (mm/dd/yyyy)",
+        },
+        {
+          id: "part2.motherSex",
+          type: "radio",
+          label: "32. Mother's Sex",
+
+          options: [
+            { value: "male", label: "Male" },
+            { value: "female", label: "Female" },
+          ],
+        },
+        {
+          id: "part2.motherCountryOfBirth",
+          type: "text",
+          label: "33. Mother's Country of Birth",
+        },
+        {
+          id: "part2.motherCityOfResidence",
+          type: "text",
+          label: "34. Mother's City/Town/Village of Residence",
+        },
+        {
+          id: "part2.motherCountryOfResidence",
+          type: "text",
+          label: "35. Mother's Country of Residence",
+        },
+      ],
+    },
+    {
+      id: "part2-additional-info",
+      title: "Part 2: Additional Information About You (Petitioner)",
+      description: "Additional information required for the petition",
+      questions: [
+        {
+          id: "part2.isUSCitizen",
+          type: "radio",
+          label: "36. I am a (Select only one box):",
+          required: true,
+          options: [
+            { value: "citizen", label: "U.S. Citizen" },
+            { value: "lpr", label: "Lawful Permanent Resident" },
+          ],
+        },
+        {
+          id: "part2.citizenshipAcquiredThrough",
+          type: "radio",
+          label:
+            "37. My citizenship was acquired through (Select only one box):",
+          required: false,
+          conditionalShow: {
+            questionId: "part2.isUSCitizen",
+            value: "citizen",
+          },
+          options: [
+            { value: "birth-us", label: "Birth in the United States" },
+            { value: "naturalization", label: "Naturalization" },
+            { value: "parents", label: "Parents" },
+          ],
+        },
+        {
+          id: "part2.hasNaturalizationCertificate",
+          type: "radio",
+          label:
+            "38. Have you obtained a Certificate of Naturalization or a Certificate of Citizenship?",
+          required: false,
+          conditionalShow: {
+            questionId: "part2.citizenshipAcquiredThrough",
+            value: "naturalization",
+          },
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part2.certificateNumber",
+          type: "text",
+          label: "39.a. Certificate Number",
+          conditionalShow: {
+            questionId: "part2.hasNaturalizationCertificate",
+            value: "yes",
+          },
+        },
+        {
+          id: "part2.placeOfIssuance",
+          type: "text",
+          label: "39.b. Place of Issuance (City/Town, State, Country)",
+          conditionalShow: {
+            questionId: "part2.hasNaturalizationCertificate",
+            value: "yes",
+          },
+        },
+        {
+          id: "part2.dateOfIssuance",
+          type: "date",
+          label: "39.c. Date of Issuance (mm/dd/yyyy)",
+          conditionalShow: {
+            questionId: "part2.hasNaturalizationCertificate",
+            value: "yes",
+          },
+        },
+        {
+          id: "part2.line40a.classOfAdmission",
+          type: "text",
+          label: "Class Of Admission",
+          required: false,
+        },
+        {
+          id: "part2.line40b.dateOfAdmission",
+          type: "date",
+          label: "Date Of Admission",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.line40d.cityOrTown",
+          type: "text",
+          label: "City Or Town",
+        },
+        {
+          id: "part2.line41",
+          type: "radio",
+          label:
+            "Did you gain lawful permanent resident status through marriage to a U.S. citizen or lawful permanent resident?",
+          required: true,
+
+          options: [
+            {
+              value: "yes",
+              label: "Yes",
+            },
+            {
+              value: "no",
+              label: "No",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part2-citizenship",
+      title: "Part 2: Information About Your U.S. Citizenship",
+      description: "Complete this section if you are a U.S. citizen",
+      questions: [
+        {
+          id: "part2.citizenshipThrough",
+          type: "radio",
+          label: "How did you acquire U.S. citizenship?",
+          options: [
+            { value: "birth-us", label: "Birth in the United States" },
+            { value: "naturalization", label: "Naturalization" },
+            {
+              value: "parents",
+              label:
+                "Parents (acquired after birth through U.S. citizen parents)",
+            },
+          ],
+          helpText: "Select one",
+        },
+        {
+          id: "part2.citizenshipUS",
+          type: "radio",
+          label:
+            "How did you acquire U.S. citizenship? --( If you are a U.S. citizen )",
+
+          conditionalShow: {
+            questionId: "part2.isUSCitizen",
+            value: "citizen",
+          },
+          options: [
+            {
+              value: "Birth in the United States",
+              label: "Birth in the United States",
+            },
+            { value: "Naturalization", label: "Naturalization" },
+            {
+              value: "Parents",
+              label: "Parents",
+            },
+          ],
+
+          helpText: "Select one",
+        },
+
+        {
+          id: "part2.dateOfNaturalization",
+          type: "date",
+          label:
+            "Date of Issuance of Certificate of Naturalization or Citizenship",
+        },
+
+        {
+          id: "part2.certificateNumber",
+          type: "text",
+          label:
+            "Certificate of Naturalization Number or Certificate of Citizenship Number",
+          helpText: "If you naturalized or acquired citizenship",
+        },
+        {
+          id: "part2.placeOfNaturalization",
+          type: "text",
+          label: "Place of Naturalization or Acquisition (City, State)",
+          helpText: "If you naturalized or acquired citizenship",
+        },
+      ],
+    },
+
+    // =====================================================================
+    {
+      id: "part4-beneficiary-info",
+      title: "Part 4: Information About Your Relative (Beneficiary)",
+      description:
+        "Provide information about the person you are petitioning for",
+      questions: [
+        {
+          id: "part4.alienNumber",
+          type: "text",
+          label: "Beneficiary's Alien Registration Number (A-Number)",
+          placeholder: "A-",
+          helpText: "If they have one",
+        },
+        {
+          id: "part4.uscisOnlineAccount",
+          type: "text",
+          label: "Beneficiary's USCIS Online Account Number",
+        },
+        {
+          id: "part4.ssn",
+          type: "ssn",
+          label: "Beneficiary's U.S. Social Security Number",
+          helpText: "If they have one",
+        },
+        {
+          id: "part4.lastName",
+          type: "text",
+          label: "Beneficiary's Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part4.firstName",
+          type: "text",
+          label: "Beneficiary's Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part4.middleName",
+          type: "text",
+          label: "Beneficiary's Middle Name",
+        },
+        {
+          id: "part4.cityOfBirth",
+          type: "text",
+          label: "Beneficiary's City or Town of Birth",
+          required: true,
+        },
+        {
+          id: "part4.countryOfBirth",
+          type: "text",
+          label: "Beneficiary's Country of Birth",
+          required: true,
+        },
+        {
+          id: "part4.dateOfBirth",
+          type: "date",
+          label: "Beneficiary's Date of Birth",
+          required: true,
+        },
+        {
+          id: "part4.sex",
+          type: "radio",
+          label: "Beneficiary's Sex",
+          required: true,
+          options: [
+            { value: "male", label: "Male" },
+            { value: "female", label: "Female" },
+          ],
+        },
+        {
+          id: "part4.hasOtherNames",
+          type: "radio",
+          label: "Has your relative ever used other names?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part4.otherNames",
+          type: "textarea",
+          label: "Other Names Used by Beneficiary",
+          helpText: "If yes, list all other names",
+        },
+      ],
+    },
+    {
+      id: "part4-beneficiary-address",
+      title: "Part 4: Beneficiary's Address",
+      questions: [
+        {
+          id: "part4.street",
+          type: "text",
+          label: "Street Number and Name",
+          required: true,
+        },
+        {
+          id: "part4.aptType",
+          type: "select",
+          label: "Apt/Ste/Flr",
+          options: [
+            { value: "", label: "None" },
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part4.aptNumber",
+          type: "text",
+          label: "Apartment/Suite/Floor Number",
+        },
+        {
+          id: "part4.city",
+          type: "text",
+          label: "City or Town",
+          required: true,
+        },
+        {
+          id: "part4.state",
+          type: "select",
+          label: "State or Province",
+          required: true,
+          options: US_STATES,
+        },
+        {
+          id: "part4.zip",
+          type: "text",
+          label: "ZIP or Postal Code",
+        },
+        {
+          id: "part4.country",
+          type: "text",
+          label: "Country",
+          required: true,
+        },
+      ],
+    },
+    {
+      id: "part4-beneficiary-marital",
+      title: "Part 4: Beneficiary's Marital Information",
+      questions: [
+        {
+          id: "part4.timesMarried",
+          type: "text",
+          label: "How many times has the beneficiary been married?",
+          required: true,
+        },
+        {
+          id: "part4.currentMaritalStatus",
+          type: "select",
+          label: "Beneficiary's Current Marital Status",
+          required: true,
+          options: [
+            { value: "single", label: "Single, Never Married" },
+            { value: "married", label: "Married" },
+            { value: "divorced", label: "Divorced" },
+            { value: "widowed", label: "Widowed" },
+            { value: "separated", label: "Marriage Annulled or Other" },
+          ],
+        },
+        {
+          id: "part4.spouseName",
+          type: "text",
+          label: "Beneficiary's Current Spouse's Full Name",
+          helpText: "If currently married",
+        },
+        {
+          id: "part4.dateOfMarriage",
+          type: "date",
+          label: "Date of Marriage",
+          helpText: "If currently married",
+        },
+      ],
+    },
+    {
+      id: "part4-immigration-intent",
+      title: "Part 4: Immigration Intent",
+      description: "Indicate how the beneficiary will immigrate",
+      questions: [
+        {
+          id: "part4.immigrationPath",
+          type: "radio",
+          label: "The beneficiary will apply for:",
+          required: true,
+          options: [
+            {
+              value: "adjustment",
+              label: "Adjustment of status in the United States (Form I-485)",
+            },
+            {
+              value: "consular",
+              label: "An immigrant visa abroad at a U.S. Embassy or consulate",
+            },
+          ],
+          helpText: "IMPORTANT: You must select only ONE option",
+        },
+        {
+          id: "part4.consularLocation",
+          type: "text",
+          label:
+            "If applying for an immigrant visa abroad, provide the location (City, Country) where the beneficiary will apply",
+          helpText: "E.g., London, United Kingdom",
+        },
+      ],
+    },
   ],
   pdfFieldMappings: [
     // { questionId: "part2.lastName", pdfFieldName: "Pt2Line4a_FamilyName" },

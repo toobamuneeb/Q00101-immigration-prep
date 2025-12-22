@@ -85,23 +85,35 @@ export function UniversalFormWizard({
     const newErrors: Record<string, string> = {};
     let isValid = true;
 
-    currentSection.questions.forEach((question) => {
-      const value = answers[question.id];
-      const error = validateField(question, value);
-      if (error) {
-        newErrors[question.id] = error;
-        isValid = false;
-      }
-    });
+    // Only validate visible questions (respecting conditional logic)
+    currentSection.questions
+      .filter((question) => shouldShowQuestion(question))
+      .forEach((question) => {
+        const value = answers[question.id];
+        const error = validateField(question, value);
+        if (error) {
+          newErrors[question.id] = error;
+          isValid = false;
+        }
+      });
 
     setErrors(newErrors);
 
     if (!isValid) {
       toast({
-        title: "Missing Required Fields",
-        description: "Please fill in all required fields before continuing.",
+        title: "Validation Error",
+        description: `Please fix ${Object.keys(newErrors).length} error${
+          Object.keys(newErrors).length > 1 ? "s" : ""
+        } before continuing.`,
         variant: "destructive",
       });
+
+      // Scroll to first error
+      const firstErrorField = Object.keys(newErrors)[0];
+      const element = document.getElementById(firstErrorField);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
     }
 
     return isValid;
@@ -136,6 +148,41 @@ export function UniversalFormWizard({
     // For now, just return the text as-is since all form text should be in English
     // Actual translations would need to be added to form definitions as keys
     return text;
+  };
+
+  // Check if a question should be shown based on conditional logic
+  const shouldShowQuestion = (question: Question): boolean => {
+    // Check for 'conditional' property (new format)
+    if (question.conditional) {
+      const conditional = question.conditional as any;
+      const dependsOn = conditional.dependsOn;
+      const dependentValue = answers[dependsOn];
+
+      // Support both 'value' (single) and 'values' (array) formats
+      if (conditional.values && Array.isArray(conditional.values)) {
+        return conditional.values.includes(dependentValue);
+      } else if (conditional.value !== undefined) {
+        return dependentValue === conditional.value;
+      }
+      return false;
+    }
+
+    // Check for 'conditionalShow' property (legacy format used in I-130)
+    const conditionalShow = (question as any).conditionalShow;
+    if (conditionalShow) {
+      const dependentValue = answers[conditionalShow.questionId];
+      
+      // Support both 'value' (single) and 'values' (array) formats
+      if (conditionalShow.values && Array.isArray(conditionalShow.values)) {
+        return conditionalShow.values.includes(dependentValue);
+      } else if (conditionalShow.value !== undefined) {
+        return dependentValue === conditionalShow.value;
+      }
+      return false;
+    }
+
+    // If no conditional logic, always show the question
+    return true;
   };
 
   // Render a single question field
@@ -298,7 +345,7 @@ export function UniversalFormWizard({
     // For checkbox, label is part of the field
     if (question.type === "checkbox") {
       return (
-        <div key={question.id} className="space-y-2">
+        <div key={question.id} id={question.id} className="space-y-2">
           {question.helpText && (
             <p className="text-sm text-muted-foreground">
               {translateLabel(question.helpText)}
@@ -306,14 +353,27 @@ export function UniversalFormWizard({
           )}
           {renderField()}
           {hasError && (
-            <p className="text-sm text-red-500 mt-1">{errorMessage}</p>
+            <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-md">
+              <svg
+                className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <p className="text-sm text-red-600 font-medium">{errorMessage}</p>
+            </div>
           )}
         </div>
       );
     }
 
     return (
-      <div key={question.id} className="space-y-2">
+      <div key={question.id} id={question.id} className="space-y-2">
         <Label className="text-base font-medium">
           {translateLabel(question.label)}
           {question.required && (
@@ -327,7 +387,20 @@ export function UniversalFormWizard({
         )}
         {renderField()}
         {hasError && (
-          <p className="text-sm text-red-500 mt-1">{errorMessage}</p>
+          <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-md">
+            <svg
+              className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                clipRule="evenodd"
+              />
+            </svg>
+            <p className="text-sm text-red-600 font-medium">{errorMessage}</p>
+          </div>
         )}
       </div>
     );
@@ -496,7 +569,9 @@ export function UniversalFormWizard({
         </CardHeader>
 
         <CardContent className="space-y-6">
-          {currentSection.questions.map((question) => renderQuestion(question))}
+          {currentSection.questions
+            .filter((question) => shouldShowQuestion(question))
+            .map((question) => renderQuestion(question))}
         </CardContent>
 
         <CardFooter className="flex justify-between border-t pt-6">

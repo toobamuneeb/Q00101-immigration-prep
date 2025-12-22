@@ -197,13 +197,30 @@ function updateFillPdf(formIds: string[]): void {
 async function main() {
   console.log('🚀 UNIVERSAL FORM GENERATOR');
   console.log('=' .repeat(70));
-  console.log('Generating complete mappings for ALL forms...\n');
-
+  
+  // Check if a specific form ID was provided
+  const targetFormId = process.argv[2];
+  
   // Get all form IDs
-  const formIds = getAllFormIds();
-  console.log(`📋 Found ${formIds.length} forms with auto-mappings:\n`);
-  formIds.forEach(id => console.log(`   - ${id.toUpperCase()}`));
-  console.log();
+  let formIds = getAllFormIds();
+  
+  if (targetFormId) {
+    // Filter to only the specified form
+    if (formIds.includes(targetFormId)) {
+      formIds = [targetFormId];
+      console.log(`Generating mappings for: ${targetFormId.toUpperCase()}\n`);
+    } else {
+      console.error(`❌ Form "${targetFormId}" not found!`);
+      console.log(`\nAvailable forms:`);
+      formIds.forEach(id => console.log(`   - ${id}`));
+      process.exit(1);
+    }
+  } else {
+    console.log('Generating complete mappings for ALL forms...\n');
+    console.log(`📋 Found ${formIds.length} forms with auto-mappings:\n`);
+    formIds.forEach(id => console.log(`   - ${id.toUpperCase()}`));
+    console.log();
+  }
 
   const results: Record<string, { success: boolean; count: number; error?: string }> = {};
 
