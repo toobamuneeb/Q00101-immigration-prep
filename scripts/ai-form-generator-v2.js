@@ -1,4 +1,20 @@
 
+// Load environment variables from .env file manually
+const envPath = require('path').join(__dirname, '..', '.env');
+if (require('fs').existsSync(envPath)) {
+  const envContent = require('fs').readFileSync(envPath, 'utf-8');
+  envContent.split('\n').forEach(line => {
+    const match = line.match(/^([^=:#]+)=(.*)$/);
+    if (match) {
+      const key = match[1].trim();
+      const value = match[2].trim();
+      if (!process.env[key]) {
+        process.env[key] = value;
+      }
+    }
+  });
+}
+
 const { execSync } = require("child_process");
 const fs = require("fs");
 const path = require("path");
@@ -267,62 +283,157 @@ Generate EXACTLY ${
     }
 
     // Build mapping context with values and field type hints
-    const mappingContext = batchQuestionIds.map(qid => {
+    const uniqueQuestionIds = [...new Set(batchQuestionIds)]; // Remove duplicates
+    const mappingContext = uniqueQuestionIds.map(qid => {
       const values = questionIdToValues.get(qid) || [];
       const fieldInfo = questionIdToFieldInfo.get(qid);
       const pdfFields = fieldInfo?.pdfFields || [];
       
-      // Check if this is a state/country dropdown by looking at PDF field name
-      const isStateOrCountry = pdfFields.some(f => 
-        f.toLowerCase().includes('state') || 
-        f.toLowerCase().includes('country') ||
-        f.toLowerCase().includes('province')
-      );
+      // Detect field type based on PDF field name patterns
+      const fieldNameLower = pdfFields.join(' ').toLowerCase();
       
+      // Check for dropdown indicators
+      const isState = fieldNameLower.includes('state') && !fieldNameLower.includes('statement');
+      const isCountry = fieldNameLower.includes('country');
+      const isProvince = fieldNameLower.includes('province');
+      const isCity = fieldNameLower.includes('city') || fieldNameLower.includes('town');
+      const isZipCode = fieldNameLower.includes('zip') || fieldNameLower.includes('postal');
+      
+      // Check for unit type fields (APT, STE, FLR)
+      const isUnitType = fieldNameLower.includes('unit') && 
+                        (fieldNameLower.includes('apt') || 
+                         fieldNameLower.includes('ste') || 
+                         fieldNameLower.includes('flr') ||
+                         values.some(v => ['APT', 'STE', 'FLR', 'apt', 'ste', 'flr'].includes(v)));
+      
+      // Determine field type
+      let typeHint = '';
       if (values.length > 0) {
-        const typeHint = isStateOrCountry ? ' [DROPDOWN]' : (values.length === 2 ? ' [RADIO]' : ' [CHECKBOX/RADIO]');
+        if (isState || isCountry || isProvince) {
+          typeHint = ' [DROPDOWN-LOCATION]';
+        } else if (isUnitType) {
+          typeHint = ' [RADIO-UNIT]';
+        } else if (values.length === 2 && (values.includes('Y') || values.includes('N') || values.includes('yes') || values.includes('no'))) {
+          typeHint = ' [RADIO-YESNO]';
+        } else if (values.length === 2) {
+          typeHint = ' [RADIO]';
+        } else if (values.length >= 3 && values.length <= 5) {
+          typeHint = ' [RADIO-MULTI]';
+        } else {
+          typeHint = ' [CHECKBOX]';
+        }
         return `${qid} → values: [${values.map(v => `"${v}"`).join(', ')}]${typeHint}`;
       }
+      
+      // For fields without values, detect type from name
+      if (isZipCode) return `${qid} [TEXT-ZIP]`;
+      if (isCity) return `${qid} [TEXT-CITY]`;
+      
       return qid;
     }).join('\n');
 
     // STEP 2: Generate definition for these mappings IMMEDIATELY
     console.log(
-      `   Step 2: Generating definition for ${batchQuestionIds.length} questions...`
+      `   Step 2: Generating definition for ${uniqueQuestionIds.length} unique questions...`
     );
 
     const defPrompt = `Generate form sections for ${formCode.toUpperCase()}.
 
-QUESTION IDs WITH VALUES:
-${mappingContext}
+QUESTION IDs WITH VALUES AND PDF LABELS:
+${uniqueQuestionIds.map(qid => {
+  const values = questionIdToValues.get(qid) || [];
+  const fieldInfo = questionIdToFieldInfo.get(qid);
+  const pdfFields = fieldInfo?.pdfFields || [];
+  
+  // Find the original field data to get the alt name (label)
+  const originalField = fieldData.find(f => pdfFields.includes(f.pdfField));
+  const pdfLabel = originalField?.altName || '';
+  
+  // Detect field type
+  const fieldNameLower = pdfFields.join(' ').toLowerCase();
+  const isState = fieldNameLower.includes('state') && !fieldNameLower.includes('statement');
+  const isCountry = fieldNameLower.includes('country');
+  const isProvince = fieldNameLower.includes('province');
+  const isUnitType = fieldNameLower.includes('unit') && 
+                    (fieldNameLower.includes('apt') || 
+                     fieldNameLower.includes('ste') || 
+                     fieldNameLower.includes('flr') ||
+                     values.some(v => ['APT', 'STE', 'FLR', 'apt', 'ste', 'flr'].includes(v)));
+  
+  let typeHint = '';
+  if (values.length > 0) {
+    if (isState || isCountry || isProvince) {
+      typeHint = ' [DROPDOWN-LOCATION]';
+    } else if (isUnitType) {
+      typeHint = ' [RADIO-UNIT]';
+    } else if (values.length === 2 && (values.includes('Y') || values.includes('N') || values.includes('yes') || values.includes('no'))) {
+      typeHint = ' [RADIO-YESNO]';
+    } else if (values.length === 2) {
+      typeHint = ' [RADIO]';
+    } else if (values.length >= 3 && values.length <= 5) {
+      typeHint = ' [RADIO-MULTI]';
+    } else {
+      typeHint = ' [CHECKBOX]';
+    }
+    return `${qid} → PDF Label: "${pdfLabel}" → values: [${values.map(v => `"${v}"`).join(', ')}]${typeHint}`;
+  }
+  
+  return `${qid} → PDF Label: "${pdfLabel}"`;
+}).join('\n')}
 
 FULL MAPPINGS (for reference):
 ${mappingCode.substring(0, 2000)}
 
-⚠️ CRITICAL RULES:
-1. Create question for ALL ${batchQuestionIds.length} questionIds - DO NOT SKIP ANY
-2. If questionId has multiple values listed above:
-   - Check the [TYPE HINT] at the end of the line
-   - [DROPDOWN]: Use type "select" for state/country dropdowns - options should have value=id and label=name
-   - [RADIO]: Use type "radio" for "select one" questions (typically 2 options like yes/no)
-   - [CHECKBOX/RADIO]: Use type "checkbox" for "select all that apply" questions (3+ options)
-   - Use EXACT values from mappings as the option values
-   - DO NOT create separate questions for each value
-3. If questionId has NO values listed:
-   - It's a text/date/email field
-4. Use proper types: text, date, ssn, tel, email, select, radio, checkbox
-5. For radio/select/checkbox: ALWAYS include options array with EXACT values from mappings
-6. For dropdowns [DROPDOWN]: value should be the ID/code, label should be human-readable
-7. For radio [RADIO]: value and label can be the same or value can be code
-8. For checkbox [CHECKBOX/RADIO]: value should match mapping exactly
-9. Set required: true for essential fields
-10. Add helpful labels and helpText
-11. DO NOT duplicate questionIds - each questionId should appear ONCE
+⚠️ CRITICAL RULES - READ CAREFULLY:
+
+1. **USE EXACT PDF LABELS**: Use the "PDF Label" text shown above as the question label
+   - Keep the exact formatting, numbering, and punctuation from the PDF
+   - Example: If PDF Label is "1.a. Family Name (Last Name)" use that EXACTLY
+
+2. **NO DUPLICATES**: Each questionId must appear ONLY ONCE in the output
+
+3. **Process ALL questions**: Create question for ALL ${uniqueQuestionIds.length} unique questionIds
+
+4. **Field Type Detection** - Use the [TYPE HINT] to determine the correct type:
+   - [DROPDOWN-LOCATION]: Use type "select" for state/country/province dropdowns
+   - [RADIO-UNIT]: Use type "radio" for unit types (Apt/Ste/Flr)
+   - [RADIO-YESNO]: Use type "radio" for Yes/No questions
+   - [RADIO]: Use type "radio" for 2-option questions
+   - [RADIO-MULTI]: Use type "radio" for 3-5 option "select one" questions
+   - [CHECKBOX]: Use type "checkbox" for "select all that apply" (6+ options)
+   - No hint: Detect from PDF label or use "text"
+
+5. **Options Format**:
+   - For [DROPDOWN-LOCATION]: { value: "CODE", label: "Full Name" }
+     Example: { value: "CA", label: "California" }
+   - For [RADIO-UNIT]: { value: "APT", label: "Apartment" }, { value: "STE", label: "Suite" }, { value: "FLR", label: "Floor" }
+   - For [RADIO-YESNO]: { value: "yes", label: "Yes" }, { value: "no", label: "No" }
+   - For others: Use EXACT values from mappings
+
+6. **Section Organization**:
+   - Group questions by Part number (Part 1, Part 2, etc.)
+   - Extract Part number from PDF Label (e.g., "Part 1 Line 2a" → Part 1)
+   - Create logical section titles based on the content
+
+7. **Required Fields**: Set required: true for:
+   - Name fields (familyName, givenName)
+   - Date of birth
+   - Address fields (street, city, state, zip)
+   - Country fields
+   - Any field marked as required in the PDF
+
+8. **Field Types from PDF Labels**:
+   - If label contains "Date" or "DOB" → type: "date"
+   - If label contains "Email" → type: "email"
+   - If label contains "Phone" or "Telephone" → type: "tel"
+   - If label contains "SSN" or "Social Security" → type: "ssn"
+   - If label contains "ZIP" or "Postal Code" → type: "text"
+   - Otherwise use the [TYPE HINT]
 
 EXAMPLES:
 
-// Example 1: Text field (no values in mapping)
-// part1.familyName → no values
+// Example with exact PDF label
+// part1.familyName → PDF Label: "1.a. Family Name (Last Name)"
 {
   id: "part1-personal-info",
   title: "Part 1: Personal Information",
@@ -331,13 +442,13 @@ EXAMPLES:
       id: "part1.familyName",
       type: "text",
       label: "1.a. Family Name (Last Name)",
-      required: true,
-    },
-  ],
+      required: true
+    }
+  ]
 }
 
-// Example 2: State/Country Dropdown [DROPDOWN]
-// part1.state → values: ["AL", "AK", "AZ", ...] [DROPDOWN]
+// Dropdown with PDF label
+// part1.state → PDF Label: "1.e. State" → values: ["AL", "AK"] [DROPDOWN-LOCATION]
 {
   id: "part1-address",
   title: "Part 1: Address",
@@ -349,79 +460,54 @@ EXAMPLES:
       required: true,
       options: [
         { value: "AL", label: "Alabama" },
-        { value: "AK", label: "Alaska" },
-        { value: "AZ", label: "Arizona" }
+        { value: "AK", label: "Alaska" }
       ]
-    },
-  ],
+    }
+  ]
 }
 
-// Example 3: Radio for "Select One" [RADIO]
-// part1.applicationType → values: ["a", "b"] [RADIO]
+// Radio with PDF label
+// part1.unitType → PDF Label: "1.g. Unit Type" → values: ["APT", "STE", "FLR"] [RADIO-UNIT]
 {
-  id: "part1-application",
-  title: "Part 1: Application Type",
+  id: "part1-address-unit",
+  title: "Part 1: Unit Information",
   questions: [
     {
-      id: "part1.applicationType",
+      id: "part1.unitType",
       type: "radio",
-      label: "2. Application Type (Select one)",
-      required: true,
-      options: [
-        { value: "a", label: "Type A" },
-        { value: "b", label: "Type B" }
-      ]
-    },
-  ],
-}
-
-// Example 4: Yes/No Radio [RADIO]
-// part2.hasSpouse → values: ["yes", "no"] [RADIO]
-{
-  id: "part2-spouse",
-  title: "Part 2: Spouse Information",
-  questions: [
-    {
-      id: "part2.hasSpouse",
-      type: "radio",
-      label: "1. Do you have a spouse?",
-      required: true,
-      options: [
-        { value: "yes", label: "Yes" },
-        { value: "no", label: "No" }
-      ]
-    },
-  ],
-}
-
-// Example 5: Checkbox for "Select All That Apply" [CHECKBOX/RADIO]
-// part8.race → values: ["AS", "WH", "BL", "AI", "HW"] [CHECKBOX/RADIO]
-{
-  id: "part8-race",
-  title: "Part 8: Race",
-  questions: [
-    {
-      id: "part8.race",
-      type: "checkbox",
-      label: "1. Race (Select all that apply)",
+      label: "1.g. Unit Type",
       required: false,
       options: [
-        { value: "AS", label: "Asian" },
-        { value: "WH", label: "White" },
-        { value: "BL", label: "Black or African American" },
-        { value: "AI", label: "American Indian or Alaska Native" },
-        { value: "HW", label: "Native Hawaiian or Other Pacific Islander" }
+        { value: "APT", label: "Apartment" },
+        { value: "STE", label: "Suite" },
+        { value: "FLR", label: "Floor" }
       ]
-    },
-  ],
+    }
+  ]
 }
 
-⚠️ IMPORTANT: 
-- Generate complete section objects with proper structure
-- Each section must have: id, title, questions array
-- Use EXACT values from the "QUESTION IDs WITH VALUES" list above
-- DO NOT wrap in "sections: [...]" - just output the section objects separated by commas
-- Each questionId should appear ONLY ONCE in the output
+// Date field with PDF label
+// part1.dateOfBirth → PDF Label: "1.n. Date of Birth (mm/dd/yyyy)"
+{
+  id: "part1-personal-info",
+  title: "Part 1: Personal Information",
+  questions: [
+    {
+      id: "part1.dateOfBirth",
+      type: "date",
+      label: "1.n. Date of Birth (mm/dd/yyyy)",
+      required: true,
+      placeholder: "MM/DD/YYYY"
+    }
+  ]
+}
+
+⚠️ OUTPUT FORMAT:
+- Use EXACT PDF labels as shown in "PDF Label:" above
+- Generate section objects separated by commas
+- DO NOT wrap in "sections: [...]"
+- Each questionId appears ONLY ONCE
+- Group by Part numbers from PDF labels
 `;
 
     let defResponse;
@@ -448,13 +534,13 @@ EXAMPLES:
     const questionCount = (defCode.match(/\bid:\s*["'][^"']+["']/g) || [])
       .length;
 
-    if (questionCount < batchQuestionIds.length) {
+    if (questionCount < uniqueQuestionIds.length) {
       console.log(
-        `   ⚠️  WARNING: Expected ${batchQuestionIds.length} questions, got ${questionCount}`
+        `   ⚠️  WARNING: Expected ${uniqueQuestionIds.length} questions, got ${questionCount}`
       );
     } else {
       console.log(
-        `   ✅ Definition: ${questionCount}/${batchQuestionIds.length} questions created`
+        `   ✅ Definition: ${questionCount}/${uniqueQuestionIds.length} questions created`
       );
     }
 

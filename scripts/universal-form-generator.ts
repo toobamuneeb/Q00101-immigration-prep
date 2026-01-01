@@ -63,7 +63,7 @@ function loadAutoMappings(formId: string): any[] {
     const mappings = eval(`(${arrayStr})`);
     return mappings;
   } catch (error) {
-    console.error(`   ❌ Error loading auto-mappings for ${formId}:`, error.message);
+    console.error(`   ❌ Error loading auto-mappings for ${formId}:`, error instanceof Error ? error.message : String(error));
     return [];
   }
 }
@@ -265,8 +265,8 @@ async function main() {
       results[formId] = { success: true, count: mappings.length };
       
     } catch (error) {
-      console.error(`   ❌ Error: ${error.message}`);
-      results[formId] = { success: false, count: 0, error: error.message };
+      console.error(`   ❌ Error: ${error instanceof Error ? error.message : String(error)}`);
+      results[formId] = { success: false, count: 0, error: error instanceof Error ? error.message : String(error) };
     }
   }
 

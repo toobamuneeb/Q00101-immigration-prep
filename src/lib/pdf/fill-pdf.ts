@@ -43,6 +43,7 @@ import { I_212_FIELD_MAPPINGS } from "../constants/form-mappings/i-212-field-map
 import { I_129F_FIELD_MAPPINGS } from "../constants/form-mappings/i-129f-field-mappings";
 import { I_485_FIELD_MAPPINGS } from "../constants/form-mappings/i-485-field-mappings";
 import { I_730_FIELD_MAPPINGS } from "../constants/form-mappings/i-730-field-mappings";
+import { I_129_FIELD_MAPPINGS } from "../constants/form-mappings/i-129-field-mappings";
 
 /**
  * Get field mappings for a specific form
@@ -66,7 +67,7 @@ function getFormMappings(formId: string): FieldMapping[] {
     case "i-751":
       return I_751_FIELD_MAPPINGS;
     case "i-129":
-      return I_129_AUTO_MAPPINGS;
+      return I_129_FIELD_MAPPINGS;
     case "i-140":
       return I_140_AUTO_MAPPINGS;
     case "i-539":

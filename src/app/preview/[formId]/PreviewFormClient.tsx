@@ -81,6 +81,7 @@ export function PreviewFormClient({ formDefinition }: PreviewFormClientProps) {
       {/* Form */}
       <div className="container mx-auto px-4 pb-12">
         <UniversalFormWizard
+          formId={formDefinition.id}
           formDefinition={formDefinition}
           applicationId={null}
           initialAnswers={{}}

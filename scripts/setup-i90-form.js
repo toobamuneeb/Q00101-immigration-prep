@@ -265,7 +265,6 @@ const improvedFormDefinition = `/**
  * This is the complete form definition for I-90
  */
 
-import { FormDefinition } from '../types/form-types';
 
 export const I90_DEFINITION: FormDefinition = {
   id: "i90",

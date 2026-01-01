@@ -21,7 +21,7 @@ const PDF_PATH = path.join(process.cwd(), "public", "pdf-templates", PDF_FILE);
 const OUTPUT_DIR = path.join(process.cwd(), "src", "uscis", "generated");
 
 // Detect field type
-function detectType(field) {
+function detectType(field: any) {
   const name = field.constructor.name;
   if (name === "PDFCheckBox") return "checkbox";
   if (name === "PDFRadioGroup") return "radio";
@@ -30,7 +30,7 @@ function detectType(field) {
 }
 
 // Normalize field name for questionId
-function normalizeId(pdfField) {
+function normalizeId(pdfField: string) {
   return pdfField
     .replace(/^form1\[0\]\.#subform\[\d+\]\.?/, "")
     .replace(/\[.*?\]/g, "")
@@ -39,13 +39,13 @@ function normalizeId(pdfField) {
 }
 
 // Detect part number
-function detectPart(pdfField) {
+function detectPart(pdfField: string) {
   const m = pdfField.match(/P(\d+)_/);
   return m ? `part${m[1]}` : "unknown";
 }
 
 // Generate human-readable label
-function generateLabel(pdfField) {
+function generateLabel(pdfField: string) {
   if (/PDF417BarCode|#PageSet|^form1\[\d+\]\.$/.test(pdfField)) {
     return null;
   }
@@ -57,7 +57,7 @@ function generateLabel(pdfField) {
 }
 
 // Detect if field is required (PDF-lib supports widget flags)
-function isRequired(field) {
+function isRequired(field: any) {
   try {
     const widgets = field.acroField.acroField.getWidgets?.() || [];
     for (const w of widgets) {
@@ -82,8 +82,8 @@ function isRequired(field) {
   const form = pdf.getForm();
   const fields = form.getFields();
 
-  const AUTO_MAPPINGS = [];
-  const sections = {};
+  const AUTO_MAPPINGS: any[] = [];
+  const sections: Record<string, any[]> = {};
 
   for (const field of fields) {
     const pdfField = field.getName();

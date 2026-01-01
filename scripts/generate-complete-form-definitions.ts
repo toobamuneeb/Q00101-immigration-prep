@@ -52,7 +52,7 @@ function loadAutoMappings(formId: string): any[] {
     
     return eval(`(${arrayStr})`);
   } catch (error) {
-    console.error(`Error loading auto-mappings for ${formId}:`, error.message);
+    console.error(`Error loading auto-mappings for ${formId}:`, error instanceof Error ? error.message : String(error));
     return [];
   }
 }

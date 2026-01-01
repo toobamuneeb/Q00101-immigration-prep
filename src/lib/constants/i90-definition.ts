@@ -5,14 +5,16 @@
  * This is the complete form definition for I-90
  */
 
-import { FormDefinition } from '../types/form-types';
+import { FormDefinition } from "./forms-registry";
+
+
 
 export const I90_DEFINITION: FormDefinition = {
   id: "i90",
   code: "I-90",
   name: "Application to Replace Permanent Resident Card",
   description: "Use this form to apply for a replacement Permanent Resident Card (Green Card) if your card has been lost, stolen, destroyed, or contains incorrect information.",
-  category: "green-card",
+  category: "other",
   estimatedTime: "45-60 minutes",
   filingFee: 540,
   price: 89,
@@ -512,4 +514,5 @@ export const I90_DEFINITION: FormDefinition = {
     "Pay the required filing fee",
     "Sign and date your application"
   ],
+  pdfFieldMappings: []
 };

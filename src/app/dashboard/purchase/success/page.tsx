@@ -15,6 +15,7 @@ function PurchaseSuccessContent() {
   const [isVerifying, setIsVerifying] = useState(true);
   const [purchase, setPurchase] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
     if (!sessionId) {
@@ -30,19 +31,25 @@ function PurchaseSuccessContent() {
 
         if (data.verified && data.purchase) {
           setPurchase(data.purchase);
+          setIsVerifying(false);
+        } else if (data.needsRetry && retryCount < 10) {
+          // Payment is processing, retry after a delay
+          setTimeout(() => {
+            setRetryCount(prev => prev + 1);
+          }, 2000);
         } else {
-          setError('Purchase verification failed. Please contact support.');
+          setError(data.error || 'Purchase verification failed. Please contact support.');
+          setIsVerifying(false);
         }
       } catch (err) {
         console.error('Error verifying purchase:', err);
         setError('Failed to verify purchase. Please contact support.');
-      } finally {
         setIsVerifying(false);
       }
     };
 
     verifyPurchase();
-  }, [sessionId]);
+  }, [sessionId, retryCount]);
 
   if (isVerifying) {
     return (
@@ -51,7 +58,11 @@ function PurchaseSuccessContent() {
           <CardContent className="pt-6 text-center">
             <Loader2 className="h-12 w-12 animate-spin mx-auto mb-4 text-primary" />
             <p className="text-lg font-medium">Verifying your purchase...</p>
-            <p className="text-sm text-muted-foreground mt-2">This will only take a moment.</p>
+            <p className="text-sm text-muted-foreground mt-2">
+              {retryCount > 0 
+                ? `Processing payment... (${retryCount}/10)` 
+                : 'This will only take a moment.'}
+            </p>
           </CardContent>
         </Card>
       </div>
