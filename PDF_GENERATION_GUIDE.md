@@ -2,14 +2,9 @@
 
 ## Overview
 
-USCIS PDFs are **encrypted/protected** but contain **450+ fillable form fields**. We can unlock them, extract field names, map them to our questionnaire, and generate filled PDFs.
-
 ## The Problem
 
-USCIS PDFs are protected with encryption that prevents:
-- Viewing form field names
-- Filling form fields programmatically
-- Extracting field metadata
+
 
 ## The Solution
 
