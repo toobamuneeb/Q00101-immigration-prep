@@ -27,18 +27,21 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslations } from "next-intl";
+import { fillPDFAndDownload } from "@/lib/pdf/download-pdf";
 
 interface UniversalFormWizardProps {
   formDefinition: FormDefinition;
   applicationId: string | null;
   initialAnswers?: Record<string, any>;
-  onComplete?: any;
+  onComplete?: () => void;
+  formId: string;
 }
 
 export function UniversalFormWizard({
   formDefinition,
   applicationId,
   initialAnswers = {},
+  formId,
   onComplete,
 }: UniversalFormWizardProps) {
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
@@ -46,6 +49,8 @@ export function UniversalFormWizard({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
+
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
   const { toast } = useToast();
   const t = useTranslations();
 
@@ -53,6 +58,79 @@ export function UniversalFormWizard({
   const totalSections = formDefinition.sections.length;
   const isLastSection = currentSectionIndex === totalSections - 1;
   const progress = ((currentSectionIndex + 1) / totalSections) * 100;
+
+  // Safety check: if currentSection is undefined, reset to first section
+  if (!currentSection) {
+    console.error(
+      "Invalid section index:",
+      currentSectionIndex,
+      "Total sections:",
+      totalSections
+    );
+    setCurrentSectionIndex(0);
+    return null;
+  }
+
+  // Validate a single field
+  const validateField = (question: Question, value: any): string | null => {
+    if (question.required) {
+      if (!value || (typeof value === "string" && value.trim() === "")) {
+        return `${question.label} is required`;
+      }
+      if (Array.isArray(value) && value.length === 0) {
+        return `${question.label} is required`;
+      }
+    }
+
+    // Email validation
+    if (question.type === "email" && value) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(value)) {
+        return "Please enter a valid email address";
+      }
+    }
+
+    return null;
+  };
+
+  // Validate current section
+  const validateCurrentSection = (): boolean => {
+    const newErrors: Record<string, string> = {};
+    let isValid = true;
+
+    // Only validate visible questions (respecting conditional logic)
+    currentSection.questions
+      .filter((question) => shouldShowQuestion(question))
+      .forEach((question) => {
+        const value = answers[question.id];
+        const error = validateField(question, value);
+        if (error) {
+          newErrors[question.id] = error;
+          isValid = false;
+        }
+      });
+
+    setErrors(newErrors);
+
+    if (!isValid) {
+      toast({
+        title: "Validation Error",
+        description: `Please fix ${Object.keys(newErrors).length} error${
+          Object.keys(newErrors).length > 1 ? "s" : ""
+        } before continuing.`,
+        variant: "destructive",
+      });
+
+      // Scroll to first error
+      const firstErrorField = Object.keys(newErrors)[0];
+      const element = document.getElementById(firstErrorField);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    }
+
+    return isValid;
+  };
 
   // Update answer for a field
   const updateAnswer = (questionId: string, value: any) => {
@@ -68,6 +146,12 @@ export function UniversalFormWizard({
         return newErrors;
       });
     }
+
+    // Mark field as touched
+    setTouched((prev) => ({
+      ...prev,
+      [questionId]: true,
+    }));
   };
 
   // Helper to safely handle text - only plain English text without translation
@@ -78,14 +162,53 @@ export function UniversalFormWizard({
     return text;
   };
 
+  // Check if a question should be shown based on conditional logic
+  const shouldShowQuestion = (question: Question): boolean => {
+    // Check for 'conditional' property (new format)
+    if (question.conditional) {
+      const conditional = question.conditional as any;
+      const dependsOn = conditional.dependsOn;
+      const dependentValue = answers[dependsOn];
+
+      // Support both 'value' (single) and 'values' (array) formats
+      if (conditional.values && Array.isArray(conditional.values)) {
+        return conditional.values.includes(dependentValue);
+      } else if (conditional.value !== undefined) {
+        return dependentValue === conditional.value;
+      }
+      return false;
+    }
+
+    // Check for 'conditionalShow' property (legacy format used in I-130)
+    const conditionalShow = (question as any).conditionalShow;
+    if (conditionalShow) {
+      const dependentValue = answers[conditionalShow.questionId];
+
+      // Support both 'value' (single) and 'values' (array) formats
+      if (conditionalShow.values && Array.isArray(conditionalShow.values)) {
+        return conditionalShow.values.includes(dependentValue);
+      } else if (conditionalShow.value !== undefined) {
+        return dependentValue === conditionalShow.value;
+      }
+      return false;
+    }
+
+    // If no conditional logic, always show the question
+    return true;
+  };
+
   // Render a single question field
   const renderQuestion = (question: Question) => {
     const value = answers[question.id] || "";
     const error = errors[question.id];
+    const hasError = !!errors[question.id];
+    const errorMessage = errors[question.id];
 
     const renderField = () => {
       const hasError = !!error;
-      const errorClass = hasError ? "border-red-500 focus-visible:ring-red-500" : "";
+      const errorClass = hasError
+        ? "border-red-500 focus-visible:ring-red-500"
+        : "";
 
       switch (question.type) {
         case "text":
@@ -96,8 +219,9 @@ export function UniversalFormWizard({
               value={value}
               onChange={(e) => updateAnswer(question.id, e.target.value)}
               placeholder={question.placeholder || ""}
-              className={errorClass}
-              aria-invalid={hasError}
+              className={
+                hasError ? "border-red-500 focus-visible:ring-red-500" : ""
+              }
             />
           );
 
@@ -109,8 +233,9 @@ export function UniversalFormWizard({
               value={value}
               onChange={(e) => updateAnswer(question.id, e.target.value)}
               placeholder={question.placeholder || ""}
-              className={errorClass}
-              aria-invalid={hasError}
+              className={
+                hasError ? "border-red-500 focus-visible:ring-red-500" : ""
+              }
             />
           );
 
@@ -120,8 +245,9 @@ export function UniversalFormWizard({
               type="date"
               value={value}
               onChange={(e) => updateAnswer(question.id, e.target.value)}
-              className={errorClass}
-              aria-invalid={hasError}
+              className={
+                hasError ? "border-red-500 focus-visible:ring-red-500" : ""
+              }
             />
           );
 
@@ -132,8 +258,9 @@ export function UniversalFormWizard({
               onChange={(e) => updateAnswer(question.id, e.target.value)}
               placeholder={question.placeholder || ""}
               rows={4}
-              className={errorClass}
-              aria-invalid={hasError}
+              className={
+                hasError ? "border-red-500 focus-visible:ring-red-500" : ""
+              }
             />
           );
 
@@ -143,7 +270,11 @@ export function UniversalFormWizard({
               value={value}
               onValueChange={(val) => updateAnswer(question.id, val)}
             >
-              <SelectTrigger className={errorClass}>
+              <SelectTrigger
+                className={
+                  hasError ? "border-red-500 focus-visible:ring-red-500" : ""
+                }
+              >
                 <SelectValue
                   placeholder={question.placeholder || "Select..."}
                 />
@@ -210,8 +341,9 @@ export function UniversalFormWizard({
             <Input
               type="file"
               onChange={(e) => updateAnswer(question.id, e.target.files?.[0])}
-              className={errorClass}
-              aria-invalid={hasError}
+              className={
+                hasError ? "border-red-500 focus-visible:ring-red-500" : ""
+              }
             />
           );
 
@@ -221,8 +353,9 @@ export function UniversalFormWizard({
               value={value}
               onChange={(e) => updateAnswer(question.id, e.target.value)}
               placeholder={question.placeholder || ""}
-              className={errorClass}
-              aria-invalid={hasError}
+              className={
+                hasError ? "border-red-500 focus-visible:ring-red-500" : ""
+              }
             />
           );
       }
@@ -231,19 +364,27 @@ export function UniversalFormWizard({
     // For checkbox, label is part of the field
     if (question.type === "checkbox") {
       return (
-        <div key={question.id} className="space-y-2">
+        <div key={question.id} id={question.id} className="space-y-2">
           {question.helpText && (
             <p className="text-sm text-muted-foreground">
               {translateLabel(question.helpText)}
             </p>
           )}
           {renderField()}
-          {error && (
+          {hasError && (
             <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-md">
-              <svg className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+              <svg
+                className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  clipRule="evenodd"
+                />
               </svg>
-              <p className="text-sm text-red-600 font-medium">{error}</p>
+              <p className="text-sm text-red-600 font-medium">{errorMessage}</p>
             </div>
           )}
         </div>
@@ -251,7 +392,7 @@ export function UniversalFormWizard({
     }
 
     return (
-      <div key={question.id} className="space-y-2">
+      <div key={question.id} id={question.id} className="space-y-2">
         <Label className="text-base font-medium">
           {translateLabel(question.label)}
           {question.required && (
@@ -264,67 +405,24 @@ export function UniversalFormWizard({
           </p>
         )}
         {renderField()}
-        {error && (
+        {hasError && (
           <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-md">
-            <svg className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+            <svg
+              className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                clipRule="evenodd"
+              />
             </svg>
-            <p className="text-sm text-red-600 font-medium">{error}</p>
+            <p className="text-sm text-red-600 font-medium">{errorMessage}</p>
           </div>
         )}
       </div>
     );
-  };
-
-  // Enhanced validation with error messages
-  const validateCurrentSection = () => {
-    const newErrors: Record<string, string> = {};
-    
-    currentSection.questions.forEach((question) => {
-      if (question.required) {
-        const value = answers[question.id];
-        
-        // Check if field is empty
-        if (!value || value === "" || value === undefined || value === null || value === false) {
-          newErrors[question.id] = `${question.label} is required`;
-        }
-        // Email validation
-        else if (question.type === "email" && typeof value === "string") {
-          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-          if (!emailRegex.test(value)) {
-            newErrors[question.id] = "Please enter a valid email address";
-          }
-        }
-        // Phone validation
-        else if (question.type === "tel" && typeof value === "string") {
-          const phoneRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
-          if (!phoneRegex.test(value.replace(/\s/g, ""))) {
-            newErrors[question.id] = "Please enter a valid phone number";
-          }
-        }
-      }
-    });
-
-    setErrors(newErrors);
-
-    if (Object.keys(newErrors).length > 0) {
-      toast({
-        title: "Validation Error",
-        description: `Please fix ${Object.keys(newErrors).length} error${Object.keys(newErrors).length > 1 ? 's' : ''} before continuing.`,
-        variant: "destructive",
-      });
-      
-      // Scroll to first error
-      const firstErrorField = Object.keys(newErrors)[0];
-      const element = document.getElementById(firstErrorField);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
-      
-      return false;
-    }
-
-    return true;
   };
 
   // Navigation handlers
@@ -342,88 +440,100 @@ export function UniversalFormWizard({
       // Complete the form
       console.log("Form complete, final answers:", answers);
       setIsSubmitting(true);
+      onComplete?.();
     }
   };
 
   const handleDownloadPDF = async () => {
-    try {
-      setIsDownloading(true);
+    await fillPDFAndDownload(formId, answers);
 
-      // First, validate all sections
-      for (let i = 0; i < formDefinition.sections.length; i++) {
-        const section = formDefinition.sections[i];
-        const requiredFields = section.questions
-          .filter((q) => q.required)
-          .map((q) => q.id);
+    // setIsDownloading(true);
 
-        const missingFields = requiredFields.filter((fieldId) => {
-          const value = answers[fieldId];
-          return (
-            !value || value === "" || value === undefined || value === null
-          );
-        });
+    // First, validate all sections
+    //   for (let i = 0; i < formDefinition.sections.length; i++) {
+    //     const section = formDefinition.sections[i];
+    //     const requiredFields = section.questions
+    //       .filter((q) => q.required)
+    //       .map((q) => q.id);
 
-        if (missingFields.length > 0) {
-          setCurrentSectionIndex(i);
-          toast({
-            title: "Missing Required Fields",
-            description: `Please complete section "${section?.title}" before downloading.`,
-            variant: "destructive",
-          });
-          setIsDownloading(false);
-          return;
-        }
-      }
+    //     const missingFields = requiredFields.filter((fieldId) => {
+    //       const value = answers[fieldId];
+    //       return (
+    //         !value || value === "" || value === undefined || value === null
+    //       );
+    //     });
 
-      // Generate PDF
-      const response = await fetch("/api/forms/generate-pdf", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          formId: formDefinition.id,
-          answers: answers,
-          timestamp: new Date().toISOString(),
-        }),
-      });
+    //     if (missingFields.length > 0) {
+    //       setCurrentSectionIndex(i);
+    //       toast({
+    //         title: "Missing Required Fields",
+    //         description: `Please complete section "${section?.title}" before downloading.`,
+    //         variant: "destructive",
+    //       });
+    //       setIsDownloading(false);
+    //       return;
+    //     }
+    //   }
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to generate PDF");
-      }
+    //   // Generate PDF
+    //   const response = await fetch("/api/forms/generate-pdf", {
+    //     method: "POST",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify({
+    //       formId: formDefinition.id,
+    //       answers: answers,
+    //       timestamp: new Date().toISOString(),
+    //     }),
+    //   });
 
-      // Create and download the PDF
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `${formDefinition.code.toUpperCase()}-filled-${new Date()
-        .toISOString()
-        .slice(0, 10)}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+    //   if (!response.ok) {
+    //     let message = `Failed to generate PDF (${response.status})`;
+    //     try {
+    //       const ct = response.headers.get("content-type") || "";
+    //       if (ct.includes("application/json")) {
+    //         const errorData = await response.json();
+    //         message = (errorData && errorData.error) || message;
+    //       } else {
+    //         const text = await response.text();
+    //         if (text) message = text;
+    //       }
+    //     } catch (_) {}
+    //     throw new Error(message);
+    //   }
 
-      toast({
-        title: "Success",
-        description: "PDF downloaded successfully!",
-      });
+    //   // Create and download the PDF
+    //   const blob = await response.blob();
+    //   const url = URL.createObjectURL(blob);
+    //   const link = document.createElement("a");
+    //   link.href = url;
+    //   link.download = `${formDefinition.code.toUpperCase()}-filled-${new Date()
+    //     .toISOString()
+    //     .slice(0, 10)}.pdf`;
+    //   document.body.appendChild(link);
+    //   link.click();
+    //   document.body.removeChild(link);
+    //   URL.revokeObjectURL(url);
 
-      // Optionally save to database
-      if (applicationId) {
-        await saveAnswersToDatabase(answers);
-      }
-    } catch (error) {
-      console.error("PDF download error:", error);
-      toast({
-        title: "Error",
-        description:
-          error instanceof Error ? error?.message : "Failed to generate PDF",
-        variant: "destructive",
-      });
-    } finally {
-      setIsDownloading(false);
-    }
+    //   toast({
+    //     title: "Success",
+    //     description: "PDF downloaded successfully!",
+    //   });
+
+    //   // Optionally save to database
+    //   if (applicationId) {
+    //     await saveAnswersToDatabase(answers);
+    //   }
+    // } catch (error) {
+    //   console.error("PDF download error:", error);
+    //   toast({
+    //     title: "Error",
+    //     description:
+    //       error instanceof Error ? error?.message : "Failed to generate PDF",
+    //     variant: "destructive",
+    //   });
+    // } finally {
+    //   setIsDownloading(false);
+    // }
   };
 
   // Helper function to save answers
@@ -478,7 +588,9 @@ export function UniversalFormWizard({
         </CardHeader>
 
         <CardContent className="space-y-6">
-          {currentSection.questions.map((question) => renderQuestion(question))}
+          {currentSection.questions
+            ?.filter((question) => shouldShowQuestion(question))
+            .map((question) => renderQuestion(question))}
         </CardContent>
 
         <CardFooter className="flex justify-between border-t pt-6">

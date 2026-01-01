@@ -19,6 +19,37 @@ exports.I_9_AUTO_MAPPINGS = [
     { questionId: 'section1.aptNumber', pdfField: 'Apt Number (if any)', }, // Confidence: 9
     { questionId: 'section1.telephone', pdfField: 'Telephone Number', }, // Confidence: 9
     { questionId: 'section1.foreignPassportNumber', pdfField: 'Foreign Passport Number and Country of IssuanceRow1', }, // Confidence: 9
+    { questionId: 'preparer1.lastName', pdfField: 'Preparer or Translator Last Name (Family Name) 0' },
+    { questionId: 'preparer1.firstName', pdfField: 'Preparer or Translator First Name (Given Name) 0' },
+    { questionId: 'preparer1.middleInitial', pdfField: 'PT Middle Initial 0' },
+    { questionId: 'preparer1.streetAddress', pdfField: 'Preparer or Translator Address (Street Number and Name) 0' },
+    { questionId: 'preparer1.city', pdfField: 'Preparer or Translator City or Town 0' },
+    { questionId: 'preparer1.state', pdfField: 'Preparer State 0' },
+    { questionId: 'preparer1.zipCode', pdfField: 'Zip Code 0' },
+    { questionId: 'preparer1.date', pdfField: 'Sig Date mmddyyyy 0' },
+    { questionId: 'preparer2.lastName', pdfField: 'Preparer or Translator Last Name (Family Name) 1' },
+    { questionId: 'preparer2.firstName', pdfField: 'Preparer or Translator First Name (Given Name) 2' },
+    { questionId: 'preparer2.middleInitial', pdfField: 'PT Middle Initial 1' },
+    { questionId: 'preparer2.streetAddress', pdfField: 'Preparer or Translator Address (Street Number and Name) 1' },
+    { questionId: 'preparer2.city', pdfField: 'Preparer or Translator City or Town 1' },
+    { questionId: 'preparer2.state', pdfField: 'Preparer State 1' },
+    { questionId: 'preparer2.zipCode', pdfField: 'Zip Code 1' },
+    { questionId: 'preparer2.date', pdfField: 'Sig Date mmddyyyy 1' },
+    { questionId: 'preparer3.lastName', pdfField: 'Preparer or Translator Last Name (Family Name) 2' },
+    { questionId: 'preparer3.firstName', pdfField: 'Preparer or Translator First Name (Given Name) 3' },
+    { questionId: 'preparer3.middleInitial', pdfField: 'PT Middle Initial 2' },
+    { questionId: 'preparer3.streetAddress', pdfField: 'Preparer or Translator Address (Street Number and Name) 2' },
+    { questionId: 'preparer3.city', pdfField: 'Preparer or Translator City or Town 2' },
+    { questionId: 'preparer3.state', pdfField: 'Preparer State 2' },
+    { questionId: 'preparer3.zipCode', pdfField: 'Zip Code 2' },
+    { questionId: 'preparer3.date', pdfField: 'Sig Date mmddyyyy 2' },
+    { questionId: 'preparer4.lastName', pdfField: 'Preparer or Translator Last Name (Family Name) 3' },
+    { questionId: 'preparer4.middleInitial', pdfField: 'PT Middle Initial 3' },
+    { questionId: 'preparer4.streetAddress', pdfField: 'Preparer or Translator Address (Street Number and Name) 3' },
+    { questionId: 'preparer4.city', pdfField: 'Preparer or Translator City or Town 3' },
+    { questionId: 'preparer4.state', pdfField: 'Preparer State 3' },
+    { questionId: 'preparer4.zipCode', pdfField: 'Zip Code 3' },
+    { questionId: 'preparer4.date', pdfField: 'Sig Date mmddyyyy 3' },
 ];
 /**
  * Unmapped questions (38):

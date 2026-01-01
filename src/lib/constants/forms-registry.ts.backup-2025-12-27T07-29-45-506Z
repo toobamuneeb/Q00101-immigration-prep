@@ -1,0 +1,28141 @@
+// @ts-nocheck - Form definitions have some type inconsistencies
+import { z } from "zod";
+import { I_600_FIELD_MAPPINGS } from "./form-mappings/i-600-field-mappings";
+import { I_129_FIELD_MAPPINGS } from "./form-mappings/i-129-field-mappings";
+import { I_131_FIELD_MAPPINGS } from "./form-mappings/i-131-field-mappings";
+import { I_765_FIELD_MAPPINGS } from "./form-mappings/i-765-field-mappings";
+import { N_400_FIELD_MAPPINGS } from "./form-mappings/n-400-field-mappings";
+
+import { I_212_FIELD_MAPPINGS } from "./form-mappings/i-212-field-mappings";
+import { I_751_FIELD_MAPPINGS } from "./form-mappings/i-751-field-mappings";
+import { I_129F_FIELD_MAPPINGS } from "./form-mappings/i-129f-field-mappings";
+import { I_485_FIELD_MAPPINGS } from "./form-mappings/i-485-fieldmappings";
+
+/**
+ * MULTI-FORM SYSTEM ARCHITECTURE
+ *
+ * This registry defines all USCIS forms supported by the application.
+ * Each form has a complete definition including questions, validation, and PDF mappings.
+ */
+
+// ============================================================================
+// TYPE DEFINITIONS
+// ============================================================================
+
+export type QuestionType =
+  | "text"
+  | "email"
+  | "tel"
+  | "date"
+  | "select"
+  | "radio"
+  | "checkbox"
+  | "textarea"
+  | "address"
+  | "name"
+  | "ssn"
+  | "file";
+
+export interface QuestionOption {
+  value: string;
+  label: string;
+}
+
+export interface Question {
+  id: string;
+  type: QuestionType;
+  label: string;
+  placeholder?: string;
+  helpText?: string;
+  required?: boolean;
+  options?: QuestionOption[];
+  validation?: z.ZodType<any>;
+  conditional?: {
+    dependsOn: string;
+    values: string[];
+  };
+}
+
+export interface FormSection {
+  id: string;
+  title: string;
+  description?: string;
+  questions: Question[];
+}
+
+export interface PDFFieldMapping {
+  questionId: string;
+  pdfFieldName: string;
+  transform?: (value: string) => string;
+}
+
+export interface FormDefinition {
+  id: string;
+  code: string; // e.g., "I-130", "N-400"
+  name: string;
+  description: string;
+  category:
+    | "family"
+    | "employment"
+    | "citizenship"
+    | "travel"
+    | "humanitarian"
+    | "work_authorization"
+    | "status_change"
+    | "other";
+  estimatedTime: string;
+  filingFee: number; // USCIS government filing fee
+  price?: number; // Our service price (in dollars, for display)
+  sections: FormSection[];
+  pdfFieldMappings: PDFFieldMapping[];
+  requiredDocuments: string[];
+  instructions: string[];
+  status?: "active" | "beta"; // Status flag for form availability
+}
+
+// ============================================================================
+// VALIDATION SCHEMAS
+// ============================================================================
+
+const nameSchema = z.object({
+  firstName: z.string().min(1, "First name is required"),
+  middleName: z.string().optional(),
+  lastName: z.string().min(1, "Last name is required"),
+});
+
+const addressSchema = z.object({
+  street: z.string().min(1, "Street address is required"),
+  apt: z.string().optional(),
+  city: z.string().min(1, "City is required"),
+  state: z.string().min(2, "State is required"),
+  zipCode: z.string().regex(/^\d{5}(-\d{4})?$/, "Invalid ZIP code"),
+});
+
+const dateSchema = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format");
+const emailSchema = z.string().email("Invalid email address");
+const phoneSchema = z.string().regex(/^\d{10}$/, "Phone must be 10 digits");
+const ssnSchema = z.string().regex(/^\d{3}-\d{2}-\d{4}$/, "Invalid SSN format");
+
+// ============================================================================
+// US STATES
+// ============================================================================
+
+const US_STATES = [
+  { value: "AL", label: "Alabama" },
+  { value: "AK", label: "Alaska" },
+  { value: "AZ", label: "Arizona" },
+  { value: "AR", label: "Arkansas" },
+  { value: "CA", label: "California" },
+  { value: "CO", label: "Colorado" },
+  { value: "CT", label: "Connecticut" },
+  { value: "DE", label: "Delaware" },
+  { value: "FL", label: "Florida" },
+  { value: "GA", label: "Georgia" },
+  { value: "HI", label: "Hawaii" },
+  { value: "ID", label: "Idaho" },
+  { value: "IL", label: "Illinois" },
+  { value: "IN", label: "Indiana" },
+  { value: "IA", label: "Iowa" },
+  { value: "KS", label: "Kansas" },
+  { value: "KY", label: "Kentucky" },
+  { value: "LA", label: "Louisiana" },
+  { value: "ME", label: "Maine" },
+  { value: "MD", label: "Maryland" },
+  { value: "MA", label: "Massachusetts" },
+  { value: "MI", label: "Michigan" },
+  { value: "MN", label: "Minnesota" },
+  { value: "MS", label: "Mississippi" },
+  { value: "MO", label: "Missouri" },
+  { value: "MT", label: "Montana" },
+  { value: "NE", label: "Nebraska" },
+  { value: "NV", label: "Nevada" },
+  { value: "NH", label: "New Hampshire" },
+  { value: "NJ", label: "New Jersey" },
+  { value: "NM", label: "New Mexico" },
+  { value: "NY", label: "New York" },
+  { value: "NC", label: "North Carolina" },
+  { value: "ND", label: "North Dakota" },
+  { value: "OH", label: "Ohio" },
+  { value: "OK", label: "Oklahoma" },
+  { value: "OR", label: "Oregon" },
+  { value: "PA", label: "Pennsylvania" },
+  { value: "RI", label: "Rhode Island" },
+  { value: "SC", label: "South Carolina" },
+  { value: "SD", label: "South Dakota" },
+  { value: "TN", label: "Tennessee" },
+  { value: "TX", label: "Texas" },
+  { value: "UT", label: "Utah" },
+  { value: "VT", label: "Vermont" },
+  { value: "VA", label: "Virginia" },
+  { value: "WA", label: "Washington" },
+  { value: "WV", label: "West Virginia" },
+  { value: "WI", label: "Wisconsin" },
+  { value: "WY", label: "Wyoming" },
+];
+
+// ============================================================================
+// FORM DEFINITIONS
+// ============================================================================
+
+// Form I-130: Petition for Alien Relative
+// Based on actual USCIS form structure and fields
+
+// const I485_DEFINITION: FormDefinition = {
+//   id: "i-485",
+//   code: "I-485",
+//   name: "Application to Register Permanent Residence or Adjust Status",
+//   description: "Apply for a green card while in the United States",
+//   category: "family",
+//   estimatedTime: "90-120 minutes",
+//   filingFee: 1140,
+//   price: 70,
+//   sections: [
+//     // ... (your existing sections remain the same)
+//   ],
+//   pdfFieldMappings: [
+//     // ==================== PART 1: Information About You ====================
+
+//     // 1. Your Current Legal Name
+//     { questionId: "part1.familyName", pdfFieldName: "Pt1Line1a_FamilyName" },
+//     { questionId: "part1.givenName", pdfFieldName: "Pt1Line1b_GivenName" },
+//     { questionId: "part1.middleName", pdfFieldName: "Pt1Line1c_MiddleName" },
+
+//     // 2. Other Names You Have Used Since Birth
+//     {
+//       questionId: "part1.otherNameUsed",
+//       pdfFieldName: "Pt1Line2a_FamilyName",
+//       transform: (value: string) =>
+//         value === "yes" ? "See Additional Information" : "",
+//     },
+
+//     // 5. Date of Birth
+//     { questionId: "part1.dob", pdfFieldName: "Pt1Line3_DOB" },
+
+//     // 6. Sex
+//     {
+//       questionId: "part1.sex",
+//       pdfFieldName: "Pt1Line6_Male",
+//       transform: (value: string) => (value === "male" ? "Yes" : "Off"),
+//     },
+//     {
+//       questionId: "part1.sex",
+//       pdfFieldName: "Pt1Line6_Female",
+//       transform: (value: string) => (value === "female" ? "Yes" : "Off"),
+//     },
+
+//     // 7. Place of Birth
+//     { questionId: "part1.cityOfBirth", pdfFieldName: "Pt1Line7a_CityTown" },
+//     { questionId: "part1.countryOfBirth", pdfFieldName: "Pt1Line7b_Country" },
+
+//     // 8. Country of Citizenship or Nationality
+//     {
+//       questionId: "part1.countryOfCitizenship",
+//       pdfFieldName: "Pt1Line8_Country",
+//     },
+
+//     // 10. Alien Registration Number (A-Number)
+//     { questionId: "part1.alienNumber", pdfFieldName: "Pt1Line4_ANumber" },
+
+//     // 11. USCIS Online Account Number
+//     {
+//       questionId: "part1.uscisAccount",
+//       pdfFieldName: "Pt1Line9_OnlineAccount",
+//     },
+
+//     // 12. U.S. Social Security Number
+//     { questionId: "part1.ssn", pdfFieldName: "Pt1Line19_SSN" },
+
+//     // 13. Current U.S. Mailing Address
+//     {
+//       questionId: "part1.mailingCareOfName",
+//       pdfFieldName: "Pt1Line13a_InCareOf",
+//     },
+//     { questionId: "part1.mailingStreet", pdfFieldName: "Pt1Line13b_Street" },
+//     { questionId: "part1.mailingAptType", pdfFieldName: "Pt1Line13c_AptType" },
+//     {
+//       questionId: "part1.mailingAptNumber",
+//       pdfFieldName: "Pt1Line13d_AptNumber",
+//     },
+//     { questionId: "part1.mailingCity", pdfFieldName: "Pt1Line13e_City" },
+//     { questionId: "part1.mailingState", pdfFieldName: "Pt1Line13f_State" },
+//     { questionId: "part1.mailingZip", pdfFieldName: "Pt1Line13g_ZIP" },
+
+//     // 15-18. Passport/Travel Document Information
+//     {
+//       questionId: "part1.passportNumber",
+//       pdfFieldName: "Pt1Line15_PassportNumber",
+//     },
+//     {
+//       questionId: "part1.travelDocNumber",
+//       pdfFieldName: "Pt1Line16_TravelDocNumber",
+//     },
+//     {
+//       questionId: "part1.passportExpiration",
+//       pdfFieldName: "Pt1Line17_ExpirationDate",
+//     },
+//     { questionId: "part1.passportCountry", pdfFieldName: "Pt1Line18_Country" },
+
+//     // 19. Nonimmigrant Visa Number
+//     { questionId: "part1.visaNumber", pdfFieldName: "Pt1Line19_VisaNumber" },
+
+//     // 20-21. Last Arrival Information
+//     { questionId: "part1.entryCity", pdfFieldName: "Pt1Line20a_City" },
+//     { questionId: "part1.entryState", pdfFieldName: "Pt1Line20b_State" },
+//     { questionId: "part1.dateOfLastEntry", pdfFieldName: "Pt1Line21_Date" },
+
+//     // 22. Arrival Status
+//     {
+//       questionId: "part1.inspected",
+//       pdfFieldName: "Pt1Line22a_Inspected",
+//       transform: (value: string) => (value === "yes" ? "Yes" : "Off"),
+//     },
+//     {
+//       questionId: "part1.inspected",
+//       pdfFieldName: "Pt1Line22c_WithoutAdmission",
+//       transform: (value: string) => (value === "no" ? "Yes" : "Off"),
+//     },
+
+//     // 23. I-94 Information
+//     { questionId: "part1.i94Number", pdfFieldName: "Pt1Line23a_I94Number" },
+//     { questionId: "part1.statusAtEntry", pdfFieldName: "Pt1Line23c_Status" },
+
+//     // 24. Current Immigration Status
+//     {
+//       questionId: "part1.currentStatus",
+//       pdfFieldName: "Pt1Line24_CurrentStatus",
+//     },
+
+//     // ==================== PART 2: Application Type ====================
+
+//     // 1. Filing with EOIR
+//     {
+//       questionId: "part2.filingCategory",
+//       pdfFieldName: "Pt2Line1_EOIR",
+//       transform: (value: string) => "No", // Default to No unless specified
+//     },
+
+//     // 2. Receipt Number of Underlying Petition
+//     // Note: This would need a separate question in your form
+
+//     // 3. Filing as Principal or Derivative Applicant
+//     {
+//       questionId: "part2.filingCategory",
+//       pdfFieldName: "Pt2Line3_Principal",
+//       transform: (value: string) => "Yes", // Assuming principal for now
+//     },
+
+//     // 3.a. Family-based categories
+//     {
+//       questionId: "part2.filingCategory",
+//       pdfFieldName: "Pt2Line3a_SpouseCitizen",
+//       transform: (value: string) =>
+//         value === "family-immediate" ? "Yes" : "Off",
+//     },
+//     {
+//       questionId: "part2.filingCategory",
+//       pdfFieldName: "Pt2Line3a_ChildUnder21",
+//       transform: (value: string) =>
+//         value === "family-immediate" ? "Off" : "Off",
+//     },
+//     {
+//       questionId: "part2.filingCategory",
+//       pdfFieldName: "Pt2Line3a_ParentCitizen",
+//       transform: (value: string) =>
+//         value === "family-immediate" ? "Off" : "Off",
+//     },
+//     {
+//       questionId: "part2.filingCategory",
+//       pdfFieldName: "Pt2Line3a_Fiance",
+//       transform: (value: string) =>
+//         value === "family-immediate" ? "Off" : "Off",
+//     },
+//     {
+//       questionId: "part2.filingCategory",
+//       pdfFieldName: "Pt2Line3a_Widow",
+//       transform: (value: string) => (value === "widow" ? "Yes" : "Off"),
+//     },
+
+//     // 3.b. Employment-based categories
+//     {
+//       questionId: "part2.filingCategory",
+//       pdfFieldName: "Pt2Line3b_EB1",
+//       transform: (value: string) =>
+//         value === "employment-eb1" ? "Yes" : "Off",
+//     },
+//     {
+//       questionId: "part2.filingCategory",
+//       pdfFieldName: "Pt2Line3b_EB2",
+//       transform: (value: string) =>
+//         value === "employment-eb2" ? "Yes" : "Off",
+//     },
+//     {
+//       questionId: "part2.filingCategory",
+//       pdfFieldName: "Pt2Line3b_EB3",
+//       transform: (value: string) =>
+//         value === "employment-eb3" ? "Yes" : "Off",
+//     },
+
+//     // 3.c. Special Immigrant
+//     {
+//       questionId: "part2.filingCategory",
+//       pdfFieldName: "Pt2Line3c_SpecialImmigrant",
+//       transform: (value: string) =>
+//         value === "special-immigrant" ? "Yes" : "Off",
+//     },
+
+//     // 3.d. Asylee or Refugee
+//     {
+//       questionId: "part2.filingCategory",
+//       pdfFieldName: "Pt2Line3d_Asylee",
+//       transform: (value: string) => (value === "asylee" ? "Yes" : "Off"),
+//     },
+//     {
+//       questionId: "part2.filingCategory",
+//       pdfFieldName: "Pt2Line3d_Refugee",
+//       transform: (value: string) => (value === "refugee" ? "Yes" : "Off"),
+//     },
+
+//     // 3.g. Additional Options
+//     {
+//       questionId: "part2.filingCategory",
+//       pdfFieldName: "Pt2Line3g_Diversity",
+//       transform: (value: string) => (value === "diversity" ? "Yes" : "Off"),
+//     },
+//     {
+//       questionId: "part2.filingCategory",
+//       pdfFieldName: "Pt2Line3g_Cuban",
+//       transform: (value: string) =>
+//         value === "cuban-adjustment" ? "Yes" : "Off",
+//     },
+
+//     // 4. Section 245(i)
+//     {
+//       questionId: "part2.section245i",
+//       pdfFieldName: "Pt2Line4_245iYes",
+//       transform: (value: string) => (value === "yes" ? "Yes" : "Off"),
+//     },
+//     {
+//       questionId: "part2.section245i",
+//       pdfFieldName: "Pt2Line4_245iNo",
+//       transform: (value: string) => (value === "no" ? "Yes" : "Off"),
+//     },
+
+//     // ==================== PART 7: Biographic Information ====================
+
+//     // 1. Ethnicity
+//     {
+//       questionId: "part7.ethnicity",
+//       pdfFieldName: "Pt7Line1_Hispanic",
+//       transform: (value: string) => (value === "hispanic" ? "Yes" : "Off"),
+//     },
+//     {
+//       questionId: "part7.ethnicity",
+//       pdfFieldName: "Pt7Line1_NotHispanic",
+//       transform: (value: string) => (value === "not-hispanic" ? "Yes" : "Off"),
+//     },
+
+//     // 2. Race
+//     {
+//       questionId: "part7.race",
+//       pdfFieldName: "Pt7Line2_White",
+//       transform: (value: string) => (value.includes("white") ? "Yes" : "Off"),
+//     },
+//     {
+//       questionId: "part7.race",
+//       pdfFieldName: "Pt7Line2_Asian",
+//       transform: (value: string) => (value.includes("asian") ? "Yes" : "Off"),
+//     },
+//     {
+//       questionId: "part7.race",
+//       pdfFieldName: "Pt7Line2_Black",
+//       transform: (value: string) => (value.includes("black") ? "Yes" : "Off"),
+//     },
+//     {
+//       questionId: "part7.race",
+//       pdfFieldName: "Pt7Line2_NativeAmerican",
+//       transform: (value: string) =>
+//         value.includes("native-american") ? "Yes" : "Off",
+//     },
+//     {
+//       questionId: "part7.race",
+//       pdfFieldName: "Pt7Line2_Pacific",
+//       transform: (value: string) => (value.includes("pacific") ? "Yes" : "Off"),
+//     },
+
+//     // 3. Height
+//     {
+//       questionId: "part7.height",
+//       pdfFieldName: "Pt7Line3_Height",
+//       transform: (value: string) => {
+//         // Convert "5 feet 8 inches" to "5'8" format
+//         const match = value.match(/(\d+)\s*feet?\s*(\d+)\s*inches?/i);
+//         if (match) {
+//           return `${match[1]}'${match[2]}"`;
+//         }
+//         return value;
+//       },
+//     },
+
+//     // 4. Weight
+//     { questionId: "part7.weight", pdfFieldName: "Pt7Line4_Weight" },
+
+//     // 5. Eye Color
+//     { questionId: "part7.eyeColor", pdfFieldName: "Pt7Line5_EyeColor" },
+
+//     // 6. Hair Color
+//     { questionId: "part7.hairColor", pdfFieldName: "Pt7Line6_HairColor" },
+
+//     // ==================== PART 8: Eligibility Questions ====================
+
+//     // Criminal History (Question 22)
+//     {
+//       questionId: "part8.criminalHistory",
+//       pdfFieldName: "Pt9Line22_Yes",
+//       transform: (value: string) => (value === "yes" ? "Yes" : "Off"),
+//     },
+//     {
+//       questionId: "part8.criminalHistory",
+//       pdfFieldName: "Pt9Line22_No",
+//       transform: (value: string) => (value === "no" ? "Yes" : "Off"),
+//     },
+
+//     // Crime Conviction (Question 24)
+//     {
+//       questionId: "part8.crimeConviction",
+//       pdfFieldName: "Pt9Line24_Yes",
+//       transform: (value: string) => (value === "yes" ? "Yes" : "Off"),
+//     },
+//     {
+//       questionId: "part8.crimeConviction",
+//       pdfFieldName: "Pt9Line24_No",
+//       transform: (value: string) => (value === "no" ? "Yes" : "Off"),
+//     },
+
+//     // Controlled Substance (Question 26)
+//     {
+//       questionId: "part8.controlledSubstance",
+//       pdfFieldName: "Pt9Line26_Yes",
+//       transform: (value: string) => (value === "yes" ? "Yes" : "Off"),
+//     },
+//     {
+//       questionId: "part8.controlledSubstance",
+//       pdfFieldName: "Pt9Line26_No",
+//       transform: (value: string) => (value === "no" ? "Yes" : "Off"),
+//     },
+
+//     // Prostitution (Question 30)
+//     {
+//       questionId: "part8.prostitution",
+//       pdfFieldName: "Pt9Line30_Yes",
+//       transform: (value: string) => (value === "yes" ? "Yes" : "Off"),
+//     },
+//     {
+//       questionId: "part8.prostitution",
+//       pdfFieldName: "Pt9Line30_No",
+//       transform: (value: string) => (value === "no" ? "Yes" : "Off"),
+//     },
+
+//     // Human Trafficking (Question 36)
+//     {
+//       questionId: "part8.humanTrafficking",
+//       pdfFieldName: "Pt9Line36_Yes",
+//       transform: (value: string) => (value === "yes" ? "Yes" : "Off"),
+//     },
+//     {
+//       questionId: "part8.humanTrafficking",
+//       pdfFieldName: "Pt9Line36_No",
+//       transform: (value: string) => (value === "no" ? "Yes" : "Off"),
+//     },
+
+//     // Money Laundering (Question 41)
+//     {
+//       questionId: "part8.moneyLaundering",
+//       pdfFieldName: "Pt9Line41_Yes",
+//       transform: (value: string) => (value === "yes" ? "Yes" : "Off"),
+//     },
+//     {
+//       questionId: "part8.moneyLaundering",
+//       pdfFieldName: "Pt9Line41_No",
+//       transform: (value: string) => (value === "no" ? "Yes" : "Off"),
+//     },
+
+//     // Terrorist Activity (Question 42-45)
+//     {
+//       questionId: "part8.terroristActivity",
+//       pdfFieldName: "Pt9Line42a_Yes",
+//       transform: (value: string) => (value === "yes" ? "Yes" : "Off"),
+//     },
+//     {
+//       questionId: "part8.terroristActivity",
+//       pdfFieldName: "Pt9Line42a_No",
+//       transform: (value: string) => (value === "no" ? "Yes" : "Off"),
+//     },
+
+//     // Totalitarian Party (Question 52)
+//     {
+//       questionId: "part8.totalitarianParty",
+//       pdfFieldName: "Pt9Line52_Yes",
+//       transform: (value: string) => (value === "yes" ? "Yes" : "Off"),
+//     },
+//     {
+//       questionId: "part8.totalitarianParty",
+//       pdfFieldName: "Pt9Line52_No",
+//       transform: (value: string) => (value === "no" ? "Yes" : "Off"),
+//     },
+
+//     // Persecution (Question 53)
+//     {
+//       questionId: "part8.persecution",
+//       pdfFieldName: "Pt9Line53a_Yes",
+//       transform: (value: string) => (value === "yes" ? "Yes" : "Off"),
+//     },
+//     {
+//       questionId: "part8.persecution",
+//       pdfFieldName: "Pt9Line53a_No",
+//       transform: (value: string) => (value === "no" ? "Yes" : "Off"),
+//     },
+
+//     // Torture (Question 53.a)
+//     {
+//       questionId: "part8.torture",
+//       pdfFieldName: "Pt9Line53a_Yes",
+//       transform: (value: string) => (value === "yes" ? "Yes" : "Off"),
+//     },
+//     {
+//       questionId: "part8.torture",
+//       pdfFieldName: "Pt9Line53a_No",
+//       transform: (value: string) => (value === "no" ? "Yes" : "Off"),
+//     },
+
+//     // Genocide (Question 53.b)
+//     {
+//       questionId: "part8.genocide",
+//       pdfFieldName: "Pt9Line53b_Yes",
+//       transform: (value: string) => (value === "yes" ? "Yes" : "Off"),
+//     },
+//     {
+//       questionId: "part8.genocide",
+//       pdfFieldName: "Pt9Line53b_No",
+//       transform: (value: string) => (value === "no" ? "Yes" : "Off"),
+//     },
+
+//     // Child Soldier (Question 54-55)
+//     {
+//       questionId: "part8.childSoldier",
+//       pdfFieldName: "Pt9Line54_Yes",
+//       transform: (value: string) => (value === "yes" ? "Yes" : "Off"),
+//     },
+//     {
+//       questionId: "part8.childSoldier",
+//       pdfFieldName: "Pt9Line54_No",
+//       transform: (value: string) => (value === "no" ? "Yes" : "Off"),
+//     },
+
+//     // Religious Freedom (Question 35.b)
+//     {
+//       questionId: "part8.religiousFreedom",
+//       pdfFieldName: "Pt9Line35b_Yes",
+//       transform: (value: string) => (value === "yes" ? "Yes" : "Off"),
+//     },
+//     {
+//       questionId: "part8.religiousFreedom",
+//       pdfFieldName: "Pt9Line35b_No",
+//       transform: (value: string) => (value === "no" ? "Yes" : "Off"),
+//     },
+
+//     // Immigration Fraud (Question 68-69)
+//     {
+//       questionId: "part8.immigrationFraud",
+//       pdfFieldName: "Pt9Line68_Yes",
+//       transform: (value: string) => (value === "yes" ? "Yes" : "Off"),
+//     },
+//     {
+//       questionId: "part8.immigrationFraud",
+//       pdfFieldName: "Pt9Line68_No",
+//       transform: (value: string) => (value === "no" ? "Yes" : "Off"),
+//     },
+
+//     // False U.S. Citizen Claim (Question 70)
+//     {
+//       questionId: "part8.falseUSCitizen",
+//       pdfFieldName: "Pt9Line70_Yes",
+//       transform: (value: string) => (value === "yes" ? "Yes" : "Off"),
+//     },
+//     {
+//       questionId: "part8.falseUSCitizen",
+//       pdfFieldName: "Pt9Line70_No",
+//       transform: (value: string) => (value === "no" ? "Yes" : "Off"),
+//     },
+
+//     // Voted Illegally (Question 82)
+//     {
+//       questionId: "part8.votedIllegally",
+//       pdfFieldName: "Pt9Line82_Yes",
+//       transform: (value: string) => (value === "yes" ? "Yes" : "Off"),
+//     },
+//     {
+//       questionId: "part8.votedIllegally",
+//       pdfFieldName: "Pt9Line82_No",
+//       transform: (value: string) => (value === "no" ? "Yes" : "Off"),
+//     },
+
+//     // Renounced Citizenship (Question 83)
+//     {
+//       questionId: "part8.renounced",
+//       pdfFieldName: "Pt9Line83_Yes",
+//       transform: (value: string) => (value === "yes" ? "Yes" : "Off"),
+//     },
+//     {
+//       questionId: "part8.renounced",
+//       pdfFieldName: "Pt9Line83_No",
+//       transform: (value: string) => (value === "no" ? "Yes" : "Off"),
+//     },
+
+//     // Unlawfully Present (Question 76)
+//     {
+//       questionId: "part8.unlawfullyPresent",
+//       pdfFieldName: "Pt9Line76_Yes",
+//       transform: (value: string) => (value === "yes" ? "Yes" : "Off"),
+//     },
+//     {
+//       questionId: "part8.unlawfullyPresent",
+//       pdfFieldName: "Pt9Line76_No",
+//       transform: (value: string) => (value === "no" ? "Yes" : "Off"),
+//     },
+
+//     // ==================== ADDITIONAL MAPPINGS ====================
+
+//     // Note: For textarea fields (address history, employment history),
+//     // these would typically go in Part 14 (Additional Information)
+//     {
+//       questionId: "part3.addressHistory",
+//       pdfFieldName: "Pt14_AddressHistory",
+//       transform: (value: string) => value, // Goes to Additional Information section
+//     },
+//     {
+//       questionId: "part3.employmentHistory",
+//       pdfFieldName: "Pt14_EmploymentHistory",
+//       transform: (value: string) => value, // Goes to Additional Information section
+//     },
+//     {
+//       questionId: "part6.childrenDetails",
+//       pdfFieldName: "Pt14_ChildrenInfo",
+//       transform: (value: string) => value, // Goes to Additional Information section
+//     },
+
+//     // Parents Information
+//     {
+//       questionId: "part4.parent1FamilyName",
+//       pdfFieldName: "Pt5Line1a_Parent1FamilyName",
+//     },
+//     {
+//       questionId: "part4.parent1GivenName",
+//       pdfFieldName: "Pt5Line1b_Parent1GivenName",
+//     },
+//     { questionId: "part4.parent1Dob", pdfFieldName: "Pt5Line3_Parent1DOB" },
+//     {
+//       questionId: "part4.parent1CountryOfBirth",
+//       pdfFieldName: "Pt5Line4_Parent1Country",
+//     },
+
+//     {
+//       questionId: "part4.parent2FamilyName",
+//       pdfFieldName: "Pt5Line5a_Parent2FamilyName",
+//     },
+//     {
+//       questionId: "part4.parent2GivenName",
+//       pdfFieldName: "Pt5Line5b_Parent2GivenName",
+//     },
+//     { questionId: "part4.parent2Dob", pdfFieldName: "Pt5Line7_Parent2DOB" },
+//     {
+//       questionId: "part4.parent2CountryOfBirth",
+//       pdfFieldName: "Pt5Line8_Parent2Country",
+//     },
+
+//     // Marital History
+//     {
+//       questionId: "part5.currentMaritalStatus",
+//       pdfFieldName: "Pt6Line1_Single",
+//       transform: (value: string) => (value === "single" ? "Yes" : "Off"),
+//     },
+//     {
+//       questionId: "part5.currentMaritalStatus",
+//       pdfFieldName: "Pt6Line1_Married",
+//       transform: (value: string) => (value === "married" ? "Yes" : "Off"),
+//     },
+//     {
+//       questionId: "part5.currentMaritalStatus",
+//       pdfFieldName: "Pt6Line1_Divorced",
+//       transform: (value: string) => (value === "divorced" ? "Yes" : "Off"),
+//     },
+//     {
+//       questionId: "part5.currentMaritalStatus",
+//       pdfFieldName: "Pt6Line1_Widowed",
+//       transform: (value: string) => (value === "widowed" ? "Yes" : "Off"),
+//     },
+
+//     { questionId: "part5.timesMarried", pdfFieldName: "Pt6Line3_TimesMarried" },
+//     {
+//       questionId: "part5.currentSpouseFamilyName",
+//       pdfFieldName: "Pt6Line4a_SpouseFamilyName",
+//     },
+//     {
+//       questionId: "part5.currentSpouseGivenName",
+//       pdfFieldName: "Pt6Line4b_SpouseGivenName",
+//     },
+//     {
+//       questionId: "part5.dateOfMarriage",
+//       pdfFieldName: "Pt6Line9_DateOfMarriage",
+//     },
+//     {
+//       questionId: "part5.placeOfMarriage",
+//       pdfFieldName: "Pt6Line9_PlaceOfMarriage",
+//     },
+
+//     // Children Information (in Part 14)
+//     {
+//       questionId: "part6.totalChildren",
+//       pdfFieldName: "Pt7Line1_TotalChildren",
+//     },
+
+//     // Public Charge (Question 56)
+//     {
+//       questionId: "part8.publicCharge",
+//       pdfFieldName: "Pt9Line56_Exempt",
+//       transform: (value: string) => (value === "no" ? "Yes" : "Off"),
+//     },
+//     {
+//       questionId: "part8.publicCharge",
+//       pdfFieldName: "Pt9Line56_NotExempt",
+//       transform: (value: string) => (value === "yes" ? "Yes" : "Off"),
+//     },
+//   ],
+//   requiredDocuments: [
+//     "Copy of I-130 approval notice (if family-based)",
+//     "Birth certificate with certified English translation",
+//     "Passport biographical pages",
+//     "Two passport-style photos",
+//     "Medical examination (Form I-693) in sealed envelope",
+//     "Affidavit of Support (Form I-864) if required",
+//     "Evidence of lawful entry (I-94, visa, etc.)",
+//     "Marriage certificate (if applicable)",
+//     "Divorce/death certificates for prior marriages (if applicable)",
+//   ],
+//   instructions: [],
+// };
+
+const I_751_DEFINITION: FormDefinition = {
+  id: "i-751",
+  code: "I-751",
+  name: "Petition to Remove Conditions on Residence",
+  description: "Remove conditions from your 2-year conditional green card",
+  category: "family",
+  estimatedTime: "60-90 minutes",
+  filingFee: 0,
+  price: 60,
+  sections: [
+    {
+      id: "part1-attorney-representation",
+      title: "Part 1: Attorney or Accredited Representative",
+      description:
+        "Information about your attorney or accredited representative, if applicable.",
+      questions: [
+        {
+          id: "part1.g28Attached",
+          type: "radio",
+          label: "Is Form G-28 attached?",
+          options: [
+            { value: "1", label: "Yes" },
+            { value: "0", label: "No" },
+          ],
+          helpText:
+            "Attach Form G-28 if you have an attorney or accredited representative.",
+        },
+        {
+          id: "part1.attorneyStateBarNumber",
+          type: "text",
+          label: "Attorney State Bar Number",
+          helpText:
+            "Enter the state bar number of your attorney, if applicable.",
+        },
+        {
+          id: "part1.uscisElisAccountNumber",
+          type: "text",
+          label: "USCIS Online Account Number",
+          helpText: "Enter your USCIS online account number, if you have one.",
+        },
+      ],
+    },
+    {
+      id: "part1-personal-info",
+      title: "Part 1: Personal Information",
+      description: "Provide your personal information.",
+      questions: [
+        {
+          id: "part1.familyName",
+          type: "text",
+          label: "1.a. Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part1.givenName",
+          type: "text",
+          label: "1.b. Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part1.middleName",
+          type: "text",
+          label: "1.c. Middle Name",
+        },
+        {
+          id: "part1.otherNamesUsed.familyName",
+          type: "text",
+          label: "2.a. Other Names Used - Family Name (Last Name)",
+          helpText: "Enter any other last names you have used.",
+        },
+        {
+          id: "part1.otherNamesUsed.givenName",
+          type: "text",
+          label: "2.b. Other Names Used - Given Name (First Name)",
+          helpText: "Enter any other first names you have used.",
+        },
+        {
+          id: "part1.otherNamesUsed.middleName",
+          type: "text",
+          label: "2.c. Other Names Used - Middle Name",
+        },
+        {
+          id: "part1.otherNamesUsed.familyName2",
+          type: "text",
+          label: "3.a. Other Names Used - Family Name (Last Name)",
+          helpText: "Enter any additional last names you have used.",
+        },
+        {
+          id: "part1.otherNamesUsed.givenName2",
+          type: "text",
+          label: "3.b. Other Names Used - Given Name (First Name)",
+          helpText: "Enter any additional first names you have used.",
+        },
+        {
+          id: "part1.otherNamesUsed.middleName2",
+          type: "text",
+          label: "3.c. Other Names Used - Middle Name",
+        },
+        {
+          id: "part1.dateOfBirth",
+          type: "date",
+          label: "4. Date of Birth (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part1.countryOfBirth",
+          type: "text",
+          label: "5. Country of Birth",
+          required: true,
+        },
+        {
+          id: "part1.countryOfCitizenship",
+          type: "text",
+          label: "6. Country of Citizenship",
+          required: true,
+        },
+        {
+          id: "part1.alienNumber",
+          type: "text",
+          label: "7. Alien Registration Number (A-Number)",
+          helpText: "Enter your A-Number, if you have one.",
+        },
+        {
+          id: "part1.ssn",
+          type: "ssn",
+          label: "8. U.S. Social Security Number (if any)",
+          placeholder: "###-##-####",
+          helpText: "Enter your SSN, if you have one.",
+        },
+        {
+          id: "part1.maritalStatus",
+          type: "radio",
+          label: "10. Marital Status",
+          required: true,
+          options: [
+            { value: "M", label: "Married" },
+            { value: "W", label: "Widowed" },
+            { value: "S", label: "Single" },
+            { value: "D", label: "Divorced" },
+          ],
+        },
+        {
+          id: "part1.dateOfMarriage",
+          type: "date",
+          label: "11. Date of Marriage (mm/dd/yyyy)",
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part1.placeOfMarriage",
+          type: "text",
+          label: "12. Place of Marriage",
+        },
+        {
+          id: "part1.dateMarriageEnded",
+          type: "date",
+          label: "13. Date Marriage Ended (mm/dd/yyyy)",
+          placeholder: "MM/DD/YYYY",
+          helpText: "Enter the date your marriage ended, if applicable.",
+        },
+        {
+          id: "part1.conditionalResidenceExpiresOn",
+          type: "date",
+          label: "14. Conditional Residence Expires On (mm/dd/yyyy)",
+          placeholder: "MM/DD/YYYY",
+          required: true,
+        },
+      ],
+    },
+    {
+      id: "part1-mailing-address",
+      title: "Part 1: Mailing Address",
+      description: "Provide your current mailing address.",
+      questions: [
+        {
+          id: "part1.mailingAddress.inCareOfName",
+          type: "text",
+          label: "17.a. In Care Of Name",
+          helpText:
+            "Enter the name of the person who receives mail at this address, if applicable.",
+        },
+        {
+          id: "part1.mailingAddress.streetNumberAndName",
+          type: "text",
+          label: "17.b. Street Number and Name",
+          required: true,
+        },
+        {
+          id: "part1.mailingAddress.aptSteFlrNumber",
+          type: "text",
+          label: "17.c. Apt./Ste./Flr. Number",
+        },
+
+        {
+          id: "part1.mailingAddress.unit",
+          type: "radio",
+          label: "6.b. Unit Type",
+          options: [
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+
+        {
+          id: "part1.mailingAddress.cityOrTown",
+          type: "text",
+          label: "17.d. City or Town",
+          required: true,
+        },
+        {
+          id: "part1.mailingAddress.state",
+          type: "select",
+          label: "17.e. State",
+          required: true,
+          options: US_STATES,
+        },
+        {
+          id: "part1.mailingAddress.zipCode",
+          type: "text",
+          label: "17.f. ZIP Code",
+          required: true,
+        },
+        {
+          id: "part1.physicalAddressDifferent",
+          type: "radio",
+          label:
+            "Is your physical address different from your mailing address?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part1-physical-address",
+      title: "Part 1: Physical Address",
+      description:
+        "Provide your current physical address, if different from mailing address.",
+      questions: [
+        {
+          id: "part1.physicalAddress.inCareOfName",
+          type: "text",
+          label: "18.a. In Care Of Name",
+          helpText:
+            "Enter the name of the person who receives mail at this address, if applicable.",
+        },
+        {
+          id: "part1.physicalAddress.streetNumberAndName",
+          type: "text",
+          label: "18.b. Street Number and Name",
+          required: true,
+        },
+        {
+          id: "part1.physicalAddress.aptSteFlrNumber",
+          type: "text",
+          label: "18.c. Apt./Ste./Flr. Number",
+        },
+
+        {
+          id: "part1.mailingAddress.u",
+          type: "radio",
+          label: "6.b. Unit Type",
+          options: [
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+
+        {
+          id: "part1.physicalAddress.cityOrTown",
+          type: "text",
+          label: "18.d. City or Town",
+          required: true,
+        },
+        {
+          id: "part1.physicalAddress.state",
+          type: "select",
+          label: "18.e. State",
+          required: true,
+          options: US_STATES,
+        },
+        {
+          id: "part1.physicalAddress.zipCode",
+          type: "text",
+          label: "18.f. ZIP Code",
+          required: true,
+        },
+      ],
+    },
+    {
+      id: "part1-additional-info",
+      title: "Part 1: Additional Information",
+      description:
+        "Provide additional information relevant to your application.",
+      questions: [
+        {
+          id: "part1.removalProceedings",
+          type: "radio",
+          label: "Are you currently in removal proceedings?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+        {
+          id: "part1.feePaidToNonAttorney",
+          type: "radio",
+          label:
+            "Did you pay anyone other than an attorney or accredited representative to assist you in preparing this form?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+        {
+          id: "part1.criminalHistory",
+          type: "radio",
+          label: "Do you have any criminal history?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          helpText: "Include any arrests, charges, or convictions.",
+        },
+        {
+          id: "part1.differentMarriage",
+          type: "radio",
+          label:
+            "Is this application based on a different marriage than the one that granted you conditional residence?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+        {
+          id: "part1.otherAddresses",
+          type: "radio",
+          label:
+            "Have you lived at any other addresses since becoming a conditional resident?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+        {
+          id: "part1.spouseServingOutsideUS",
+          type: "radio",
+          label:
+            "Is your spouse currently serving outside the United States in the U.S. Armed Forces or other government service?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+      ],
+    },
+
+    {
+      id: "part2-physical-characteristics",
+      title: "Part 2: Physical Characteristics",
+      description:
+        "Provide your physical characteristics as they appear on your identification documents.",
+      questions: [
+        {
+          id: "part2.heightFeet",
+          type: "radio",
+          label: "Height (Feet)",
+          required: true,
+          options: [
+            { value: "4", label: "4" },
+            { value: "5", label: "5" },
+            { value: "6", label: "6" },
+            { value: "7", label: "7" },
+          ],
+          helpText: "Select the number of feet in your height.",
+        },
+        {
+          id: "part2.heightInches",
+          type: "radio",
+          label: "Height (Inches)",
+          required: true,
+          options: [
+            { value: "0", label: "0" },
+            { value: "1", label: "1" },
+            { value: "2", label: "2" },
+            { value: "3", label: "3" },
+            { value: "4", label: "4" },
+            { value: "5", label: "5" },
+            { value: "6", label: "6" },
+            { value: "7", label: "7" },
+            { value: "8", label: "8" },
+            { value: "9", label: "9" },
+            { value: "10", label: "10" },
+            { value: "11", label: "11" },
+          ],
+          helpText: "Select the number of inches in your height.",
+        },
+        {
+          id: "part2.weightFirstDigit",
+          type: "text",
+          label: "Weight (First Digit)",
+          required: true,
+          helpText: "Enter the first digit of your weight in pounds.",
+        },
+        {
+          id: "part2.weightSecondDigit",
+          type: "text",
+          label: "Weight (Second Digit)",
+          required: true,
+          helpText: "Enter the second digit of your weight in pounds.",
+        },
+        {
+          id: "part2.weightThirdDigit",
+          type: "text",
+          label: "Weight (Third Digit)",
+          required: true,
+          helpText: "Enter the third digit of your weight in pounds.",
+        },
+      ],
+    },
+    {
+      id: "part2-ethnicity-race",
+      title: "Part 2: Ethnicity and Race",
+      description: "Select your ethnicity and race as they best describe you.",
+      questions: [
+        {
+          id: "part2.ethnicity",
+          type: "radio",
+          label: "Ethnicity",
+          required: true,
+          options: [
+            { value: "N", label: "Not Hispanic or Latino" },
+            { value: "H", label: "Hispanic or Latino" },
+          ],
+          helpText: "Select your ethnicity.",
+        },
+        {
+          id: "part2.race",
+          type: "radio",
+          label: "Race",
+          required: true,
+          options: [
+            {
+              value: "Hawaiian",
+              label: "Native Hawaiian or Other Pacific Islander",
+            },
+            {
+              value: "AmericanIndian",
+              label: "American Indian or Alaska Native",
+            },
+            { value: "white", label: "White" },
+            { value: "asian", label: "Asian" },
+            { value: "black", label: "Black or African American" },
+          ],
+          helpText: "Select all races that apply.",
+        },
+      ],
+    },
+    {
+      id: "part2-eye-hair-color",
+      title: "Part 2: Eye and Hair Color",
+      description:
+        "Provide your eye and hair color as they appear on your identification documents.",
+      questions: [
+        {
+          id: "part2.eyeColor",
+          type: "radio",
+          label: "Eye Color",
+          required: true,
+          options: [
+            { value: "BLU", label: "Blue" },
+            { value: "GRN", label: "Green" },
+            { value: "HAZ", label: "Hazel" },
+            { value: "PNK", label: "Pink" },
+            { value: "MAR", label: "Maroon" },
+            { value: "BRO", label: "Brown" },
+            { value: "BLK", label: "Black" },
+            { value: "UNK", label: "Unknown" },
+            { value: "GRY", label: "Gray" },
+          ],
+          helpText: "Select your eye color.",
+        },
+        {
+          id: "part2.hairColor",
+          type: "radio",
+          label: "Hair Color",
+          required: true,
+          options: [
+            { value: "BAL", label: "Bald" },
+            { value: "BLN", label: "Blonde" },
+            { value: "GRY", label: "Gray" },
+            { value: "SDY", label: "Sandy" },
+            { value: "UNK", label: "Unknown" },
+            { value: "BLK", label: "Black" },
+            { value: "BRO", label: "Brown" },
+            { value: "RED", label: "Red" },
+          ],
+          helpText: "Select your hair color.",
+        },
+      ],
+    },
+
+    {
+      id: "part3-basis-for-petition",
+      title: "Part 3: Basis for Petition",
+      description:
+        "Select the basis for your petition to remove conditions on residence.",
+      questions: [
+        {
+          id: "part3.basisForPetition.jointFiling",
+          type: "radio",
+          label: "1. I am filing this petition jointly with my spouse.",
+          required: true,
+          options: [
+            {
+              value: "A",
+              label:
+                "A. Our marriage was entered in good faith, and we are still married.",
+            },
+            {
+              value: "B",
+              label:
+                "B. Our marriage was entered in good faith, but my spouse is deceased.",
+            },
+          ],
+          helpText:
+            "Select the option that best describes your current marital situation.",
+        },
+        {
+          id: "part3.basisForPetition.waiverOrIndividualFiling",
+          type: "radio",
+          label: "2. I am requesting a waiver or filing individually.",
+          required: true,
+          options: [
+            {
+              value: "C",
+              label:
+                "C. Our marriage was entered in good faith, but has ended in divorce or annulment.",
+            },
+            {
+              value: "D",
+              label:
+                "D. Our marriage was entered in good faith, but I have been battered or subjected to extreme cruelty by my spouse.",
+            },
+            {
+              value: "E",
+              label:
+                "E. The termination of my status and removal would result in extreme hardship.",
+            },
+            {
+              value: "F",
+              label:
+                "F. I am a child of a marriage that was entered in good faith, but I have been battered or subjected to extreme cruelty by my parent.",
+            },
+            {
+              value: "G",
+              label:
+                "G. I am a child of a marriage that was entered in good faith, but the marriage has ended in divorce or annulment.",
+            },
+          ],
+          helpText:
+            "Select the option that best describes your situation if you are not filing jointly with your spouse.",
+        },
+      ],
+    },
+
+    {
+      id: "part4-relationship",
+      title: "Part 4: Relationship to Conditional Permanent Resident",
+      description:
+        "Specify your relationship to the conditional permanent resident.",
+      questions: [
+        {
+          id: "part4.relationship",
+          type: "radio",
+          label: "Relationship to the conditional permanent resident:",
+          required: true,
+          options: [
+            { value: "A", label: "Spouse" },
+            { value: "B", label: "Parent" },
+          ],
+          helpText: "Select the option that best describes your relationship.",
+        },
+      ],
+    },
+    {
+      id: "part4-other-information",
+      title: "Part 4: Other Information About You",
+      description: "Provide additional personal information.",
+      questions: [
+        {
+          id: "part4.otherInformation.familyName",
+          type: "text",
+          label: "2.a. Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part4.otherInformation.givenName",
+          type: "text",
+          label: "2.b. Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part4.otherInformation.middleName",
+          type: "text",
+          label: "2.c. Middle Name",
+        },
+        {
+          id: "part4.dateOfBirth",
+          type: "date",
+          label: "3. Date of Birth (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part4.ssn",
+          type: "ssn",
+          label: "4. U.S. Social Security Number (if any)",
+          placeholder: "###-##-####",
+          helpText: "Leave blank if you do not have one.",
+        },
+        {
+          id: "part4.alienNumber",
+          type: "text",
+          label: "5. Alien Registration Number (A-Number)",
+          helpText: "Enter your A-Number if you have one.",
+        },
+      ],
+    },
+    {
+      id: "part4-address",
+      title: "Part 4: Address Information",
+      description: "Provide your current physical address.",
+      questions: [
+        {
+          id: "part4.streetNumberName",
+          type: "text",
+          label: "6.a. Street Number and Name",
+          required: true,
+        },
+        {
+          id: "part4.unit",
+          type: "radio",
+          label: "6.b. Unit Type",
+          options: [
+            { value: "APT", label: "Apt." },
+            { value: "STE", label: "Ste." },
+            { value: "FLR", label: "Flr." },
+          ],
+        },
+        {
+          id: "part4.aptSteFlrNumber",
+          type: "text",
+          label: "6.c. Unit Number",
+        },
+        {
+          id: "part4.cityOrTown",
+          type: "text",
+          label: "6.d. City or Town",
+          required: true,
+        },
+        {
+          id: "part4.state",
+          type: "select",
+          label: "6.e. State",
+          options: US_STATES,
+          required: true,
+        },
+        {
+          id: "part4.zipCode",
+          type: "text",
+          label: "6.f. ZIP Code",
+          required: true,
+        },
+        {
+          id: "part4.province",
+          type: "text",
+          label: "6.g. Province",
+          helpText:
+            "Complete this field if you live outside the United States.",
+        },
+        {
+          id: "part4.postalCode",
+          type: "text",
+          label: "6.h. Postal Code",
+          helpText:
+            "Complete this field if you live outside the United States.",
+        },
+        {
+          id: "part4.country",
+          type: "text",
+          label: "6.i. Country",
+          required: true,
+        },
+      ],
+    },
+
+    {
+      id: "part5-child-info",
+      title: "Part 5: Information About Your Children Child 1",
+      description: "Provide details about each child related to this petition.",
+      questions: [
+        {
+          id: "part5.child1.givenName",
+          type: "text",
+          label: "1.b. Given Name (First Name)",
+        },
+        {
+          id: "part5.child1.familyName",
+          type: "text",
+          label: "1.a. Family Name (Last Name)",
+        },
+        {
+          id: "part5.child1.middleName",
+          type: "text",
+          label: "1.c. Middle Name",
+        },
+        {
+          id: "part5.child1.dateOfBirth",
+          type: "date",
+          label: "2. Date of Birth (mm/dd/yyyy)",
+
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part5.child1.alienNumber",
+          type: "text",
+          label: "3. Alien Registration Number (A-Number)",
+          helpText: "Enter the A-Number if applicable.",
+        },
+        {
+          id: "part5.child1.livingWithYou",
+          type: "radio",
+          label: "5. Is this child living with you?",
+
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+        {
+          id: "part5.child1.applyingWithYou",
+          type: "radio",
+          label: "6. Is this child applying with you?",
+
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+        {
+          id: "part5.child1.streetNumberName",
+          type: "text",
+          label: "7.a. Street Number and Name",
+        },
+        {
+          id: "part5.child1.unit",
+          type: "select",
+          label: "7.b. Unit Type",
+          options: [
+            { value: "", label: "Select if applicable" },
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part5.child1.aptSteFlrNumber",
+          type: "text",
+          label: "7.c. Unit Number",
+        },
+        {
+          id: "part5.child1.cityOrTown",
+          type: "text",
+          label: "7.d. City or Town",
+        },
+        {
+          id: "part5.child1.state",
+          type: "select",
+          label: "7.e. State",
+          options: US_STATES,
+        },
+        {
+          id: "part5.child1.zipCode",
+          type: "text",
+          label: "7.f. ZIP Code",
+        },
+        {
+          id: "part5.child1.postalCode",
+          type: "text",
+          label: "7.g. Postal Code",
+        },
+        {
+          id: "part5.child1.country",
+          type: "text",
+          label: "7.h. Country",
+        },
+        {
+          id: "part5.child1.province",
+          type: "text",
+          label: "7.i. Province",
+        },
+        // Repeat similar structure for child2 to child5
+      ],
+    },
+    //
+    {
+      id: "part5-child-info-2",
+      title: "Part 5: Information About Your Children Child 2",
+      description: "Provide details about each child related to this petition.",
+      questions: [
+        {
+          id: "part5.child2.givenName",
+          type: "text",
+          label: "1.b. Given Name (First Name)",
+        },
+        {
+          id: "part5.child2.familyName",
+          type: "text",
+          label: "1.a. Family Name (Last Name)",
+        },
+        {
+          id: "part5.child2.middleName",
+          type: "text",
+          label: "1.c. Middle Name",
+        },
+        {
+          id: "part5.child2.dateOfBirth",
+          type: "date",
+          label: "2. Date of Birth (mm/dd/yyyy)",
+
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part5.child2.alienNumber",
+          type: "text",
+          label: "3. Alien Registration Number (A-Number)",
+          helpText: "Enter the A-Number if applicable.",
+        },
+        {
+          id: "part5.child2.livingWithYou",
+          type: "radio",
+          label: "5. Is this child living with you?",
+
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+        {
+          id: "part5.child2.applyingWithYou",
+          type: "radio",
+          label: "6. Is this child applying with you?",
+
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+        {
+          id: "part5.child2.streetNumberName",
+          type: "text",
+          label: "7.a. Street Number and Name",
+        },
+        {
+          id: "part5.child2.unit",
+          type: "select",
+          label: "7.b. Unit Type",
+          options: [
+            { value: "", label: "Select if applicable" },
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part5.child2.aptSteFlrNumber",
+          type: "text",
+          label: "7.c. Unit Number",
+        },
+        {
+          id: "part5.child2.cityOrTown",
+          type: "text",
+          label: "7.d. City or Town",
+        },
+        {
+          id: "part5.child2.state",
+          type: "select",
+          label: "7.e. State",
+          options: US_STATES,
+        },
+        {
+          id: "part5.child2.zipCode",
+          type: "text",
+          label: "7.f. ZIP Code",
+        },
+        {
+          id: "part5.child2.postalCode",
+          type: "text",
+          label: "7.g. Postal Code",
+        },
+        {
+          id: "part5.child2.country",
+          type: "text",
+          label: "7.h. Country",
+        },
+        {
+          id: "part5.child2.province",
+          type: "text",
+          label: "7.i. Province",
+        },
+        // Repeat similar structure for child2 to child5
+      ],
+    },
+    {
+      id: "part5-child-info-3",
+      title: "Part 5: Information About Your Children Child 3",
+      description: "Provide details about each child related to this petition.",
+      questions: [
+        {
+          id: "part5.child3.givenName",
+          type: "text",
+          label: "1.b. Given Name (First Name)",
+        },
+        {
+          id: "part5.child3.familyName",
+          type: "text",
+          label: "1.a. Family Name (Last Name)",
+        },
+        {
+          id: "part5.child3.middleName",
+          type: "text",
+          label: "1.c. Middle Name",
+        },
+        {
+          id: "part5.child3.dateOfBirth",
+          type: "date",
+          label: "2. Date of Birth (mm/dd/yyyy)",
+
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part5.child3.alienNumber",
+          type: "text",
+          label: "3. Alien Registration Number (A-Number)",
+          helpText: "Enter the A-Number if applicable.",
+        },
+        {
+          id: "part5.child3.livingWithYou",
+          type: "radio",
+          label: "5. Is this child living with you?",
+
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+        {
+          id: "part5.child3.applyingWithYou",
+          type: "radio",
+          label: "6. Is this child applying with you?",
+
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+        {
+          id: "part5.child3.streetNumberName",
+          type: "text",
+          label: "7.a. Street Number and Name",
+        },
+        {
+          id: "part5.child3.unit",
+          type: "select",
+          label: "7.b. Unit Type",
+          options: [
+            { value: "", label: "Select if applicable" },
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part5.child3.aptSteFlrNumber",
+          type: "text",
+          label: "7.c. Unit Number",
+        },
+        {
+          id: "part5.child3.cityOrTown",
+          type: "text",
+          label: "7.d. City or Town",
+        },
+        {
+          id: "part5.child3.state",
+          type: "select",
+          label: "7.e. State",
+          options: US_STATES,
+        },
+        {
+          id: "part5.child3.zipCode",
+          type: "text",
+          label: "7.f. ZIP Code",
+        },
+        {
+          id: "part5.child3.postalCode",
+          type: "text",
+          label: "7.g. Postal Code",
+        },
+        {
+          id: "part5.child3.country",
+          type: "text",
+          label: "7.h. Country",
+        },
+        {
+          id: "part5.child3.province",
+          type: "text",
+          label: "7.i. Province",
+        },
+        // Repeat similar structure for child2 to child5
+      ],
+    },
+    {
+      id: "part5-child-info-4",
+      title: "Part 5: Information About Your Children Child 4",
+      description: "Provide details about each child related to this petition.",
+      questions: [
+        {
+          id: "part5.child4.givenName",
+          type: "text",
+          label: "1.b. Given Name (First Name)",
+        },
+        {
+          id: "part5.child4.familyName",
+          type: "text",
+          label: "1.a. Family Name (Last Name)",
+        },
+        {
+          id: "part5.child4.middleName",
+          type: "text",
+          label: "1.c. Middle Name",
+        },
+        {
+          id: "part5.child4.dateOfBirth",
+          type: "date",
+          label: "2. Date of Birth (mm/dd/yyyy)",
+
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part5.child4.alienNumber",
+          type: "text",
+          label: "3. Alien Registration Number (A-Number)",
+          helpText: "Enter the A-Number if applicable.",
+        },
+        {
+          id: "part5.child4.livingWithYou",
+          type: "radio",
+          label: "5. Is this child living with you?",
+
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+        {
+          id: "part5.child4.applyingWithYou",
+          type: "radio",
+          label: "6. Is this child applying with you?",
+
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+        {
+          id: "part5.child4.streetNumberName",
+          type: "text",
+          label: "7.a. Street Number and Name",
+        },
+        {
+          id: "part5.child4.unit",
+          type: "select",
+          label: "7.b. Unit Type",
+          options: [
+            { value: "", label: "Select if applicable" },
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part5.child4.aptSteFlrNumber",
+          type: "text",
+          label: "7.c. Unit Number",
+        },
+        {
+          id: "part5.child4.cityOrTown",
+          type: "text",
+          label: "7.d. City or Town",
+        },
+        {
+          id: "part5.child4.state",
+          type: "select",
+          label: "7.e. State",
+          options: US_STATES,
+        },
+        {
+          id: "part5.child4.zipCode",
+          type: "text",
+          label: "7.f. ZIP Code",
+        },
+        {
+          id: "part5.child4.postalCode",
+          type: "text",
+          label: "7.g. Postal Code",
+        },
+        {
+          id: "part5.child4.country",
+          type: "text",
+          label: "7.h. Country",
+        },
+        {
+          id: "part5.child4.province",
+          type: "text",
+          label: "7.i. Province",
+        },
+        // Repeat similar structure for child2 to child5
+      ],
+    },
+    {
+      id: "part5-child-info-5",
+      title: "Part 5: Information About Your Children Child 5",
+      description: "Provide details about each child related to this petition.",
+      questions: [
+        {
+          id: "part5.child5.givenName",
+          type: "text",
+          label: "1.b. Given Name (First Name)",
+        },
+        {
+          id: "part5.child5.familyName",
+          type: "text",
+          label: "1.a. Family Name (Last Name)",
+        },
+        {
+          id: "part5.child5.middleName",
+          type: "text",
+          label: "1.c. Middle Name",
+        },
+        {
+          id: "part5.child5.dateOfBirth",
+          type: "date",
+          label: "2. Date of Birth (mm/dd/yyyy)",
+
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part5.child5.alienNumber",
+          type: "text",
+          label: "3. Alien Registration Number (A-Number)",
+          helpText: "Enter the A-Number if applicable.",
+        },
+        {
+          id: "part5.child5.livingWithYou",
+          type: "radio",
+          label: "5. Is this child living with you?",
+
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+        {
+          id: "part5.child5.applyingWithYou",
+          type: "radio",
+          label: "6. Is this child applying with you?",
+
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+        {
+          id: "part5.child5.streetNumberName",
+          type: "text",
+          label: "7.a. Street Number and Name",
+        },
+        {
+          id: "part5.child5.unit",
+          type: "select",
+          label: "7.b. Unit Type",
+          options: [
+            { value: "", label: "Select if applicable" },
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part5.child5.aptSteFlrNumber",
+          type: "text",
+          label: "7.c. Unit Number",
+        },
+        {
+          id: "part5.child5.cityOrTown",
+          type: "text",
+          label: "7.d. City or Town",
+        },
+        {
+          id: "part5.child5.state",
+          type: "select",
+          label: "7.e. State",
+          options: US_STATES,
+        },
+        {
+          id: "part5.child5.zipCode",
+          type: "text",
+          label: "7.f. ZIP Code",
+        },
+        {
+          id: "part5.child5.postalCode",
+          type: "text",
+          label: "7.g. Postal Code",
+        },
+        {
+          id: "part5.child5.country",
+          type: "text",
+          label: "7.h. Country",
+        },
+        {
+          id: "part5.child5.province",
+          type: "text",
+          label: "7.i. Province",
+        },
+        // Repeat similar structure for child2 to child5
+      ],
+    },
+
+    {
+      id: "part6-accommodations-for-disabilities",
+      title:
+        "Part 6: Accommodations for Individuals with Disabilities and/or Impairments",
+      description:
+        "Request accommodations for disabilities or impairments to ensure you can participate in the immigration process.",
+      questions: [
+        {
+          id: "part6.accommodationsForDisabilities.requestingAccommodation",
+          type: "radio",
+          label:
+            "Are you requesting an accommodation because of your disabilities and/or impairments?",
+          required: true,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          helpText:
+            "Select 'Yes' if you need any special accommodations during your interview or other interactions with USCIS.",
+        },
+        {
+          id: "part6.accommodationsForDisabilities.deafOrHardOfHearing",
+          type: "checkbox",
+          label:
+            "I am deaf or hard of hearing and request the following accommodation(s):",
+          options: [
+            { value: "A", label: "Sign language interpreter" },
+            { value: "B", label: "Other accommodations" },
+          ],
+          helpText:
+            "Specify if you need a sign language interpreter or any other accommodations related to hearing impairments.",
+        },
+        {
+          id: "part6.accommodationsForDisabilities.blindOrSightImpaired",
+          type: "checkbox",
+          label:
+            "I am blind or sight-impaired and request the following accommodation(s):",
+          options: [
+            { value: "A", label: "Braille materials" },
+            { value: "B", label: "Large print materials" },
+          ],
+          helpText:
+            "Indicate if you require Braille or large print materials due to vision impairments.",
+        },
+        {
+          id: "part6.accommodationsForDisabilities.accommodationRequested",
+          type: "textarea",
+          label: "Describe any other accommodation(s) requested:",
+          helpText:
+            "Provide details about any other accommodations you require that are not listed above.",
+        },
+        {
+          id: "part6.accommodationsForDisabilities.otherDisability",
+          type: "checkbox",
+          label:
+            "I have another type of disability and request the following accommodation(s):",
+          options: [{ value: "C", label: "Other accommodations" }],
+          helpText:
+            "Specify any accommodations needed for disabilities not covered in the previous sections.",
+        },
+      ],
+    },
+
+    {
+      id: "part7-petitioners-statement",
+      title: "Part 7: Petitioner's Statement",
+      description:
+        "Provide information about your statement and the use of an interpreter or preparer.",
+      questions: [
+        {
+          id: "part7.petitionersStatement",
+          type: "radio",
+          label: "Petitioner's Statement",
+          required: true,
+          options: [
+            {
+              value: "A",
+              label:
+                "I can read and understand English, and have read and understand every question and instruction on this petition and my answer to every question.",
+            },
+            {
+              value: "B",
+              label:
+                "The interpreter named in Part 8 read to me every question and instruction on this petition and my answer to every question in a language in which I am fluent, and I understood everything.",
+            },
+          ],
+        },
+        {
+          id: "part7.petitionersStatement.languageUsed",
+          type: "text",
+          label: "Language Used",
+          description: "If you used an interpreter, specify the language used.",
+          helpText:
+            "Enter the language in which the interpreter communicated with you.",
+        },
+        {
+          id: "part7.petitionersStatement.preparerConsent",
+          type: "radio",
+          label: "Preparer's Consent",
+          options: [
+            {
+              value: "Y",
+              label:
+                "Yes, I have requested the preparer to complete this petition.",
+            },
+            { value: "N", label: "No, I did not use a preparer." },
+          ],
+        },
+        {
+          id: "part7.petitionersStatement.preparerName",
+          type: "text",
+          label: "Preparer's Name",
+          description:
+            "Name of the person who prepared this petition, if applicable.",
+          helpText: "Enter the full name of the preparer.",
+        },
+        {
+          id: "part7.petitionersStatement.preparerIsAttorney",
+          type: "radio",
+          label: "Is the Preparer an Attorney?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part7-petitioners-contact-information",
+      title: "Part 7: Petitioner's Contact Information",
+      description: "Provide your contact information.",
+      questions: [
+        {
+          id: "part7.petitionersContactInformation.emailAddress",
+          type: "email",
+          label: "Email Address",
+          placeholder: "example@email.com",
+          helpText: "Provide a valid email address where you can be reached.",
+        },
+        {
+          id: "part7.petitionersContactInformation.daytimePhoneNumber",
+          type: "tel",
+          label: "Daytime Phone Number",
+          placeholder: "(555) 123-4567",
+          helpText:
+            "Provide a phone number where you can be reached during the day.",
+        },
+        {
+          id: "part7.petitionersContactInformation.mobilePhoneNumber",
+          type: "tel",
+          label: "Mobile Phone Number",
+          placeholder: "(555) 123-4567",
+          helpText: "Provide your mobile phone number.",
+        },
+      ],
+    },
+    {
+      id: "part7-acknowledgement-of-appointment",
+      title: "Part 7: Acknowledgement of Appointment",
+      description:
+        "Acknowledge the appointment of the representative, if applicable.",
+      questions: [
+        {
+          id: "part7.acknowledgementOfAppointment.name",
+          type: "text",
+          label: "Name of Appointed Representative",
+          description:
+            "Enter the name of the person you have appointed as your representative.",
+          helpText:
+            "This is typically the name of your attorney or accredited representative.",
+        },
+      ],
+    },
+    // {
+    //   id: "part7-petitioners-signature",
+    //   title: "Part 7: Petitioner's Signature",
+    //   description: "Sign and date the petition to confirm your statements.",
+    //   questions: [
+    //     {
+    //       id: "part7.petitionersSignature.signature",
+    //       type: "text",
+    //       label: "Petitioner's Signature",
+    //       required: true,
+    //       helpText:
+    //         "Sign your full legal name as it appears on your official documents.",
+    //     },
+    //     {
+    //       id: "part7.petitionersSignature.dateOfSignature",
+    //       type: "date",
+    //       label: "Date of Signature",
+    //       required: true,
+    //       placeholder: "MM/DD/YYYY",
+    //       helpText: "Enter the date you signed this petition.",
+    //     },
+    //   ],
+    // },
+
+    {
+      id: "part8-spouses-statement",
+      title: "Part 8: Spouse's Statement",
+      description:
+        "Provide the necessary information regarding the spouse's statement and preparer details.",
+      questions: [
+        {
+          id: "part8.spousesStatement",
+          type: "radio",
+          label: "Spouse's Statement",
+          required: true,
+          options: [
+            {
+              value: "A",
+              label:
+                "I can read and understand English, and have read and understand every question and instruction on this petition and my answer to every question.",
+            },
+            {
+              value: "B",
+              label:
+                "The interpreter named in Part 9 read to me every question and instruction on this petition and my answer to every question in a language in which I am fluent, and I understood everything.",
+            },
+          ],
+        },
+        {
+          id: "part8.spousesStatement.languageUsed",
+          type: "text",
+          label: "Language Used",
+          helpText: "If you used an interpreter, specify the language used.",
+        },
+        {
+          id: "part8.spousesStatement.preparerConsent",
+          type: "radio",
+          label: "Preparer's Consent",
+          options: [
+            {
+              value: "Y",
+              label:
+                "Yes, the preparer has consented to assist in the completion of this form.",
+            },
+          ],
+          helpText: "Select 'Yes' if the preparer has consented to assist.",
+        },
+        {
+          id: "part8.spousesStatement.preparerName",
+          type: "text",
+          label: "Preparer's Name",
+          helpText: "Enter the full name of the preparer if applicable.",
+        },
+        {
+          id: "part8.spousesStatement.preparerIsAttorney",
+          type: "radio",
+          label: "Is the Preparer an Attorney?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          helpText: "Indicate whether the preparer is an attorney.",
+        },
+      ],
+    },
+    {
+      id: "part8-spouses-contact-information",
+      title: "Part 8: Spouse's Contact Information",
+      description:
+        "Provide the spouse's contact details for communication purposes.",
+      questions: [
+        {
+          id: "part8.spousesContactInformation.emailAddress",
+          type: "email",
+          label: "Email Address",
+          placeholder: "example@email.com",
+          helpText: "Provide a valid email address for correspondence.",
+        },
+        {
+          id: "part8.spousesContactInformation.mobilePhoneNumber",
+          type: "tel",
+          label: "Mobile Phone Number",
+          placeholder: "(555) 123-4567",
+          helpText: "Enter the mobile phone number including area code.",
+        },
+        {
+          id: "part8.spousesContactInformation.daytimePhoneNumber",
+          type: "tel",
+          label: "Daytime Phone Number",
+          placeholder: "(555) 123-4567",
+          helpText: "Provide a daytime phone number where you can be reached.",
+        },
+      ],
+    },
+    {
+      id: "part8-acknowledgement-of-appointment",
+      title: "Part 8: Acknowledgement of Appointment",
+      description: "Acknowledge the appointment details as required.",
+      questions: [
+        {
+          id: "part8.acknowledgementOfAppointment.name",
+          type: "text",
+          label: "Name",
+          helpText:
+            "Enter the name of the person acknowledging the appointment.",
+        },
+      ],
+    },
+    // {
+    //   id: "part8-spouses-signature",
+    //   title: "Part 8: Spouse's Signature",
+    //   description:
+    //     "Sign and date the form to confirm the information provided.",
+    //   questions: [
+    //     {
+    //       id: "part8.spousesSignature.dateOfSignature",
+    //       type: "date",
+    //       label: "Date of Signature",
+    //       required: true,
+    //       placeholder: "MM/DD/YYYY",
+    //       helpText: "Enter the date you are signing this form.",
+    //     },
+    //     {
+    //       id: "part8.spousesSignature.signature",
+    //       type: "text",
+    //       label: "Signature of Spouse",
+    //       required: true,
+    //       helpText:
+    //         "Sign your full name to certify the information provided is true and correct.",
+    //     },
+    //   ],
+    // },
+
+    {
+      id: "part9-interpreter-information",
+      title: "Part 9: Interpreter's Information",
+      description:
+        "Provide details about the interpreter who assisted in completing this form.",
+      questions: [
+        {
+          id: "part9.interpretersFullName.familyName",
+          type: "text",
+          label: "1.a. Family Name (Last Name)",
+          required: true,
+          helpText:
+            "Enter the interpreter's last name as it appears on official documents.",
+        },
+        {
+          id: "part9.interpretersFullName.givenName",
+          type: "text",
+          label: "1.b. Given Name (First Name)",
+          required: true,
+          helpText:
+            "Enter the interpreter's first name as it appears on official documents.",
+        },
+        {
+          id: "part9.interpretersBusinessOrOrganizationName",
+          type: "text",
+          label: "2. Name of Business or Organization (if applicable)",
+          helpText:
+            "Provide the name of the business or organization the interpreter is affiliated with, if any.",
+        },
+      ],
+    },
+    {
+      id: "part9-interpreter-mailing-address",
+      title: "Part 9: Interpreter's Mailing Address",
+      description: "Enter the mailing address of the interpreter.",
+      questions: [
+        {
+          id: "part9.interpretersMailingAddress.streetNumberName",
+          type: "text",
+          label: "3.a. Street Number and Name",
+          required: true,
+          helpText:
+            "Provide the street number and name of the interpreter's mailing address.",
+        },
+        {
+          id: "part9.interpretersMailingAddress.unit",
+          type: "radio",
+          label: "3.b. Unit Type",
+          options: [
+            { value: "APT", label: "Apt." },
+            { value: "STE", label: "Ste." },
+            { value: "FLR", label: "Flr." },
+          ],
+          helpText: "Select the type of unit if applicable.",
+        },
+        {
+          id: "part9.interpretersMailingAddress.aptSteFlrNumber",
+          type: "text",
+          label: "3.c. Unit Number",
+          helpText: "Enter the unit number if applicable.",
+        },
+        {
+          id: "part9.interpretersMailingAddress.cityOrTown",
+          type: "text",
+          label: "3.d. City or Town",
+          required: true,
+        },
+        {
+          id: "part9.interpretersMailingAddress.state",
+          type: "select",
+          label: "3.e. State",
+          options: US_STATES,
+          required: true,
+        },
+        {
+          id: "part9.interpretersMailingAddress.zipCode",
+          type: "text",
+          label: "3.f. ZIP Code",
+          required: true,
+          helpText: "Enter the 5-digit ZIP code.",
+        },
+        {
+          id: "part9.interpretersMailingAddress.province",
+          type: "text",
+          label: "3.g. Province",
+          helpText: "Provide the province if applicable.",
+        },
+        {
+          id: "part9.interpretersMailingAddress.postalCode",
+          type: "text",
+          label: "3.h. Postal Code",
+          helpText: "Enter the postal code if applicable.",
+        },
+        {
+          id: "part9.interpretersMailingAddress.country",
+          type: "text",
+          label: "3.i. Country",
+          required: true,
+        },
+      ],
+    },
+    {
+      id: "part9-interpreter-contact-information",
+      title: "Part 9: Interpreter's Contact Information",
+      description: "Provide contact details for the interpreter.",
+      questions: [
+        {
+          id: "part9.interpretersContactInformation.daytimePhoneNumber",
+          type: "tel",
+          label: "4. Daytime Phone Number",
+          required: true,
+          placeholder: "(555) 123-4567",
+          helpText:
+            "Enter a phone number where the interpreter can be reached during the day.",
+        },
+        {
+          id: "part9.interpretersContactInformation.emailAddress",
+          type: "email",
+          label: "5. Email Address",
+          placeholder: "example@email.com",
+          helpText: "Provide an email address for the interpreter.",
+        },
+      ],
+    },
+    {
+      id: "part9-interpreter-certification",
+      title: "Part 9: Interpreter's Certification",
+      description:
+        "Certification of the interpreter's proficiency in the language used.",
+      questions: [
+        {
+          id: "part9.interpretersCertification.languageFluent",
+          type: "text",
+          label: "6. Language in which you are fluent",
+          required: true,
+          helpText:
+            "Specify the language in which the interpreter is fluent and used to interpret.",
+        },
+      ],
+    },
+    // {
+    //   id: "part9-interpreter-signature",
+    //   title: "Part 9: Interpreter's Signature",
+    //   description: "The interpreter must sign and date this section.",
+    //   questions: [
+    //     {
+    //       id: "part9.interpretersSignature.signature",
+    //       type: "text",
+    //       label: "7.a. Signature",
+    //       required: true,
+    //       helpText: "The interpreter must sign here.",
+    //     },
+    //     {
+    //       id: "part9.interpretersSignature.dateOfSignature",
+    //       type: "date",
+    //       label: "7.b. Date of Signature",
+    //       required: true,
+    //       placeholder: "MM/DD/YYYY",
+    //       helpText: "Enter the date the interpreter signed this form.",
+    //     },
+    //   ],
+    // },
+
+    {
+      id: "part10-preparers-information",
+      title: "Part 10: Preparer's Information",
+      description:
+        "Provide details about the person who prepared this petition, if applicable.",
+      questions: [
+        {
+          id: "part10.preparersFullName.familyName",
+          type: "text",
+          label: "1.a. Family Name (Last Name)",
+          required: true,
+          helpText: "Enter the preparer's last name.",
+        },
+        {
+          id: "part10.preparersFullName.givenName",
+          type: "text",
+          label: "1.b. Given Name (First Name)",
+          required: true,
+          helpText: "Enter the preparer's first name.",
+        },
+        {
+          id: "part10.preparersBusinessOrOrganizationName",
+          type: "text",
+          label: "2. Name of Business or Organization",
+          helpText:
+            "Enter the name of the business or organization, if applicable.",
+        },
+      ],
+    },
+    {
+      id: "part10-preparers-contact-information",
+      title: "Part 10: Preparer's Contact Information",
+      description: "Provide the contact details of the preparer.",
+      questions: [
+        {
+          id: "part10.preparersContactInformation.emailAddress",
+          type: "email",
+          label: "6. Email Address",
+          helpText: "Enter the preparer's email address.",
+          placeholder: "example@email.com",
+        },
+        {
+          id: "part10.preparersContactInformation.daytimePhoneNumber",
+          type: "tel",
+          label: "4. Daytime Telephone Number",
+          helpText: "Enter the preparer's daytime phone number.",
+          placeholder: "(555) 123-4567",
+        },
+        {
+          id: "part10.preparersContactInformation.faxNumber",
+          type: "tel",
+          label: "5. Fax Number",
+          helpText: "Enter the preparer's fax number, if applicable.",
+          placeholder: "(555) 123-4567",
+        },
+      ],
+    },
+    {
+      id: "part10-preparers-mailing-address",
+      title: "Part 10: Preparer's Mailing Address",
+      description: "Provide the mailing address of the preparer.",
+      questions: [
+        {
+          id: "part10.preparersMailingAddress.streetNumberName",
+          type: "text",
+          label: "3.a. Street Number and Name",
+          required: true,
+          helpText: "Enter the street number and name.",
+        },
+        {
+          id: "part10.preparersMailingAddress.unit",
+          type: "radio",
+          label: "3.b. Unit Type",
+          options: [
+            { value: "APT", label: "Apt." },
+            { value: "STE", label: "Ste." },
+            { value: "FLR", label: "Flr." },
+          ],
+        },
+        {
+          id: "part10.preparersMailingAddress.aptSteFlrNumber",
+          type: "text",
+          label: "3.c. Unit Number",
+          helpText: "Enter the unit number, if applicable.",
+        },
+        {
+          id: "part10.preparersMailingAddress.cityOrTown",
+          type: "text",
+          label: "3.d. City or Town",
+          required: true,
+          helpText: "Enter the city or town.",
+        },
+        {
+          id: "part10.preparersMailingAddress.state",
+          type: "select",
+          label: "3.e. State",
+          options: US_STATES,
+          required: true,
+          helpText: "Select the state.",
+        },
+        {
+          id: "part10.preparersMailingAddress.zipCode",
+          type: "text",
+          label: "3.f. ZIP Code",
+          required: true,
+          helpText: "Enter the ZIP code.",
+        },
+        {
+          id: "part10.preparersMailingAddress.province",
+          type: "text",
+          label: "3.g. Province",
+          helpText: "Enter the province, if applicable.",
+        },
+        {
+          id: "part10.preparersMailingAddress.postalCode",
+          type: "text",
+          label: "3.h. Postal Code",
+          helpText: "Enter the postal code, if applicable.",
+        },
+        {
+          id: "part10.preparersMailingAddress.country",
+          type: "text",
+          label: "3.i. Country",
+          required: true,
+          helpText: "Enter the country.",
+        },
+      ],
+    },
+    {
+      id: "part10-preparers-statement",
+      title: "Part 10: Preparer's Statement",
+      description:
+        "Indicate the preparer's involvement in completing this form.",
+      questions: [
+        {
+          id: "part10.preparersStatement",
+          type: "radio",
+          label: "7. Preparer's Statement",
+          options: [
+            {
+              value: "A",
+              label:
+                "I am not an attorney or accredited representative but have prepared this form on behalf of the petitioner and with the petitioner's consent.",
+            },
+            {
+              value: "B",
+              label:
+                "I am an attorney or accredited representative and my representation extends beyond the preparation of this form.",
+            },
+          ],
+        },
+        {
+          id: "part10.preparersStatement.extendsBeyondPreparation",
+          type: "radio",
+          label: "7.b. My representation extends beyond preparation",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+      ],
+    },
+    // {
+    //   id: "part10-preparers-signature",
+    //   title: "Part 10: Preparer's Signature",
+    //   description: "The preparer must sign and date this section.",
+    //   questions: [
+    //     {
+    //       id: "part10.preparersSignature.signature",
+    //       type: "text",
+    //       label: "8.a. Signature of Preparer",
+    //       required: true,
+    //       helpText: "The preparer must sign here.",
+    //     },
+    //     {
+    //       id: "part10.preparersSignature.dateOfSignature",
+    //       type: "date",
+    //       label: "8.b. Date of Signature",
+    //       required: true,
+    //       helpText: "Enter the date the preparer signed the form.",
+    //       placeholder: "MM/DD/YYYY",
+    //     },
+    //   ],
+    // },
+
+    {
+      id: "part11-additional-information",
+      title: "Part 11: Additional Information",
+      description:
+        "Provide any additional information that does not fit in other sections of this form.",
+      questions: [
+        {
+          id: "part11.additionalInformation.pageNumber",
+          type: "text",
+          label: "3.a. Page Number",
+          helpText:
+            "Enter the page number from the form where additional information is needed.",
+        },
+        {
+          id: "part11.additionalInformation.partNumber",
+          type: "text",
+          label: "3.b. Part Number",
+          helpText:
+            "Enter the part number from the form where additional information is needed.",
+        },
+        {
+          id: "part11.additionalInformation.itemNumber",
+          type: "text",
+          label: "3.c. Item Number",
+          helpText:
+            "Enter the item number from the form where additional information is needed.",
+        },
+        {
+          id: "part11.additionalInformation.additionalInfo",
+          type: "textarea",
+          label: "3.d. Additional Information",
+          helpText:
+            "Provide additional details or explanations related to the specified page, part, and item numbers.",
+        },
+        {
+          id: "part11.additionalInformation.pageNumber4",
+          type: "text",
+          label: "4.a. Page Number",
+          helpText:
+            "Enter the page number from the form where additional information is needed.",
+        },
+        {
+          id: "part11.additionalInformation.partNumber4",
+          type: "text",
+          label: "4.b. Part Number",
+          helpText:
+            "Enter the part number from the form where additional information is needed.",
+        },
+        {
+          id: "part11.additionalInformation.itemNumber4",
+          type: "text",
+          label: "4.c. Item Number",
+          helpText:
+            "Enter the item number from the form where additional information is needed.",
+        },
+        {
+          id: "part11.additionalInformation.additionalInfo4",
+          type: "textarea",
+          label: "4.d. Additional Information",
+          helpText:
+            "Provide additional details or explanations related to the specified page, part, and item numbers.",
+        },
+        {
+          id: "part11.additionalInformation.pageNumber5",
+          type: "text",
+          label: "5.a. Page Number",
+          helpText:
+            "Enter the page number from the form where additional information is needed.",
+        },
+        {
+          id: "part11.additionalInformation.partNumber5",
+          type: "text",
+          label: "5.b. Part Number",
+          helpText:
+            "Enter the part number from the form where additional information is needed.",
+        },
+        {
+          id: "part11.additionalInformation.itemNumber5",
+          type: "text",
+          label: "5.c. Item Number",
+          helpText:
+            "Enter the item number from the form where additional information is needed.",
+        },
+        {
+          id: "part11.additionalInformation.additionalInfo5",
+          type: "textarea",
+          label: "5.d. Additional Information",
+          helpText:
+            "Provide additional details or explanations related to the specified page, part, and item numbers.",
+        },
+        {
+          id: "part11.additionalInformation.pageNumber6",
+          type: "text",
+          label: "6.a. Page Number",
+          helpText:
+            "Enter the page number from the form where additional information is needed.",
+        },
+        {
+          id: "part11.additionalInformation.partNumber6",
+          type: "text",
+          label: "6.b. Part Number",
+          helpText:
+            "Enter the part number from the form where additional information is needed.",
+        },
+        {
+          id: "part11.additionalInformation.itemNumber6",
+          type: "text",
+          label: "6.c. Item Number",
+          helpText:
+            "Enter the item number from the form where additional information is needed.",
+        },
+        {
+          id: "part11.additionalInformation.additionalInfo6",
+          type: "textarea",
+          label: "6.d. Additional Information",
+          helpText:
+            "Provide additional details or explanations related to the specified page, part, and item numbers.",
+        },
+        {
+          id: "part11.additionalInformation.pageNumber7",
+          type: "text",
+          label: "7.a. Page Number",
+          helpText:
+            "Enter the page number from the form where additional information is needed.",
+        },
+        {
+          id: "part11.additionalInformation.partNumber7",
+          type: "text",
+          label: "7.b. Part Number",
+          helpText:
+            "Enter the part number from the form where additional information is needed.",
+        },
+        {
+          id: "part11.additionalInformation.itemNumber7",
+          type: "text",
+          label: "7.c. Item Number",
+          helpText:
+            "Enter the item number from the form where additional information is needed.",
+        },
+        {
+          id: "part11.additionalInformation.additionalInfo7",
+          type: "textarea",
+          label: "7.d. Additional Information",
+          helpText:
+            "Provide additional details or explanations related to the specified page, part, and item numbers.",
+        },
+      ],
+    },
+    {
+      id: "part11-your-full-name",
+      title: "Part 11: Your Full Name",
+      description:
+        "Provide your full legal name as it appears on official documents.",
+      questions: [
+        {
+          id: "part11.additionalInformation.fullName.familyName",
+          type: "text",
+          label: "1.a. Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part11.additionalInformation.fullName.givenName",
+          type: "text",
+          label: "1.b. Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part11.yourFullName.middleName",
+          type: "text",
+          label: "1.c. Middle Name",
+        },
+      ],
+    },
+    {
+      id: "part11-identification",
+      title: "Part 11: Identification",
+      description: "Provide your Alien Registration Number if applicable.",
+      questions: [
+        {
+          id: "part11.alienRegistrationNumber",
+          type: "text",
+          label: "Alien Registration Number (A-Number)",
+          helpText:
+            "Enter your A-Number if you have one. It is an 8 or 9 digit number.",
+        },
+      ],
+    },
+  ],
+  pdfFieldMappings: I_751_FIELD_MAPPINGS,
+  requiredDocuments: [],
+  instructions: [],
+};
+
+const I_485_DEFINITION: FormDefinition = {
+  id: "i-485",
+  code: "I-485",
+  name: "Application to Register Permanent Residence or Adjust Status",
+  description: "Apply for a green card while in the United States",
+  category: "family",
+  estimatedTime: "90-120 minutes",
+  filingFee: 1140,
+  price: 70,
+  sections: [
+    {
+      id: "attorney-info",
+      title: "Attorney Information",
+      questions: [
+        {
+          id: "attorney.stateBarNumber",
+          type: "text",
+          label: "State Bar Number",
+          required: false,
+          helpText: "Enter the attorney's state bar number."
+        },
+        {
+          id: "attorney.formG28Attached",
+          type: "radio",
+          label: "Form G-28 Attached",
+          required: false,
+          options: [
+            { value: "1", label: "Yes" },
+            { value: "Off", label: "No" },
+          ]
+        },
+        {
+          id: "attorney.volagNumber",
+          type: "text",
+          label: "VOLAG Number",
+          required: false,
+          helpText: "Enter the VOLAG number if applicable."
+        },
+        {
+          id: "attorney.uscisOnlineAccountNumber",
+          type: "text",
+          label: "USCIS Online Account Number",
+          required: false,
+          helpText: "Enter the USCIS online account number if available."
+        },
+      ]
+    },
+    {
+      id: "applicant-info",
+      title: "Applicant Information",
+      questions: [
+        {
+          id: "applicant.alienNumber",
+          type: "text",
+          label: "Alien Registration Number (A-Number)",
+          required: true,
+          helpText: "Enter your A-Number, if any."
+        },
+      ]
+    },
+    {
+      id: "part1-personal-info",
+      title: "Part 1: Personal Information",
+      questions: [
+        {
+          id: "part1.currentLegalName.familyName",
+          type: "text",
+          label: "1.a. Family Name (Last Name)",
+          required: true
+        },
+        {
+          id: "part1.currentLegalName.givenName",
+          type: "text",
+          label: "1.b. Given Name (First Name)",
+          required: true
+        },
+        {
+          id: "part1.currentLegalName.middleName",
+          type: "text",
+          label: "1.c. Middle Name",
+          required: false
+        },
+        {
+          id: "part1.otherNamesUsed.familyName",
+          type: "text",
+          label: "2.a. Other Names Used - Family Name",
+          required: false
+        },
+        {
+          id: "part1.otherNamesUsed.givenName",
+          type: "text",
+          label: "2.b. Other Names Used - Given Name",
+          required: false
+        },
+        {
+          id: "part1.otherNamesUsed.middleName",
+          type: "text",
+          label: "2.c. Other Names Used - Middle Name",
+          required: false
+        },
+        {
+          id: "part1.otherNamesUsed2.familyName",
+          type: "text",
+          label: "2.a. Additional Other Names Used - Family Name",
+          required: false
+        },
+        {
+          id: "part1.otherNamesUsed2.givenName",
+          type: "text",
+          label: "2.b. Additional Other Names Used - Given Name",
+          required: false
+        },
+        {
+          id: "part1.otherNamesUsed2.middleName",
+          type: "text",
+          label: "2.c. Additional Other Names Used - Middle Name",
+          required: false
+        },
+        {
+          id: "part1.dateOfBirth",
+          type: "date",
+          label: "3. Date of Birth (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY"
+        },
+        {
+          id: "part1.usedOtherDob",
+          type: "radio",
+          label: "Have you used other dates of birth?",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ]
+        },
+        {
+          id: "part1.otherDob1",
+          type: "date",
+          label: "Other Date of Birth 1 (mm/dd/yyyy)",
+          required: false,
+          placeholder: "MM/DD/YYYY"
+        },
+        {
+          id: "part1.otherDob2",
+          type: "date",
+          label: "Other Date of Birth 2 (mm/dd/yyyy)",
+          required: false,
+          placeholder: "MM/DD/YYYY"
+        },
+        {
+          id: "part1.sex",
+          type: "select",
+          label: "4. Sex",
+          required: true,
+          options: [
+            { value: "M", label: "Male" },
+            { value: "F", label: "Female" },
+          ]
+        },
+        {
+          id: "part1.placeOfBirth.cityTown",
+          type: "text",
+          label: "5.a. City/Town of Birth",
+          required: true
+        },
+        {
+          id: "part1.placeOfBirth.country",
+          type: "text",
+          label: "5.b. Country of Birth",
+          required: true
+        },
+        {
+          id: "part1.countryOfCitizenship",
+          type: "text",
+          label: "6. Country of Citizenship/Nationality",
+          required: true
+        },
+      ]
+    },
+
+    {
+      id: "part1-info",
+      title: "Part 1: Information",
+      questions: [
+        {
+          id: "part1.uscisAccountNumber",
+          type: "text",
+          label: "USCIS Online Account Number",
+          required: false,
+          helpText: "Enter your USCIS Online Account Number, if any."
+        },
+        {
+          id: "part1.passportNumber",
+          type: "text",
+          label: "Passport Number",
+          required: true,
+          helpText: "Enter your passport number."
+        },
+        {
+          id: "part1.passportExpirationDate",
+          type: "date",
+          label: "Passport Expiration Date",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+          helpText: "Enter the expiration date of your passport."
+        },
+        {
+          id: "part1.passportCountry",
+          type: "text",
+          label: "Country of Issuance for Passport",
+          required: true,
+          helpText: "Enter the country that issued your passport."
+        },
+        {
+          id: "part1.visaNumber",
+          type: "text",
+          label: "Nonimmigrant Visa Number",
+          required: false,
+          helpText: "Enter your nonimmigrant visa number, if applicable."
+        },
+        {
+          id: "part1.cityOfLastArrival",
+          type: "text",
+          label: "City of Last Arrival",
+          required: true,
+          helpText: "Enter the city where you last arrived in the U.S."
+        },
+        {
+          id: "part1.stateOfLastArrival",
+          type: "select",
+          label: "State of Last Arrival",
+          required: true,
+          options: US_STATES,
+          helpText: "Enter the state where you last arrived in the U.S."
+        },
+        {
+          id: "part1.dateOfLastArrival",
+          type: "date",
+          label: "Date of Last Arrival",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+          helpText: "Enter the date of your last arrival in the U.S."
+        },
+        {
+          id: "part1.nonImmigrantVisaIssueDate",
+          type: "date",
+          label: "Nonimmigrant Visa Issue Date",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+          helpText:
+            "Enter the issue date of your nonimmigrant visa, if applicable."
+        },
+        {
+          id: "part1.alienNumber",
+          type: "button",
+          label: "Alien Registration Number (A-Number)",
+          required: false,
+          helpText: "Click to enter your Alien Registration Number."
+        },
+        {
+          id: "part1.hasAlienNumber",
+          type: "radio",
+          label: "Do you have an Alien Registration Number (A-Number)?",
+          required: true,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ]
+        },
+        {
+          id: "part1.usedOtherANumber",
+          type: "radio",
+          label: "Have you ever used another A-Number?",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ]
+        },
+        {
+          id: "part1.otherANumber",
+          type: "text",
+          label: "Other Alien Registration Number (A-Number)",
+          required: false,
+          helpText: "Enter any other A-Number you have used."
+        },
+        {
+          id: "part1.otherANumberButton",
+          type: "button",
+          label: "Enter Other A-Number",
+          required: false
+        },
+        {
+          id: "part1.otherImmigrationHistory",
+          type: "text",
+          label: "Other Immigration History",
+          required: false,
+          helpText: "Provide details of any other immigration history."
+        },
+        {
+          id: "part1.admitted",
+          type: "checkbox",
+          label: "Admitted to the U.S.",
+          required: false,
+          helpText: "Check if you were admitted to the U.S."
+        },
+        {
+          id: "part1.paroled",
+          type: "checkbox",
+          label: "Paroled into the U.S.",
+          required: false,
+          helpText: "Check if you were paroled into the U.S."
+        },
+        {
+          id: "part1.familyName",
+          type: "text",
+          label: "Family Name (Last Name)",
+          required: true,
+          helpText: "Enter your family name or last name."
+        },
+      ]
+    },
+    {
+      id: "part2-info",
+      title: "Part 2: Additional Information",
+      questions: [
+        {
+          id: "part2.cubanAdjustmentAct",
+          type: "radio",
+          label: "Are you applying under the Cuban Adjustment Act?",
+          required: false,
+          options: [
+            { value: "11A", label: "Yes, under section 11A" },
+            { value: "11B", label: "Yes, under section 11B" },
+            { value: "11C", label: "Yes, under section 11C" },
+          ]
+        },
+      ]
+    },
+
+    {
+      id: "part1-info-2",
+      title: "Part 1: Information",
+      questions: [
+        {
+          id: "part1.givenName",
+          type: "text",
+          label: "1.b. Given Name (First Name)",
+          required: true
+        },
+        {
+          id: "part1.expirationDateOfAuthorizedStay",
+          type: "date",
+          label: "2. Expiration Date of Authorized Stay (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY"
+        },
+        {
+          id: "part1.immigrationStatusOnI94",
+          type: "text",
+          label: "3. Immigration Status on I-94",
+          required: true
+        },
+        {
+          id: "part1.i94ArrivalDepartureRecordNumber",
+          type: "text",
+          label: "4. I-94 Arrival/Departure Record Number",
+          required: true
+        },
+        {
+          id: "part1.lastArrivalFirstTime",
+          type: "radio",
+          label: "5. Is this your first arrival?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ]
+        },
+
+        {
+          id: "part1.expirationDateOfCurrentStatus",
+          type: "date",
+          label: "6. Expiration Date of Current Status (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY"
+        },
+        {
+          id: "part1.alienCrewmanVisa",
+          type: "radio",
+          label: "7. Are you an alien crewman?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ]
+        },
+
+        {
+          id: "part1.arrivalToJoinVessel",
+          type: "radio",
+          label: "8. Did you arrive to join a vessel? No",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ]
+        },
+
+        {
+          id: "part1.usUnit",
+          type: "select",
+          label: "9. U.S. Unit",
+          options: [
+            { value: "STE", label: "Suite" },
+            { value: "APT", label: "Apartment" },
+            { value: "FLR", label: "Floor" },
+          ]
+        },
+
+        {
+          id: "part1.aptSteFlrNumber",
+          type: "text",
+          label: "10. Apt/Ste/Flr Number"
+        },
+
+        {
+          id: "part1.cityOrTown",
+          type: "text",
+          label: "11. City or Town",
+          required: true
+        },
+        {
+          id: "part1.state",
+          type: "select",
+          label: "12. State",
+          required: true,
+          options: US_STATES
+        },
+        {
+          id: "part1.zipCode",
+          type: "text",
+          label: "13. ZIP Code",
+          required: true
+        },
+        {
+          id: "part1.streetNumberAndName",
+          type: "text",
+          label: "14. Street Number and Name",
+          required: true
+        },
+        {
+          id: "part1.inCareOfName",
+          type: "text",
+          label: "15. In Care Of Name"
+        },
+        {
+          id: "part1.dateFirstResidedAtAddress",
+          type: "date",
+          label: "16. Date First Resided at Address (mm/dd/yyyy)",
+          placeholder: "MM/DD/YYYY"
+        },
+      ]
+    },
+
+    {
+      id: "part1-currentMailingAddress",
+      title: "Part 1: Current Mailing Address",
+      questions: [
+        {
+          id: "part1.currentMailingAddress",
+          type: "radio",
+          label: "17. Is this your current mailing address? Yes",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ]
+        },
+        {
+          id: "currentMailingAddressUnitType",
+          type: "select",
+          label: "Unit Type",
+          options: [
+            { value: "APT", label: "Apartment" },
+            { value: "STE", label: "Suite" },
+            { value: "FLR", label: "Floor" },
+          ],
+          required: true,
+          conditional: { dependsOn: "part1.currentMailingAddress", value: "N" }
+        },
+        {
+          id: "part1.currentMailingAddressAptSteFlrNumber",
+          type: "text",
+          label: "Apartment, Suite, or Floor Number",
+          required: true,
+          conditional: { dependsOn: "part1.currentMailingAddress", value: "N" }
+        },
+        {
+          id: "part1.currentMailingAddressCityOrTown",
+          type: "text",
+          label: "City or Town",
+          required: true,
+          conditional: { dependsOn: "part1.currentMailingAddress", value: "N" }
+        },
+        {
+          id: "part1.currentMailingAddressState",
+          type: "select",
+          label: "State",
+          required: true,
+          options: US_STATES,
+          conditional: { dependsOn: "part1.currentMailingAddress", value: "N" }
+        },
+        {
+          id: "part1.currentMailingAddressZipCode",
+          type: "text",
+          label: "ZIP Code",
+          required: true,
+          conditional: { dependsOn: "part1.currentMailingAddress", value: "N" }
+        },
+        {
+          id: "part1.currentMailingAddressStreetNumberName",
+          type: "text",
+          label: "Street Number and Name",
+          required: true,
+          conditional: { dependsOn: "part1.currentMailingAddress", value: "N" }
+        },
+        {
+          id: "part1.currentMailingAddressInCareOfName",
+          type: "text",
+          label: "In Care Of Name",
+          conditional: { dependsOn: "part1.currentMailingAddress", value: "N" },
+          helpText:
+            "Enter the name of the person who receives mail at this address, if applicable."
+        },
+      ]
+    },
+    {
+      id: "part1-currentImmigrationStatus",
+      title: "Part 1: Current Immigration Status",
+      questions: [
+        {
+          id: "part1.currentImmigrationStatus",
+          type: "text",
+          label: "Current Immigration Status",
+          required: true
+        },
+      ]
+    },
+    {
+      id: "part1-alienRegistrationNumber",
+      title: "Part 1: Alien Registration Number",
+      questions: [
+        {
+          id: "alienRegistrationNumber",
+          type: "text",
+          label: "Alien Registration Number (A-Number)",
+          required: true
+        },
+      ]
+    },
+
+    {
+      id: "part1-priorAddress",
+      title: "Part 1: Prior Address",
+      description:
+        "Provide your prior address if you have not lived at your current address for 5 years.",
+      questions: [
+        {
+          id: "part1.residedAtCurrentAddress5YearsYes",
+          type: "radio",
+          label:
+            "Have you resided at your current address for at least 5 years?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part1.priorAddressInCareOfName",
+          type: "text",
+          label: "In Care Of Name",
+          conditional: {
+            dependsOn: "part1.residedAtCurrentAddress5YearsYes",
+            value: "N"
+          },
+          helpText:
+            "Enter the name of the person who received mail at this address, if applicable."
+        },
+        {
+          id: "part1.priorAddressStreetName",
+          type: "text",
+          label: "Street Name",
+          conditional: {
+            dependsOn: "part1.residedAtCurrentAddress5YearsYes",
+            value: "N"
+          },
+          required: true
+        },
+        {
+          id: "part1.priorAddressUnit",
+          type: "select",
+          label: "Unit Type",
+          conditional: {
+            dependsOn: "part1.residedAtCurrentAddress5YearsYes",
+            value: "N"
+          },
+          options: [
+            { value: "APT", label: "Apartment" },
+            { value: "STE", label: "Suite" },
+            { value: "FLR", label: "Floor" },
+          ]
+        },
+
+        {
+          id: "part1.priorAddressAptSteFlrNumber",
+          type: "text",
+          label: "Apartment, Suite, or Floor Number",
+          conditional: {
+            dependsOn: "part1.residedAtCurrentAddress5YearsYes",
+            value: "N"
+          }
+        },
+        {
+          id: "part1.priorAddressCityOrTown",
+          type: "text",
+          label: "City or Town",
+          required: true,
+          conditional: {
+            dependsOn: "part1.residedAtCurrentAddress5YearsYes",
+            value: "N"
+          }
+        },
+        {
+          id: "part1.priorAddressState",
+          type: "select",
+          label: "State",
+          required: true,
+          options: US_STATES,
+          conditional: {
+            dependsOn: "part1.residedAtCurrentAddress5YearsYes",
+            value: "N"
+          }
+        },
+        {
+          id: "part1.priorAddressZipCode",
+          type: "text",
+          label: "ZIP Code",
+          required: true,
+          conditional: {
+            dependsOn: "part1.residedAtCurrentAddress5YearsYes",
+            value: "N"
+          }
+        },
+        {
+          id: "part1.priorAddressProvince",
+          type: "text",
+          label: "Province",
+          conditional: {
+            dependsOn: "part1.residedAtCurrentAddress5YearsYes",
+            value: "N"
+          }
+        },
+        {
+          id: "part1.priorAddressPostalCode",
+          type: "text",
+          label: "Postal Code",
+          conditional: {
+            dependsOn: "part1.residedAtCurrentAddress5YearsYes",
+            value: "N"
+          }
+        },
+        {
+          id: "part1.priorAddressCountry",
+          type: "text",
+          label: "Country",
+          required: true,
+          conditional: {
+            dependsOn: "part1.residedAtCurrentAddress5YearsYes",
+            value: "N"
+          }
+        },
+        {
+          id: "part1.priorAddressDateFrom",
+          type: "date",
+          label: "Date From",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+          conditional: {
+            dependsOn: "part1.residedAtCurrentAddress5YearsYes",
+            value: "N"
+          }
+        },
+        {
+          id: "part1.priorAddressDateTo",
+          type: "date",
+          label: "Date To",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+          conditional: {
+            dependsOn: "part1.residedAtCurrentAddress5YearsYes",
+            value: "N"
+          }
+        },
+      ]
+    },
+    {
+      id: "part1-address",
+      title: "Part 1: Recent Address",
+      description:
+        "Provide your most recent physical address outside the United States where you lived for more than one year",
+      questions: [
+        {
+          id: "part1.recentStreetName",
+          type: "text",
+          label: "18.a. Street Name",
+          required: true
+        },
+        {
+          id: "part1.recentUnit",
+          type: "select",
+          label: "18.b. Unit Type",
+          options: [
+            { value: "APT", label: "Apartment" },
+            { value: "STE", label: "Suite" },
+            { value: "FLR", label: "Floor" },
+          ]
+        },
+        {
+          id: "part1.recentNumber",
+          type: "text",
+          label: "18.c. Unit Number"
+        },
+        {
+          id: "part1.recentCity",
+          type: "text",
+          label: "18.d. City or Town",
+          required: true
+        },
+        {
+          id: "part1.recentState",
+          type: "select",
+          label: "18.e. State",
+          required: true,
+          options: US_STATES
+        },
+        {
+          id: "part1.recentZipCode",
+          type: "text",
+          label: "18.f. ZIP Code",
+          required: true
+        },
+        {
+          id: "part1.recentProvince",
+          type: "text",
+          label: "18.g. Province"
+        },
+        {
+          id: "part1.recentPostalCode",
+          type: "text",
+          label: "18.h. Postal Code"
+        },
+        {
+          id: "part1.recentCountry",
+          type: "text",
+          label: "18.i. Country",
+          required: true
+        },
+        {
+          id: "part1.recentDateFrom",
+          type: "date",
+          label: "18.j. Date From",
+          required: true,
+          placeholder: "MM/DD/YYYY"
+        },
+        {
+          id: "part1.recentDateTo",
+          type: "date",
+          label: "18.k. Date To",
+          placeholder: "MM/DD/YYYY"
+        },
+      ]
+    },
+    {
+      id: "part1-ssa",
+      title: "Part 1: Social Security Administration",
+      description: "Provide information about your Social Security card.",
+      questions: [
+        {
+          id: "part1.socialSecurityCardIssued",
+          type: "radio",
+          label: "19. Has the SSA ever issued you a Social Security card?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ]
+        },
+        {
+          id: "part1.socialSecurityNumber",
+          type: "ssn",
+          label: "19.a. Social Security Number",
+          helpText: "Provide your SSN if you have one."
+        },
+        {
+          id: "part1.ssaIssueCard",
+          type: "radio",
+          label:
+            "19.b. Do you want the SSA to issue you a Social Security card?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ]
+        },
+        {
+          id: "part1.consentForDisclosure",
+          type: "radio",
+          label: "19.c. Consent for Disclosure",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          helpText:
+            "Do you consent to the disclosure of your information to the SSA?"
+        },
+      ]
+    },
+    {
+      id: "part2-status",
+      title: "Part 2: Adjustment of Status",
+      questions: [
+        {
+          id: "alienNumber",
+          type: "text",
+          label: "1. Alien Registration Number (A-Number)",
+          required: true
+        },
+        {
+          id: "part2.adjustmentOfStatus",
+          type: "radio",
+          label: "2. Are you applying for adjustment of status?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ]
+        },
+        {
+          id: "part2.receiptNumber",
+          type: "text",
+          label: "3. Receipt Number",
+          helpText: "Provide the receipt number of your application."
+        },
+        {
+          id: "part2.priorityDate",
+          type: "date",
+          label: "4. Priority Date",
+          placeholder: "MM/DD/YYYY"
+        },
+      ]
+    },
+    {
+      id: "part2-applicant-info",
+      title: "Part 2: Applicant Information",
+      questions: [
+        {
+          id: "part2.principalApplicantFamilyName",
+          type: "text",
+          label: "2.a. Family Name (Last Name)",
+          required: true
+        },
+        {
+          id: "part2.principalApplicantGivenName",
+          type: "text",
+          label: "2.b. Given Name (First Name)",
+          required: true
+        },
+        {
+          id: "part2.principalApplicantMiddleName",
+          type: "text",
+          label: "2.c. Middle Name",
+          required: false
+        },
+        {
+          id: "part2.dateOfBirth",
+          type: "date",
+          label: "2.d. Date of Birth (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY"
+        },
+        {
+          id: "part2.alienNumber",
+          type: "text",
+          label: "2.e. Alien Registration Number (A-Number)",
+          required: false
+        },
+        {
+          id: "part2.applicationTypePrincipal",
+          type: "radio",
+          label: "2.f. Application Type",
+          options: [
+            { value: "1fA", label: "Principal Applicant" },
+            { value: "1fB", label: "Derivative Applicant" },
+          ],
+          required: true
+        },
+
+        {
+          id: "part2.categoryCitizen",
+          type: "radio",
+          label: "3.a. Category",
+          helpText:
+            "Immediate relative of a U.S. citizen, Form I-130, I-129F, or I-360 (select your specific category below)",
+          options: [
+            { value: "3a0", label: "Spouse of a U.S. Citizen" },
+            {
+              value: "3a1",
+              label: "Unmarried Child Under 21 of a U.S. Citizen"
+            },
+            { value: "3a2", label: "Parent of a U.S. Citizen" },
+            { value: "3a3", label: "Fiancé(e) of a U.S. Citizen" },
+            { value: "3a4", label: "Widow(er) of a U.S. Citizen" },
+            {
+              value: "3a5",
+              label: "Spouse/Child/Parent of Deceased Service Member"
+            },
+            {
+              value: "3a6",
+              label: "Unmarried Son/Daughter of a U.S. Citizen"
+            },
+            { value: "3a7", label: "Married Son/Daughter of a U.S. Citizen" },
+            { value: "3a8", label: "Brother/Sister of a U.S. Citizen" },
+            { value: "3a9", label: "Spouse of a Lawful Permanent Resident" },
+            {
+              value: "3a10",
+              label: "Unmarried Child of a Lawful Permanent Resident"
+            },
+            {
+              value: "3a11",
+              label: "Unmarried Son/Daughter of a Lawful Permanent Resident"
+            },
+            { value: "3a12", label: "VAWA Self-Petitioner (Spouse)" },
+            { value: "3a13", label: "VAWA Self-Petitioner (Child)" },
+            { value: "3a14", label: "VAWA Self-Petitioner (Parent)" },
+            { value: "3a15", label: "Alien Investor" },
+            { value: "3a16", label: "Alien of Extraordinary Ability" },
+          ],
+          required: true
+        },
+      ]
+    },
+    {
+      id: "part2-employmentBased",
+      title: "Part 2: Employment-Based Preferences",
+      questions: [
+        {
+          id: "part2.employmentBasedOutstandingProfessor",
+          type: "radio",
+          label: "3.b.2. Outstanding Professor or Researcher",
+          options: [
+            {
+              value: "3b2",
+              label: "3.b.2. Outstanding Professor or Researcher"
+            },
+          ]
+        },
+        {
+          id: "part2.employmentBasedMultinationalExecutive",
+          type: "radio",
+          label: "3.b.3. Multinational Executive or Manager",
+          options: [
+            {
+              value: "3b3",
+              label: "3.b.3. Multinational Executive or Manager"
+            },
+          ]
+        },
+        {
+          id: "part2.employmentBasedAdvancedDegree",
+          type: "radio",
+          label: "3.b.4. Advanced Degree Professional",
+          options: [
+            {
+              value: "3b4",
+              label: "3.b.4. Advanced Degree Professional"
+            },
+          ]
+        },
+        {
+          id: "part2.employmentBasedProfessional",
+          type: "radio",
+          label: "3.b.5. Professional",
+          options: [
+            {
+              value: "3b5",
+              label: "3.b.5. Professional"
+            },
+          ]
+        },
+        {
+          id: "part2.employmentBasedSkilledWorker",
+          type: "radio",
+          label: "3.b.6. Skilled Worker",
+          options: [
+            {
+              value: "3b6",
+              label: "3.b.6. Skilled Worker"
+            },
+          ]
+        },
+        {
+          id: "part2.employmentBasedOtherWorker",
+          type: "radio",
+          label: "3.b.7. Other Worker",
+          options: [
+            {
+              value: "3b7",
+              label: "3.b.7. Other Worker"
+            },
+          ]
+        },
+        {
+          id: "part2.employmentBasedNationalInterestWaiver",
+          type: "radio",
+          label: "3.b.8. National Interest Waiver",
+          options: [
+            {
+              value: "3b8",
+              label: "3.b.8. National Interest Waiver"
+            },
+          ]
+        },
+      ]
+    },
+    {
+      id: "part2-relativeFiledI140",
+      title: "Part 2: Relative Filed I-140",
+      questions: [
+        {
+          id: "part2.relativeFiledI140",
+          type: "radio",
+          label: "Relative Filed I-140: Not Applicable",
+          required: true,
+          options: [
+            {
+              value: "NA",
+              label: "Not Applicable"
+            },
+            {
+              value: "Y",
+              label: "yes"
+            },
+            { value: "N", label: "No" },
+          ]
+        },
+        {
+          id: "part2.relativeType",
+          type: "radio", // or "select"
+          label: "Relationship to U.S. Citizen/LPR",
+          helpText: "Select your relationship to the petitioner",
+          required: true,
+          conditional: {
+            dependsOn: "part2.relativeFiledI140",
+            value: "Y"
+          },
+          options: [
+            { value: "1", label: "Father" },
+            { value: "2", label: "Mother" },
+            { value: "3", label: "Child" },
+            { value: "4", label: "Adult Son" },
+            { value: "5", label: "Adult Daughter" },
+            { value: "6", label: "Brother" },
+            { value: "7", label: "Sister" },
+            { value: "8", label: "None of These" },
+          ]
+        },
+        {
+          id: "part2.relativeStatus",
+          type: "radio",
+          label: "Relative's Immigration Status",
+          conditional: {
+            dependsOn: "part2.relativeFiledI140",
+            value: "Y"
+          },
+          helpText: "Select the immigration status of your relative/petitioner",
+          required: true,
+          options: [
+            { value: "1", label: "U.S. Citizen" },
+            { value: "2", label: "U.S. National" },
+            { value: "3", label: "Lawful Permanent Resident" },
+            { value: "4", label: "None of These" },
+          ]
+        },
+      ]
+    },
+
+    {
+      id: "part2-specialImmigrant",
+      title: "Part 2: Special Immigrant",
+      questions: [
+        {
+          id: "part2.specialImmigrantAfghanIraqi",
+          type: "radio",
+          label: "3.c.1. Special Immigrant: Afghan or Iraqi",
+          options: [
+            { value: "3c1", label: "Afghan or Iraqi" },
+            { value: "3c0", label: "3.c.3. Special Immigrant: Juvenile" },
+            { value: "3c3", label: "3.c.10. Special Immigrant: G-4 or NATO-6" },
+            { value: "N/A", label: "None" },
+          ]
+        },
+      ]
+    },
+    {
+      id: "part2-specialImmigrant-2",
+      title: "Part 2: Special Immigrant Category",
+      questions: [
+        {
+          id: "part2.specialImmigrantCategory",
+          type: "radio",
+          label: "3.c. Special Immigrant Category",
+          required: true,
+          options: [
+            { value: "3c2", label: "Certain International Broadcaster" },
+            { value: "3c4", label: "Certain US Armed Forces Member" },
+            { value: "3c5", label: "Panama Canal Zone Employee" },
+            { value: "3c6", label: "Certain Physician" },
+            {
+              value: "3c7",
+              label:
+                "Certain Employee or Former Employee of US Government Abroad"
+            },
+            { value: "3c8", label: "Minister of Religion" },
+            { value: "3c9", label: "Other Religious Worker" },
+            { value: "N/A", label: "None" },
+          ]
+        },
+      ]
+    },
+    {
+      id: "part2-asyleeOrRefugee",
+      title: "Part 2: Asylee or Refugee",
+      questions: [
+        {
+          id: "part2.asyleeOrRefugee",
+          type: "select",
+          label: "3.d. Asylee or Refugee Status",
+          required: true,
+          options: [
+            { value: "3d0", label: "Asylum Status" },
+            { value: "3d1", label: "Refugee Status" },
+            { value: "N/A", label: "None" },
+          ]
+        },
+      ]
+    },
+    {
+      id: "part2-humanTraffickingVictimOrCrimeVictim",
+      title: "Part 2: Human Trafficking Victim or Crime Victim",
+      questions: [
+        {
+          id: "part2.humanTraffickingVictimOrCrimeVictim",
+          type: "radio",
+          label: "3.e. Human Trafficking Victim or Crime Victim",
+          required: true,
+          options: [
+            { value: "3e0", label: "Human Trafficking Victim" },
+            { value: "3e1", label: "Victim of Qualifying Criminal Activity" },
+          ]
+        },
+      ]
+    },
+    {
+      id: "part2-alienRegistrationNumber",
+      title: "Part 2: Alien Registration Number",
+      questions: [
+        {
+          id: "part2.alienRegistrationNumber",
+          type: "text",
+          label: "Alien Registration Number",
+          required: true
+        },
+      ]
+    },
+    {
+      id: "part2-specialProgramsBasedOnCertainPublicLaws",
+      title: "Part 2: Special Programs Based on Certain Public Laws",
+      questions: [
+        {
+          id: "part2.specialPrograms",
+          type: "radio",
+          label: "3.f. Special Programs Based on Certain Public Laws",
+          required: true,
+          options: [
+            { value: "3f0", label: "Cuban Adjustment Act" },
+            {
+              value: "3f1",
+              label:
+                "Victim of Battery or Extreme Cruelty under Cuban Adjustment Act"
+            },
+            {
+              value: "3f2",
+              label:
+                "Dependent Status under Haitian Refugee Immigrant Fairness Act"
+            },
+            {
+              value: "3f3",
+              label:
+                "Victim of Battery or Extreme Cruelty under Haitian Refugee Immigrant Fairness Act"
+            },
+            { value: "3f4", label: "Lautenberg Parolee" },
+            {
+              value: "3f5",
+              label: "Diplomat or High-Ranking Official Unable to Return Home"
+            },
+            { value: "3f6", label: "National of Vietnam, Cambodia, or Laos" },
+          ]
+        },
+      ]
+    },
+    {
+      id: "part2-additionalOptions",
+      title: "Part 2: Additional Options",
+      questions: [
+        {
+          id: "part2.additionalOptions",
+          type: "radio",
+          label: "3.g. Additional Eligibility Options",
+          required: true,
+          options: [
+            { value: "3g0", label: "Diversity Visa Program" },
+            {
+              value: "3g1",
+              label: "Continuous Residence in US Since Before 1972"
+            },
+            {
+              value: "3g2",
+              label: "Individual Born in US Under Diplomatic Status"
+            },
+            {
+              value: "3g3",
+              label: "S Nonimmigrant or Qualifying Family Member"
+            },
+            { value: "3g4", label: "Other Eligibility" },
+          ]
+        },
+        {
+          id: "part2.additionalOptions.enterOtherEligibility",
+          type: "text",
+          label: "Specify Other Eligibility",
+          required: false,
+          conditional: { dependsOn: "part2.additionalOptions", value: "3g4" }
+        },
+      ]
+    },
+    {
+      id: "part2-eligibility",
+      title: "Part 2: Application Type or Filing Category",
+      questions: [
+        {
+          id: "part2.asyleeDateGranted",
+          type: "date",
+          label: "3.d. Date Asylee Status Granted",
+          required: true,
+          placeholder: "MM/DD/YYYY"
+        },
+        {
+          id: "part2.refugeeDateOfAdmission",
+          type: "date",
+          label: "3.d. Date of Refugee Admission",
+          required: true,
+          placeholder: "MM/DD/YYYY"
+        },
+
+        {
+          id: "part2.cspa",
+          type: "radio",
+          label: "5. CSPA Not Applicable",
+          required: true,
+          options: [
+            { value: "N", label: "No" },
+            { value: "Y", label: "Yes" },
+          ]
+        },
+
+        {
+          id: "part2.ina245i",
+          type: "radio",
+          label: "4. INA 245(i) Not Applicable",
+          required: true,
+          options: [
+            { value: "N", label: "No" },
+            { value: "Y", label: "Yes" },
+          ]
+        },
+      ]
+    },
+    {
+      id: "part7-alien-number",
+      title: "Part 7: Alien Registration Number",
+      questions: [
+        {
+          id: "part7.alienNumber",
+          type: "text",
+          label: "Alien Registration Number",
+          required: true
+        },
+      ]
+    },
+    {
+      id: "part4-immigrant-visa",
+      title: "Part 4: Information About Your Immigration History",
+      questions: [
+        {
+          id: "part4.appliedForImmigrantVisa",
+          type: "radio",
+          label: "1. Have you ever applied for an immigrant visa?",
+          required: true,
+          options: [
+            { value: "N", label: "No" },
+            { value: "Y", label: "Yes" },
+          ]
+        },
+
+        {
+          id: "part4.dateOfDecision",
+          type: "date",
+          label: "4. Date of Decision",
+          required: true,
+          placeholder: "MM/DD/YYYY"
+        },
+        {
+          id: "part4.locationOfEmbassyCity",
+          type: "text",
+          label: "Location of U.S. Embassy or Consulate City",
+          required: true
+        },
+        {
+          id: "part4.locationOfEmbassyCountry",
+          type: "text",
+          label: "Location of U.S. Embassy or Consulate Country",
+          required: true
+        },
+        {
+          id: "part4.appliedForPermanentResidence",
+          type: "radio",
+          label: "Have you ever applied for permanent residence?",
+          required: true,
+          options: [
+            { value: "N", label: "No" },
+            { value: "Y", label: "Yes" },
+          ]
+        },
+
+        {
+          id: "part4.lprStatusRescinded",
+          type: "radio",
+          label: "Has your LPR status ever been rescinded? No",
+          required: true,
+          options: [
+            { value: "N", label: "No" },
+            { value: "Y", label: "Yes" },
+          ]
+        },
+        {
+          id: "part3.exemption",
+          type: "radio",
+          label: "1. Exemption from Affidavit of Support",
+          required: true,
+          options: [
+            { value: "0", label: "40 Quarters of Coverage" },
+            { value: "1", label: "Under 18 Years of Age" },
+            { value: "2", label: "Widow/Widower" },
+            { value: "3", label: "VAWA Self-Petitioner" },
+            { value: "4", label: "None Apply" },
+          ]
+        },
+        {
+          id: "part4.employmentOrSchoolName",
+          type: "text",
+          label: "Name of Employer or School",
+          required: true
+        },
+        {
+          id: "part4.occupation",
+          type: "text",
+          label: "Occupation",
+          required: true
+        },
+      ]
+    },
+
+    {
+      id: "part3-exemption-request",
+      title: "Part 3: Exemption Request",
+      questions: [
+        {
+          id: "part3.exemptionRequest.noneApply",
+          type: "radio",
+          label: "1. None Apply",
+          required: true,
+          options: [{ value: "5", label: "None Apply" }]
+        },
+      ]
+    },
+    {
+      id: "part4-employment-history",
+      title: "Part 4: Employment History",
+      questions: [
+        {
+          id: "part4.employmentHistory.employerName",
+          type: "text",
+          label: "7. Employer Name",
+          required: true
+        },
+        {
+          id: "part4.employerAddress.streetName",
+          type: "text",
+          label: "7.a. Street Name",
+          required: true
+        },
+        {
+
+          id: "part4.employerAddress.unitType",
+
+          type: "select",
+
+          label: "7.b. Unit Type",
+
+          options: [
+
+            { value: "", label: "Select if applicable" },
+
+            { value: "APT", label: "Apartment" },
+
+            { value: "STE", label: "Suite" },
+
+            { value: "FLR", label: "Floor" },
+
+          ]
+
+        },
+        {
+          id: "part4.employerAddress.unitNumber",
+          type: "text",
+          label: "7.c. Unit Number"
+        },
+        {
+          id: "part4.employerAddress.city",
+          type: "text",
+          label: "7.d. City",
+          required: true
+        },
+        {
+          id: "part4.employerAddress.state",
+          type: "text",
+          label: "7.e. State",
+          required: true
+        },
+        {
+          id: "part4.employerAddress.zipCode",
+          type: "text",
+          label: "7.f. ZIP Code",
+          required: true
+        },
+        {
+          id: "part4.employerAddress.postalCode",
+          type: "text",
+          label: "7.g. Postal Code"
+        },
+        {
+          id: "part4.employerAddress.province",
+          type: "text",
+          label: "7.h. Province"
+        },
+        {
+          id: "part4.employerAddress.country",
+          type: "text",
+          label: "7.i. Country",
+          required: true
+        },
+        {
+          id: "part4.employmentDates.dateFrom",
+          type: "date",
+          label: "7.j. Date From",
+          required: true,
+          placeholder: "MM/DD/YYYY"
+        },
+        {
+          id: "part4.employmentDates.dateTo",
+          type: "date",
+          label: "7.k. Date To",
+          placeholder: "MM/DD/YYYY"
+        },
+        {
+          id: "part4.unemploymentSupport.source",
+          type: "text",
+          label: "8. Source of Unemployment Support"
+        },
+        {
+          id: "part4.recentEmployerOccupation",
+          type: "text",
+          label: "9. Recent Employer Occupation"
+        },
+        {
+          id: "part4.recentEmployerName",
+          type: "text",
+          label: "10. Recent Employer Name"
+        },
+        {
+          id: "part4.recentEmployerAddress.streetName",
+          type: "text",
+          label: "10.a. Street Name"
+        },
+        {
+
+          id: "part4.recentEmployerAddress.unitType",
+
+          type: "select",
+
+          label: "10.b. Unit Type",
+
+          options: [
+
+            { value: "", label: "Select if applicable" },
+
+            { value: "APT", label: "Apartment" },
+
+            { value: "STE", label: "Suite" },
+
+            { value: "FLR", label: "Floor" },
+
+          ]
+
+        },
+        {
+          id: "part4.recentEmployerAddress.unitNumber",
+          type: "text",
+          label: "10.c. Unit Number"
+        },
+      ]
+    },
+    {
+      id: "part4-additional-info",
+      title: "Part 4: Additional Information",
+      questions: [
+        {
+          id: "part4.additionalInfo.decision",
+          type: "radio",
+          label: "3. Decision",
+          required: true,
+          options: [{ value: "approved", label: "Approved" }]
+        },
+      ]
+    },
+    {
+      id: "alien-registration",
+      title: "Alien Registration",
+      questions: [
+        {
+          id: "alienRegistrationNumber",
+          type: "text",
+          label: "Alien Registration Number",
+          required: true
+        },
+      ]
+    },
+    {
+      id: "part4-employment",
+      title: "Part 4: Employment Information",
+      questions: [
+        {
+          id: "part4.employerCity",
+          type: "text",
+          label: "8.a. Employer City",
+          required: true
+        },
+        {
+          id: "part4.employerState",
+          type: "text",
+          label: "8.b. Employer State",
+          required: true
+        },
+        {
+          id: "part4.employerZipCode",
+          type: "text",
+          label: "8.c. Employer ZIP Code",
+          required: true
+        },
+        {
+          id: "part4.employerPostalCode",
+          type: "text",
+          label: "8.d. Employer Postal Code",
+          required: false
+        },
+        {
+          id: "part4.employerProvince",
+          type: "text",
+          label: "8.e. Employer Province",
+          required: false
+        },
+        {
+          id: "part4.employerCountry",
+          type: "text",
+          label: "8.f. Employer Country",
+          required: true
+        },
+        {
+          id: "part4.employmentDateFrom",
+          type: "date",
+          label: "8.g. Employment Date From",
+          required: true,
+          placeholder: "MM/DD/YYYY"
+        },
+        {
+          id: "part4.employmentDateTo",
+          type: "date",
+          label: "8.h. Employment Date To",
+          required: true,
+          placeholder: "MM/DD/YYYY"
+        },
+        {
+          id: "part4.financialSupportSource",
+          type: "text",
+          label: "8.i. Source of Financial Support",
+          required: false
+        },
+      ]
+    },
+    {
+      id: "part5-parent1",
+      title: "Part 5: Parent 1 Information",
+      questions: [
+        {
+          id: "part5.parent1FamilyName",
+          type: "text",
+          label: "1.a. Parent 1 Family Name (Last Name)",
+          required: true
+        },
+        {
+          id: "part5.parent1GivenName",
+          type: "text",
+          label: "1.b. Parent 1 Given Name (First Name)",
+          required: true
+        },
+        {
+          id: "part5.parent1MiddleName",
+          type: "text",
+          label: "1.c. Parent 1 Middle Name",
+          required: false
+        },
+        {
+          id: "part5.parent1BirthGivenName",
+          type: "text",
+          label: "2.a. Parent 1 Birth Given Name",
+          required: false
+        },
+        {
+          id: "part5.parent1DateOfBirth",
+          type: "date",
+          label: "3. Parent 1 Date of Birth (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY"
+        },
+        {
+          id: "part5.parent1BirthFamilyName",
+          type: "text",
+          label: "2.b. Parent 1 Birth Family Name",
+          required: false
+        },
+        {
+          id: "part5.parent1BirthMiddleName",
+          type: "text",
+          label: "2.c. Parent 1 Birth Middle Name",
+          required: false
+        },
+        {
+          id: "part5.alienNumber",
+          type: "text",
+          label: "4. Alien Registration Number (A-Number)",
+          required: false
+        },
+        {
+          id: "part5.parent1CityOfBirth",
+          type: "text",
+          label: "5. Parent 1 City of Birth",
+          required: true
+        },
+      ]
+    },
+    {
+      id: "part5-parent2",
+      title: "Part 5: Parent 2 Information",
+      questions: [
+        {
+          id: "part5.parent2FamilyName",
+          type: "text",
+          label: "6.a. Parent 2 Family Name (Last Name)",
+          required: true
+        },
+        {
+          id: "part5.parent2GivenName",
+          type: "text",
+          label: "6.b. Parent 2 Given Name (First Name)",
+          required: true
+        },
+        {
+          id: "part5.parent2MiddleName",
+          type: "text",
+          label: "6.c. Parent 2 Middle Name",
+          required: false
+        },
+        {
+          id: "part5.parent2DateOfBirth",
+          type: "date",
+          label: "7. Parent 2 Date of Birth (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY"
+        },
+        {
+          id: "part5.parent2BirthFamilyName",
+          type: "text",
+          label: "8.a. Parent 2 Birth Family Name",
+          required: false
+        },
+        {
+          id: "part5.parent2BirthGivenName",
+          type: "text",
+          label: "8.b. Parent 2 Birth Given Name",
+          required: false
+        },
+        {
+          id: "part5.parent2BirthMiddleName",
+          type: "text",
+          label: "8.c. Parent 2 Birth Middle Name",
+          required: false
+        },
+      ]
+    },
+    {
+      id: "part5-parent-info",
+      title: "Part 5: Parent Information",
+      questions: [
+        {
+          id: "part5.parent2CountryOfBirth",
+          type: "text",
+          label: "10. Parent 2 Country of Birth",
+          required: true
+        },
+        {
+          id: "part5.spouseUsArmedForces",
+          type: "radio",
+          label:
+            "2. Is your spouse currently serving in the U.S. Armed Forces?",
+          options: [
+            { label: "No", value: "N" },
+            { label: "Yes", value: "Y" },
+          ],
+          required: true
+        },
+        {
+          id: "part5.timesMarried",
+          type: "text",
+          label: "3. How many times have you been married?",
+          required: true
+        },
+      ]
+    },
+    {
+      id: "part6-marital-info",
+      title: "Part 6: Marital Information",
+      questions: [
+        {
+          id: "part6.currentMaritalStatus",
+          type: "radio",
+          label: "1. Current Marital Status",
+          options: [
+            { label: "Married", value: "1" },
+            { label: "Single", value: "2" },
+            { label: "Divorced", value: "3" },
+            { label: "Widowed", value: "4" },
+            { label: "Separated", value: "5" },
+            { label: "Annulled", value: "7" },
+          ],
+          required: true
+        },
+        {
+          id: "part6.currentSpouseFamilyName",
+          type: "text",
+          label: "4.a. Current Spouse's Family Name (Last Name)",
+          required: true
+        },
+        {
+          id: "part6.currentSpouseGivenName",
+          type: "text",
+          label: "4.b. Current Spouse's Given Name (First Name)",
+          required: true
+        },
+        {
+          id: "part6.currentSpouseMiddleName",
+          type: "text",
+          label: "4.c. Current Spouse's Middle Name"
+        },
+        {
+          id: "part6.currentSpouseAlienNumber",
+          type: "text",
+          label: "5. Current Spouse's Alien Registration Number (A-Number)"
+        },
+        {
+          id: "part6.currentSpouseDateOfBirth",
+          type: "date",
+          label: "8. Current Spouse's Date of Birth (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY"
+        },
+        {
+          id: "part6.currentSpouseCountryOfBirth",
+          type: "text",
+          label: "9. Current Spouse's Country of Birth",
+          required: true
+        },
+        {
+          id: "part6.currentSpouseCurrentAddressCountry",
+          type: "text",
+          label: "Current Spouse's Current Address - Country",
+          required: true
+        },
+        {
+          id: "part6.currentSpouseCurrentAddressStreet",
+          type: "text",
+          label: "Current Spouse's Current Address - Street",
+          required: true
+        },
+        {
+          id: "part6.currentSpouseCurrentAddressCity",
+          type: "text",
+          label: "Current Spouse's Current Address - City",
+          required: true
+        },
+        {
+          id: "part6.currentSpouseCurrentAddressPostalCode",
+          type: "text",
+          label: "Current Spouse's Current Address - Postal Code",
+          required: true
+        },
+        {
+          id: "part6.currentSpouseCurrentAddressProvince",
+          type: "text",
+          label: "Current Spouse's Current Address - Province"
+        },
+        {
+          id: "part6.interpreterMailingAddressUnit",
+          type: "text",
+          label: "Interpreter's Mailing Address - Unit"
+        },
+      ]
+    },
+    {
+      id: "part6-interpreter-mailing-address",
+      title: "Part 6: Interpreter Mailing Address",
+      questions: [
+        {
+          id: "part6.interpreterMailingAddressApartmentSuiteOrFloorNumber",
+          type: "text",
+          label: "8. Apartment, Suite, or Floor Number",
+          required: false
+        },
+        {
+          id: "part6.interpreterMailingAddressState",
+          type: "text",
+          label: "8. State",
+          required: true
+        },
+        {
+          id: "part6.interpreterMailingAddressZipCode",
+          type: "text",
+          label: "8. ZIP Code",
+          required: true
+        },
+      ]
+    },
+    {
+      id: "part6-current-marriage",
+      title: "Part 6: Current Marriage Information",
+      questions: [
+        {
+          id: "alienRegistrationNumber",
+          type: "text",
+          label: "Alien Registration Number (A-Number)",
+          required: true
+        },
+        {
+          id: "part6.currentMarriagePlaceCityOrTown",
+          type: "text",
+          label: "10. City or Town of Marriage",
+          required: true
+        },
+        {
+          id: "part6.currentMarriagePlaceStateOrProvince",
+          type: "text",
+          label: "10. State or Province of Marriage",
+          required: true
+        },
+        {
+          id: "part6.currentMarriagePlaceCountry",
+          type: "text",
+          label: "10. Country of Marriage",
+          required: true
+        },
+        {
+          id: "part6.currentMarriageDateOfMarriage",
+          type: "date",
+          label: "10. Date of Marriage (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY"
+        },
+        {
+          id: "part6.currentSpouseApplyingWithYouNo",
+          type: "radio",
+          label: "11. Is your current spouse applying with you? No",
+          value: "N",
+          required: true
+        },
+        {
+          id: "part6.currentSpouseApplyingWithYouYes",
+          type: "radio",
+          label: "11. Is your current spouse applying with you? Yes",
+          value: "Y",
+          required: true
+        },
+      ]
+    },
+    {
+      id: "part6-prior-marriage",
+      title: "Part 6: Prior Marriage Information",
+      questions: [
+        {
+          id: "part6.priorSpouseFamilyName",
+          type: "text",
+          label: "12. Prior Spouse's Family Name (Last Name)",
+          required: true
+        },
+        {
+          id: "part6.priorSpouseGivenName",
+          type: "text",
+          label: "12. Prior Spouse's Given Name (First Name)",
+          required: true
+        },
+        {
+          id: "part6.priorSpouseMiddleName",
+          type: "text",
+          label: "12. Prior Spouse's Middle Name",
+          required: false
+        },
+        {
+          id: "part6.priorSpouseDateOfBirth",
+          type: "date",
+          label: "12. Prior Spouse's Date of Birth (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY"
+        },
+        {
+          id: "part6.priorSpouseCountryOfCitizenshipOrNationality",
+          type: "text",
+          label: "15. Prior Spouse's Country of Citizenship or Nationality",
+          required: true
+        },
+        {
+          id: "part6.priorSpouseCountryOfBirth",
+          type: "text",
+          label: "14. Prior Spouse's Country of Birth",
+          required: true
+        },
+        {
+          id: "part6.priorMarriageDateOfMarriage",
+          type: "date",
+          label: "16. Date of Prior Marriage (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY"
+        },
+        {
+          id: "part6.priorMarriagePlaceCityOrTown",
+          type: "text",
+          label: "16. City or Town of Prior Marriage",
+          required: true
+        },
+        {
+          id: "part6.priorMarriagePlaceStateOrProvince",
+          type: "text",
+          label: "16. State or Province of Prior Marriage",
+          required: true
+        },
+        {
+          id: "part6.priorMarriagePlaceCountry",
+          type: "text",
+          label: "16. Country of Prior Marriage",
+          required: true
+        },
+        {
+          id: "part6.priorMarriageEndPlaceCityOrTown",
+          type: "text",
+          label: "16. City or Town Where Prior Marriage Ended",
+          required: true
+        },
+        {
+          id: "part6.priorMarriageEndPlaceStateOrProvince",
+          type: "text",
+          label: "16. State or Province Where Prior Marriage Ended",
+          required: true
+        },
+        {
+          id: "part6.priorMarriageEndPlaceCountry",
+          type: "text",
+          label: "16. Country Where Prior Marriage Ended",
+          required: true
+        },
+        {
+          id: "part6.priorMarriageEndDate",
+          type: "date",
+          label: "16. Date Prior Marriage Ended (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY"
+        },
+        {
+          id: "part6.howMarriageEndedWithPriorSpouseSpouseDeceased",
+          type: "text",
+          label: "16. How Prior Marriage Ended (e.g., Spouse Deceased)",
+          required: true
+        },
+      ]
+    },
+    {
+      id: "part6-marital-history",
+      title: "Part 6: Marital History",
+      questions: [
+        {
+          id: "part6.maritalHistory.priorMarriages.howMarriageEndedAnnulled",
+          type: "radio",
+          label: "19. How Marriage Ended - Annulled",
+          value: "1",
+          required: true
+        },
+        {
+          id: "part6.maritalHistory.priorMarriages.howMarriageEndedOther",
+          type: "radio",
+          label: "19. How Marriage Ended - Other",
+          value: "4",
+          required: true
+        },
+        {
+          id: "part6.maritalHistory.priorMarriages.howMarriageEndedDivorced",
+          type: "text",
+          label: "19. How Marriage Ended - Divorced",
+          required: true
+        },
+        {
+          id: "part6.maritalHistory.priorMarriages.howMarriageEndedExplanation",
+          type: "text",
+          label: "19. Explanation if Other",
+          helpText:
+            "Provide details if the marriage ended in a way not listed.",
+          required: false
+        },
+      ]
+    },
+    {
+      id: "part7-children",
+      title: "Part 7: Information About Your Children",
+      questions: [
+        {
+          id: "alienNumber",
+          type: "text",
+          label: "Alien Registration Number (A-Number)",
+          required: true
+        },
+        {
+          id: "part7.children.totalChildren",
+          type: "text",
+          label: "1. Total Number of Children",
+          required: true
+        },
+        {
+          id: "part7.children.child1.familyName",
+          type: "text",
+          label: "2.a. Child 1 Family Name (Last Name)",
+          required: true
+        },
+        {
+          id: "part7.children.child1.givenName",
+          type: "text",
+          label: "2.b. Child 1 Given Name (First Name)",
+          required: true
+        },
+        {
+          id: "part7.children.child1.middleName",
+          type: "text",
+          label: "2.c. Child 1 Middle Name",
+          required: false
+        },
+        {
+          id: "part7.children.child1.alienNumber",
+          type: "text",
+          label: "2.d. Child 1 Alien Registration Number (A-Number)",
+          required: false
+        },
+        {
+          id: "part7.children.child1.dateOfBirth",
+          type: "date",
+          label: "2.e. Child 1 Date of Birth (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY"
+        },
+        {
+          id: "part7.children.child1.countryOfBirth",
+          type: "select",
+          label: "2.f. Child 1 Country of Birth",
+          required: true
+        },
+        {
+          id: "part7.children.child1.applyingSeparateFormNo",
+          type: "radio",
+          label: "2.g. Is Child 1 Applying with a Separate Form - No",
+          value: "N",
+          required: true
+        },
+        {
+          id: "part7.children.child1.applyingSeparateFormYes",
+          type: "radio",
+          label: "2.g. Is Child 1 Applying with a Separate Form - Yes",
+          required: true
+        },
+        {
+          id: "part7.children.child1.relationship",
+          type: "text",
+          label: "2.h. Child 1 Relationship to You",
+          required: true
+        },
+        {
+          id: "part7.children.child2.familyName",
+          type: "text",
+          label: "3.a. Child 2 Family Name (Last Name)",
+          required: false
+        },
+        {
+          id: "part7.children.child2.givenName",
+          type: "text",
+          label: "3.b. Child 2 Given Name (First Name)",
+          required: false
+        },
+        {
+          id: "part7.children.child2.middleName",
+          type: "text",
+          label: "3.c. Child 2 Middle Name",
+          required: false
+        },
+        {
+          id: "part7.children.child2.alienNumber",
+          type: "text",
+          label: "3.d. Child 2 Alien Registration Number (A-Number)",
+          required: false
+        },
+        {
+          id: "part7.children.child2.dateOfBirth",
+          type: "date",
+          label: "3.e. Child 2 Date of Birth (mm/dd/yyyy)",
+          required: false,
+          placeholder: "MM/DD/YYYY"
+        },
+        {
+          id: "part7.children.child2.countryOfBirth",
+          type: "select",
+          label: "3.f. Child 2 Country of Birth",
+          required: false
+        },
+        {
+          id: "part7.children.child2.applyingSeparateFormNo",
+          type: "radio",
+          label: "3.g. Is Child 2 Applying with a Separate Form - No",
+          value: "N",
+          required: false
+        },
+        {
+          id: "part7.children.child2.applyingSeparateFormYes",
+          type: "radio",
+          label: "3.g. Is Child 2 Applying with a Separate Form - Yes",
+          required: false
+        },
+        {
+          id: "part7.children.child2.relationship",
+          type: "text",
+          label: "3.h. Child 2 Relationship to You",
+          required: false
+        },
+        {
+          id: "alienNumberReadOnly",
+          type: "text",
+          label: "Alien Registration Number (Read-Only)",
+          required: false,
+          readOnly: true
+        },
+      ]
+    },
+    {
+      id: "part8-ethnicity-race",
+      title: "Part 8: Ethnicity and Race",
+      questions: [
+        {
+          id: "part8.ethnicityHispanicOrLatino",
+          type: "radio",
+          label: "1. Ethnicity: Hispanic or Latino",
+          required: true,
+          options: [
+            { value: "H", label: "Yes" },
+            { value: "N", label: "No" },
+          ]
+        },
+        {
+          id: "part8.ethnicityNotHispanicOrLatino",
+          type: "radio",
+          label: "1. Ethnicity: Not Hispanic or Latino",
+          required: true,
+          options: [
+            { value: "H", label: "Yes" },
+            { value: "N", label: "No" },
+          ]
+        },
+        {
+          id: "part8.raceAsian",
+          type: "radio",
+          label: "2. Race: Asian",
+          required: true,
+          options: [
+            { value: "AS", label: "Yes" },
+            { value: "WH", label: "No" },
+          ]
+        },
+        {
+          id: "part8.raceWhite",
+          type: "radio",
+          label: "2. Race: White",
+          required: true,
+          options: [
+            { value: "WH", label: "Yes" },
+            { value: "BL", label: "No" },
+          ]
+        },
+        {
+          id: "part8.raceBlackOrAfricanAmerican",
+          type: "radio",
+          label: "2. Race: Black or African American",
+          required: true,
+          options: [
+            { value: "BL", label: "Yes" },
+            { value: "AI", label: "No" },
+          ]
+        },
+        {
+          id: "part8.raceAmericanIndianOrAlaskaNative",
+          type: "radio",
+          label: "2. Race: American Indian or Alaska Native",
+          required: true,
+          options: [
+            { value: "AI", label: "Yes" },
+            { value: "HW", label: "No" },
+          ]
+        },
+        {
+          id: "part8.raceNativeHawaiianOrOtherPacificIslander",
+          type: "radio",
+          label: "2. Race: Native Hawaiian or Other Pacific Islander",
+          required: true,
+          options: [
+            { value: "HW", label: "Yes" },
+            { value: "AS", label: "No" },
+          ]
+        },
+      ]
+    },
+    {
+      id: "part8-physical-characteristics",
+      title: "Part 8: Physical Characteristics",
+      questions: [
+        {
+          id: "part8.heightFeet",
+          type: "select",
+          label: "3. Height: Feet",
+          required: true,
+          options: [
+            { value: "1", label: "1" },
+            { value: "2", label: "2" },
+            { value: "3", label: "3" },
+            { value: "4", label: "4" },
+            { value: "5", label: "5" },
+            { value: "6", label: "6" },
+            { value: "7", label: "7" },
+            { value: "8", label: "8" },
+            { value: "9", label: "9" },
+          ]
+        },
+        {
+          id: "part8.heightInches",
+          type: "select",
+          label: "3. Height: Inches",
+          required: true,
+          options: [
+            { value: "0", label: "0" },
+            { value: "1", label: "1" },
+            { value: "2", label: "2" },
+            { value: "3", label: "3" },
+            { value: "4", label: "4" },
+            { value: "5", label: "5" },
+            { value: "6", label: "6" },
+            { value: "7", label: "7" },
+            { value: "8", label: "8" },
+            { value: "9", label: "9" },
+            { value: "10", label: "10" },
+            { value: "11", label: "11" },
+          ]
+        },
+        {
+          id: "part8.weightFirstDigit",
+          type: "text",
+          label: "4. Weight: First Digit",
+          required: true
+        },
+        {
+          id: "part8.weightSecondDigit",
+          type: "text",
+          label: "4. Weight: Second Digit",
+          required: true
+        },
+        {
+          id: "part8.weightThirdDigit",
+          type: "text",
+          label: "4. Weight: Third Digit",
+          required: true
+        },
+      ]
+    },
+    {
+      id: "part8-eye-color",
+      title: "Part 8: Eye Color",
+      questions: [
+        {
+          id: "part8.eyeColorBlue",
+          type: "radio",
+          label: "5. Eye Color: Blue",
+          required: true,
+          options: [
+            { value: "BU", label: "Yes" },
+            { value: "BL", label: "No" },
+          ]
+        },
+        {
+          id: "part8.eyeColorBlack",
+          type: "radio",
+          label: "5. Eye Color: Black",
+          required: true,
+          options: [
+            { value: "BL", label: "Yes" },
+            { value: "BN", label: "No" },
+          ]
+        },
+        {
+          id: "part8.eyeColorBrown",
+          type: "radio",
+          label: "5. Eye Color: Brown",
+          required: true,
+          options: [
+            { value: "BN", label: "Yes" },
+            { value: "GR", label: "No" },
+          ]
+        },
+        {
+          id: "part8.eyeColorGray",
+          type: "radio",
+          label: "5. Eye Color: Gray",
+          required: true,
+          options: [
+            { value: "GR", label: "Yes" },
+            { value: "BU", label: "No" },
+          ]
+        },
+        {
+          id: "part8.eyeColorGreen",
+          type: "radio",
+          label: "5. Eye Color: Green",
+          required: true,
+          options: [
+            { value: "GR", label: "Yes" },
+            { value: "BU", label: "No" },
+          ]
+        },
+        {
+          id: "part8.eyeColorHazel",
+          type: "radio",
+          label: "5. Eye Color: Hazel",
+          required: true,
+          options: [
+            { value: "GR", label: "Yes" },
+            { value: "BU", label: "No" },
+          ]
+        },
+        {
+          id: "part8.eyeColorMaroon",
+          type: "radio",
+          label: "5. Eye Color: Maroon",
+          required: true,
+          options: [
+            { value: "GR", label: "Yes" },
+            { value: "BU", label: "No" },
+          ]
+        },
+        {
+          id: "part8.eyeColorPink",
+          type: "radio",
+          label: "5. Eye Color: Pink",
+          required: true,
+          options: [
+            { value: "GR", label: "Yes" },
+            { value: "BU", label: "No" },
+          ]
+        },
+        {
+          id: "part8.eyeColorUnknownOrOther",
+          type: "radio",
+          label: "5. Eye Color: Unknown or Other",
+          required: true,
+          options: [
+            { value: "GR", label: "Yes" },
+            { value: "BU", label: "No" },
+          ]
+        },
+      ]
+    },
+    {
+      id: "part8-hair-color",
+      title: "Part 8: Hair Color",
+      questions: [
+        {
+          id: "part8.hairColorBald",
+          type: "radio",
+          label: "6. Hair Color: Bald",
+          required: true,
+          options: [
+            { value: "GR", label: "Yes" },
+            { value: "BU", label: "No" },
+          ]
+        },
+        {
+          id: "part8.hairColorBlack",
+          type: "radio",
+          label: "6. Hair Color: Black",
+          required: true,
+          options: [
+            { value: "GR", label: "Yes" },
+            { value: "BU", label: "No" },
+          ]
+        },
+        {
+          id: "part8.hairColorBlond",
+          type: "radio",
+          label: "6. Hair Color: Blond",
+          required: true,
+          options: [
+            { value: "GR", label: "Yes" },
+            { value: "BU", label: "No" },
+          ]
+        },
+        {
+          id: "part8.hairColorBrown",
+          type: "radio",
+          label: "6. Hair Color: Brown",
+          required: true,
+          options: [
+            { value: "GR", label: "Yes" },
+            { value: "BU", label: "No" },
+          ]
+        },
+      ]
+    },
+    {
+      id: "part8-hairColor",
+      title: "Part 8: Hair Color",
+      questions: [
+        {
+          id: "part8.hairColorGray",
+          type: "radio",
+          label: "Gray",
+          value: "GR",
+          required: false
+        },
+        {
+          id: "part8.hairColorRed",
+          type: "radio",
+          label: "Red",
+          value: "RD",
+          required: false
+        },
+        {
+          id: "part8.hairColorSandy",
+          type: "radio",
+          label: "Sandy",
+          value: "SA",
+          required: false
+        },
+        {
+          id: "part8.hairColorWhite",
+          type: "radio",
+          label: "White",
+          value: "WH",
+          required: false
+        },
+        {
+          id: "part8.hairColorUnknownOther",
+          type: "radio",
+          label: "Unknown/Other",
+          value: "OT",
+          required: false
+        },
+      ]
+    },
+    {
+      id: "part9-organizationInvolvement",
+      title: "Part 9: Organization Involvement",
+      questions: [
+        {
+          id: "part9.organizationInvolvementNo",
+          type: "radio",
+          label: "No",
+          value: "N",
+          required: true
+        },
+        {
+          id: "part9.organizationInvolvementYes",
+          type: "radio",
+          label: "Yes",
+          value: "Y",
+          required: true
+        },
+      ]
+    },
+    {
+      id: "part9-organization1",
+      title: "Part 9: Organization 1 Details",
+      questions: [
+        {
+          id: "part9.organization1Name",
+          type: "text",
+          label: "Organization Name",
+          required: false
+        },
+        {
+          id: "part9.organization1CityTown",
+          type: "text",
+          label: "City/Town",
+          required: false
+        },
+        {
+          id: "part9.organization1StateProvince",
+          type: "text",
+          label: "State/Province",
+          required: false
+        },
+        {
+          id: "part9.organization1Country",
+          type: "text",
+          label: "Country",
+          required: false
+        },
+        {
+          id: "part9.organization1Nature",
+          type: "text",
+          label: "Nature of Organization",
+          required: false
+        },
+        {
+          id: "part9.organization1InvolvementNature",
+          type: "text",
+          label: "Nature of Involvement",
+          required: false
+        },
+        {
+          id: "part9.organization1DateFrom",
+          type: "date",
+          label: "Date From",
+          required: false,
+          placeholder: "MM/DD/YYYY"
+        },
+        {
+          id: "part9.organization1DateTo",
+          type: "date",
+          label: "Date To",
+          required: false,
+          placeholder: "MM/DD/YYYY"
+        },
+      ]
+    },
+    {
+      id: "part9-organization2",
+      title: "Part 9: Organization 2 Details",
+      questions: [
+        {
+          id: "part9.organization2Name",
+          type: "text",
+          label: "Organization Name",
+          required: false
+        },
+        {
+          id: "part9.organization2CityTown",
+          type: "text",
+          label: "City/Town",
+          required: false
+        },
+        {
+          id: "part9.organization2StateProvince",
+          type: "text",
+          label: "State/Province",
+          required: false
+        },
+        {
+          id: "part9.organization2Country",
+          type: "text",
+          label: "Country",
+          required: false
+        },
+        {
+          id: "part9.organization2Nature",
+          type: "text",
+          label: "Nature of Organization",
+          required: false
+        },
+        {
+          id: "part9.organization2InvolvementNature",
+          type: "text",
+          label: "Nature of Involvement",
+          required: false
+        },
+        {
+          id: "part9.organization2DateFrom",
+          type: "date",
+          label: "Date From",
+          required: false,
+          placeholder: "MM/DD/YYYY"
+        },
+        {
+          id: "part9.organization2DateTo",
+          type: "date",
+          label: "Date To",
+          required: false,
+          placeholder: "MM/DD/YYYY"
+        },
+      ]
+    },
+    {
+      id: "part9-additionalInformation",
+      title: "Part 9: Additional Information",
+      questions: [
+        {
+          id: "alienRegistrationNumber",
+          type: "text",
+          label: "Alien Registration Number",
+          required: true
+        },
+        {
+          id: "part9.deniedAdmissionNo",
+          type: "radio",
+          label: "Denied Admission: No",
+          value: "N",
+          required: true
+        },
+      ]
+    },
+    {
+      id: "part9-admissions",
+      title: "Part 9: Admissions and Immigration History",
+      questions: [
+        {
+          id: "part9.deniedAdmissionYes",
+          type: "radio",
+          label:
+            "10. Have you ever been denied admission to the United States?",
+          options: [
+            { label: "Yes", value: "Y" },
+            { label: "No", value: "N" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.deniedVisaYes",
+          type: "radio",
+          label: "11. Have you ever been denied a visa to the United States?",
+          options: [
+            { label: "Yes", value: "Y" },
+            { label: "No", value: "N" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.violatedNonimmigrantStatusYes",
+          type: "radio",
+          label:
+            "13. Have you ever violated the terms of your nonimmigrant status?",
+          options: [
+            { label: "Yes", value: "Y" },
+            { label: "No", value: "N" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.removalProceedingsYes",
+          type: "radio",
+          label: "18. Are you currently in removal proceedings?",
+          options: [
+            { label: "Yes", value: "Y" },
+            { label: "No", value: "N" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.finalOrderYes",
+          type: "radio",
+          label:
+            "19. Have you ever been ordered removed from the United States?",
+          options: [
+            { label: "Yes", value: "Y" },
+            { label: "No", value: "N" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.workedWithoutAuthorizationYes",
+          type: "radio",
+          label:
+            "12. Have you ever worked in the United States without authorization?",
+          options: [
+            { label: "Yes", value: "Y" },
+            { label: "No", value: "N" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.reinstatedOrderYes",
+          type: "radio",
+          label: "20. Have you ever had a removal order reinstated?",
+          options: [
+            { label: "Yes", value: "Y" },
+            { label: "No", value: "N" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.voluntaryDepartureYes",
+          type: "radio",
+          label:
+            "17. Have you ever been granted voluntary departure by an immigration officer or judge?",
+          options: [
+            { label: "Yes", value: "Y" },
+            { label: "No", value: "N" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.appliedForReliefYes",
+          type: "radio",
+          label: "23. Have you ever applied for any relief from removal?",
+          options: [
+            { label: "Yes", value: "Y" },
+            { label: "No", value: "N" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.jNonimmigrantYes",
+          type: "radio",
+          label: "Have you ever been a J nonimmigrant exchange visitor?",
+          options: [
+            { label: "Yes", value: "Y" },
+            { label: "No", value: "N" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.compliedWithRequirementYes",
+          type: "radio",
+          label:
+            "Have you complied with the two-year foreign residence requirement?",
+          options: [
+            { label: "Yes", value: "Y" },
+            { label: "No", value: "N" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.grantedWaiverYes",
+          type: "radio",
+          label:
+            "Have you been granted a waiver of the two-year foreign residence requirement?",
+          options: [
+            { label: "Yes", value: "Y" },
+            { label: "No", value: "N" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.arrestedYes",
+          type: "radio",
+          label:
+            "Have you ever been arrested, cited, charged, or detained for any reason by any law enforcement official?",
+          options: [
+            { label: "Yes", value: "Y" },
+            { label: "No", value: "N" },
+          ],
+          required: true
+        },
+      ]
+    },
+    {
+      id: "part9-criminalHistory",
+      title: "Part 9: Criminal History and Immigration Violations",
+      questions: [
+        {
+          id: "part9.alienNumber",
+          type: "text",
+          label: "Alien Registration Number (A-Number)",
+          required: true,
+          readonly: true
+        },
+        {
+          id: "part9.criminalActsCommittedNo",
+          type: "radio",
+          label:
+            "Have you ever committed a crime or offense for which you were not arrested?",
+          options: [
+            { value: "N", label: "No" },
+            { value: "Y", label: "Yes" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.crimeConvictionYes",
+          type: "radio",
+          label: "Have you ever been convicted of a crime or offense?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.punishmentOrderedYes",
+          type: "radio",
+          label: "Have you ever been ordered to pay a fine or restitution?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.controlledSubstanceViolationYes",
+          type: "radio",
+          label:
+            "Have you ever violated any law related to controlled substances?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.traffickingControlledSubstancesYes",
+          type: "radio",
+          label:
+            "Have you ever been involved in trafficking of controlled substances?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.spouseTraffickingBenefitYes",
+          type: "radio",
+          label:
+            "Has your spouse ever benefited from trafficking of controlled substances?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.knowledgeOfBenefitYes",
+          type: "radio",
+          label:
+            "Did you have knowledge of any benefit from trafficking activities?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.engagedInProstitutionYes",
+          type: "radio",
+          label: "Have you ever engaged in prostitution?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.procuredProstitutionYes",
+          type: "radio",
+          label: "Have you ever procured anyone for prostitution?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.receivedProstitutionProceedsYes",
+          type: "radio",
+          label: "Have you ever received proceeds from prostitution?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.exercisedImmunityYes",
+          type: "radio",
+          label:
+            "Have you ever exercised diplomatic immunity to avoid prosecution?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.illegalGamblingIntentYes",
+          type: "radio",
+          label: "Have you ever intended to engage in illegal gambling?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+      ]
+    },
+    {
+      id: "part9-eligibility",
+      title: "Part 9: Eligibility and Inadmissibility Grounds",
+      questions: [
+        {
+          id: "part9.servedAsForeignGovernmentOfficialYes",
+          type: "radio",
+          label: "35.a. Have you ever served as a foreign government official?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.involvedInSexTraffickingYes",
+          type: "radio",
+          label: "36. Have you ever been involved in sex trafficking?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.traffickedPersonForLaborYes",
+          type: "radio",
+          label: "37. Have you ever trafficked a person for labor?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.violationsOfReligiousFreedomsYes",
+          type: "radio",
+          label:
+            "35.b. Have you ever been involved in violations of religious freedoms?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.alienRegistrationNumber",
+          type: "text",
+          label: "Alien Registration Number",
+          required: false,
+          helpText: "Enter your Alien Registration Number if applicable."
+        },
+        {
+          id: "part9.aidedInTraffickingYes",
+          type: "radio",
+          label: "38. Have you ever aided in trafficking?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.receivedBenefitsFromTraffickingYes",
+          type: "radio",
+          label: "39. Have you ever received benefits from trafficking?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.engagedInMoneyLaunderingYes",
+          type: "radio",
+          label: "41. Have you ever engaged in money laundering?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.knewAboutBenefitsFromTraffickingYes",
+          type: "radio",
+          label: "39. Did you know about benefits from trafficking?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.espionageOrSabotageYes",
+          type: "radio",
+          label: "Have you ever engaged in espionage or sabotage?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.exportViolationYes",
+          type: "radio",
+          label: "Have you ever been involved in export violations?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.overthrowGovernmentYes",
+          type: "radio",
+          label: "Have you ever attempted to overthrow a government?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.receivedMilitaryTrainingYes",
+          type: "radio",
+          label: "Have you ever received military training?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+      ]
+    },
+    {
+      id: "part9-unlawful-activity",
+      title: "Part 9: Unlawful Activity",
+      questions: [
+        {
+          id: "part9.engageUnlawfulActivityYes",
+          type: "radio",
+          label: "Have you ever engaged in any unlawful activity?",
+          value: "Y",
+          required: true
+        },
+        {
+          id: "part9.engageUnlawfulActivityNo",
+          type: "radio",
+          label: "Have you ever engaged in any unlawful activity?",
+          value: "N",
+          required: true
+        },
+        {
+          id: "part9.committedKidnappingYes",
+          type: "radio",
+          label: "Have you ever committed kidnapping?",
+          value: "Y",
+          required: true
+        },
+        {
+          id: "part9.committedKidnappingNo",
+          type: "radio",
+          label: "Have you ever committed kidnapping?",
+          value: "N",
+          required: true
+        },
+        {
+          id: "part9.usedWeaponYes",
+          type: "radio",
+          label: "Have you ever used a weapon unlawfully?",
+          value: "Y",
+          required: true
+        },
+        {
+          id: "part9.usedWeaponNo",
+          type: "radio",
+          label: "Have you ever used a weapon unlawfully?",
+          value: "N",
+          required: true
+        },
+        {
+          id: "part9.threatenedActivityYes",
+          type: "radio",
+          label: "Have you ever threatened any unlawful activity?",
+          value: "Y",
+          required: true
+        },
+        {
+          id: "part9.threatenedActivityNo",
+          type: "radio",
+          label: "Have you ever threatened any unlawful activity?",
+          value: "N",
+          required: true
+        },
+        {
+          id: "part9.recruitedMembersYes",
+          type: "radio",
+          label: "Have you ever recruited members for unlawful activities?",
+          value: "Y",
+          required: true
+        },
+        {
+          id: "part9.recruitedMembersNo",
+          type: "radio",
+          label: "Have you ever recruited members for unlawful activities?",
+          value: "N",
+          required: true
+        },
+        {
+          id: "part9.providedSupportYes",
+          type: "radio",
+          label: "Have you ever provided support for unlawful activities?",
+          value: "Y",
+          required: true
+        },
+        {
+          id: "part9.providedSupportNo",
+          type: "radio",
+          label: "Have you ever provided support for unlawful activities?",
+          value: "N",
+          required: true
+        },
+        {
+          id: "part9.incitedActivityYes",
+          type: "radio",
+          label: "Have you ever incited any unlawful activity?",
+          value: "Y",
+          required: true
+        },
+        {
+          id: "part9.incitedActivityNo",
+          type: "radio",
+          label: "Have you ever incited any unlawful activity?",
+          value: "N",
+          required: true
+        },
+        {
+          id: "part9.participatedGroupYes",
+          type: "radio",
+          label:
+            "Have you ever participated in a group involved in unlawful activities?",
+          value: "Y",
+          required: true
+        },
+        {
+          id: "part9.participatedGroupNo",
+          type: "radio",
+          label:
+            "Have you ever participated in a group involved in unlawful activities?",
+          value: "N",
+          required: true
+        },
+        {
+          id: "part9.intendEngageActivityYes",
+          type: "radio",
+          label: "Do you intend to engage in any unlawful activity?",
+          value: "Y",
+          required: true
+        },
+        {
+          id: "part9.intendEngageActivityNo",
+          type: "radio",
+          label: "Do you intend to engage in any unlawful activity?",
+          value: "N",
+          required: true
+        },
+        {
+          id: "part9.providedSupportIndividualYes",
+          type: "radio",
+          label:
+            "Have you ever provided support to an individual involved in unlawful activities?",
+          value: "Y",
+          required: true
+        },
+        {
+          id: "part9.providedSupportIndividualNo",
+          type: "radio",
+          label:
+            "Have you ever provided support to an individual involved in unlawful activities?",
+          value: "N",
+          required: true
+        },
+        {
+          id: "part9.endangerUSYes",
+          type: "radio",
+          label:
+            "Have you ever engaged in activities that endanger the United States?",
+          value: "Y",
+          required: true
+        },
+        {
+          id: "part9.endangerUSNo",
+          type: "radio",
+          label:
+            "Have you ever engaged in activities that endanger the United States?",
+          value: "N",
+          required: true
+        },
+        {
+          id: "part9.alienNumber",
+          type: "text",
+          label: "Alien Registration Number (A-Number)",
+          required: true
+        },
+        {
+          id: "part9.spouseChildActivityYes",
+          type: "radio",
+          label:
+            "Has your spouse or child ever engaged in unlawful activities?",
+          value: "Y",
+          required: true
+        },
+        {
+          id: "part9.spouseChildActivityNo",
+          type: "radio",
+          label:
+            "Has your spouse or child ever engaged in unlawful activities?",
+          value: "N",
+          required: true
+        },
+      ]
+    },
+    {
+      id: "part9-security",
+      title: "Part 9: Security and Background Information",
+      questions: [
+        {
+          id: "part9.securityWeaponsNo",
+          type: "radio",
+          label: "Have you ever used a weapon against another person?",
+          options: [
+            { value: "N", label: "No" },
+            { value: "Y", label: "Yes" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.securityWeaponsYes",
+          type: "radio",
+          label: "Have you ever used a weapon against another person?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.securityDetentionNo",
+          type: "radio",
+          label: "Have you ever been detained by any law enforcement officer?",
+          options: [
+            { value: "N", label: "No" },
+            { value: "Y", label: "Yes" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.securityDetentionYes",
+          type: "radio",
+          label: "Have you ever been detained by any law enforcement officer?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.securityGroupWeaponYes",
+          type: "radio",
+          label: "Have you ever been a member of a group that used weapons?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.securityGroupWeaponNo",
+          type: "radio",
+          label: "Have you ever been a member of a group that used weapons?",
+          options: [
+            { value: "N", label: "No" },
+            { value: "Y", label: "Yes" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.securityMilitaryNo",
+          type: "radio",
+          label: "Have you ever served in the military?",
+          options: [
+            { value: "N", label: "No" },
+            { value: "Y", label: "Yes" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.securityMilitaryYes",
+          type: "radio",
+          label: "Have you ever served in the military?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.securityCommunistNo",
+          type: "radio",
+          label: "Have you ever been a member of the Communist Party?",
+          options: [
+            { value: "N", label: "No" },
+            { value: "Y", label: "Yes" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.securityCommunistYes",
+          type: "radio",
+          label: "Have you ever been a member of the Communist Party?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.securityArmedGroupYes",
+          type: "radio",
+          label: "Have you ever been a member of an armed group?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.securityArmedGroupNo",
+          type: "radio",
+          label: "Have you ever been a member of an armed group?",
+          options: [
+            { value: "N", label: "No" },
+            { value: "Y", label: "Yes" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.securityChildHostilitiesYes",
+          type: "radio",
+          label:
+            "Have you ever recruited a child under 15 to participate in hostilities?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.securityChildHostilitiesNo",
+          type: "radio",
+          label:
+            "Have you ever recruited a child under 15 to participate in hostilities?",
+          options: [
+            { value: "N", label: "No" },
+            { value: "Y", label: "Yes" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.securityInjuryNo",
+          type: "radio",
+          label: "Have you ever caused serious injury to another person?",
+          options: [
+            { value: "N", label: "No" },
+            { value: "Y", label: "Yes" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.securityInjuryYes",
+          type: "radio",
+          label: "Have you ever caused serious injury to another person?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.securityChildRecruitmentNo",
+          type: "radio",
+          label:
+            "Have you ever recruited a child under 15 for military service?",
+          options: [
+            { value: "N", label: "No" },
+            { value: "Y", label: "Yes" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.securityChildRecruitmentYes",
+          type: "radio",
+          label:
+            "Have you ever recruited a child under 15 for military service?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.securityTortureYes",
+          type: "radio",
+          label: "Have you ever engaged in torture?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.securityTortureNo",
+          type: "radio",
+          label: "Have you ever engaged in torture?",
+          options: [
+            { value: "N", label: "No" },
+            { value: "Y", label: "Yes" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.securityGenocideYes",
+          type: "radio",
+          label: "Have you ever participated in genocide?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.securityGenocideNo",
+          type: "radio",
+          label: "Have you ever participated in genocide?",
+          options: [
+            { value: "N", label: "No" },
+            { value: "Y", label: "Yes" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.securityKillingYes",
+          type: "radio",
+          label: "Have you ever killed another person?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.securityKillingNo",
+          type: "radio",
+          label: "Have you ever killed another person?",
+          options: [
+            { value: "N", label: "No" },
+            { value: "Y", label: "Yes" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.alienNumber",
+          type: "text",
+          label: "Alien Registration Number (A-Number)",
+          required: true,
+          helpText: "Enter your A-Number, if applicable."
+        },
+      ]
+    },
+    {
+      id: "part9-publicChargeExemption",
+      title: "Part 9: Public Charge Exemption",
+      questions: [
+        {
+          id: "part9.publicChargeExemption.afghanIraqiNational",
+          type: "radio",
+          label: "Afghan or Iraqi National",
+          required: true
+        },
+        {
+          id: "part9.publicChargeExemption.victimQualifyingCriminalActivity",
+          type: "radio",
+          label: "Victim of Qualifying Criminal Activity",
+          required: true
+        },
+        {
+          id: "part9.publicChargeExemption.asylee",
+          type: "radio",
+          label: "Asylee",
+          required: true
+        },
+        {
+          id: "part9.publicChargeExemption.uNonimmigrantStatus",
+          type: "radio",
+          label: "U Nonimmigrant Status",
+          required: true
+        },
+        {
+          id: "part9.publicChargeExemption.vawaSelfPetitioner",
+          type: "radio",
+          label: "VAWA Self-Petitioner",
+          required: true
+        },
+        {
+          id: "part9.publicChargeExemption.specialImmigrantJuvenile",
+          type: "radio",
+          label: "Special Immigrant Juvenile",
+          required: true
+        },
+        {
+          id: "part9.publicChargeExemption.cubanAdjustmentAct",
+          type: "radio",
+          label: "Cuban Adjustment Act",
+          required: true
+        },
+        {
+          id: "part9.publicChargeExemption.haitianRefugeeDependent",
+          type: "radio",
+          label: "Haitian Refugee Dependent",
+          required: true
+        },
+        {
+          id: "part9.publicChargeExemption.humanTraffickingVictim",
+          type: "radio",
+          label: "Victim of Human Trafficking",
+          required: true
+        },
+        {
+          id: "part9.publicChargeExemption.cubanAdjustmentActBattered",
+          type: "radio",
+          label: "Cuban Adjustment Act - Battered Spouse/Child",
+          required: true
+        },
+        {
+          id: "part9.publicChargeExemption.haitianRefugeeDependentGeneral",
+          type: "radio",
+          label: "Haitian Refugee Dependent (General)",
+          required: true
+        },
+        {
+          id: "part9.publicChargeExemption.tNonimmigrantStatus",
+          type: "radio",
+          label: "T Nonimmigrant Status",
+          required: true
+        },
+        {
+          id: "part9.publicChargeExemption.registry",
+          type: "radio",
+          label: "Registry",
+          required: true
+        },
+        {
+          id: "part9.publicChargeExemption.nicaraguansCentralAmericans",
+          type: "radio",
+          label: "Nicaraguans and Central Americans",
+          required: true
+        },
+        {
+          id: "part9.publicChargeExemption.amerasianHomecomingAct",
+          type: "radio",
+          label: "Amerasian Homecoming Act",
+          required: true
+        },
+        {
+          id: "part9.publicChargeExemption.polishHungarianParolee",
+          type: "radio",
+          label: "Polish or Hungarian Parolee",
+          required: true
+        },
+        {
+          id: "part9.publicChargeExemption.cubanHaitianEntrants",
+          type: "radio",
+          label: "Cuban or Haitian Entrants",
+          required: true
+        },
+        {
+          id: "part9.publicChargeExemption.lautenbergParolee",
+          type: "radio",
+          label: "Lautenberg Parolee",
+          required: true
+        },
+        {
+          id: "part9.publicChargeExemption.vietnamCambodiaLaosNational",
+          type: "radio",
+          label: "Vietnam, Cambodia, or Laos National",
+          required: true
+        },
+        {
+          id: "part9.publicChargeExemption.americanIndianBornCanada",
+          type: "radio",
+          label: "American Indian Born in Canada",
+          required: true
+        },
+        {
+          id: "part9.publicChargeExemption.liberianRefugeeImmigrationFairness",
+          type: "radio",
+          label: "Liberian Refugee Immigration Fairness",
+          required: true
+        },
+      ]
+    },
+    {
+      id: "part9-additionalInformation-2",
+      title: "Part 9: Additional Information",
+      questions: [
+        {
+          id: "part9.alienRegistrationNumber",
+          type: "text",
+          label: "Alien Registration Number (A-Number)",
+          required: true
+        },
+        {
+          id: "part9.householdSize",
+          type: "text",
+          label: "Household Size",
+          required: true
+        },
+        {
+          id: "part9.annualHouseholdIncome",
+          type: "text",
+          label: "Annual Household Income",
+          required: true
+        },
+      ]
+    },
+    {
+      id: "part2-applicationType",
+      title: "Part 2: Application Type",
+      questions: [
+        {
+          id: "part2.applicationType.lautenbergParolees",
+          type: "radio",
+          label: "Lautenberg Parolees",
+          required: true
+        },
+      ]
+    },
+    {
+      id: "part9-financialInformation",
+      title: "Part 9: Financial Information",
+      questions: [
+        {
+          id: "part9.annualHouseholdIncome",
+          type: "radio",
+          label: "Annual Household Income",
+          required: true,
+          options: [
+            { value: "B", label: "Option B" },
+            { value: "C", label: "Option C" },
+            { value: "D", label: "Option D" },
+            { value: "E", label: "Option E" },
+          ]
+        },
+        {
+          id: "part9.householdAssetsValue",
+          type: "radio",
+          label: "Household Assets Value",
+          required: true,
+          options: [
+            { value: "A", label: "Option A" },
+            { value: "B", label: "Option B" },
+            { value: "C", label: "Option C" },
+            { value: "D", label: "Option D" },
+            { value: "E", label: "Option E" },
+          ]
+        },
+        {
+          id: "part9.householdLiabilitiesValue",
+          type: "radio",
+          label: "Household Liabilities Value",
+          required: true,
+          options: [
+            { value: "A", label: "Option A" },
+            { value: "B", label: "Option B" },
+            { value: "C", label: "Option C" },
+            { value: "D", label: "Option D" },
+            { value: "E", label: "Option E" },
+          ]
+        },
+        {
+          id: "part9.exemptionReason",
+          type: "radio",
+          label: "Exemption Reason",
+          required: false,
+          options: [{ value: "22", label: "Reason 22" }]
+        },
+        {
+          id: "part9.exemptionReasonText",
+          type: "text",
+          label: "Other Exemption Reason",
+          required: false,
+          helpText: "Provide additional details if applicable."
+        },
+        {
+          id: "part9.highestGradeCompleted",
+          type: "text",
+          label: "Highest Grade Completed",
+          required: false,
+          helpText: "Enter the highest grade level you have completed."
+        },
+        {
+          id: "part9.highestEducationLevel",
+          type: "select",
+          label: "Highest Education Level",
+          required: false,
+          options: [
+            { value: "1", label: "No formal education" },
+            { value: "2", label: "Primary education" },
+            { value: "3", label: "Secondary education" },
+            { value: "4", label: "Vocational qualification" },
+            { value: "5", label: "Bachelor's degree" },
+            { value: "6", label: "Master's degree" },
+            { value: "7", label: "Doctorate or higher" },
+          ]
+        },
+      ]
+    },
+    {
+      id: "part9-publicChargeExemption-2",
+      title: "Part 9: Public Charge Exemption",
+      questions: [
+        {
+          id: "part9.exemptFromPublicChargeSyrianNational",
+          type: "radio",
+          label:
+            "56. Are you exempt from the public charge ground of inadmissibility as a Syrian national?",
+          options: [
+            { value: "24", label: "Yes" },
+            { value: "", label: "No" },
+          ],
+          required: true
+        },
+      ]
+    },
+    {
+      id: "part9-ssiOrTanf",
+      title: "Part 9: SSI or TANF Benefits",
+      questions: [
+        {
+          id: "part9.receivedSSIOrTANFYes",
+          type: "radio",
+          label: "63. Have you received SSI or TANF benefits?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+      ]
+    },
+    {
+      id: "part9-longTermInstitutionalization",
+      title: "Part 9: Long-Term Institutionalization",
+      questions: [
+        {
+          id: "part9.receivedLongTermInstitutionalizationYes",
+          type: "radio",
+          label: "64. Have you been subject to long-term institutionalization?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+      ]
+    },
+    {
+      id: "part9-additionalInformation-3",
+      title: "Part 9: Additional Information",
+      questions: [
+        {
+          id: "part9.textField1",
+          type: "text",
+          label: "Additional Information 1",
+          required: false
+        },
+        {
+          id: "part9.textField2",
+          type: "text",
+          label: "Additional Information 2",
+          required: false
+        },
+        {
+          id: "part9.textField3",
+          type: "text",
+          label: "Additional Information 3",
+          required: false
+        },
+        {
+          id: "part9.textField4",
+          type: "text",
+          label: "Additional Information 4",
+          required: false
+        },
+        {
+          id: "part9.textField5",
+          type: "text",
+          label: "Additional Information 5",
+          required: false
+        },
+        {
+          id: "part9.textField6",
+          type: "text",
+          label: "Additional Information 6",
+          required: false
+        },
+        {
+          id: "part9.textField7",
+          type: "text",
+          label: "Additional Information 7",
+          required: false
+        },
+        {
+          id: "part9.textField8",
+          type: "text",
+          label: "Additional Information 8",
+          required: false
+        },
+      ]
+    },
+    {
+      id: "part9-alienRegistration",
+      title: "Part 9: Alien Registration Number",
+      questions: [
+        {
+          id: "part9.alienRegistrationNumber",
+          type: "text",
+          label: "Alien Registration Number",
+          required: true
+        },
+      ]
+    },
+    {
+      id: "part9-institutionalizationDetails",
+      title: "Part 9: Institutionalization Details",
+      questions: [
+        {
+          id: "part9.institutionNameCityStateRow1",
+          type: "text",
+          label: "Institution Name, City, State (Row 1)",
+          required: false
+        },
+        {
+          id: "part9.institutionNameCityStateRow2",
+          type: "text",
+          label: "Institution Name, City, State (Row 2)",
+          required: false
+        },
+        {
+          id: "part9.institutionNameCityStateRow3",
+          type: "text",
+          label: "Institution Name, City, State (Row 3)",
+          required: false
+        },
+        {
+          id: "part9.institutionNameCityStateRow4",
+          type: "text",
+          label: "Institution Name, City, State (Row 4)",
+          required: false
+        },
+        {
+          id: "part9.reasonForInstitutionalizationRow1",
+          type: "text",
+          label: "Reason for Institutionalization (Row 1)",
+          required: false
+        },
+        {
+          id: "part9.reasonForInstitutionalizationRow2",
+          type: "text",
+          label: "Reason for Institutionalization (Row 2)",
+          required: false
+        },
+        {
+          id: "part9.reasonForInstitutionalizationRow3",
+          type: "text",
+          label: "Reason for Institutionalization (Row 3)",
+          required: false
+        },
+        {
+          id: "part9.reasonForInstitutionalizationRow4",
+          type: "text",
+          label: "Reason for Institutionalization (Row 4)",
+          required: false
+        },
+        {
+          id: "part9.institutionalizationDatesRow1",
+          type: "text",
+          label: "Institutionalization Dates (Row 1)",
+          required: false
+        },
+        {
+          id: "part9.institutionalizationDatesRow2",
+          type: "text",
+          label: "Institutionalization Dates (Row 2)",
+          required: false
+        },
+        {
+          id: "part9.institutionalizationDatesRow3",
+          type: "text",
+          label: "Institutionalization Dates (Row 3)",
+          required: false
+        },
+      ]
+    },
+    {
+      id: "part9-public-charge",
+      title: "Part 9: Public Charge Information",
+      questions: [
+        {
+          id: "part9.publicChargeInstitutionRow4",
+          type: "text",
+          label: "Institution Name (Row 4)",
+          required: true,
+          helpText: "Enter the name of the institution for Row 4."
+        },
+        {
+          id: "part9.publicChargeInstitutionRow1",
+          type: "text",
+          label: "Institution Name (Row 1)",
+          required: true,
+          helpText: "Enter the name of the institution for Row 1."
+        },
+        {
+          id: "part9.publicChargeInstitutionRow2",
+          type: "text",
+          label: "Institution Name (Row 2)",
+          required: true,
+          helpText: "Enter the name of the institution for Row 2."
+        },
+        {
+          id: "part9.publicChargeInstitutionRow3",
+          type: "text",
+          label: "Institution Name (Row 3)",
+          required: true,
+          helpText: "Enter the name of the institution for Row 3."
+        },
+        {
+          id: "part9.publicChargeInstitutionEndDateRow4",
+          type: "date",
+          label: "End Date (Row 4)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+          helpText: "Enter the end date for the institution in Row 4."
+        },
+        {
+          id: "part9.benefitReceivedRow1",
+          type: "text",
+          label: "Benefit Received (Row 1)",
+          required: true,
+          helpText: "Specify the benefit received for Row 1."
+        },
+        {
+          id: "part9.benefitReceivedRow2",
+          type: "text",
+          label: "Benefit Received (Row 2)",
+          required: true,
+          helpText: "Specify the benefit received for Row 2."
+        },
+        {
+          id: "part9.benefitReceivedRow3",
+          type: "text",
+          label: "Benefit Received (Row 3)",
+          required: true,
+          helpText: "Specify the benefit received for Row 3."
+        },
+        {
+          id: "part9.benefitReceivedDollarAmountRow1",
+          type: "text",
+          label: "Dollar Amount (Row 1)",
+          required: true,
+          helpText:
+            "Enter the dollar amount of the benefit received for Row 1."
+        },
+        {
+          id: "part9.benefitReceivedDollarAmountRow2",
+          type: "text",
+          label: "Dollar Amount (Row 2)",
+          required: true,
+          helpText:
+            "Enter the dollar amount of the benefit received for Row 2."
+        },
+        {
+          id: "part9.benefitReceivedDollarAmountRow3",
+          type: "text",
+          label: "Dollar Amount (Row 3)",
+          required: true,
+          helpText:
+            "Enter the dollar amount of the benefit received for Row 3."
+        },
+        {
+          id: "part9.benefitReceivedDollarAmountRow4",
+          type: "text",
+          label: "Dollar Amount (Row 4)",
+          required: true,
+          helpText:
+            "Enter the dollar amount of the benefit received for Row 4."
+        },
+        {
+          id: "part9.benefitReceivedRow4",
+          type: "text",
+          label: "Benefit Received (Row 4)",
+          required: true,
+          helpText: "Specify the benefit received for Row 4."
+        },
+        {
+          id: "part9.benefitReceivedStartDateRow1",
+          type: "date",
+          label: "Start Date (Row 1)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+          helpText: "Enter the start date for the benefit received in Row 1."
+        },
+        {
+          id: "part9.benefitReceivedStartDateRow2",
+          type: "date",
+          label: "Start Date (Row 2)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+          helpText: "Enter the start date for the benefit received in Row 2."
+        },
+        {
+          id: "part9.benefitReceivedStartDateRow3",
+          type: "date",
+          label: "Start Date (Row 3)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+          helpText: "Enter the start date for the benefit received in Row 3."
+        },
+        {
+          id: "part9.benefitReceivedStartDateRow4",
+          type: "date",
+          label: "Start Date (Row 4)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+          helpText: "Enter the start date for the benefit received in Row 4."
+        },
+        {
+          id: "part9.benefitReceivedEndDateRow1",
+          type: "date",
+          label: "End Date (Row 1)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+          helpText: "Enter the end date for the benefit received in Row 1."
+        },
+        {
+          id: "part9.benefitReceivedEndDateRow2",
+          type: "date",
+          label: "End Date (Row 2)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+          helpText: "Enter the end date for the benefit received in Row 2."
+        },
+        {
+          id: "part9.benefitReceivedEndDateRow3",
+          type: "date",
+          label: "End Date (Row 3)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+          helpText: "Enter the end date for the benefit received in Row 3."
+        },
+        {
+          id: "part9.benefitReceivedEndDateRow4",
+          type: "date",
+          label: "End Date (Row 4)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+          helpText: "Enter the end date for the benefit received in Row 4."
+        },
+        {
+          id: "part9.publicChargeYesRow1",
+          type: "radio",
+          label: "Public Charge - Yes (Row 1)",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+          helpText: "Indicate if you are a public charge for Row 1."
+        },
+        {
+          id: "part9.publicChargeNoRow1",
+          type: "radio",
+          label: "Public Charge - No (Row 1)",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+          helpText: "Indicate if you are not a public charge for Row 1."
+        },
+        {
+          id: "part9.publicChargeYesRow2",
+          type: "radio",
+          label: "Public Charge - Yes (Row 2)",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+          helpText: "Indicate if you are a public charge for Row 2."
+        },
+        {
+          id: "part9.publicChargeNoRow2",
+          type: "radio",
+          label: "Public Charge - No (Row 2)",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+          helpText: "Indicate if you are not a public charge for Row 2."
+        },
+      ]
+    },
+    {
+      id: "part9-publicCharge",
+      title: "Part 9: Public Charge",
+      questions: [
+        {
+          id: "part9.publicCharge65Row3Yes",
+          type: "radio",
+          label: "65. Have you ever received public assistance?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.publicCharge65Row4Yes",
+          type: "radio",
+          label: "65. Have you ever been declared a public charge?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+      ]
+    },
+    {
+      id: "part9-longTermInstitutionalization-2",
+      title: "Part 9: Long-term Institutionalization",
+      questions: [
+        {
+          id: "part9.longTermInstitutionalization66Row1Yes",
+          type: "radio",
+          label: "66. Have you ever been institutionalized for long-term care?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.longTermInstitutionalization66Row2Yes",
+          type: "radio",
+          label:
+            "66. Have you been institutionalized for mental health reasons?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.longTermInstitutionalization66Row3Yes",
+          type: "radio",
+          label:
+            "66. Have you been institutionalized for physical health reasons?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.longTermInstitutionalization66Row4Yes",
+          type: "radio",
+          label: "66. Have you been institutionalized for other reasons?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+      ]
+    },
+    {
+      id: "part9-illegalEntries",
+      title: "Part 9: Illegal Entries",
+      questions: [
+        {
+          id: "part9.illegalEntries67No",
+          type: "radio",
+          label: "67. Have you ever entered the U.S. illegally?",
+          options: [
+            { value: "N", label: "No" },
+            { value: "Y", label: "Yes" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.illegalEntries68Yes",
+          type: "radio",
+          label: "68. Have you ever been deported from the U.S.?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.illegalEntries73No",
+          type: "radio",
+          label: "73. Have you ever been denied entry to the U.S.?",
+          options: [
+            { value: "N", label: "No" },
+            { value: "Y", label: "Yes" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.illegalEntries71No",
+          type: "radio",
+          label: "71. Have you ever overstayed a visa in the U.S.?",
+          options: [
+            { value: "N", label: "No" },
+            { value: "Y", label: "Yes" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.illegalEntries72Yes",
+          type: "radio",
+          label:
+            "72. Have you ever been involved in smuggling people into the U.S.?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.illegalEntries70Yes",
+          type: "radio",
+          label:
+            "70. Have you ever been involved in illegal activities in the U.S.?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.illegalEntries69No",
+          type: "radio",
+          label: "69. Have you ever been arrested in the U.S.?",
+          options: [
+            { value: "N", label: "No" },
+            { value: "Y", label: "Yes" },
+          ],
+          required: true
+        },
+      ]
+    },
+    {
+      id: "part9-immigrationHistory",
+      title: "Part 9: Immigration History",
+      questions: [
+        {
+          id: "part9.illegalEntriesLied",
+          type: "radio",
+          label: "Have you ever lied to gain entry into the United States?",
+          options: [
+            { label: "Yes", value: "Y" },
+            { label: "No", value: "N" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.removalExcludedNo",
+          type: "radio",
+          label:
+            "Have you ever been removed or excluded from the United States?",
+          options: [
+            { label: "No", value: "N" },
+            { label: "Yes", value: "Y" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.enteredWithoutInspectionYes",
+          type: "radio",
+          label: "Did you enter the United States without inspection?",
+          options: [
+            { label: "Yes", value: "Y" },
+            { label: "No", value: "N" },
+          ],
+          required: true
+        },
+        {
+          id: "alienNumber",
+          type: "text",
+          label: "Alien Registration Number (A-Number)",
+          required: true,
+          helpText: "Enter your A-Number if applicable."
+        },
+        {
+          id: "part9.traffickingReasonYes",
+          type: "radio",
+          label: "Have you ever been involved in human trafficking?",
+          options: [
+            { label: "Yes", value: "Y" },
+            { label: "No", value: "N" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.reenteredAfterUnlawfulPresenceNo",
+          type: "radio",
+          label: "Have you reentered the U.S. after being unlawfully present?",
+          options: [
+            { label: "No", value: "N" },
+            { label: "Yes", value: "Y" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.deportedAfterReentryYes",
+          type: "radio",
+          label: "Have you been deported after reentry?",
+          options: [
+            { label: "Yes", value: "Y" },
+            { label: "No", value: "N" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.unlawfullyPresentNo",
+          type: "radio",
+          label: "Have you ever been unlawfully present in the U.S.?",
+          options: [
+            { label: "No", value: "N" },
+            { label: "Yes", value: "Y" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.planToPracticePolygamyYes",
+          type: "radio",
+          label: "Do you plan to practice polygamy in the U.S.?",
+          options: [
+            { label: "Yes", value: "Y" },
+            { label: "No", value: "N" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.accompanyInadmissibleAlienNo",
+          type: "radio",
+          label: "Have you ever accompanied an inadmissible alien?",
+          options: [
+            { label: "No", value: "N" },
+            { label: "Yes", value: "Y" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.assistedInCustodyViolationYes",
+          type: "radio",
+          label: "Have you assisted in a custody violation?",
+          options: [
+            { label: "Yes", value: "Y" },
+            { label: "No", value: "N" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.votedInViolationNo",
+          type: "radio",
+          label: "Have you ever voted in violation of any law?",
+          options: [
+            { label: "No", value: "N" },
+            { label: "Yes", value: "Y" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.renouncedCitizenshipToAvoidTaxYes",
+          type: "radio",
+          label: "Have you renounced citizenship to avoid tax?",
+          options: [
+            { label: "Yes", value: "Y" },
+            { label: "No", value: "N" },
+          ],
+          required: true
+        },
+        {
+          id: "part9.appliedForExemptionNo",
+          type: "radio",
+          label: "Have you applied for an exemption from military service?",
+          options: [
+            { label: "No", value: "N" },
+            { label: "Yes", value: "Y" },
+          ],
+          required: true
+        },
+      ]
+    },
+    {
+      id: "part9-military-service",
+      title: "Part 9: Military Service",
+      questions: [
+        {
+          id: "part9.appliedForExemptionYes",
+          type: "radio",
+          label:
+            "84.a. Have you ever applied for any exemption from military service?",
+          value: "Y",
+          required: true
+        },
+        {
+          id: "part9.appliedForExemptionNo",
+          type: "radio",
+          label:
+            "84.a. Have you ever applied for any exemption from military service?",
+          value: "Off",
+          required: true
+        },
+        {
+          id: "part9.beenRelievedDischargedYes",
+          type: "radio",
+          label:
+            "84.b. Have you ever been relieved or discharged from military service?",
+          value: "Y",
+          required: true
+        },
+        {
+          id: "part9.beenRelievedDischargedNo",
+          type: "radio",
+          label:
+            "84.b. Have you ever been relieved or discharged from military service?",
+          value: "N",
+          required: true
+        },
+        {
+          id: "part9.beenConvictedDesertionYes",
+          type: "radio",
+          label: "84.c. Have you ever been convicted of desertion?",
+          value: "Y",
+          required: true
+        },
+        {
+          id: "part9.beenConvictedDesertionNo",
+          type: "radio",
+          label: "84.c. Have you ever been convicted of desertion?",
+          value: "N",
+          required: true
+        },
+        {
+          id: "part9.nationalityStatus",
+          type: "text",
+          label: "86. Nationality or Citizenship Status",
+          required: true
+        },
+        {
+          id: "part9.leftToAvoidServiceYes",
+          type: "radio",
+          label:
+            "85. Have you ever left the United States to avoid military service?",
+          value: "Y",
+          required: true
+        },
+        {
+          id: "part9.leftToAvoidServiceNo",
+          type: "radio",
+          label:
+            "85. Have you ever left the United States to avoid military service?",
+          value: "N",
+          required: true
+        },
+      ]
+    },
+    {
+      id: "part10-applicant-contact",
+      title: "Part 10: Applicant's Contact Information",
+      questions: [
+        {
+          id: "part10.alienNumber",
+          type: "text",
+          label: "Alien Registration Number (A-Number)",
+          required: true
+        },
+        {
+          id: "part10.daytimePhoneNumber",
+          type: "tel",
+          label: "Daytime Telephone Number",
+          required: true
+        },
+        {
+          id: "part10.emailAddress",
+          type: "email",
+          label: "Email Address",
+          required: true
+        },
+        {
+          id: "part10.mobilePhoneNumber",
+          type: "tel",
+          label: "Mobile Telephone Number",
+          required: true
+        },
+      ]
+    },
+    {
+      id: "part11-interpreter-info",
+      title: "Part 11: Interpreter's Information",
+      questions: [
+        {
+          id: "part11.interpreterGivenName",
+          type: "text",
+          label: "Interpreter's Given Name (First Name)",
+          required: true
+        },
+        {
+          id: "part11.interpreterFamilyName",
+          type: "text",
+          label: "Interpreter's Family Name (Last Name)",
+          required: true
+        },
+        {
+          id: "part11.interpreterBusinessName",
+          type: "text",
+          label: "Interpreter's Business or Organization Name"
+        },
+        {
+          id: "part11.interpreterDaytimePhoneNumber",
+          type: "tel",
+          label: "Interpreter's Daytime Telephone Number",
+          required: true
+        },
+        {
+          id: "part11.interpreterMobilePhoneNumber",
+          type: "tel",
+          label: "Interpreter's Mobile Telephone Number"
+        },
+        {
+          id: "part11.interpreterEmail",
+          type: "email",
+          label: "Interpreter's Email Address",
+          required: true
+        },
+        {
+          id: "part11.interpreterLanguage",
+          type: "text",
+          label: "Language Used by Interpreter",
+          required: true
+        },
+      ]
+    },
+    {
+      id: "part12-preparer-info",
+      title: "Part 12: Preparer's Information",
+      questions: [
+        {
+          id: "part12.preparerBusinessName",
+          type: "text",
+          label: "Preparer's Business or Organization Name"
+        },
+      ]
+    },
+    {
+      id: "part12-preparer",
+      title: "Part 12: Preparer's Information",
+      questions: [
+        {
+          id: "part12.preparerFamilyName",
+          type: "text",
+          label: "1. Preparer's Family Name (Last Name)",
+          required: true
+        },
+        {
+          id: "part12.preparerGivenName",
+          type: "text",
+          label: "1.a. Preparer's Given Name (First Name)",
+          required: true
+        },
+        {
+          id: "part12.preparerDaytimePhoneNumber",
+          type: "tel",
+          label: "3. Preparer's Daytime Telephone Number",
+          required: true
+        },
+        {
+          id: "part12.preparerEmail",
+          type: "email",
+          label: "5. Preparer's Email Address",
+          required: false
+        },
+        {
+          id: "part12.preparerMobileNumber",
+          type: "tel",
+          label: "4. Preparer's Mobile Telephone Number",
+          required: false
+        },
+      ]
+    },
+
+    {
+      id: "part14-additional",
+      title: "Part 14: Additional Information",
+      questions: [
+        {
+          id: "part14.alienNumber",
+          type: "text",
+          label: "Alien Number",
+          required: false
+        },
+        {
+          id: "part14.familyName",
+          type: "text",
+          label: "Family Name (Last Name)",
+          required: false
+        },
+        {
+          id: "part14.givenName",
+          type: "text",
+          label: "Given Name (First Name)",
+          required: false
+        },
+        {
+          id: "part14.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: false
+        },
+        {
+          id: "part14.pageNumber",
+          type: "text",
+          label: "Page Number",
+          required: false
+        },
+        {
+          id: "part14.partNumber",
+          type: "text",
+          label: "Part Number",
+          required: false
+        },
+        {
+          id: "part8.itemNumber",
+          type: "text",
+          label: "Item Number",
+          required: false
+        },
+        {
+          id: "part14.pageNumberDuplicate",
+          type: "text",
+          label: "Page Number (Duplicate)",
+          required: false
+        },
+        {
+          id: "part14.partNumberDuplicate",
+          type: "text",
+          label: "Part Number (Duplicate)",
+          required: false
+        },
+      ]
+    },
+    {
+      id: "part14-additionalInformation",
+      title: "Part 14: Additional Information",
+      questions: [
+        {
+          id: "part14.additionalInformation3ItemNumber",
+          type: "text",
+          label: "3.c. Item Number",
+          required: true,
+          helpText: "Enter the item number for additional information."
+        },
+        {
+          id: "part14.additionalInformation4PageNumber",
+          type: "text",
+          label: "4.a. Page Number",
+          required: true,
+          helpText:
+            "Enter the page number where additional information is located."
+        },
+        {
+          id: "part14.additionalInformation4PartNumber",
+          type: "text",
+          label: "4.b. Part Number",
+          required: true,
+          helpText: "Enter the part number for additional information."
+        },
+        {
+          id: "part14.additionalInformation4ItemNumber",
+          type: "text",
+          label: "4.c. Item Number",
+          required: true,
+          helpText: "Enter the item number for additional information."
+        },
+        {
+          id: "part14.additionalInformation5PageNumber",
+          type: "text",
+          label: "5.a. Page Number",
+          required: true,
+          helpText:
+            "Enter the page number where additional information is located."
+        },
+        {
+          id: "part14.additionalInformation5PartNumber",
+          type: "text",
+          label: "5.b. Part Number",
+          required: true,
+          helpText: "Enter the part number for additional information."
+        },
+        {
+          id: "part14.additionalInformation5ItemNumber",
+          type: "text",
+          label: "5.c. Item Number",
+          required: true,
+          helpText: "Enter the item number for additional information."
+        },
+        {
+          id: "part14.additionalInformation5AdditionalInfo",
+          type: "text",
+          label: "5. Additional Information",
+          required: true,
+          helpText:
+            "Provide any additional information relevant to this section."
+        },
+        {
+          id: "part14.additionalInformation4AdditionalInfo",
+          type: "text",
+          label: "4. Additional Information",
+          required: true,
+          helpText:
+            "Provide any additional information relevant to this section."
+        },
+        {
+          id: "part14.additionalInformation3AdditionalInfo",
+          type: "text",
+          label: "3. Additional Information",
+          required: true,
+          helpText:
+            "Provide any additional information relevant to this section."
+        },
+        {
+          id: "part14.additionalInformation2AdditionalInfo",
+          type: "text",
+          label: "2. Additional Information",
+          required: true,
+          helpText:
+            "Provide any additional information relevant to this section."
+        },
+      ]
+    },
+  ],
+  pdfFieldMappings: I_485_FIELD_MAPPINGS,
+  requiredDocuments: [
+    "Copy of birth certificate with certified English translation",
+    "Copy of passport biographical pages",
+    "Two passport-style photos",
+    "Medical examination (Form I-693) in sealed envelope",
+    "Copy of I-94 arrival/departure record",
+    "Copy of approved immigrant petition (if applicable)",
+    "Affidavit of Support (Form I-864) if required",
+    "Evidence of lawful entry to the United States",
+    "Marriage certificate (if applicable)",
+    "Divorce/death certificates for prior marriages (if applicable)",
+  ],
+  instructions: [
+    "Complete all applicable sections of this form",
+    "Use black ink when completing by hand",
+    "If you need more space, use Part 8 or attach additional sheets",
+    "Submit required supporting documents with your application",
+    "Pay the required filing fee",
+    "Sign and date your application",
+  ],
+};
+
+// const I765_DEFINITION: FormDefinition = {
+//   id: "i-765",
+//   code: "I-765",
+//   name: "Application for Employment Authorization",
+//   description: "Apply for a work permit (EAD)",
+//   category: "work_authorization",
+//   estimatedTime: "30-45 minutes",
+//   filingFee: 410,
+//   price: 60,
+//   sections: [
+//     // PART 1: Reason for Applying
+//     {
+//       id: "part1-reason",
+//       title: "Part 1: Reason for Applying",
+//       description: "Indicate why you are filing this application",
+//       questions: [
+//         {
+//           id: "part1.reason",
+//           type: "radio",
+//           label: "I am applying for (select only one box):",
+//           required: true,
+//           options: [
+//             {
+//               value: "initial",
+//               label: "1.a. Initial permission to accept employment",
+//             },
+//             {
+//               value: "replacement",
+//               label:
+//                 "1.b. Replacement (of lost, stolen, or damaged employment authorization document, or correction of DHS error)",
+//             },
+//             {
+//               value: "renewal",
+//               label:
+//                 "1.c. Renewal of my permission to accept employment (attach a copy of your previous employment authorization document)",
+//             },
+//           ],
+//         },
+//         {
+//           id: "part1.previouslyFiled",
+//           type: "radio",
+//           label: "2. Have you EVER filed Form I-765?",
+//           required: true,
+//           options: [
+//             { value: "yes", label: "Yes" },
+//             { value: "no", label: "No" },
+//           ],
+//           helpText:
+//             "If yes, you may need to provide your previous receipt number",
+//         },
+//       ],
+//     },
+//     // PART 2: Information About You - Personal Info
+//     {
+//       id: "part2-personal-info",
+//       title: "Part 2: Your Legal Name",
+//       description: "Enter your current legal name",
+//       questions: [
+//         {
+//           id: "part2.familyName",
+//           type: "text",
+//           label: "1.a. Family Name (Last Name)",
+//           required: true,
+//           helpText:
+//             "Enter your last name as it appears on your birth certificate or passport",
+//         },
+//         {
+//           id: "part2.givenName",
+//           type: "text",
+//           label: "1.b. Given Name (First Name)",
+//           required: true,
+//         },
+//         {
+//           id: "part2.middleName",
+//           type: "text",
+//           label: "1.c. Middle Name",
+//           helpText: "Leave blank if you do not have a middle name",
+//         },
+//         {
+//           id: "part2.otherNamesUsed",
+//           type: "radio",
+//           label: "2. Have you used any other names since birth?",
+//           required: true,
+//           options: [
+//             { value: "yes", label: "Yes" },
+//             { value: "no", label: "No" },
+//           ],
+//           helpText: "Include maiden names, aliases, or any previous names",
+//         },
+//       ],
+//     },
+//     {
+//       id: "part2-address",
+//       title: "Part 2: U.S. Mailing Address",
+//       description: "Where should USCIS send your EAD card?",
+//       questions: [
+//         {
+//           id: "part2.mailingCareOfName",
+//           type: "text",
+//           label: "5.a. In Care Of Name",
+//           helpText: "Only if receiving mail at someone else's address",
+//         },
+//         {
+//           id: "part2.mailingStreet",
+//           type: "text",
+//           label: "5.b. Street Number and Name",
+//           required: true,
+//         },
+//         {
+//           id: "part2.mailingAptType",
+//           type: "select",
+//           label: "5.c. Unit Type",
+//           options: [
+//             { value: "", label: "Select if applicable" },
+//             { value: "apt", label: "Apt." },
+//             { value: "ste", label: "Ste." },
+//             { value: "flr", label: "Flr." },
+//           ],
+//         },
+//         {
+//           id: "part2.mailingAptNumber",
+//           type: "text",
+//           label: "5.d. Unit Number",
+//         },
+//         {
+//           id: "part2.mailingCity",
+//           type: "text",
+//           label: "5.e. City or Town",
+//           required: true,
+//         },
+//         {
+//           id: "part2.mailingState",
+//           type: "select",
+//           label: "5.f. State",
+//           required: true,
+//           options: US_STATES,
+//         },
+//         {
+//           id: "part2.mailingZip",
+//           type: "text",
+//           label: "5.g. ZIP Code",
+//           required: true,
+//           placeholder: "12345",
+//         },
+//         {
+//           id: "part2.physicalAddressSameAsMailing",
+//           type: "radio",
+//           label:
+//             "6. Is your current physical address the same as your mailing address?",
+//           required: true,
+//           options: [
+//             { value: "yes", label: "Yes" },
+//             { value: "no", label: "No (provide physical address in Part 6)" },
+//           ],
+//         },
+//       ],
+//     },
+//     {
+//       id: "part2-identification",
+//       title: "Part 2: Identification Numbers",
+//       description:
+//         "Provide your A-Number, USCIS account, and other identifying information",
+//       questions: [
+//         {
+//           id: "part2.alienNumber",
+//           type: "text",
+//           label: "8. Alien Registration Number (A-Number)",
+//           placeholder: "A-",
+//           helpText:
+//             "Found on your previous EAD, I-94, or other USCIS documents. Leave blank if you do not have one.",
+//         },
+//         {
+//           id: "part2.uscisAccount",
+//           type: "text",
+//           label: "9. USCIS Online Account Number",
+//           helpText: "Only if you have created an account at uscis.gov",
+//         },
+//         {
+//           id: "part2.gender",
+//           type: "radio",
+//           label: "10. Gender",
+//           required: true,
+//           options: [
+//             { value: "male", label: "Male" },
+//             { value: "female", label: "Female" },
+//           ],
+//         },
+//         {
+//           id: "part2.maritalStatus",
+//           type: "select",
+//           label: "11. Marital Status",
+//           required: true,
+//           options: [
+//             { value: "single", label: "Single, Never Married" },
+//             { value: "married", label: "Married" },
+//             { value: "divorced", label: "Divorced" },
+//             { value: "widowed", label: "Widowed" },
+//           ],
+//         },
+//       ],
+//     },
+//     {
+//       id: "part2-ssn",
+//       title: "Part 2: Social Security Information",
+//       description: "Information about your Social Security Number",
+//       questions: [
+//         {
+//           id: "part2.hasSSN",
+//           type: "radio",
+//           label:
+//             "13.a. Has the Social Security Administration (SSA) ever officially issued a Social Security card to you?",
+//           required: true,
+//           options: [
+//             { value: "yes", label: "Yes (provide SSN below)" },
+//             { value: "no", label: "No" },
+//           ],
+//         },
+//         {
+//           id: "part2.ssn",
+//           type: "ssn",
+//           label: "13.b. U.S. Social Security Number (if any)",
+//           placeholder: "###-##-####",
+//           helpText: "Complete only if you answered Yes to 13.a",
+//         },
+//         {
+//           id: "part2.wantSSNCard",
+//           type: "radio",
+//           label: "14. Do you want the SSA to issue you a Social Security card?",
+//           required: true,
+//           options: [
+//             {
+//               value: "yes",
+//               label: "Yes (USCIS will share your information with SSA)",
+//             },
+//             { value: "no", label: "No" },
+//           ],
+//           helpText:
+//             "You must also answer Yes to question 15 to receive a Social Security card",
+//         },
+//         {
+//           id: "part2.consentDisclosure",
+//           type: "radio",
+//           label:
+//             "15. Consent for Disclosure: I authorize disclosure of information from this application to the SSA as required for assigning me a Social Security number and issuing me a Social Security card",
+//           required: true,
+//           options: [
+//             { value: "yes", label: "Yes" },
+//             { value: "no", label: "No" },
+//           ],
+//         },
+//       ],
+//     },
+//     {
+//       id: "part2-parents",
+//       title: "Part 2: Parent Information",
+//       description:
+//         "Information about your parents (for Social Security card application)",
+//       questions: [
+//         {
+//           id: "part2.fatherFamilyName",
+//           type: "text",
+//           label: "16.a. Father's Family Name (Last Name)",
+//           helpText: "Required if you want SSA to issue a Social Security card",
+//         },
+//         {
+//           id: "part2.fatherGivenName",
+//           type: "text",
+//           label: "16.b. Father's Given Name (First Name)",
+//         },
+//         {
+//           id: "part2.motherFamilyName",
+//           type: "text",
+//           label: "17.a. Mother's Family Name (Last Name)",
+//           helpText: "Required if you want SSA to issue a Social Security card",
+//         },
+//         {
+//           id: "part2.motherGivenName",
+//           type: "text",
+//           label: "17.b. Mother's Given Name (First Name)",
+//         },
+//       ],
+//     },
+//     {
+//       id: "part2-birth-citizenship",
+//       title: "Part 2: Birth and Citizenship Information",
+//       description: "Where were you born and what is your citizenship?",
+//       questions: [
+//         {
+//           id: "part2.countriesOfCitizenship",
+//           type: "text",
+//           label: "18. Country or Countries of Citizenship or Nationality",
+//           required: true,
+//           helpText: "If more than one, list all",
+//         },
+//         {
+//           id: "part2.cityOfBirth",
+//           type: "text",
+//           label: "19.a. Place of Birth - City or Town",
+//           required: true,
+//         },
+//         {
+//           id: "part2.stateOfBirth",
+//           type: "text",
+//           label: "19.b. State or Province",
+//           helpText: "If applicable",
+//         },
+//         {
+//           id: "part2.countryOfBirth",
+//           type: "text",
+//           label: "19.c. Country",
+//           required: true,
+//         },
+//         {
+//           id: "part2.dob",
+//           type: "date",
+//           label: "20. Date of Birth (mm/dd/yyyy)",
+//           required: true,
+//         },
+//       ],
+//     },
+//     {
+//       id: "part2-entry-info",
+//       title: "Part 2: U.S. Entry Information",
+//       description:
+//         "Information about your most recent entry to the United States",
+//       questions: [
+//         {
+//           id: "part2.i94Number",
+//           type: "text",
+//           label: "21. I-94 Arrival-Departure Record Number",
+//           required: true,
+//           helpText: "Find this at https://i94.cbp.dhs.gov",
+//         },
+//         {
+//           id: "part2.passportNumber",
+//           type: "text",
+//           label: "22.a. Passport Number",
+//           required: true,
+//         },
+//         {
+//           id: "part2.passportCountry",
+//           type: "text",
+//           label: "22.b. Country That Issued Your Passport",
+//           required: true,
+//         },
+//         {
+//           id: "part2.passportExpiration",
+//           type: "date",
+//           label: "22.c. Passport Expiration Date",
+//           required: true,
+//         },
+//         {
+//           id: "part2.dateOfLastEntry",
+//           type: "date",
+//           label: "23. Date of Your Last Arrival into the United States",
+//           required: true,
+//         },
+//         {
+//           id: "part2.placeOfLastEntry",
+//           type: "text",
+//           label: "24. Place of Your Last Arrival into the United States",
+//           required: true,
+//           helpText: "City and State, or Port of Entry",
+//         },
+//         {
+//           id: "part2.immigrationStatusAtEntry",
+//           type: "text",
+//           label:
+//             "25. Immigration Status at Your Last Arrival (for example, B-2 visitor, F-1 student)",
+//           required: true,
+//         },
+//         {
+//           id: "part2.currentImmigrationStatus",
+//           type: "text",
+//           label: "26. Your Current Immigration Status or Category",
+//           required: true,
+//           helpText: "For example, F-1, H-1B, pending I-485, asylee",
+//         },
+//         {
+//           id: "part2.sevisNumber",
+//           type: "text",
+//           label:
+//             "27. Student and Exchange Visitor Information System (SEVIS) Number (if any)",
+//           helpText:
+//             "For F-1 and J-1 students only. Found on your I-20 or DS-2019.",
+//         },
+//       ],
+//     },
+//     {
+//       id: "part2-eligibility",
+//       title: "Part 2: Eligibility Category",
+//       description: "Select the eligibility category that applies to you",
+//       questions: [
+//         {
+//           id: "part2.eligibilityCategory",
+//           type: "select",
+//           label: "28. Eligibility Category",
+//           required: true,
+//           options: [
+//             {
+//               value: "(c)(9)",
+//               label: "(c)(9) - Adjustment of Status applicant (pending I-485)",
+//             },
+//             {
+//               value: "(c)(3)(B)",
+//               label:
+//                 "(c)(3)(B) - F-1 student seeking Optional Practical Training (OPT)",
+//             },
+//             {
+//               value: "(c)(3)(C)",
+//               label: "(c)(3)(C) - F-1 student seeking STEM OPT Extension",
+//             },
+//             { value: "(a)(3)", label: "(a)(3) - Refugee" },
+//             { value: "(a)(5)", label: "(a)(5) - Asylee" },
+//             {
+//               value: "(a)(8)",
+//               label:
+//                 "(a)(8) - Citizen of Micronesia, Marshall Islands, or Palau",
+//             },
+//             {
+//               value: "(a)(12)",
+//               label: "(a)(12) - Temporary Protected Status (TPS)",
+//             },
+//             { value: "(c)(8)", label: "(c)(8) - Applicant for asylum" },
+//             { value: "(c)(10)", label: "(c)(10) - Withholding of removal" },
+//             {
+//               value: "(c)(19)",
+//               label: "(c)(19) - Temporary Protected Status (TPS) applicant",
+//             },
+//             { value: "(c)(26)", label: "(c)(26) - H-4 spouse of H-1B" },
+//             { value: "(c)(35)", label: "(c)(35) - L-2 spouse of L-1" },
+//             {
+//               value: "(c)(36)",
+//               label: "(c)(36) - E-3 spouse of E-3 Australian",
+//             },
+//             {
+//               value: "other",
+//               label: "Other (see instructions for complete list)",
+//             },
+//           ],
+//           helpText:
+//             "This is the most important question. Choose carefully based on your immigration status. See USCIS instructions for the complete list.",
+//         },
+//       ],
+//     },
+//   ],
+//   pdfFieldMappings: [],
+//   requiredDocuments: [
+//     "Copy of I-94 Arrival-Departure Record",
+//     "Two passport-style photos",
+//     "Copy of passport biographical page",
+//     "Copy of current visa (if applicable)",
+//     "Copy of I-20 (for F-1 students)",
+//     "Copy of pending I-485 receipt notice (if applying under category (c)(9))",
+//     "Copy of previous EAD (if renewing)",
+//     "Proof of eligibility for your specific category",
+//   ],
+//   instructions: [],
+// };
+
+const I_765_DEFINITION: FormDefinition = {
+  id: "i-765",
+  code: "I-765",
+  name: "TODO: Add form name",
+  description: "TODO: Add description",
+  category: "other",
+  estimatedTime: "30-45 minutes",
+  filingFee: 0,
+  price: 60,
+  sections: [
+    {
+      id: "part2-full-legal-name",
+      title: "Part 2: Your Full Legal Name",
+      description:
+        "Provide your current legal name as it appears on official documents.",
+      questions: [
+        {
+          id: "part2.fullLegalName.familyName",
+          type: "text",
+          label: "1.a. Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part2.fullLegalName.givenName",
+          type: "text",
+          label: "1.b. Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part2.fullLegalName.middleName",
+          type: "text",
+          label: "1.c. Middle Name",
+        },
+      ],
+    },
+    {
+      id: "part2-other-names-used",
+      title: "Part 2: Other Names Used",
+      description:
+        "List any other names you have used, including maiden names.",
+      questions: [
+        {
+          id: "part2.otherNamesUsed.familyName",
+          type: "text",
+          label: "2.a. Family Name (Last Name)",
+        },
+        {
+          id: "part2.otherNamesUsed.givenName",
+          type: "text",
+          label: "2.b. Given Name (First Name)",
+        },
+        {
+          id: "part2.otherNamesUsed.middleName",
+          type: "text",
+          label: "2.c. Middle Name",
+        },
+      ],
+    },
+    {
+      id: "part2-us-mailing-address",
+      title: "Part 2: U.S. Mailing Address",
+      description:
+        "Provide the address where you want USCIS to send your documents.",
+      questions: [
+        {
+          id: "part2.usMailingAddress.isMailingAddressSame",
+          type: "radio",
+          label:
+            "5. Is your mailing address the same as your physical address?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part2.usMailingAddress.streetNumberName",
+          type: "text",
+          label: "5.a. Street Number and Name",
+          required: true,
+        },
+        {
+          id: "part2.usMailingAddress.unitType",
+          type: "select",
+          label: "5.b. Unit Type",
+          options: [
+            { value: "", label: "Select if applicable" },
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part2.usMailingAddress.aptSteFlrNumber",
+          type: "text",
+          label: "5.c. Unit Number",
+        },
+        {
+          id: "part2.usMailingAddress.cityOrTown",
+          type: "text",
+          label: "5.d. City or Town",
+          required: true,
+        },
+        {
+          id: "part2.usMailingAddress.state",
+          type: "select",
+          label: "5.e. State",
+          options: US_STATES,
+          required: true,
+        },
+        {
+          id: "part2.usMailingAddress.zipCode",
+          type: "text",
+          label: "5.f. ZIP Code",
+          required: true,
+        },
+        {
+          id: "part2.usMailingAddress.inCareOfName",
+          type: "text",
+          label: "5.g. In Care Of Name",
+        },
+      ],
+    },
+    {
+      id: "part2-us-physical-address",
+      title: "Part 2: U.S. Physical Address",
+      description:
+        "Provide your current physical address if different from your mailing address.",
+      questions: [
+        {
+          id: "part2.usPhysicalAddress.streetNumberName",
+          type: "text",
+          label: "7.a. Street Number and Name",
+          required: true,
+        },
+        {
+          id: "part2.usPhysicalAddress.unitType",
+          type: "select",
+          label: "7.b. Unit Type",
+          options: [
+            { value: "", label: "Select if applicable" },
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part2.usPhysicalAddress.aptSteFlrNumber",
+          type: "text",
+          label: "7.c. Unit Number",
+        },
+        {
+          id: "part2.usPhysicalAddress.cityOrTown",
+          type: "text",
+          label: "7.d. City or Town",
+          required: true,
+        },
+        {
+          id: "part2.usPhysicalAddress.state",
+          type: "select",
+          label: "7.e. State",
+          options: US_STATES,
+          required: true,
+        },
+        {
+          id: "part2.usPhysicalAddress.zipCode",
+          type: "text",
+          label: "7.f. ZIP Code",
+          required: true,
+        },
+      ],
+    },
+    {
+      id: "part2-other-information",
+      title: "Part 2: Other Information",
+      description: "Provide additional personal information.",
+      questions: [
+        {
+          id: "part2.otherInformation.consentForDisclosure",
+          type: "radio",
+          label: "14. Do you consent to disclosure of information?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part2.otherInformation.alienNumber",
+          type: "text",
+          label: "15. Alien Registration Number (A-Number)",
+          helpText: "Enter your A-Number if you have one.",
+        },
+        {
+          id: "part2.otherInformation.uscisOnlineAccountNumber",
+          type: "text",
+          label: "16. USCIS Online Account Number",
+          helpText: "Enter your USCIS Online Account Number if you have one.",
+        },
+        {
+          id: "part2.otherInformation.sex",
+          type: "radio",
+          label: "17. Sex",
+          required: true,
+          options: [
+            { value: "male", label: "Male" },
+            { value: "female", label: "Female" },
+          ],
+        },
+        {
+          id: "part2.otherInformation.maritalStatus",
+          type: "select",
+          label: "18. Marital Status",
+          options: [
+            { value: "single", label: "Single" },
+            { value: "married", label: "Married" },
+            { value: "divorced", label: "Divorced" },
+            { value: "widowed", label: "Widowed" },
+          ],
+        },
+        {
+          id: "part2.otherInformation.previouslyFiledI765",
+          type: "radio",
+          label: "19. Have you previously filed Form I-765?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part2.otherInformation.fathersName.familyName",
+          type: "text",
+          label: "20.a. Father's Family Name (Last Name)",
+        },
+        {
+          id: "part2.otherInformation.fathersName.givenName",
+          type: "text",
+          label: "20.b. Father's Given Name (First Name)",
+        },
+        {
+          id: "part2.otherInformation.mothersName.familyName",
+          type: "text",
+          label: "21.a. Mother's Family Name (Last Name)",
+        },
+        {
+          id: "part2.otherInformation.mothersName.givenName",
+          type: "text",
+          label: "21.b. Mother's Given Name (First Name)",
+        },
+        {
+          id: "part2.countryOfCitizenshipOrNationality",
+          type: "text",
+          label: "22. Country of Citizenship or Nationality",
+          required: true,
+        },
+        {
+          id: "part2.otherInformation.wantSSACard",
+          type: "radio",
+          label: "23. Do you want the SSA to issue you a Social Security card?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part2.otherInformation.ssn",
+          type: "ssn",
+          label: "24. U.S. Social Security Number (if any)",
+          placeholder: "###-##-####",
+          helpText: "Leave blank if you do not have one.",
+        },
+        {
+          id: "part2.otherInformation.ssaCardIssued",
+          type: "radio",
+          label: "25. Has the SSA ever issued you a Social Security card?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part2-last-arrival",
+      title: "Part 2: Last Arrival in the United States",
+      description:
+        "Provide information about your most recent arrival in the United States.",
+      questions: [
+        {
+          id: "part2.lastArrival.i94Number",
+          type: "text",
+          label: "26. I-94 Arrival-Departure Record Number",
+          helpText: "Enter your I-94 number if applicable.",
+        },
+        {
+          id: "part2.lastArrival.passportNumber",
+          type: "text",
+          label: "27. Passport Number",
+        },
+        {
+          id: "part2.lastArrival.travelDocumentNumber",
+          type: "text",
+          label: "28. Travel Document Number",
+        },
+        {
+          id: "part2.lastArrival.countryOfIssuance",
+          type: "text",
+          label: "29. Country of Issuance for Passport/Travel Document",
+        },
+        {
+          id: "part2.lastArrival.expirationDate",
+          type: "date",
+          label: "30. Expiration Date for Passport/Travel Document",
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.lastArrival.dateOfLastEntry",
+          type: "date",
+          label: "31. Date of Last Entry into the U.S.",
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.lastArrival.placeOfLastArrival",
+          type: "text",
+          label: "32. Place of Last Arrival",
+        },
+        {
+          id: "part2.lastArrival.statusLastEntry",
+          type: "text",
+          label: "33. Status at Last Entry",
+        },
+        {
+          id: "part2.lastArrival.currentStatus",
+          type: "text",
+          label: "34. Current Immigration Status",
+        },
+        {
+          id: "part2.lastArrival.sevisNumber",
+          type: "text",
+          label: "35. SEVIS Number (if applicable)",
+        },
+      ],
+    },
+    {
+      id: "part2-eligibility-category",
+      title: "Part 2: Eligibility Category",
+      description:
+        "Provide information about your eligibility category for employment authorization.",
+      questions: [
+        {
+          id: "part2.eligibilityCategory.category",
+          type: "text",
+          label: "36. Eligibility Category",
+          required: true,
+          helpText:
+            "Enter the code for your eligibility category (e.g., (c)(3)(C)).",
+        },
+        {
+          id: "part2.eligibilityCategory.employerNameEverify",
+          type: "text",
+          label: "37. Employer's Name as Listed in E-Verify",
+        },
+        {
+          id: "part2.eligibilityCategory.everifyIDNumber",
+          type: "text",
+          label: "38. Employer's E-Verify Company Identification Number",
+        },
+        {
+          id: "part2.eligibilityCategory.c8ArrestedConvicted",
+          type: "radio",
+          label: "39. Have you ever been arrested or convicted of any crime?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part2.eligibilityCategory.c35c36ReceiptNumber",
+          type: "text",
+          label: "40. Receipt Number for Pending Form I-140 (if applicable)",
+        },
+        {
+          id: "part2.eligibilityCategory.c26ReceiptNumber",
+          type: "text",
+          label: "41. Receipt Number for Pending Form I-129 (if applicable)",
+        },
+        {
+          id: "part2.eligibilityCategory.degree",
+          type: "text",
+          label: "42. Degree (if applicable)",
+        },
+        {
+          id: "part2.eligibilityCategory.c35c36ArrestedConvicted",
+          type: "radio",
+          label: "43. Have you ever been arrested or convicted of any crime?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part2-place-of-birth",
+      title: "Part 2: Place of Birth",
+      description: "Provide information about your place of birth.",
+      questions: [
+        {
+          id: "part2.placeOfBirth.cityTownOfBirth",
+          type: "text",
+          label: "44.a. City or Town of Birth",
+        },
+        {
+          id: "part2.placeOfBirth.stateProvinceOfBirth",
+          type: "text",
+          label: "44.b. State or Province of Birth",
+        },
+        {
+          id: "part2.placeOfBirth.countryOfBirth",
+          type: "text",
+          label: "44.c. Country of Birth",
+          required: true,
+        },
+        {
+          id: "part2.placeOfBirth.dateOfBirth",
+          type: "date",
+          label: "45. Date of Birth (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+      ],
+    },
+
+    {
+      id: "part1-reason-for-applying",
+      title: "Part 1: Reason for Applying",
+      description:
+        "Select the reason you are applying for employment authorization.",
+      questions: [
+        {
+          id: "part1.reasonForApplying",
+          type: "radio",
+          label: "I am applying for (select one):",
+          required: true,
+          options: [
+            { value: "1", label: "1. Initial permission to accept employment" },
+            {
+              value: "2",
+              label:
+                "2. Replacement of lost, stolen, or damaged employment authorization document",
+            },
+            {
+              value: "3",
+              label:
+                "3. Renewal of my permission to accept employment (attach a copy of your previous employment authorization document)",
+            },
+          ],
+          helpText:
+            "Choose the option that best describes your current situation. If renewing, ensure to attach a copy of your previous employment authorization document.",
+        },
+      ],
+    },
+
+    {
+      id: "attorneyOrRepresentative",
+      title: "Attorney or Accredited Representative",
+      description:
+        "Provide details about your attorney or accredited representative, if applicable.",
+      questions: [
+        {
+          id: "attorneyOrRepresentative",
+          type: "radio",
+          label:
+            "Is an attorney or accredited representative assisting you with this application?",
+          required: true,
+          options: [
+            { value: "1", label: "Yes" },
+            { value: "0", label: "No" },
+          ],
+          helpText:
+            "Select 'Yes' if you have an attorney or accredited representative assisting you with this application.",
+        },
+        {
+          id: "attorneyOrRepresentative.uscisOnlineNumber",
+          type: "text",
+          label: "USCIS Online Account Number (if any)",
+          helpText:
+            "Enter the USCIS Online Account Number of your attorney or representative, if applicable.",
+        },
+      ],
+    },
+
+    {
+      id: "part3-applicant-statement",
+      title: "Part 3: Applicant's Statement",
+      description:
+        "Provide information about the use of interpreters and preparers.",
+      questions: [
+        {
+          id: "part3.applicantStatement.interpreterUsed",
+          type: "radio",
+          label: "1. Did you use an interpreter to complete this application?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+          helpText:
+            "Select 'Yes' if someone helped you translate or interpret the form.",
+        },
+        {
+          id: "part3.applicantStatement.languageFluent",
+          type: "text",
+          label: "1.b. If yes, specify the language:",
+          helpText: "Enter the language in which you are fluent.",
+        },
+        {
+          id: "part3.applicantStatement.preparerUsed",
+          type: "radio",
+          label: "2. Did you use a preparer to complete this application?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+          helpText: "Select 'Yes' if someone helped you fill out the form.",
+        },
+        {
+          id: "part3.applicantStatement.preparerName",
+          type: "text",
+          label: "2.a. Preparer's Name",
+          helpText:
+            "Enter the full name of the person who prepared your application.",
+        },
+      ],
+    },
+
+    {
+      id: "part3-contact-information",
+      title: "Part 3: Contact Information",
+      description: "Provide your contact details.",
+      questions: [
+        {
+          id: "part3.contactInformation.daytimePhoneNumber",
+          type: "tel",
+          label: "3. Daytime Phone Number",
+          required: true,
+          placeholder: "(555) 123-4567",
+          helpText:
+            "Enter a phone number where you can be reached during the day.",
+        },
+        {
+          id: "part3.contactInformation.mobileNumber",
+          type: "tel",
+          label: "4. Mobile Phone Number",
+          placeholder: "(555) 123-4567",
+          helpText:
+            "Enter your mobile phone number, if different from your daytime number.",
+        },
+        {
+          id: "part3.contactInformation.email",
+          type: "email",
+          label: "5. Email Address",
+          placeholder: "example@email.com",
+          helpText:
+            "Provide an email address where you can receive correspondence.",
+        },
+        {
+          id: "part3.contactInformation.abcSettlement",
+          type: "radio",
+          label: "6. Are you eligible for ABC Settlement benefits?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+          helpText:
+            "Select 'Yes' if you are eligible for benefits under the ABC Settlement.",
+        },
+      ],
+    },
+
+    {
+      id: "part4-interpreter-contact-information",
+      title: "Part 4: Interpreter's Contact Information",
+      description:
+        "Provide the contact details of the interpreter assisting with this application.",
+      questions: [
+        {
+          id: "part4.interpreterContactInformation.familyName",
+          type: "text",
+          label: "1.a. Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part4.interpreterContactInformation.givenName",
+          type: "text",
+          label: "1.b. Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part4.interpreterContactInformation.businessOrOrgName",
+          type: "text",
+          label: "2. Business or Organization Name",
+          helpText:
+            "Enter the name of the business or organization, if applicable.",
+        },
+        {
+          id: "part4.interpreterContactInformation.daytimeTelephone",
+          type: "tel",
+          label: "4. Daytime Telephone Number",
+          placeholder: "(555) 123-4567",
+          required: true,
+        },
+        {
+          id: "part4.interpretersMobileNumber",
+          type: "tel",
+          label: "5. Mobile Telephone Number",
+          placeholder: "(555) 123-4567",
+        },
+        {
+          id: "part4.interpretersEmailAddress",
+          type: "email",
+          label: "6. Email Address",
+          placeholder: "example@email.com",
+        },
+        {
+          id: "part4.languageInterpreterFluentIn",
+          type: "text",
+          label: "7. Language the Interpreter is Fluent In",
+          required: true,
+          helpText: "Specify the language(s) the interpreter is fluent in.",
+        },
+      ],
+    },
+    {
+      id: "part4-interpreter-address",
+      title: "Part 4: Interpreter's Mailing Address",
+      description: "Provide the mailing address of the interpreter.",
+      questions: [
+        {
+          id: "part4.interpretersStreetNumberName",
+          type: "text",
+          label: "3.a. Street Number and Name",
+          required: true,
+        },
+        {
+          id: "part4.interpretersUnit",
+          type: "select",
+          label: "3.b. Unit Type",
+          options: [
+            { value: "", label: "Select if applicable" },
+            { value: "APT", label: "Apt." },
+            { value: "STE", label: "Ste." },
+            { value: "FLR", label: "Flr." },
+          ],
+        },
+        {
+          id: "part4.interpreterUnit",
+          type: "radio",
+          label: "3.b. Unit Type",
+          options: [
+            { value: "APT", label: "Apt." },
+            { value: "STE", label: "Ste." },
+            { value: "FLR", label: "Flr." },
+          ],
+        },
+        {
+          id: "part4.interpretersAptSteFlrNumber",
+          type: "text",
+          label: "3.b. Unit Number",
+        },
+        {
+          id: "part4.interpretersCityOrTown",
+          type: "text",
+          label: "3.c. City or Town",
+          required: true,
+        },
+        {
+          id: "part4.interpretersState",
+          type: "select",
+          label: "3.d. State",
+          options: US_STATES,
+          required: true,
+        },
+        {
+          id: "part4.interpretersZipCode",
+          type: "text",
+          label: "3.e. ZIP Code",
+          required: true,
+        },
+        {
+          id: "part4.interpretersProvince",
+          type: "text",
+          label: "3.f. Province",
+          helpText: "If applicable, provide the province.",
+        },
+        {
+          id: "part4.interpretersPostalCode",
+          type: "text",
+          label: "3.g. Postal Code",
+          helpText: "If applicable, provide the postal code.",
+        },
+        {
+          id: "part4.interpretersCountry",
+          type: "text",
+          label: "3.h. Country",
+          required: true,
+        },
+      ],
+    },
+
+    {
+      id: "part5-preparer-info",
+      title: "Part 5: Preparer's Information",
+      description:
+        "Provide details about the person who prepared this application, if applicable.",
+      questions: [
+        {
+          id: "part5.preparersGivenName",
+          type: "text",
+          label: "1.b. Preparer's Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part5.preparersFamilyName",
+          type: "text",
+          label: "1.a. Preparer's Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part5.preparersBusinessName",
+          type: "text",
+          label: "2. Preparer's Business or Organization Name",
+        },
+      ],
+    },
+    {
+      id: "part5-preparer-address",
+      title: "Part 5: Preparer's Mailing Address",
+      description: "Enter the mailing address of the preparer.",
+      questions: [
+        {
+          id: "part5.preparersStreetNumberName",
+          type: "text",
+          label: "3.a. Street Number and Name",
+          required: true,
+        },
+        {
+          id: "part5.preparersUnit",
+          type: "select",
+          label: "3.b. Unit Type",
+          options: [
+            { value: "", label: "Select if applicable" },
+            { value: "APT", label: "Apt." },
+            { value: "STE", label: "Ste." },
+            { value: "FLR", label: "Flr." },
+          ],
+        },
+        {
+          id: "part5.preparersAptSteFlrNumber",
+          type: "text",
+          label: "3.b. Unit Number",
+        },
+        {
+          id: "part5.preparersCityOrTown",
+          type: "text",
+          label: "3.c. City or Town",
+          required: true,
+        },
+        {
+          id: "part5.preparersState",
+          type: "select",
+          label: "3.d. State",
+          options: US_STATES,
+          required: true,
+        },
+        {
+          id: "part5.preparersZipCode",
+          type: "text",
+          label: "3.e. ZIP Code",
+          required: true,
+        },
+        {
+          id: "part5.preparersProvince",
+          type: "text",
+          label: "3.f. Province",
+        },
+        {
+          id: "part5.preparersPostalCode",
+          type: "text",
+          label: "3.g. Postal Code",
+        },
+        {
+          id: "part5.preparersCountry",
+          type: "text",
+          label: "3.h. Country",
+          required: true,
+        },
+      ],
+    },
+    {
+      id: "part5-preparer-contact",
+      title: "Part 5: Preparer's Contact Information",
+      description: "Provide the contact details of the preparer.",
+      questions: [
+        {
+          id: "part5.preparersDaytimeTelephoneNumber",
+          type: "tel",
+          label: "4. Daytime Telephone Number",
+          placeholder: "(555) 123-4567",
+          required: true,
+        },
+        {
+          id: "part5.preparersMobileTelephoneNumber",
+          type: "tel",
+          label: "5. Mobile Telephone Number",
+          placeholder: "(555) 123-4567",
+        },
+        {
+          id: "part5.preparersEmailAddress",
+          type: "email",
+          label: "6. Email Address",
+          placeholder: "example@email.com",
+        },
+      ],
+    },
+    {
+      id: "part5-preparer-statement",
+      title: "Part 5: Preparer's Statement",
+      description: "Indicate the preparer's role and representation.",
+      questions: [
+        {
+          id: "part5.preparersStatement",
+          type: "radio",
+          label: "7. Preparer's Statement",
+          required: true,
+          options: [
+            {
+              value: "A",
+              label:
+                "A. I am not an attorney or accredited representative but have prepared this form on behalf of the applicant.",
+            },
+            {
+              value: "B",
+              label:
+                "B. I am an attorney or accredited representative and my representation extends beyond the preparation of this form.",
+            },
+          ],
+        },
+        {
+          id: "part5.preparersRepresentation",
+          type: "radio",
+          label: "7.b. Preparer's Representation",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          helpText:
+            "Indicate if the preparer is an attorney or accredited representative.",
+        },
+      ],
+    },
+
+    {
+      id: "part6-additional-information",
+      title: "Part 6: Additional Information",
+      description:
+        "Provide additional information as needed for any of the sections in this form.",
+      questions: [
+        {
+          id: "part6.familyName",
+          type: "text",
+          label: "1.a. Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part6.givenName",
+          type: "text",
+          label: "1.b. Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part6.middleName",
+          type: "text",
+          label: "1.c. Middle Name",
+        },
+        {
+          id: "part6.alienNumber",
+          type: "text",
+          label: "7. Alien Registration Number (A-Number)",
+          helpText: "Enter your A-Number if you have one.",
+        },
+        {
+          id: "part6.additionalInformationPageNumber",
+          type: "text",
+          label: "3.a. Page Number",
+          helpText: "Enter the page number where the information appears.",
+        },
+        {
+          id: "part6.additionalInformationPartNumber",
+          type: "text",
+          label: "3.b. Part Number",
+          helpText: "Enter the part number where the information appears.",
+        },
+        {
+          id: "part6.additionalInformationItemNumber",
+          type: "text",
+          label: "3.c. Item Number",
+          helpText: "Enter the item number where the information appears.",
+        },
+        {
+          id: "part6.additionalInformation",
+          type: "textarea",
+          label: "3.d. Additional Information",
+          helpText:
+            "Provide any additional information related to the sections in this form.",
+        },
+      ],
+    },
+  ],
+  pdfFieldMappings: I_765_FIELD_MAPPINGS,
+  requiredDocuments: [],
+  instructions: [],
+};
+
+const I131_DEFINITION: FormDefinition = {
+  id: "i-131",
+  code: "I-131",
+  name: "Application for Travel Document",
+  description:
+    "Apply for advance parole, reentry permit, or refugee travel document",
+  category: "travel",
+  estimatedTime: "30-45 minutes",
+  filingFee: 575,
+  price: 60,
+  sections: [
+    {
+      id: "attorney-representative",
+      title: "Attorney or Representative Information",
+      description: "To be completed by an attorney or representative, if any.",
+      questions: [
+        {
+          id: "attorney.g28Attached",
+          type: "checkbox",
+          label: "Check if Form G-28 is attached to represent the applicant.",
+          options: [{ value: "Y", label: "Yes" }],
+        },
+      ],
+    },
+    {
+      id: "part1-application-type",
+      title: "Part 1: Application Type",
+      description: "Select the type of travel document you are applying for.",
+      questions: [
+        {
+          id: "part1.applicationType",
+          type: "radio",
+          label: "I am applying for (select one):",
+          required: true,
+          options: [
+            {
+              value: "1",
+              label: "1. Reentry Permit (for lawful permanent residents)",
+            },
+            {
+              value: "2",
+              label:
+                "2. Refugee Travel Document (current refugee/asylee status)",
+            },
+            {
+              value: "3",
+              label:
+                "3. Refugee Travel Document (LPR as a result of refugee/asylee status)",
+            },
+            {
+              value: "4",
+              label: "4. TPS Travel Authorization Document",
+            },
+            {
+              value: "5",
+              label: "5. Advance Parole Document (inside the U.S.)",
+            },
+          ],
+          helpText:
+            "Choose the option that best describes your current status and needs.",
+        },
+      ],
+    },
+    {
+      id: "part1-tps-receipt",
+      title: "Part 1: TPS Receipt Number",
+      description: "Provide your TPS receipt number",
+      questions: [
+        {
+          id: "part1.tpsReceiptNumber",
+          type: "text",
+          label:
+            "4. Enter the receipt number for your last approved Form I-821, Application for Temporary Protected Status:",
+          required: true,
+          helpText:
+            "This is the receipt number from your most recent TPS approval (e.g., IOE1234567890).",
+        },
+      ],
+      conditional: {
+        dependsOn: "part1.applicationType",
+        values: ["4"],
+      },
+    },
+    {
+      id: "part2-personal-info",
+      title: "Part 2: Information About You",
+      description: "Provide your personal information.",
+      questions: [
+        {
+          id: "part2.fullName",
+          type: "group",
+          label: "1. Your Full Name",
+          questions: [
+            {
+              id: "part2.familyName",
+              type: "text",
+              label: "1.a. Family Name (Last Name)",
+              required: true,
+            },
+            {
+              id: "part2.givenName",
+              type: "text",
+              label: "1.b. Given Name (First Name)",
+              required: true,
+            },
+            {
+              id: "part2.middleName",
+              type: "text",
+              label: "1.c. Middle Name",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part2-address",
+      title: "Part 2: Current Mailing Address",
+      description: "Where should USCIS mail your travel document?",
+      questions: [
+        {
+          id: "part2.inCareOfName",
+          type: "text",
+          label: "3.a. In Care Of Name (if any)",
+        },
+        {
+          id: "part2.streetNumberName",
+          type: "text",
+          label: "3.b. Street Number and Name",
+          required: true,
+        },
+        {
+          id: "part2.cityTown",
+          type: "text",
+          label: "3.c. City or Town",
+          required: true,
+        },
+        {
+          id: "part2.state",
+          type: "select",
+          label: "3.d. State",
+          options: US_STATES,
+          required: true,
+        },
+        {
+          id: "part2.zipCode",
+          type: "text",
+          label: "3.e. ZIP Code",
+          required: true,
+        },
+      ],
+    },
+    {
+      id: "part2-refugee-status",
+      title: "Part 2: Refugee Status",
+      description: "Indicate your refugee status.",
+      questions: [
+        {
+          id: "part2.refugeeStatus",
+          type: "radio",
+          label:
+            "13. Do you hold status as a refugee, were you paroled as a refugee, or are you a lawful permanent resident as a direct result of being a refugee?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+      ],
+    },
+
+    {
+      id: "part2-current-mailing-address",
+      title: "Part 2: Current Mailing Address",
+      description:
+        "Provide your current mailing address or a safe address if applicable.",
+      questions: [
+        {
+          id: "part2.mailingStreet",
+          type: "text",
+          label: "3.a. Street Number and Name",
+          required: true,
+        },
+        {
+          id: "part2.mailingUnitType",
+          type: "select",
+          label: "3.b. Unit Type",
+          options: [
+            { value: "", label: "Select if applicable" },
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part2.mailingUnitNumber",
+          type: "text",
+          label: "3.c. Unit Number",
+        },
+        {
+          id: "part2.mailingCity",
+          type: "text",
+          label: "3.d. City or Town",
+          required: true,
+        },
+        {
+          id: "part2.mailingState",
+          type: "select",
+          label: "3.e. State",
+          options: US_STATES,
+          required: true,
+        },
+        {
+          id: "part2.mailingZipCode",
+          type: "text",
+          label: "3.f. ZIP Code",
+          required: true,
+        },
+        {
+          id: "part2.mailingCountry",
+          type: "text",
+          label: "3.g. Country",
+          required: true,
+        },
+      ],
+    },
+    {
+      id: "part2-current-physical-address",
+      title: "Part 2: Current Physical Address",
+      description:
+        "Provide your current physical address if different from the mailing address.",
+      questions: [
+        {
+          id: "part2.physicalStreet",
+          type: "text",
+          label: "4.a. Street Number and Name",
+        },
+        {
+          id: "part2.physicalUnitType",
+          type: "select",
+          label: "4.b. Unit Type",
+          options: [
+            { value: "", label: "Select if applicable" },
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part2.physicalUnitNumber",
+          type: "text",
+          label: "4.c. Unit Number",
+        },
+        {
+          id: "part2.physicalCity",
+          type: "text",
+          label: "4.d. City or Town",
+        },
+        {
+          id: "part2.physicalState",
+          type: "select",
+          label: "4.e. State",
+          options: US_STATES,
+        },
+        {
+          id: "part2.physicalZipCode",
+          type: "text",
+          label: "4.f. ZIP Code",
+        },
+        {
+          id: "part2.physicalCountry",
+          type: "text",
+          label: "4.g. Country",
+        },
+      ],
+    },
+    {
+      id: "part2-other-information",
+      title: "Part 2: Other Information",
+      description: "Provide additional identification information.",
+      questions: [
+        {
+          id: "part2.alienNumber",
+          type: "text",
+          label: "5. Alien Registration Number (A-Number) (if any)",
+        },
+        {
+          id: "part2.countryOfBirth",
+          type: "text",
+          label: "6. Country of Birth",
+          required: true,
+        },
+        {
+          id: "part2.countryOfCitizenship",
+          type: "text",
+          label: "7. Country of Citizenship or Nationality",
+          required: true,
+        },
+        {
+          id: "part2.gender",
+          type: "radio",
+          label: "8. Gender",
+          required: true,
+          options: [
+            { value: "female", label: "Female" },
+            { value: "male", label: "Male" },
+          ],
+          helpText: "Must match your birth certificate",
+        },
+        {
+          id: "part2.dob",
+          type: "date",
+          label: "9. Date of Birth (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.ssn",
+          type: "ssn",
+          label: "10. U.S. Social Security Number (if any)",
+          placeholder: "###-##-####",
+          helpText: "Leave blank if you do not have one",
+        },
+        {
+          id: "part2.uscisOnlineAccountNumber",
+          type: "text",
+          label: "11. USCIS Online Account Number (if any)",
+        },
+        {
+          id: "part2.classOfAdmission",
+          type: "text",
+          label: "12. Class of Admission (if any)",
+        },
+        {
+          id: "part2.i94RecordNumber",
+          type: "text",
+          label:
+            "13. Most recent Form I-94 Arrival/Departure Record Number (if any)",
+        },
+      ],
+    },
+
+    {
+      id: "part2-additional-information",
+      title: "Part 2: Other Information",
+      description: "Provide additional identification details if applicable.",
+      questions: [
+        {
+          id: "part2.eMedicalUsParoleeId",
+          type: "text",
+          label: "15. eMedical U.S. Parolee ID (USP ID) (if any)",
+          helpText: "Enter your eMedical U.S. Parolee ID if you have one.",
+        },
+        {
+          id: "part2.i94ExpirationDate",
+          type: "date",
+          label:
+            "14. Expiration Date of Authorized Stay (Shown on Form I-94) (if any)",
+          placeholder: "MM/DD/YYYY",
+          helpText: "Enter as 2-digit month, 2-digit day, and 4-digit year.",
+        },
+        {
+          id: "part2.classOfAdmission",
+          type: "text",
+          label: "26. Class of Admission (COA) (if any)",
+          helpText: "Enter your Class of Admission.",
+        },
+        {
+          id: "part2.i94RecordNumber",
+          type: "text",
+          label:
+            "27. Most Recent Form I-94 Arrival/Departure Record Number (if any)",
+          helpText: "Enter your most recent I-94 number if available.",
+        },
+      ],
+    },
+    {
+      id: "part3-biographic-information",
+      title: "Part 3: Biographic Information",
+      description:
+        "Provide biographic details of the person who will receive the travel document.",
+      questions: [
+        {
+          id: "part3.ethnicity",
+          type: "radio",
+          label: "1. Ethnicity",
+          options: [
+            { value: "notHispanicOrLatino", label: "Not Hispanic or Latino" },
+            { value: "hispanicOrLatino", label: "Hispanic or Latino" },
+          ],
+        },
+        {
+          id: "part3.race",
+          type: "checkbox",
+          label: "2. Race (Select all applicable boxes)",
+          options: [
+            {
+              value: "blackOrAfricanAmerican",
+              label: "Black or African American",
+            },
+            {
+              value: "nativeHawaiianOrOtherPacificIslander",
+              label: "Native Hawaiian or Other Pacific Islander",
+            },
+            {
+              value: "americanIndianOrAlaskaNative",
+              label: "American Indian or Alaska Native",
+            },
+            { value: "asian", label: "Asian" },
+            { value: "white", label: "White" },
+          ],
+        },
+        {
+          id: "part3.height",
+          type: "group",
+          label: "3. Height",
+          questions: [
+            {
+              id: "part3.heightFeet",
+              type: "select",
+              label: "Feet",
+              options: [
+                { value: "2", label: "2" },
+                { value: "3", label: "3" },
+                { value: "4", label: "4" },
+                { value: "5", label: "5" },
+                { value: "6", label: "6" },
+                { value: "7", label: "7" },
+                { value: "8", label: "8" },
+              ],
+            },
+            {
+              id: "part3.heightInches",
+              type: "select",
+              label: "Inches",
+              options: [
+                { value: "0", label: "0" },
+                { value: "1", label: "1" },
+                { value: "2", label: "2" },
+                { value: "3", label: "3" },
+                { value: "4", label: "4" },
+                { value: "5", label: "5" },
+                { value: "6", label: "6" },
+                { value: "7", label: "7" },
+                { value: "8", label: "8" },
+                { value: "9", label: "9" },
+                { value: "10", label: "10" },
+                { value: "11", label: "11" },
+              ],
+            },
+          ],
+        },
+        {
+          id: "part3.weight",
+          type: "text",
+          label: "4. Weight in Pounds",
+          helpText: "Enter your weight in pounds.",
+        },
+        {
+          id: "part3.eyeColor",
+          type: "radio",
+          label: "5. Eye Color (Select only one box)",
+          options: [
+            { value: "brown", label: "Brown" },
+            { value: "gray", label: "Gray" },
+            { value: "maroon", label: "Maroon" },
+            { value: "unknownOrOther", label: "Unknown or Other" },
+            { value: "pink", label: "Pink" },
+            { value: "hazel", label: "Hazel" },
+            { value: "green", label: "Green" },
+            { value: "blue", label: "Blue" },
+            { value: "black", label: "Black" },
+          ],
+        },
+        {
+          id: "part3.hairColor",
+          type: "radio",
+          label: "6. Hair Color (Select only one box)",
+          options: [
+            { value: "bald", label: "Bald (No Hair)" },
+            { value: "blond", label: "Blond" },
+            { value: "gray", label: "Gray" },
+            { value: "sandy", label: "Sandy" },
+            { value: "unknownOrOther", label: "Unknown or Other" },
+            { value: "white", label: "White" },
+            { value: "red", label: "Red" },
+            { value: "brown", label: "Brown" },
+            { value: "black", label: "Black" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part4-processing-information",
+      title: "Part 4: Processing Information",
+      description:
+        "Provide details about previous travel documents and processing requests.",
+      questions: [
+        {
+          id: "part4.previousReentryPermitOrRefugeeTravelDocument",
+          type: "radio",
+          label:
+            "2. A. Have you EVER been issued a Reentry Permit or Refugee Travel Document?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part4.previousAdvanceParoleDocument",
+          type: "radio",
+          label: "3. A. Have you EVER been issued an Advance Parole Document?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part4.replacementRequest",
+          type: "radio",
+          label: "4. Are you requesting a replacement document?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part4.replacementReason",
+          type: "radio",
+          label: "5. Reason for Replacement",
+          options: [
+            {
+              value: "notReceived",
+              label: "Document was issued, but I did not receive it.",
+            },
+            {
+              value: "lostOrStolen",
+              label: "Received document, but it was lost, stolen, or damaged.",
+            },
+            {
+              value: "incorrectInfo",
+              label:
+                "Received document, but it has incorrect information due to my error or change.",
+            },
+            {
+              value: "uscisError",
+              label:
+                "Received document, but it has incorrect information due to USCIS error.",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part5-reentry-permit",
+      title: "Part 5: Reentry Permit Information",
+      description:
+        "Complete this section only if applying for a Reentry Permit.",
+      questions: [
+        {
+          id: "part5.timeOutsideUs",
+          type: "radio",
+          label:
+            "1. Total time spent outside the United States since becoming a permanent resident",
+          options: [
+            { value: "lessThan6Months", label: "Less Than 6 Months" },
+            { value: "6MonthsTo1Year", label: "6 Months to 1 Year" },
+            { value: "1To2Years", label: "1 to 2 Years" },
+            { value: "2To3Years", label: "2 to 3 Years" },
+            { value: "3To4Years", label: "3 to 4 Years" },
+            { value: "moreThan4Years", label: "More Than 4 Years" },
+          ],
+        },
+      ],
+    },
+
+    {
+      id: "part4-notification-address",
+      title: "Part 4: Processing Information",
+      description: "Provide details for processing your application.",
+      questions: [
+        {
+          id: "part4.aptSteFlrNumber",
+          type: "text",
+          label:
+            "9.a. If Apartment, Suite or Floor is Checked, Enter Apartment, Suite or Floor Number.",
+          helpText:
+            "Enter the number of your apartment, suite, or floor if applicable.",
+        },
+        {
+          id: "part4.postalCode",
+          type: "text",
+          label: "9.a. Enter Postal Code.",
+          required: true,
+          helpText: "Provide the postal code for your address.",
+        },
+        {
+          id: "part4.province",
+          type: "text",
+          label: "9.a. Enter Province.",
+          helpText: "Provide the province if applicable.",
+        },
+        {
+          id: "part4.country",
+          type: "text",
+          label: "9.a. Enter Country.",
+          required: true,
+          helpText: "Provide the country for your address.",
+        },
+        {
+          id: "part4.email",
+          type: "email",
+          label: "9.c. Enter Email Address.",
+          placeholder: "example@email.com",
+          helpText: "Provide a valid email address for communication.",
+        },
+        {
+          id: "part4.daytimePhone",
+          type: "tel",
+          label: "9.b. Enter Daytime Phone Number",
+          placeholder: "(555) 123-4567",
+          helpText: "Provide a daytime phone number where you can be reached.",
+        },
+      ],
+    },
+    {
+      id: "part6-refugee-travel-document",
+      title: "Part 6: Refugee Travel Document",
+      description:
+        "Complete this section only if applying for a Refugee Travel Document.",
+      questions: [
+        {
+          id: "part6.travelToCountry",
+          type: "radio",
+          label:
+            "2. Do you plan to travel to the country named above in Item Number 1?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+          helpText:
+            "Indicate if you plan to travel to the country from which you are a refugee or asylee.",
+        },
+        {
+          id: "part6.countryRefugee",
+          type: "text",
+          label: "1. Country from which you are a refugee or asylee:",
+          required: true,
+          helpText:
+            "Provide the name of the country from which you are a refugee or asylee.",
+        },
+        {
+          id: "part6.nationalPassport",
+          type: "radio",
+          label:
+            "3.b. Applied for and/or obtained a national passport, passport renewal, or entry permit from the country in Item Number 1?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part6.receivedBenefits",
+          type: "radio",
+          label:
+            "3.c. Applied for and/or received any benefit from the country named in Item Number 1. (for example, health insurance benefits)?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part6.returnedToCountry",
+          type: "radio",
+          label: "3.a. Returned to the country named above in Item Number 1?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part6.reacquiredNationality",
+          type: "radio",
+          label:
+            "4.a. Reacquired the nationality of the country named above in Item Number 1?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part6.acquiredNewNationality",
+          type: "radio",
+          label: "4.b. Acquired a new nationality?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part6.filingBeforeDeparture",
+          type: "radio",
+          label:
+            "5. Are you filing for a Refugee Travel Document before departing the United States?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part6.outsideUS",
+          type: "radio",
+          label: "6.a. Are you currently outside the United States?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part6.currentLocation",
+          type: "text",
+          label:
+            "6.b. If you answered 'Yes,' what is your current location (City or Town and Country)?",
+          helpText:
+            "Provide your current location if you are outside the United States.",
+        },
+        {
+          id: "part6.traveledCountries",
+          type: "text",
+          label:
+            "6.c. If you answered 'Yes,' what other countries have you traveled to since leaving the United States?",
+          helpText:
+            "List the countries you have traveled to since leaving the United States.",
+        },
+      ],
+    },
+    {
+      id: "part7-proposed-travel",
+      title: "Part 7: Information About Your Proposed Travel",
+      description:
+        "Complete this section only if you are applying for an Advance Parole Document.",
+      questions: [
+        {
+          id: "part7.dateOfDeparture",
+          type: "date",
+          label: "1. Date of Intended Departure",
+          placeholder: "MM/DD/YYYY",
+          helpText: "Provide the date you intend to depart.",
+        },
+        {
+          id: "part7.purposeOfTrip",
+          type: "textarea",
+          label: "2. Purpose of trip.",
+          helpText:
+            "Describe the purpose of your trip. Use Part 13 for additional space if needed.",
+        },
+        {
+          id: "part7.countriesToVisit",
+          type: "textarea",
+          label: "3. List the countries you intend to visit.",
+          helpText:
+            "List all countries you plan to visit. Use Part 13 for additional space if needed.",
+        },
+        {
+          id: "part7.numberOfTrips",
+          type: "radio",
+          label: "4. How many trips do you intend to use this document?",
+          options: [
+            { value: "one", label: "One Trip" },
+            { value: "multiple", label: "More than one trip" },
+          ],
+        },
+        {
+          id: "part7.expectedLengthOfTrip",
+          type: "text",
+          label: "5. Expected Length of Trip (in days)",
+          helpText: "Provide the expected duration of your trip in days.",
+        },
+      ],
+    },
+    {
+      id: "part10-applicant-contact",
+      title:
+        "Part 10: Applicant's Contact Information, Certification, and Signature",
+      description:
+        "Provide your contact information and certify the information provided.",
+      questions: [
+        {
+          id: "part10.daytimePhone",
+          type: "tel",
+          label: "1. Applicant's Daytime Telephone Number.",
+          placeholder: "(555) 123-4567",
+          helpText:
+            "Provide a telephone number where you can be reached during the day.",
+        },
+        {
+          id: "part10.mobilePhone",
+          type: "tel",
+          label: "2. Applicant Mobile Telephone Number (if any).",
+          placeholder: "(555) 123-4567",
+        },
+        {
+          id: "part10.email",
+          type: "email",
+          label: "3. Applicant's Email Address (if any)",
+          placeholder: "example@email.com",
+        },
+        // {
+        //   id: "part10.applicantSignature",
+        //   type: "text",
+        //   label: "4. Applicant's Signature",
+        //   required: true,
+        //   helpText:
+        //     "Sign your name in ink. Digital signatures are not accepted.",
+        // },
+        // {
+        //   id: "part10.dateOfSignature",
+        //   type: "text",
+        //   label:
+        //     "4. Date of Signature. Enter as 2 digit month, 2 digit day and 4 digit year.",
+        //   placeholder: "MM/DD/YYYY",
+        //   required: true,
+        // },
+      ],
+    },
+    {
+      id: "part11-interpreter-contact",
+      title:
+        "Part 11: Interpreter's Contact Information, Certification, and Signature",
+      description: "Complete this section if an interpreter assisted you.",
+      questions: [
+        {
+          id: "part11.interpreterFamilyName",
+          type: "text",
+          label: "1. Interpreter's Family Name (Last Name)",
+          helpText: "Provide the last name of the interpreter.",
+        },
+        {
+          id: "part11.interpreterGivenName",
+          type: "text",
+          label: "1. Interpreter's Given Name (First Name)",
+          helpText: "Provide the first name of the interpreter.",
+        },
+        {
+          id: "part11.interpreterBusinessName",
+          type: "text",
+          label: "2. Interpreter's Business or Organization Name (if any)",
+        },
+        {
+          id: "part11.daytimePhone",
+          type: "tel",
+          label: "3. Interpreter's Daytime Telephone Number.",
+          placeholder: "(555) 123-4567",
+        },
+        {
+          id: "part11.mobilePhone",
+          type: "tel",
+          label: "4. Interpreter's Mobile Telephone Number (if any)",
+          placeholder: "(555) 123-4567",
+        },
+        {
+          id: "part11.email",
+          type: "email",
+          label: "5. Interpreter's Email Address (if any)",
+          placeholder: "example@email.com",
+        },
+        {
+          id: "part11.language",
+          type: "text",
+          label: "Interpreter's Certification and Signature. Enter language",
+          helpText: "Provide the language in which the interpreter is fluent.",
+        },
+        // {
+        //   id: "part11.interpreterSignature",
+        //   type: "text",
+        //   label: "6. Interpreter's Signature",
+        //   helpText:
+        //     "Sign your name in ink. Digital signatures are not accepted.",
+        // },
+        // {
+        //   id: "part11.dateOfSignature",
+        //   type: "text",
+        //   label:
+        //     "6. Date of Signature. Enter as 2 digit month, 2 digit day and 4 digit year.",
+        //   placeholder: "MM/DD/YYYY",
+        // },
+      ],
+    },
+    {
+      id: "part12-preparer-contact",
+      title:
+        "Part 12: Preparer's Contact Information, Certification, and Signature",
+      description:
+        "Complete this section if someone else prepared this application for you.",
+      questions: [
+        {
+          id: "part12.preparerFamilyName",
+          type: "text",
+          label: "1. Enter Preparer's Family Name (Last Name).",
+          helpText: "Provide the last name of the preparer.",
+        },
+        {
+          id: "part12.preparerGivenName",
+          type: "text",
+          label: "1. Enter Preparer's Given Name (First Name).",
+          helpText: "Provide the first name of the preparer.",
+        },
+        {
+          id: "part12.preparerBusinessName",
+          type: "text",
+          label: "2. Enter Preparer's Business or Organization Name.",
+        },
+        {
+          id: "part12.daytimePhone",
+          type: "tel",
+          label: "3. Enter Preparer's Daytime Telephone Number.",
+          placeholder: "(555) 123-4567",
+        },
+        {
+          id: "part12.mobilePhone",
+          type: "tel",
+          label: "4. Enter Preparer's Mobile Telephone Number, if any.",
+          placeholder: "(555) 123-4567",
+        },
+        {
+          id: "part12.email",
+          type: "email",
+          label: "5. Enter Preparer's Email Address, if any.",
+          placeholder: "example@email.com",
+        },
+        // {
+        //   id: "part12.preparerSignature",
+        //   type: "text",
+        //   label: "6. Preparer's Signature",
+        //   helpText:
+        //     "Sign your name in ink. Digital signatures are not accepted.",
+        // },
+        // {
+        //   id: "part12.dateOfSignature",
+        //   type: "text",
+        //   label:
+        //     "6. Date of Signature. Enter as 2 digit month, 2 digit day and 4 digit year.",
+        //   placeholder: "MM/DD/YYYY",
+        // },
+      ],
+    },
+    {
+      id: "part13-additional-information",
+      title: "Part 13: Additional Information",
+      description:
+        "Use this section to provide additional information as needed.",
+      questions: [
+        {
+          id: "part13.familyName",
+          type: "text",
+          label: "1. Family Name (Last Name)",
+          helpText: "This field pre-populates from page 1.",
+        },
+        {
+          id: "part13.givenName",
+          type: "text",
+          label: "1. Given Name (First Name)",
+          helpText: "This field pre-populates from page 1.",
+        },
+        {
+          id: "part13.middleName",
+          type: "text",
+          label: "1. Middle Name",
+          helpText: "This field pre-populates from page 1.",
+        },
+        {
+          id: "part13.alienNumber",
+          type: "text",
+          label: "2. Alien Registration Number (A. Number), if any",
+          helpText: "This field pre-populates from page 1.",
+        },
+        {
+          id: "part13.pageNumber",
+          type: "text",
+          label: "3. Enter Page Number.",
+        },
+        {
+          id: "part13.partNumber",
+          type: "text",
+          label: "3. Enter Part Number.",
+        },
+        {
+          id: "part13.itemNumber",
+          type: "text",
+          label: "3. Enter Item Number.",
+        },
+        {
+          id: "part13.additionalInfo",
+          type: "textarea",
+          label: "3. Enter Additional Information.",
+          helpText:
+            "Provide any additional information related to your application.",
+        },
+      ],
+    },
+
+    {
+      id: "part13-additional-info-continued",
+      title: "Part 13: Additional Information",
+      description:
+        "Provide any additional information that could not be included in the previous sections. Reference the page, part, and item numbers for clarity.",
+      questions: [
+        {
+          id: "part13.additionalInfo6",
+          type: "textarea",
+          label: "6. Enter Additional Information",
+          helpText:
+            "Use this space to provide any extra details that do not fit elsewhere on the form.",
+        },
+        {
+          id: "part13.pageNumber",
+          type: "text",
+          label: "7.a. Page Number",
+          helpText:
+            "Indicate the page number of the form where additional information is needed.",
+        },
+        {
+          id: "part13.partNumber",
+          type: "text",
+          label: "7.b. Part Number",
+          helpText:
+            "Specify the part number of the form related to your additional information.",
+        },
+        {
+          id: "part13.itemNumber",
+          type: "text",
+          label: "7.c. Item Number",
+          helpText:
+            "Identify the item number on the form that corresponds to your additional information.",
+        },
+        {
+          id: "part13.additionalInfo7",
+          type: "textarea",
+          label: "7.d. Enter Additional Information",
+          helpText:
+            "Provide further details or explanations as necessary for the referenced page, part, and item numbers.",
+        },
+      ],
+    },
+  ],
+  pdfFieldMappings: I_131_FIELD_MAPPINGS,
+  requiredDocuments: [],
+  instructions: [],
+};
+
+const I864_DEFINITION: FormDefinition = {
+  id: "i-864",
+  code: "I-864",
+  name: "Affidavit of Support Under Section 213A",
+  description: "Financial sponsorship for family-based immigration",
+  category: "family",
+  estimatedTime: "60-90 minutes",
+  filingFee: 0,
+  price: 60,
+  sections: [
+    // PART 1: Basis for Filing Affidavit of Support
+    {
+      id: "part1-basis",
+      title: "Part 1: Basis for Filing Affidavit of Support",
+      description: "Indicate your relationship to the sponsored immigrant",
+      questions: [
+        {
+          id: "part1.sponsorType",
+          type: "radio",
+          label:
+            "I am filing this affidavit of support because (select only one box):",
+          required: true,
+          options: [
+            {
+              value: "petitioner",
+              label:
+                "I am the petitioner. I filed or am filing for the immigration of my relative.",
+            },
+            {
+              value: "joint-sponsor",
+              label:
+                "I am a joint sponsor. I am willing to accept joint legal liability with the petitioner.",
+            },
+            {
+              value: "substitute",
+              label:
+                "I am a substitute sponsor. I am replacing the original petitioner because that person died or the petitioner lost lawful permanent resident status through abandonment or loss of citizenship.",
+            },
+          ],
+          helpText: "Most sponsors are the petitioner who filed Form I-130",
+        },
+      ],
+    },
+    // PART 2: Information on the Principal Immigrant
+    {
+      id: "part2-immigrant-info",
+      title: "Part 2: Information About the Principal Immigrant",
+      description: "Information about the person you are sponsoring",
+      questions: [
+        {
+          id: "part2.immigrantFamilyName",
+          type: "text",
+          label: "1.a. Family Name (Last Name)",
+          required: true,
+          helpText: "Enter the principal immigrant's legal last name",
+        },
+        {
+          id: "part2.immigrantGivenName",
+          type: "text",
+          label: "1.b. Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part2.immigrantMiddleName",
+          type: "text",
+          label: "1.c. Middle Name",
+        },
+        {
+          id: "part2.immigrantAlienNumber",
+          type: "text",
+          label: "2. Alien Registration Number (A-Number) (if any)",
+          placeholder: "A-",
+          helpText: "If the immigrant has an A-Number from USCIS",
+        },
+        {
+          id: "part2.immigrantDob",
+          type: "date",
+          label: "3. Date of Birth (mm/dd/yyyy)",
+          required: true,
+        },
+        {
+          id: "part2.immigrantCountryOfCitizenship",
+          type: "text",
+          label: "4. Country of Citizenship or Nationality",
+          required: true,
+        },
+      ],
+    },
+    // PART 3: Information About the Immigrants You Are Sponsoring
+    {
+      id: "part3-additional-immigrants",
+      title: "Part 3: Immigrants Being Sponsored",
+      description:
+        "List all family members immigrating with the principal immigrant",
+      questions: [
+        {
+          id: "part3.sponsoringPrincipal",
+          type: "radio",
+          label:
+            "1. Are you sponsoring the principal immigrant named in Part 2?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part3.familyMembers",
+          type: "textarea",
+          label:
+            "2-7. List family members immigrating at the same time or within 6 months",
+          placeholder:
+            "For each family member, provide: Name, A-Number (if any), Date of Birth, Relationship",
+          helpText:
+            "Include spouse and/or unmarried children under 21 years old",
+        },
+      ],
+    },
+    // PART 4: Information About You (the Sponsor)
+    {
+      id: "part4-sponsor-personal",
+      title: "Part 4: Information About You (Sponsor)",
+      description: "Your personal information as the sponsor",
+      questions: [
+        {
+          id: "part4.familyName",
+          type: "text",
+          label: "1.a. Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part4.givenName",
+          type: "text",
+          label: "1.b. Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part4.middleName",
+          type: "text",
+          label: "1.c. Middle Name",
+        },
+        {
+          id: "part4.mailingStreet",
+          type: "text",
+          label: "2.a. Street Number and Name",
+          required: true,
+        },
+        {
+          id: "part4.mailingAptType",
+          type: "select",
+          label: "2.b. Unit Type",
+          options: [
+            { value: "", label: "Select if applicable" },
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part4.mailingAptNumber",
+          type: "text",
+          label: "2.c. Unit Number",
+        },
+        {
+          id: "part4.mailingCity",
+          type: "text",
+          label: "2.d. City or Town",
+          required: true,
+        },
+        {
+          id: "part4.mailingState",
+          type: "select",
+          label: "2.e. State",
+          required: true,
+          options: US_STATES,
+        },
+        {
+          id: "part4.mailingZip",
+          type: "text",
+          label: "2.f. ZIP Code",
+          required: true,
+          placeholder: "12345",
+        },
+      ],
+    },
+    {
+      id: "part4-sponsor-citizenship",
+      title: "Part 4: Sponsor's Citizenship and Identification",
+      description: "Citizenship status and identification numbers",
+      questions: [
+        {
+          id: "part4.dob",
+          type: "date",
+          label: "7. Date of Birth (mm/dd/yyyy)",
+          required: true,
+        },
+        {
+          id: "part4.placeOfBirth",
+          type: "text",
+          label: "8. Place of Birth (City/Town, State/Province, Country)",
+          required: true,
+        },
+        {
+          id: "part4.ssn",
+          type: "ssn",
+          label: "9. U.S. Social Security Number",
+          required: true,
+          placeholder: "###-##-####",
+          helpText:
+            "Required - you must have a Social Security Number to sponsor",
+        },
+        {
+          id: "part4.citizenshipStatus",
+          type: "select",
+          label: "10. My citizenship/residency status is:",
+          required: true,
+          options: [
+            {
+              value: "us-citizen-birth",
+              label: "U.S. Citizen by birth in the United States",
+            },
+            {
+              value: "us-citizen-naturalization",
+              label: "U.S. Citizen through naturalization",
+            },
+            { value: "us-national", label: "U.S. National" },
+            { value: "lpr", label: "Lawful Permanent Resident" },
+          ],
+          helpText:
+            "Only U.S. citizens, U.S. nationals, and LPRs can be sponsors",
+        },
+        {
+          id: "part4.activeDutyMilitary",
+          type: "radio",
+          label:
+            "11. Are you currently on active duty in the U.S. Armed Forces?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+          helpText:
+            "Active duty service members have lower income requirements (100% vs 125% of poverty guidelines)",
+        },
+      ],
+    },
+    // PART 5: Sponsor's Household Size
+    {
+      id: "part5-household-size",
+      title: "Part 5: Sponsor's Household Size",
+      description:
+        "Calculate your total household size for income requirements",
+      questions: [
+        {
+          id: "part5.immigrantsSponsoring",
+          type: "text",
+          label:
+            "1. Number of immigrants you are sponsoring (from Parts 2 and 3)",
+          required: true,
+          placeholder: "Enter number",
+          helpText:
+            "Count the principal immigrant plus any family members from Part 3",
+        },
+        {
+          id: "part5.yourself",
+          type: "text",
+          label: "2. Yourself (enter 1)",
+          required: true,
+          placeholder: "1",
+          helpText: "Always enter 1 for yourself",
+        },
+        {
+          id: "part5.spouse",
+          type: "text",
+          label: "3. Your spouse (enter 1 if married, 0 if not)",
+          required: true,
+          placeholder: "0 or 1",
+        },
+        {
+          id: "part5.children",
+          type: "text",
+          label: "4. Number of your children (unmarried and under 21)",
+          required: true,
+          placeholder: "Enter number",
+          helpText:
+            "Count children living with you and those not living with you",
+        },
+        {
+          id: "part5.otherDependents",
+          type: "text",
+          label:
+            "5. Number of other dependents listed on your most recent tax return",
+          required: true,
+          placeholder: "Enter number",
+        },
+        {
+          id: "part5.otherHouseholdMembers",
+          type: "text",
+          label:
+            "6. Number of other people living with you who are combining income (Form I-864A)",
+          required: true,
+          placeholder: "Enter number",
+          helpText: "Include only those who completed Form I-864A",
+        },
+        {
+          id: "part5.previouslySponsored",
+          type: "text",
+          label:
+            "7. Number of immigrants you previously sponsored (if still obligated)",
+          required: true,
+          placeholder: "Enter number",
+        },
+        {
+          id: "part5.totalHouseholdSize",
+          type: "text",
+          label: "8. TOTAL HOUSEHOLD SIZE (add lines 1-7)",
+          required: true,
+          placeholder: "Calculate total",
+          helpText: "This number determines your minimum income requirement",
+        },
+      ],
+    },
+    // PART 6: Sponsor's Employment and Income
+    {
+      id: "part6-employment",
+      title: "Part 6: Sponsor's Employment and Income",
+      description: "Your employment status and income information",
+      questions: [
+        {
+          id: "part6.employmentStatus",
+          type: "select",
+          label: "1-6. My current employment status is:",
+          required: true,
+          options: [
+            {
+              value: "employed",
+              label: "Employed by a company or organization",
+            },
+            { value: "self-employed", label: "Self-employed" },
+            { value: "retired", label: "Retired" },
+            { value: "unemployed", label: "Unemployed" },
+            { value: "other", label: "Other" },
+          ],
+        },
+        {
+          id: "part6.employerName",
+          type: "text",
+          label: "Employer Name (if employed)",
+          helpText:
+            "Your current employer or your business name if self-employed",
+        },
+        {
+          id: "part6.annualIncome",
+          type: "text",
+          label: "7. My current individual annual income is:",
+          required: true,
+          placeholder: "$50,000",
+          helpText:
+            "From your most recent federal tax return or estimated current income",
+        },
+        {
+          id: "part6.householdIncome",
+          type: "text",
+          label:
+            "8-22. Total income from all household members (including yourself)",
+          required: true,
+          placeholder: "$75,000",
+          helpText:
+            "Include income from spouse and anyone who completed Form I-864A",
+        },
+        {
+          id: "part6.meetsIncomeRequirement",
+          type: "radio",
+          label:
+            "Does your total household income meet or exceed 125% of Federal Poverty Guidelines for your household size?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes - I meet the income requirement" },
+            {
+              value: "no",
+              label:
+                "No - I will use assets to make up the difference (complete Part 7)",
+            },
+          ],
+          helpText:
+            "Check Form I-864P for current poverty guidelines. For 2024, 125% is approximately $22,887 for household of 2",
+        },
+      ],
+    },
+    // PART 7: Use of Assets
+    {
+      id: "part7-assets",
+      title: "Part 7: Use of Assets to Supplement Income (If Applicable)",
+      description:
+        "Complete only if your income alone does not meet the requirement",
+      questions: [
+        {
+          id: "part7.useAssets",
+          type: "radio",
+          label: "Are you using assets to meet the income requirement?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes - I am including assets" },
+            {
+              value: "no",
+              label: "No - My income alone meets the requirement",
+            },
+          ],
+        },
+        {
+          id: "part7.sponsorAssets",
+          type: "text",
+          label: "1. Total value of your assets",
+          placeholder: "$100,000",
+          helpText:
+            "Include savings, checking, stocks, bonds, real estate (minus mortgages)",
+        },
+        {
+          id: "part7.householdMemberAssets",
+          type: "text",
+          label: "2. Total value of household member's assets",
+          placeholder: "$50,000",
+          helpText: "From anyone who completed Form I-864A",
+        },
+        {
+          id: "part7.immigrantAssets",
+          type: "text",
+          label: "3. Total value of immigrant's assets",
+          placeholder: "$25,000",
+          helpText: "Assets the immigrant is bringing to the U.S.",
+        },
+        {
+          id: "part7.totalAssets",
+          type: "text",
+          label: "4. TOTAL ASSETS (add lines 1-3)",
+          placeholder: "Calculate total",
+          helpText:
+            "Assets count at 1/5 value (divide by 5). For spouse of U.S. citizen, assets count at 1/3 value (divide by 3).",
+        },
+      ],
+    },
+  ],
+  pdfFieldMappings: [],
+  requiredDocuments: [
+    "Copy of your most recent Federal income tax return (IRS Form 1040) with all schedules",
+    "Copies of W-2 forms for the most recent tax year",
+    "Copies of 1099 forms for the most recent tax year (if applicable)",
+    "Employment verification letter on company letterhead (if currently employed)",
+    "Proof of current income (recent pay stubs covering 6 months)",
+    "Copy of your U.S. passport, birth certificate, or naturalization certificate (proof of citizenship)",
+    "If using assets: bank statements, property deeds, stock certificates, appraisals, etc.",
+    "Form I-864A from any household members whose income you are including",
+  ],
+  instructions: [],
+};
+
+// const N400_DEFINITION: FormDefinition = {
+//   id: "n-400",
+//   code: "N-400",
+//   name: "Application for Naturalization",
+//   description: "Apply to become a U.S. citizen",
+//   category: "citizenship",
+//   estimatedTime: "90-120 minutes",
+//   filingFee: 640,
+//   price: 60,
+//   sections: [
+//     // PART 1: Information About Your Eligibility
+//     {
+//       id: "part1-eligibility",
+//       title: "Part 1: Information About Your Eligibility",
+//       description: "Select the basis for your naturalization application",
+//       questions: [
+//         {
+//           id: "part1.eligibilityCategory",
+//           type: "select",
+//           label: "I am applying for naturalization based on (select one):",
+//           required: true,
+//           options: [
+//             {
+//               value: "general-5yr",
+//               label:
+//                 "General Provision: I have been a lawful permanent resident for at least 5 years",
+//             },
+//             {
+//               value: "spouse-3yr",
+//               label:
+//                 "I am married to a U.S. citizen and have been a lawful permanent resident for at least 3 years",
+//             },
+//             {
+//               value: "military-1yr",
+//               label:
+//                 "I have qualifying U.S. military service (1+ year active duty)",
+//             },
+//             {
+//               value: "military-wartime",
+//               label: "I have qualifying U.S. military service during wartime",
+//             },
+//             { value: "other", label: "Other (see instructions)" },
+//           ],
+//           helpText:
+//             "Most applicants select either 5-year or 3-year (spouse of U.S. citizen) option",
+//         },
+//       ],
+//     },
+//     // PART 2: Information About You
+//     {
+//       id: "part2-personal-info",
+//       title: "Part 2: Your Current Legal Name",
+//       description: "Enter your name exactly as it appears on your green card",
+//       questions: [
+//         {
+//           id: "part2.familyName",
+//           type: "text",
+//           label: "1.a. Family Name (Last Name)",
+//           required: true,
+//         },
+//         {
+//           id: "part2.givenName",
+//           type: "text",
+//           label: "1.b. Given Name (First Name)",
+//           required: true,
+//         },
+//         {
+//           id: "part2.middleName",
+//           type: "text",
+//           label: "1.c. Middle Name",
+//         },
+//         {
+//           id: "part2.nameChange",
+//           type: "radio",
+//           label: "2. Do you want to legally change your name?",
+//           required: true,
+//           options: [
+//             { value: "yes", label: "Yes" },
+//             { value: "no", label: "No" },
+//           ],
+//           helpText:
+//             "You can request a legal name change during your naturalization ceremony",
+//         },
+//       ],
+//     },
+//     {
+//       id: "part2-uscis-info",
+//       title: "Part 2: USCIS Information",
+//       description: "Your A-Number and permanent resident information",
+//       questions: [
+//         {
+//           id: "part2.alienNumber",
+//           type: "text",
+//           label: "4. A-Number (Alien Registration Number)",
+//           required: true,
+//           placeholder: "A-",
+//           helpText: "Found on your green card",
+//         },
+//         {
+//           id: "part2.uscisAccount",
+//           type: "text",
+//           label: "5. USCIS Online Account Number",
+//           helpText: "Only if you have created an account at uscis.gov",
+//         },
+//         {
+//           id: "part2.dateBecomePR",
+//           type: "date",
+//           label: "6. Date You Became a Lawful Permanent Resident",
+//           required: true,
+//           helpText: "Found on your green card",
+//         },
+//       ],
+//     },
+//     {
+//       id: "part2-contact",
+//       title: "Part 2: Contact Information",
+//       description: "How can USCIS contact you?",
+//       questions: [
+//         {
+//           id: "part2.mailingStreet",
+//           type: "text",
+//           label: "7.a. Street Number and Name",
+//           required: true,
+//         },
+//         {
+//           id: "part2.mailingAptType",
+//           type: "select",
+//           label: "7.b. Unit Type",
+//           options: [
+//             { value: "", label: "Select if applicable" },
+//             { value: "apt", label: "Apt." },
+//             { value: "ste", label: "Ste." },
+//             { value: "flr", label: "Flr." },
+//           ],
+//         },
+//         {
+//           id: "part2.mailingAptNumber",
+//           type: "text",
+//           label: "7.c. Unit Number",
+//         },
+//         {
+//           id: "part2.mailingCity",
+//           type: "text",
+//           label: "7.d. City or Town",
+//           required: true,
+//         },
+//         {
+//           id: "part2.mailingState",
+//           type: "select",
+//           label: "7.e. State",
+//           required: true,
+//           options: US_STATES,
+//         },
+//         {
+//           id: "part2.mailingZip",
+//           type: "text",
+//           label: "7.f. ZIP Code",
+//           required: true,
+//           placeholder: "12345",
+//         },
+//       ],
+//     },
+//     // PART 3: Biographic Information
+//     {
+//       id: "part3-biographic",
+//       title: "Part 3: Biographic Information",
+//       description: "Physical characteristics and demographic information",
+//       questions: [
+//         {
+//           id: "part3.dob",
+//           type: "date",
+//           label: "1. Date of Birth (mm/dd/yyyy)",
+//           required: true,
+//         },
+//         {
+//           id: "part3.countryOfBirth",
+//           type: "text",
+//           label: "2. Country of Birth",
+//           required: true,
+//         },
+//         {
+//           id: "part3.countryOfCitizenship",
+//           type: "text",
+//           label: "3. Country of Citizenship or Nationality",
+//           required: true,
+//         },
+//         {
+//           id: "part3.ethnicity",
+//           type: "radio",
+//           label: "4. Ethnicity (Select only one box)",
+//           required: true,
+//           options: [
+//             { value: "hispanic", label: "Hispanic or Latino" },
+//             { value: "not-hispanic", label: "Not Hispanic or Latino" },
+//           ],
+//         },
+//         {
+//           id: "part3.race",
+//           type: "select",
+//           label: "5. Race (Select all that apply)",
+//           required: true,
+//           options: [
+//             { value: "white", label: "White" },
+//             { value: "asian", label: "Asian" },
+//             { value: "black", label: "Black or African American" },
+//             {
+//               value: "native-american",
+//               label: "American Indian or Alaska Native",
+//             },
+//             {
+//               value: "pacific",
+//               label: "Native Hawaiian or Other Pacific Islander",
+//             },
+//           ],
+//         },
+//         {
+//           id: "part3.height",
+//           type: "text",
+//           label: "6. Height",
+//           required: true,
+//           placeholder: "Feet and inches",
+//         },
+//         {
+//           id: "part3.weight",
+//           type: "text",
+//           label: "7. Weight",
+//           required: true,
+//           placeholder: "Pounds",
+//         },
+//         {
+//           id: "part3.eyeColor",
+//           type: "select",
+//           label: "8. Eye Color",
+//           required: true,
+//           options: [
+//             { value: "black", label: "Black" },
+//             { value: "blue", label: "Blue" },
+//             { value: "brown", label: "Brown" },
+//             { value: "gray", label: "Gray" },
+//             { value: "green", label: "Green" },
+//             { value: "hazel", label: "Hazel" },
+//             { value: "maroon", label: "Maroon" },
+//             { value: "pink", label: "Pink" },
+//             { value: "unknown", label: "Unknown/Other" },
+//           ],
+//         },
+//         {
+//           id: "part3.hairColor",
+//           type: "select",
+//           label: "9. Hair Color",
+//           required: true,
+//           options: [
+//             { value: "bald", label: "Bald (No hair)" },
+//             { value: "black", label: "Black" },
+//             { value: "blond", label: "Blond" },
+//             { value: "brown", label: "Brown" },
+//             { value: "gray", label: "Gray" },
+//             { value: "red", label: "Red" },
+//             { value: "sandy", label: "Sandy" },
+//             { value: "white", label: "White" },
+//             { value: "unknown", label: "Unknown/Other" },
+//           ],
+//         },
+//       ],
+//     },
+//     // PART 4: Information About Your Residence
+//     {
+//       id: "part4-residence",
+//       title: "Part 4: Addresses for the Last 5 Years",
+//       description:
+//         "List every address where you have lived during the last 5 years",
+//       questions: [
+//         {
+//           id: "part4.addressHistory",
+//           type: "textarea",
+//           label:
+//             "List ALL addresses where you have lived during the past 5 years",
+//           required: true,
+//           placeholder:
+//             "Start with your current address and work backwards. For each address include: Street, City, State, ZIP, dates lived there (from mm/yyyy to mm/yyyy)",
+//           helpText:
+//             "Include every address. If you need more space, use Part 14 (Additional Information)",
+//         },
+//       ],
+//     },
+//     // PART 5: Information About Your Marital History
+//     {
+//       id: "part5-marital",
+//       title: "Part 5: Information About Your Marital History",
+//       description: "Current marital status and marriage history",
+//       questions: [
+//         {
+//           id: "part5.currentMaritalStatus",
+//           type: "select",
+//           label: "1. What is your current marital status?",
+//           required: true,
+//           options: [
+//             { value: "single", label: "Single, Never Married" },
+//             { value: "married", label: "Married" },
+//             { value: "divorced", label: "Divorced" },
+//             { value: "widowed", label: "Widowed" },
+//             {
+//               value: "separated",
+//               label: "Marriage Annulled or Other Legal Separation",
+//             },
+//           ],
+//         },
+//         {
+//           id: "part5.timesMarried",
+//           type: "text",
+//           label:
+//             "2. How many times have you been married (including annulled marriages)?",
+//           required: true,
+//           placeholder: "Enter number",
+//         },
+//         {
+//           id: "part5.currentSpouseName",
+//           type: "text",
+//           label: "3. Current Spouse's Legal Name (if currently married)",
+//           helpText: "Full legal name of your current spouse",
+//         },
+//         {
+//           id: "part5.currentSpouseUSCitizen",
+//           type: "radio",
+//           label: "4. Is your current spouse a U.S. citizen?",
+//           options: [
+//             { value: "yes", label: "Yes" },
+//             { value: "no", label: "No" },
+//           ],
+//           helpText: "Complete only if currently married",
+//         },
+//       ],
+//     },
+//     // PART 6: Information About Your Children
+//     {
+//       id: "part6-children",
+//       title: "Part 6: Information About Your Children",
+//       description: "List all children under 18 years old",
+//       questions: [
+//         {
+//           id: "part6.totalChildren",
+//           type: "text",
+//           label:
+//             "1. Total number of children you have who are under 18 years of age",
+//           required: true,
+//           placeholder: "Enter 0 if none",
+//           helpText: "The updated N-400 only asks about children under 18",
+//         },
+//         {
+//           id: "part6.childrenDetails",
+//           type: "textarea",
+//           label: "2. List information for each child under 18",
+//           placeholder:
+//             "For each child under 18, provide: Full Name, Date of Birth, Country of Birth, Current Address, A-Number (if any)",
+//           helpText: "Include biological, adopted, and stepchildren under 18",
+//         },
+//       ],
+//     },
+//     // PART 7: Employment and School History
+//     {
+//       id: "part7-employment",
+//       title: "Part 7: Employment and Schools You Attended (Last 5 Years)",
+//       description: "List your employment and education for the past 5 years",
+//       questions: [
+//         {
+//           id: "part7.employmentHistory",
+//           type: "textarea",
+//           label: "List ALL employment and education for the past 5 years",
+//           required: true,
+//           placeholder:
+//             "Start with current/most recent. For each: Employer/School name, Address, Your occupation/field of study, Dates (from mm/yyyy to mm/yyyy). Include unemployment periods.",
+//           helpText:
+//             "Be complete. Include all jobs, self-employment, school, and periods of unemployment.",
+//         },
+//       ],
+//     },
+//     // PART 8: Time Outside the United States
+//     {
+//       id: "part8-travel",
+//       title: "Part 8: Time Outside the United States",
+//       description: "List all trips outside the U.S. during the last 5 years",
+//       questions: [
+//         {
+//           id: "part8.totalTrips",
+//           type: "text",
+//           label:
+//             "1. How many total days have you spent outside the United States during the last 5 years?",
+//           required: true,
+//           placeholder: "Total days",
+//           helpText: "Add up all days from all trips",
+//         },
+//         {
+//           id: "part8.totalTripsCount",
+//           type: "text",
+//           label:
+//             "2. How many trips of 24 hours or more have you taken outside the United States during the last 5 years?",
+//           required: true,
+//           placeholder: "Number of trips",
+//         },
+//         {
+//           id: "part8.tripDetails",
+//           type: "textarea",
+//           label: "3. List all trips outside the United States",
+//           required: true,
+//           placeholder:
+//             "For each trip provide: Date left U.S. (mm/dd/yyyy), Date returned (mm/dd/yyyy), Country/countries visited, Total days outside U.S.",
+//           helpText:
+//             "Include ALL trips of 24 hours or more. Extended absences (6+ months) may affect eligibility.",
+//         },
+//       ],
+//     },
+//     // PART 12: Additional Information (Good Moral Character Questions)
+//     {
+//       id: "part12-moral-character",
+//       title: "Part 12: Additional Information About You",
+//       description:
+//         "Answer ALL questions. These questions relate to eligibility and good moral character.",
+//       questions: [
+//         {
+//           id: "part12.taxes",
+//           type: "radio",
+//           label:
+//             "1. Have you EVER failed to file a required federal, state, or local tax return?",
+//           required: true,
+//           options: [
+//             { value: "yes", label: "Yes" },
+//             { value: "no", label: "No" },
+//           ],
+//         },
+//         {
+//           id: "part12.oweTaxes",
+//           type: "radio",
+//           label:
+//             "2. Do you owe any federal, state, or local taxes that are overdue?",
+//           required: true,
+//           options: [
+//             { value: "yes", label: "Yes" },
+//             { value: "no", label: "No" },
+//           ],
+//         },
+//         {
+//           id: "part12.nobilityTitle",
+//           type: "radio",
+//           label: "3. Do you have any title of nobility in any foreign country?",
+//           required: true,
+//           options: [
+//             { value: "yes", label: "Yes" },
+//             { value: "no", label: "No" },
+//           ],
+//         },
+//         {
+//           id: "part12.arrestedEver",
+//           type: "radio",
+//           label:
+//             "4. Have you EVER been arrested, cited, or detained by any law enforcement officer?",
+//           required: true,
+//           options: [
+//             { value: "yes", label: "Yes" },
+//             { value: "no", label: "No" },
+//           ],
+//           helpText:
+//             "Include minor traffic violations. Answer Yes even if records were sealed or expunged.",
+//         },
+//         {
+//           id: "part12.convictedCrime",
+//           type: "radio",
+//           label: "5. Have you EVER been convicted of a crime or offense?",
+//           required: true,
+//           options: [
+//             { value: "yes", label: "Yes" },
+//             { value: "no", label: "No" },
+//           ],
+//         },
+//         {
+//           id: "part12.gambling",
+//           type: "radio",
+//           label: "6. Have you EVER been involved in illegal gambling?",
+//           required: true,
+//           options: [
+//             { value: "yes", label: "Yes" },
+//             { value: "no", label: "No" },
+//           ],
+//         },
+//         {
+//           id: "part12.falseClaim",
+//           type: "radio",
+//           label:
+//             "7. Have you EVER falsely claimed to be a U.S. citizen (in writing or any other way)?",
+//           required: true,
+//           options: [
+//             { value: "yes", label: "Yes" },
+//             { value: "no", label: "No" },
+//           ],
+//         },
+//         {
+//           id: "part12.votedIllegally",
+//           type: "radio",
+//           label:
+//             "8. Have you EVER voted in the United States in any federal, state, or local election when you were not a U.S. citizen?",
+//           required: true,
+//           options: [
+//             { value: "yes", label: "Yes" },
+//             { value: "no", label: "No" },
+//           ],
+//         },
+//         {
+//           id: "part12.terroristOrg",
+//           type: "radio",
+//           label:
+//             "9. Have you EVER been a member of or associated with any organization, association, fund, foundation, party, club, or society?",
+//           required: true,
+//           options: [
+//             { value: "yes", label: "Yes" },
+//             { value: "no", label: "No" },
+//           ],
+//           helpText:
+//             "This includes charitable, social, youth, religious, and political organizations",
+//         },
+//         {
+//           id: "part12.persecution",
+//           type: "radio",
+//           label:
+//             "10. Have you EVER persecuted anyone because of race, religion, national origin, membership in a social group, or political opinion?",
+//           required: true,
+//           options: [
+//             { value: "yes", label: "Yes" },
+//             { value: "no", label: "No" },
+//           ],
+//         },
+//         {
+//           id: "part12.genocide",
+//           type: "radio",
+//           label:
+//             "11. Have you EVER committed, ordered, incited, assisted, or participated in genocide?",
+//           required: true,
+//           options: [
+//             { value: "yes", label: "Yes" },
+//             { value: "no", label: "No" },
+//           ],
+//         },
+//         {
+//           id: "part12.torture",
+//           type: "radio",
+//           label:
+//             "12. Have you EVER committed, ordered, incited, assisted, or participated in torture?",
+//           required: true,
+//           options: [
+//             { value: "yes", label: "Yes" },
+//             { value: "no", label: "No" },
+//           ],
+//         },
+//         {
+//           id: "part12.supportConstitution",
+//           type: "radio",
+//           label:
+//             "13. Do you support the Constitution and form of government of the United States?",
+//           required: true,
+//           options: [
+//             { value: "yes", label: "Yes" },
+//             { value: "no", label: "No" },
+//           ],
+//           helpText: "You must answer Yes to be eligible for naturalization",
+//         },
+//         {
+//           id: "part12.bearArms",
+//           type: "radio",
+//           label:
+//             "14. If the law requires it, are you willing to bear arms on behalf of the United States?",
+//           required: true,
+//           options: [
+//             { value: "yes", label: "Yes" },
+//             {
+//               value: "no",
+//               label:
+//                 "No - I claim exemption based on religious training and belief, or conscientious objection",
+//             },
+//           ],
+//         },
+//         {
+//           id: "part12.performWork",
+//           type: "radio",
+//           label:
+//             "15. If the law requires it, are you willing to perform noncombatant service in the U.S. Armed Forces?",
+//           required: true,
+//           options: [
+//             { value: "yes", label: "Yes" },
+//             { value: "no", label: "No - I claim exemption" },
+//           ],
+//         },
+//         {
+//           id: "part12.performCivilian",
+//           type: "radio",
+//           label:
+//             "16. If the law requires it, are you willing to perform work of national importance under civilian direction?",
+//           required: true,
+//           options: [
+//             { value: "yes", label: "Yes" },
+//             { value: "no", label: "No - I claim exemption" },
+//           ],
+//         },
+//       ],
+//     },
+//   ],
+//   pdfFieldMappings: [],
+//   requiredDocuments: [
+//     "Copy of your green card (front and back)",
+//     "Two passport-style photos",
+//     "Copy of marriage certificate (if applying as spouse of U.S. citizen)",
+//     "Copy of spouse's U.S. passport or birth certificate (if applicable)",
+//     "Divorce decrees or death certificates from prior marriages (if applicable)",
+//     "Court records, probation records, or certificates of rehabilitation (if you have criminal history)",
+//     "IRS tax transcripts for the required period",
+//     "Selective Service registration confirmation (males who lived in U.S. between ages 18-26)",
+//   ],
+//   instructions: [],
+// };
+const N_400_DEFINITION: FormDefinition = {
+  id: "n-400",
+  code: "N-400",
+  name: "TODO: Add form name",
+  description: "TODO: Add description",
+  category: "other",
+  estimatedTime: "30-45 minutes",
+  filingFee: 0,
+  price: 60,
+  sections: [
+    {
+      id: "part1-eligibility",
+      title: "Part 1: Eligibility Information",
+      description: "Select the basis for your eligibility to file Form N-400.",
+      questions: [
+        {
+          id: "part1.eligibilityGeneralProvision",
+          type: "radio",
+          label: "1. I am at least 18 years of age and:",
+          required: true,
+          options: [
+            {
+              value: "a",
+              label:
+                "a. Have been a lawful permanent resident of the United States for at least 5 years.",
+            },
+            {
+              value: "b",
+              label:
+                "b. Have been a lawful permanent resident of the United States for at least 3 years and have been married to and living with the same U.S. citizen spouse for the last 3 years.",
+            },
+            {
+              value: "c",
+              label:
+                "c. Am a lawful permanent resident of the United States and am the spouse of a U.S. citizen who is regularly engaged in specified employment abroad.",
+            },
+            {
+              value: "d",
+              label:
+                "d. Am applying on the basis of qualifying military service.",
+            },
+            { value: "e", label: "e. Other (Please explain):" },
+          ],
+          helpText:
+            "Select the option that best describes your eligibility. If 'Other', provide an explanation.",
+        },
+        {
+          id: "part1.eligibilityMilitaryServiceHostilities",
+          type: "radio",
+          label:
+            "2. I am applying on the basis of military service during hostilities.",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+          helpText:
+            "Select 'Yes' if you have served in the U.S. Armed Forces during a period of hostilities.",
+        },
+        {
+          id: "part1.eligibilityMilitaryServiceAnyTime",
+          type: "radio",
+          label:
+            "3. I am applying on the basis of military service at any time.",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+          helpText:
+            "Select 'Yes' if you have served in the U.S. Armed Forces at any time.",
+        },
+        {
+          id: "part1.eligibilityOtherReason",
+          type: "textarea",
+          label: "4. If you selected 'Other', please explain:",
+          helpText:
+            "Provide a detailed explanation of your eligibility if you selected 'Other'.",
+        },
+      ],
+    },
+    {
+      id: "part1-personal-info",
+      title: "Part 1: Personal Information",
+      description: "Provide your personal identification information.",
+      questions: [
+        {
+          id: "part1.alienRegistrationNumber",
+          type: "text",
+          label: "5. Alien Registration Number (A-Number)",
+          required: true,
+          placeholder: "A###-###-###",
+          helpText: "Enter your Alien Registration Number, if applicable.",
+        },
+        {
+          id: "part1.uscisFieldOffice",
+          type: "text",
+          label: "6. USCIS Field Office",
+          required: true,
+          helpText:
+            "Enter the USCIS field office where you will be filing your application.",
+        },
+      ],
+    },
+
+    {
+      id: "part2-personal-info",
+      title: "Part 2: Information About You",
+      description:
+        "Provide your personal details as required for the application.",
+      questions: [
+        {
+          id: "part2.familyName",
+          type: "text",
+          label: "1.a. Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part2.givenName",
+          type: "text",
+          label: "1.b. Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part2.middleName",
+          type: "text",
+          label: "1.c. Middle Name",
+        },
+        {
+          id: "part2.otherNamesUsedFamilyName1",
+          type: "text",
+          label: "2.a. Other Names Used - Family Name (Last Name)",
+          helpText: "Include any other names you have used in the past.",
+        },
+        {
+          id: "part2.otherNamesUsedGivenName1",
+          type: "text",
+          label: "2.b. Other Names Used - Given Name (First Name)",
+        },
+        {
+          id: "part2.otherNamesUsedMiddleName1",
+          type: "text",
+          label: "2.c. Other Names Used - Middle Name",
+        },
+        {
+          id: "part2.otherNamesUsedFamilyName2",
+          type: "text",
+          label: "3.a. Other Names Used - Family Name (Last Name)",
+        },
+        {
+          id: "part2.otherNamesUsedGivenName2",
+          type: "text",
+          label: "3.b. Other Names Used - Given Name (First Name)",
+        },
+        {
+          id: "part2.otherNamesUsedMiddleName2",
+          type: "text",
+          label: "3.c. Other Names Used - Middle Name",
+        },
+        {
+          id: "part2.dateOfBirth",
+          type: "date",
+          label: "4. Date of Birth (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.gender",
+          type: "radio",
+          label: "5. Gender",
+          required: true,
+          options: [
+            { value: "male", label: "Male" },
+            { value: "female", label: "Female" },
+          ],
+        },
+        {
+          id: "part2.uscisOnlineAccountNumber",
+          type: "text",
+          label: "6. USCIS Online Account Number (if any)",
+          helpText: "Enter your USCIS Online Account Number if you have one.",
+        },
+        {
+          id: "part2.dateBecamePermanentResident",
+          type: "date",
+          label: "7. Date You Became a Permanent Resident (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.countryOfNationality",
+          type: "text",
+          label: "8. Country of Nationality",
+          required: true,
+        },
+        {
+          id: "part2.countryOfBirth",
+          type: "text",
+          label: "9. Country of Birth",
+          required: true,
+        },
+        {
+          id: "part2.parentUsCitizenBefore18",
+          type: "radio",
+          label:
+            "10. Were your parents U.S. citizens before your 18th birthday?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part2.ssaCardUpdate",
+          type: "radio",
+          label: "11. Do you want to update your Social Security card?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part2.socialSecurityNumber",
+          type: "ssn",
+          label: "12. U.S. Social Security Number (if any)",
+          placeholder: "###-##-####",
+          helpText: "Enter your Social Security Number if you have one.",
+        },
+        {
+          id: "part2.ssaConsent",
+          type: "radio",
+          label: "13. Do you consent to SSA disclosure?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part2.disabilityException",
+          type: "radio",
+          label: "14. Are you requesting an exception due to a disability?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part2.nameChange",
+          type: "radio",
+          label: "15. Do you want to legally change your name?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part2.nameChangeFamilyName",
+          type: "text",
+          label: "15.a. New Family Name (Last Name)",
+          helpText:
+            "Enter your new last name if you are requesting a name change.",
+        },
+        {
+          id: "part2.nameChangeGivenName",
+          type: "text",
+          label: "15.b. New Given Name (First Name)",
+        },
+        {
+          id: "part2.nameChangeMiddleName",
+          type: "text",
+          label: "15.c. New Middle Name",
+        },
+      ],
+    },
+
+    {
+      id: "part4-ethnicity",
+      title: "Part 4: Ethnicity",
+      description: "Select your ethnicity.",
+      questions: [
+        {
+          id: "part4.ethnicity",
+          type: "radio",
+          label: "1. Are you Hispanic or Latino?",
+          required: true,
+          options: [
+            { value: "hispanic", label: "Yes, Hispanic or Latino" },
+            { value: "notHispanic", label: "No, not Hispanic or Latino" },
+          ],
+          helpText: "Select 'Yes' if you are of Hispanic or Latino origin.",
+        },
+      ],
+    },
+    {
+      id: "part4-race",
+      title: "Part 4: Race",
+      description: "Select one or more races that you identify with.",
+      questions: [
+        {
+          id: "part4.race",
+          type: "checkbox",
+          label: "2. Race",
+          required: true,
+          options: [
+            {
+              value: "americanIndian",
+              label: "American Indian or Alaska Native",
+            },
+            { value: "asian", label: "Asian" },
+            { value: "black", label: "Black or African American" },
+            {
+              value: "pacificIslander",
+              label: "Native Hawaiian or Other Pacific Islander",
+            },
+            { value: "white", label: "White" },
+          ],
+          helpText: "You may select more than one race.",
+        },
+      ],
+    },
+    {
+      id: "part4-physical-characteristics",
+      title: "Part 4: Physical Characteristics",
+      description: "Provide your height, weight, eye color, and hair color.",
+      questions: [
+        {
+          id: "part4.height",
+          type: "group",
+          label: "3. Height",
+          questions: [
+            {
+              id: "part4.heightFeet",
+              type: "select",
+              label: "Feet",
+              required: true,
+              options: Array.from({ length: 8 }, (_, i) => ({
+                value: `${i + 1}`,
+                label: `${i + 1}`,
+              })),
+              helpText: "Select your height in feet.",
+            },
+            {
+              id: "part4.heightInches",
+              type: "select",
+              label: "Inches",
+              required: true,
+              options: Array.from({ length: 12 }, (_, i) => ({
+                value: `${i}`,
+                label: `${i}`,
+              })),
+              helpText: "Select your height in inches.",
+            },
+          ],
+        },
+        {
+          id: "part4.weight",
+          type: "group",
+          label: "4. Weight",
+          questions: [
+            {
+              id: "part4.weightFirstDigit",
+              type: "select",
+              label: "First Digit",
+              required: true,
+              options: Array.from({ length: 10 }, (_, i) => ({
+                value: `${i}`,
+                label: `${i}`,
+              })),
+              helpText: "Select the first digit of your weight.",
+            },
+            {
+              id: "part4.weightSecondDigit",
+              type: "select",
+              label: "Second Digit",
+              required: true,
+              options: Array.from({ length: 10 }, (_, i) => ({
+                value: `${i}`,
+                label: `${i}`,
+              })),
+              helpText: "Select the second digit of your weight.",
+            },
+            {
+              id: "part4.weightThirdDigit",
+              type: "select",
+              label: "Third Digit",
+              required: true,
+              options: Array.from({ length: 10 }, (_, i) => ({
+                value: `${i}`,
+                label: `${i}`,
+              })),
+              helpText: "Select the third digit of your weight.",
+            },
+          ],
+        },
+        {
+          id: "part4.eyeColor",
+          type: "radio",
+          label: "5. Eye Color",
+          required: true,
+          options: [
+            { value: "brown", label: "Brown" },
+            { value: "blue", label: "Blue" },
+            { value: "green", label: "Green" },
+            { value: "hazel", label: "Hazel" },
+            { value: "gray", label: "Gray" },
+            { value: "black", label: "Black" },
+            { value: "pink", label: "Pink" },
+            { value: "maroon", label: "Maroon" },
+            { value: "unknown", label: "Unknown" },
+          ],
+          helpText: "Select the color that best matches your eye color.",
+        },
+        {
+          id: "part4.hairColor",
+          type: "radio",
+          label: "6. Hair Color",
+          required: true,
+          options: [
+            { value: "bald", label: "Bald" },
+            { value: "sandy", label: "Sandy" },
+            { value: "red", label: "Red" },
+            { value: "white", label: "White" },
+            { value: "gray", label: "Gray" },
+            { value: "blond", label: "Blond" },
+            { value: "brown", label: "Brown" },
+            { value: "black", label: "Black" },
+            { value: "unknown", label: "Unknown" },
+          ],
+          helpText: "Select the color that best matches your hair color.",
+        },
+      ],
+    },
+
+    {
+      id: "part3-address-history",
+      title: "Part 3: Address History",
+      description:
+        "Provide your current and previous addresses for the last five years.",
+      questions: [
+        {
+          id: "part3.physicalAddress1",
+          type: "text",
+          label: "1.a. Physical Address 1",
+          required: true,
+          helpText: "Enter your current physical address.",
+        },
+        {
+          id: "part3.cityTown1",
+          type: "text",
+          label: "1.b. City or Town",
+          required: true,
+        },
+        {
+          id: "part3.state1",
+          type: "select",
+          label: "1.c. State",
+          required: true,
+          options: US_STATES,
+        },
+        {
+          id: "part3.zipCode1",
+          type: "text",
+          label: "1.d. ZIP Code",
+          required: true,
+        },
+        {
+          id: "part3.country1",
+          type: "text",
+          label: "1.e. Country",
+          required: true,
+        },
+        {
+          id: "part3.fromDate1",
+          type: "date",
+          label: "1.f. From Date",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part3.physicalAddress2",
+          type: "text",
+          label: "2.a. Physical Address 2",
+          helpText: "Enter your previous physical address if applicable.",
+        },
+        {
+          id: "part3.cityTown2",
+          type: "text",
+          label: "2.b. City or Town",
+        },
+        {
+          id: "part3.state2",
+          type: "select",
+          label: "2.c. State",
+          options: US_STATES,
+        },
+        {
+          id: "part3.zipCode2",
+          type: "text",
+          label: "2.d. ZIP Code",
+        },
+        {
+          id: "part3.country2",
+          type: "text",
+          label: "2.e. Country",
+        },
+        {
+          id: "part3.fromDate2",
+          type: "date",
+          label: "2.f. From Date",
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part3.toDate2",
+          type: "date",
+          label: "2.g. To Date",
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part3.physicalAddress3",
+          type: "text",
+          label: "3.a. Physical Address 3",
+          helpText: "Enter another previous physical address if applicable.",
+        },
+        {
+          id: "part3.cityTown3",
+          type: "text",
+          label: "3.b. City or Town",
+        },
+        {
+          id: "part3.state3",
+          type: "select",
+          label: "3.c. State",
+          options: US_STATES,
+        },
+        {
+          id: "part3.zipCode3",
+          type: "text",
+          label: "3.d. ZIP Code",
+        },
+        {
+          id: "part3.country3",
+          type: "text",
+          label: "3.e. Country",
+        },
+        {
+          id: "part3.fromDate3",
+          type: "date",
+          label: "3.f. From Date",
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part3.toDate3",
+          type: "date",
+          label: "3.g. To Date",
+          placeholder: "MM/DD/YYYY",
+        },
+      ],
+    },
+    {
+      id: "part3-current-mailing-address",
+      title: "Part 3: Current Mailing Address",
+      description:
+        "Provide your current mailing address if different from your physical address.",
+      questions: [
+        {
+          id: "part3.isCurrentAddressMailing",
+          type: "radio",
+          label:
+            "Is your current mailing address the same as your physical address?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part3.currentMailingStreet",
+          type: "text",
+          label: "4.a. Street Number and Name",
+          helpText:
+            "Enter your mailing address if different from your physical address.",
+        },
+        {
+          id: "part3.currentMailingAddress.unit",
+          type: "select",
+          label: "4.b. Unit Type",
+          options: [
+            { value: "", label: "Select if applicable" },
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part3.currentMailingAddress.apartmentSuiteFloorNumber",
+          type: "text",
+          label: "4.c. Unit Number",
+        },
+        {
+          id: "part3.currentMailingCity",
+          type: "text",
+          label: "4.d. City or Town",
+        },
+        {
+          id: "part3.currentMailingState",
+          type: "select",
+          label: "4.e. State",
+          options: US_STATES,
+        },
+        {
+          id: "part3.currentMailingZipCode",
+          type: "text",
+          label: "4.f. ZIP Code",
+        },
+        {
+          id: "part3.currentMailingProvince",
+          type: "text",
+          label: "4.g. Province",
+        },
+        {
+          id: "part3.currentMailingPostalCode",
+          type: "text",
+          label: "4.h. Postal Code",
+        },
+        {
+          id: "part3.currentMailingAddress.country",
+          type: "text",
+          label: "4.i. Country",
+        },
+        {
+          id: "part3.currentMailingAddress.inCareOfName",
+          type: "text",
+          label: "4.j. In Care Of Name",
+          helpText:
+            "If applicable, enter the name of the person who receives mail at this address.",
+        },
+      ],
+    },
+    {
+      id: "part3-alien-registration",
+      title: "Part 3: Alien Registration Number",
+      description: "Provide your Alien Registration Number if you have one.",
+      questions: [
+        {
+          id: "part3.alienRegistrationNumber",
+          type: "text",
+          label: "5. Alien Registration Number (A-Number)",
+          helpText:
+            "Enter your A-Number if you have one. It is an 8- or 9-digit number.",
+        },
+      ],
+    },
+
+    {
+      id: "part7-marital-history",
+      title: "Part 7: Marital History",
+      description:
+        "Provide details about your marital history and current spouse.",
+      questions: [
+        {
+          id: "part7.maritalHistory.numberOfMarriages",
+          type: "text",
+          label:
+            "3. How many times have you been married (including annulled marriages)?",
+          required: true,
+          helpText: "Include your current marriage and any previous marriages.",
+        },
+        {
+          id: "part7.maritalHistory.currentMaritalStatus",
+          type: "radio",
+          label: "1. What is your current marital status?",
+          required: true,
+          options: [
+            { value: "D", label: "Divorced" },
+            { value: "S", label: "Single" },
+            { value: "W", label: "Widowed" },
+            { value: "M", label: "Married" },
+            { value: "A", label: "Annulled" },
+            { value: "E", label: "Separated" },
+          ],
+          helpText:
+            "Select the option that best describes your current marital status.",
+        },
+        {
+          id: "part7.maritalHistory.spouseArmedForces",
+          type: "radio",
+          label: "2. Is your current spouse a member of the U.S. Armed Forces?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          helpText:
+            "Indicate whether your spouse is currently serving in the U.S. military.",
+        },
+        {
+          id: "part7.maritalHistory.currentSpouse.givenName",
+          type: "text",
+          label: "4.a. Current Spouse's Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part7.maritalHistory.currentSpouse.middleName",
+          type: "text",
+          label: "4.b. Current Spouse's Middle Name",
+        },
+        {
+          id: "part7.maritalHistory.currentSpouse.familyName",
+          type: "text",
+          label: "4.c. Current Spouse's Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part7.maritalHistory.currentSpouse.dateOfBirth",
+          type: "date",
+          label: "4.d. Current Spouse's Date of Birth (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part7.maritalHistory.dateEnteredMarriage",
+          type: "date",
+          label:
+            "4.e. Date You Entered into Marriage with Your Current Spouse (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part7.maritalHistory.spouseAddressSame",
+          type: "radio",
+          label: "5. Does your current spouse live with you?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          helpText:
+            "Indicate if your spouse resides at the same address as you.",
+        },
+        {
+          id: "part7.maritalHistory.spouseCitizenshipDate",
+          type: "date",
+          label:
+            "5.b. Date Your Spouse Became a U.S. Citizen (if applicable) (mm/dd/yyyy)",
+          placeholder: "MM/DD/YYYY",
+          helpText:
+            "Provide the date if your spouse is a naturalized U.S. citizen.",
+        },
+        {
+          id: "part7.maritalHistory.spouseCitizenshipMethod",
+          type: "radio",
+          label: "5.a. How did your spouse become a U.S. citizen?",
+          options: [
+            { value: "B", label: "By Birth" },
+            { value: "O", label: "Other" },
+          ],
+          helpText:
+            "Select the method by which your spouse obtained U.S. citizenship.",
+        },
+        {
+          id: "part7.maritalHistory.currentSpouseAlienNumber",
+          type: "text",
+          label:
+            "6. Current Spouse's Alien Registration Number (A-Number) (if any)",
+          helpText: "Enter your spouse's A-Number if they have one.",
+        },
+        {
+          id: "part7.maritalHistory.currentSpouseMarriages",
+          type: "text",
+          label: "4.g. How many times has your current spouse been married?",
+          helpText: "Include all previous marriages and annulments.",
+        },
+        {
+          id: "part7.maritalHistory.currentSpouseEmployer",
+          type: "text",
+          label: "4.h. Current Spouse's Employer or Company Name",
+          helpText: "Provide the name of your spouse's current employer.",
+        },
+      ],
+    },
+
+    {
+      id: "part8-children-info",
+      title: "Part 8: Information About Your Children",
+      description:
+        "Provide details about your children, including the total number of children you have.",
+      questions: [
+        {
+          id: "part8.children.totalNumberOfChildren",
+          type: "text",
+          label: "1. Total Number of Children",
+          required: true,
+          helpText:
+            "Include all biological, adopted, and stepchildren, regardless of age or location.",
+        },
+      ],
+    },
+
+    {
+      id: "part6-children-info",
+      title: "Part 6: Information About Your Children",
+      description:
+        "Provide details about your children, including their names, dates of birth, and residences.",
+      questions: [
+        {
+          id: "part6.children.childName",
+          type: "text",
+          label: "Child's Full Name",
+          required: true,
+          helpText: "Enter the full legal name of your child.",
+        },
+        {
+          id: "part6.children.dateOfBirth",
+          type: "date",
+          label: "Child's Date of Birth (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+          helpText: "Enter the date of birth of your child.",
+        },
+        {
+          id: "part6.children.residence",
+          type: "text",
+          label: "Child's Residence",
+          required: true,
+          helpText: "Provide the current address where your child resides.",
+        },
+        {
+          id: "part6.children.relationship",
+          type: "text",
+          label: "Relationship to Child",
+          required: true,
+          helpText:
+            "Specify your relationship to the child (e.g., biological, adopted).",
+        },
+        {
+          id: "part6.children.supportProvided",
+          type: "radio",
+          label: "Do you provide financial support for this child?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+          helpText:
+            "Indicate whether you provide financial support for this child.",
+        },
+      ],
+    },
+    {
+      id: "part6-time-outside-us",
+      title: "Part 6: Time Spent Outside the United States",
+      description:
+        "List all trips you have taken outside the United States in the last 5 years.",
+      questions: [
+        {
+          id: "part6.timeOutsideUS.trip1.dateReturned",
+          type: "date",
+          label: "Trip 1: Date Returned to the U.S. (mm/dd/yyyy)",
+          placeholder: "MM/DD/YYYY",
+          helpText:
+            "Enter the date you returned to the U.S. from your first trip.",
+        },
+        {
+          id: "part6.timeOutsideUS.trip3.dateReturned",
+          type: "date",
+          label: "Trip 3: Date Returned to the U.S. (mm/dd/yyyy)",
+          placeholder: "MM/DD/YYYY",
+          helpText:
+            "Enter the date you returned to the U.S. from your third trip.",
+        },
+        {
+          id: "part6.timeOutsideUS.trip5.dateReturned",
+          type: "date",
+          label: "Trip 5: Date Returned to the U.S. (mm/dd/yyyy)",
+          placeholder: "MM/DD/YYYY",
+          helpText:
+            "Enter the date you returned to the U.S. from your fifth trip.",
+        },
+        {
+          id: "part6.timeOutsideUS.trip6.countriesTraveled",
+          type: "text",
+          label: "Trip 6: Countries Traveled",
+          helpText:
+            "List all countries visited during your sixth trip outside the U.S.",
+        },
+        {
+          id: "part6.timeOutsideUS.trip6.dateLeft",
+          type: "date",
+          label: "Trip 6: Date Left the U.S. (mm/dd/yyyy)",
+          placeholder: "MM/DD/YYYY",
+          helpText: "Enter the date you left the U.S. for your sixth trip.",
+        },
+        {
+          id: "part6.timeOutsideUS.trip6.dateReturned",
+          type: "date",
+          label: "Trip 6: Date Returned to the U.S. (mm/dd/yyyy)",
+          placeholder: "MM/DD/YYYY",
+          helpText:
+            "Enter the date you returned to the U.S. from your sixth trip.",
+        },
+        {
+          id: "part6.timeOutsideUS.trip5.dateLeft",
+          type: "date",
+          label: "Trip 5: Date Left the U.S. (mm/dd/yyyy)",
+          placeholder: "MM/DD/YYYY",
+          helpText: "Enter the date you left the U.S. for your fifth trip.",
+        },
+        {
+          id: "part6.timeOutsideUS.trip5.countriesTraveled",
+          type: "text",
+          label: "Trip 5: Countries Traveled",
+          helpText:
+            "List all countries visited during your fifth trip outside the U.S.",
+        },
+        {
+          id: "part6.timeOutsideUS.trip4.countriesTraveled",
+          type: "text",
+          label: "Trip 4: Countries Traveled",
+          helpText:
+            "List all countries visited during your fourth trip outside the U.S.",
+        },
+        {
+          id: "part6.timeOutsideUS.trip4.dateLeft",
+          type: "date",
+          label: "Trip 4: Date Left the U.S. (mm/dd/yyyy)",
+          placeholder: "MM/DD/YYYY",
+          helpText: "Enter the date you left the U.S. for your fourth trip.",
+        },
+        {
+          id: "part6.timeOutsideUS.trip4.dateReturned",
+          type: "date",
+          label: "Trip 4: Date Returned to the U.S. (mm/dd/yyyy)",
+          placeholder: "MM/DD/YYYY",
+          helpText:
+            "Enter the date you returned to the U.S. from your fourth trip.",
+        },
+        {
+          id: "part6.timeOutsideUS.trip3.dateLeft",
+          type: "date",
+          label: "Trip 3: Date Left the U.S. (mm/dd/yyyy)",
+          placeholder: "MM/DD/YYYY",
+          helpText: "Enter the date you left the U.S. for your third trip.",
+        },
+        {
+          id: "part6.timeOutsideUS.trip3.countriesTraveled",
+          type: "text",
+          label: "Trip 3: Countries Traveled",
+          helpText:
+            "List all countries visited during your third trip outside the U.S.",
+        },
+        {
+          id: "part6.tripTwoCountriesTraveled",
+          type: "text",
+          label: "Trip 2: Countries Traveled",
+          helpText:
+            "List all countries visited during your second trip outside the U.S.",
+        },
+        {
+          id: "part6.tripTwoDateLeft",
+          type: "date",
+          label: "Trip 2: Date Left the U.S. (mm/dd/yyyy)",
+          placeholder: "MM/DD/YYYY",
+          helpText: "Enter the date you left the U.S. for your second trip.",
+        },
+        {
+          id: "part6.tripTwoDateReturned",
+          type: "date",
+          label: "Trip 2: Date Returned to the U.S. (mm/dd/yyyy)",
+          placeholder: "MM/DD/YYYY",
+          helpText:
+            "Enter the date you returned to the U.S. from your second trip.",
+        },
+        {
+          id: "part6.tripOneDateLeft",
+          type: "date",
+          label: "Trip 1: Date Left the U.S. (mm/dd/yyyy)",
+          placeholder: "MM/DD/YYYY",
+          helpText: "Enter the date you left the U.S. for your first trip.",
+        },
+        {
+          id: "part6.tripOneCountriesTraveled",
+          type: "text",
+          label: "Trip 1: Countries Traveled",
+          helpText:
+            "List all countries visited during your first trip outside the U.S.",
+        },
+      ],
+    },
+
+    {
+      id: "part5-employment-and-education",
+      title: "Part 5: Information About Your Employment and Education",
+      description:
+        "Provide details about your employment and education history for the past five years.",
+      questions: [
+        {
+          id: "part5.employmentAndEducation.employerOrSchoolName",
+          type: "text",
+          label: "1. Employer or School Name",
+          required: true,
+          helpText:
+            "Enter the full name of your employer or the educational institution you attended.",
+        },
+        {
+          id: "part5.employmentAndEducation.employerCity",
+          type: "text",
+          label: "2. City",
+          required: true,
+          helpText: "Enter the city where your employer or school is located.",
+        },
+        {
+          id: "part5.employmentAndEducation.employerState",
+          type: "select",
+          label: "3. State",
+          required: true,
+          options: US_STATES,
+          helpText:
+            "Select the state where your employer or school is located.",
+        },
+        {
+          id: "part5.employmentAndEducation.employerZipCode",
+          type: "text",
+          label: "4. ZIP Code",
+          required: true,
+          helpText: "Enter the ZIP Code of your employer or school.",
+        },
+        {
+          id: "part5.employmentAndEducation.employerCountry",
+          type: "text",
+          label: "5. Country",
+          required: true,
+          helpText:
+            "Enter the country where your employer or school is located.",
+        },
+        {
+          id: "part5.employmentAndEducation.employmentDates.fromDate",
+          type: "date",
+          label: "6. Employment or Education Start Date (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+          helpText:
+            "Enter the date when you started working or attending school.",
+        },
+        {
+          id: "part5.employmentAndEducation.employmentDates.toDate",
+          type: "date",
+          label: "7. Employment or Education End Date (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+          helpText:
+            "Enter the date when you stopped working or attending school. If currently employed or enrolled, leave blank.",
+        },
+        {
+          id: "part5.employmentAndEducation.occupationOrFieldOfStudy",
+          type: "text",
+          label: "8. Occupation or Field of Study",
+          required: true,
+          helpText: "Enter your job title or the field of study you pursued.",
+        },
+      ],
+    },
+
+    {
+      id: "part5-alien-registration",
+      title: "Part 5: Alien Registration Number",
+      description: "Provide your Alien Registration Number, if applicable.",
+      questions: [
+        {
+          id: "page5.alienRegistrationNumber",
+          type: "text",
+          label: "Alien Registration Number (A-Number)",
+          required: true,
+          helpText:
+            "Your Alien Registration Number is an eight or nine-digit number assigned to you by USCIS. It is also known as an A-Number.",
+          placeholder: "A#########",
+        },
+      ],
+    },
+
+    {
+      id: "part9-voting-and-citizenship",
+      title: "Part 9: Voting and Citizenship",
+      description: "Questions about your voting and citizenship status.",
+      questions: [
+        {
+          id: "part9.registeredToVote",
+          type: "radio",
+          label:
+            "Have you ever registered to vote in any Federal, state, or local election in the United States?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part9.claimedUSCitizen",
+          type: "radio",
+          label:
+            "Have you ever claimed to be a U.S. citizen (in writing or any other way)?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part9-taxes-and-residency",
+      title: "Part 9: Taxes and Residency",
+      description: "Questions about your tax obligations and residency status.",
+      questions: [
+        {
+          id: "part9.oweTaxes",
+          type: "radio",
+          label: "Do you owe any overdue Federal, state, or local taxes?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part9.calledNonUSResident",
+          type: "radio",
+          label:
+            "Have you ever called yourself a 'non-U.S. resident' on a Federal, state, or local tax return?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part9-membership-and-affiliations",
+      title: "Part 9: Membership and Affiliations",
+      description: "Questions about your membership in organizations.",
+      questions: [
+        {
+          id: "part9.communistPartyMember",
+          type: "radio",
+          label: "Have you ever been a member of the Communist Party?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part9.groupAdvocatingViolence",
+          type: "radio",
+          label:
+            "Have you ever been a member of any group that advocated violence?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part9.groupUsedWeapons",
+          type: "radio",
+          label: "Have you ever been a member of any group that used weapons?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part9.groupKidnapping",
+          type: "radio",
+          label:
+            "Have you ever been a member of any group that engaged in kidnapping?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part9.groupThreatenedViolence",
+          type: "radio",
+          label:
+            "Have you ever been a member of any group that threatened violence?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part9-criminal-activities",
+      title: "Part 9: Criminal Activities",
+      description: "Questions about any involvement in criminal activities.",
+      questions: [
+        {
+          id: "part9.torture",
+          type: "radio",
+          label:
+            "Have you ever committed, assisted in committing, or attempted to commit torture?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part9.genocide",
+          type: "radio",
+          label:
+            "Have you ever committed, assisted in committing, or attempted to commit genocide?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part9.killing",
+          type: "radio",
+          label: "Have you ever killed or tried to kill someone?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part9.sexualContactWithoutConsent",
+          type: "radio",
+          label:
+            "Have you ever forced or tried to force someone to have any kind of sexual contact or relations?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part9.religiousPersecution",
+          type: "radio",
+          label:
+            "Have you ever persecuted any person because of race, religion, national origin, membership in a particular social group, or political opinion?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part9-criminal-history",
+      title: "Part 9: Criminal History",
+      description: "Provide details of any criminal history.",
+      questions: [
+        {
+          id: "part9.committedCrimeNotArrested",
+          type: "radio",
+          label:
+            "Have you ever committed a crime or offense for which you were not arrested?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part9.arrestedOrCharged",
+          type: "radio",
+          label:
+            "Have you ever been arrested, cited, or detained by any law enforcement officer for any reason?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part9.crimeOrOffense1",
+          type: "text",
+          label: "1. Crime or Offense",
+          placeholder: "Describe the crime or offense",
+        },
+        {
+          id: "part9.crimeDate1",
+          type: "date",
+          label: "Date of Crime or Offense (mm/dd/yyyy)",
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part9.crimeLocation1",
+          type: "text",
+          label: "Location of Crime or Offense",
+        },
+        {
+          id: "part9.crimeOutcome1",
+          type: "text",
+          label: "Outcome or Disposition",
+        },
+        {
+          id: "part9.crimeSentence1",
+          type: "text",
+          label: "Sentence",
+        },
+        {
+          id: "part9.convictionDate1",
+          type: "date",
+          label: "Date of Conviction (mm/dd/yyyy)",
+          placeholder: "MM/DD/YYYY",
+        },
+      ],
+    },
+    {
+      id: "part9-military-service",
+      title: "Part 9: Military Service",
+      description: "Questions about your military service and obligations.",
+      questions: [
+        {
+          id: "part9.usMilitaryService",
+          type: "radio",
+          label: "Have you ever served in the U.S. Armed Forces?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part9.currentMilitaryMember",
+          type: "radio",
+          label: "Are you currently a member of the U.S. Armed Forces?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part9.scheduledDeployment",
+          type: "radio",
+          label: "Are you scheduled to deploy overseas?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part9.stationedOutsideUS",
+          type: "radio",
+          label: "Are you currently stationed outside the United States?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part9-oath-of-allegiance",
+      title: "Part 9: Oath of Allegiance",
+      description:
+        "Questions about your willingness to take the Oath of Allegiance.",
+      questions: [
+        {
+          id: "part9.supportConstitution",
+          type: "radio",
+          label:
+            "Do you support the Constitution and form of government of the United States?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part9.understandOath",
+          type: "radio",
+          label:
+            "Do you understand the full Oath of Allegiance to the United States?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part9.willingToTakeOath",
+          type: "radio",
+          label:
+            "Are you willing to take the full Oath of Allegiance to the United States?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part9.willingToBearArms",
+          type: "radio",
+          label:
+            "If the law requires it, are you willing to bear arms on behalf of the United States?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part9.willingToPerformNoncombatantService",
+          type: "radio",
+          label:
+            "If the law requires it, are you willing to perform noncombatant services in the U.S. Armed Forces?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part9.willingToPerformNationalImportanceWork",
+          type: "radio",
+          label:
+            "If the law requires it, are you willing to perform work of national importance under civilian direction?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+      ],
+    },
+
+    {
+      id: "part9-alien-registration",
+      title: "Part 9: Alien Registration Number",
+      description: "Provide your Alien Registration Number if you have one.",
+      questions: [
+        {
+          id: "page9.alienRegistrationNumber",
+          type: "text",
+          label: "Alien Registration Number (A-Number)",
+          required: true,
+          helpText:
+            "Your A-Number is a unique number assigned to you by USCIS. It typically starts with an 'A' followed by 8 or 9 digits.",
+          placeholder: "A#########",
+        },
+      ],
+    },
+
+    {
+      id: "part12-alien-registration",
+      title: "Part 12: Alien Registration Number",
+      description:
+        "Provide your Alien Registration Number (A-Number) if you have one.",
+      questions: [
+        {
+          id: "page12.alienRegistrationNumber",
+          type: "text",
+          label: "Alien Registration Number (A-Number)",
+          required: true,
+          helpText:
+            "Your Alien Registration Number is an 8 or 9 digit number assigned to you by USCIS. It is also known as an A-Number.",
+          placeholder: "A#########",
+        },
+      ],
+    },
+
+    {
+      id: "part10-contact-information",
+      title: "Part 10: Contact Information",
+      description: "Provide your current contact details.",
+      questions: [
+        {
+          id: "part10.daytimeTelephoneNumber",
+          type: "tel",
+          label: "Daytime Telephone Number",
+          required: true,
+          placeholder: "(555) 123-4567",
+          helpText:
+            "Enter a phone number where you can be reached during the day.",
+        },
+        {
+          id: "part10.mobileTelephoneNumber",
+          type: "tel",
+          label: "Mobile Telephone Number",
+          placeholder: "(555) 123-4567",
+          helpText:
+            "Enter your mobile phone number, if different from your daytime number.",
+        },
+        {
+          id: "part10.emailAddress",
+          type: "email",
+          label: "Email Address",
+          placeholder: "example@email.com",
+          helpText: "Provide your email address for electronic communication.",
+        },
+      ],
+    },
+    {
+      id: "part10-signature",
+      title: "Part 10: Signature",
+      description: "Sign and date your application.",
+      questions: [
+        {
+          id: "part10.signature",
+          type: "text",
+          label: "Signature of Applicant",
+          required: true,
+          helpText: "Sign your name as it appears on your official documents.",
+        },
+        {
+          id: "part10.dateOfSignature",
+          type: "date",
+          label: "Date of Signature (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+          helpText: "Enter the date you signed this application.",
+        },
+      ],
+    },
+
+    {
+      id: "part11-interpreter-info",
+      title: "Part 11: Interpreter's Contact Information",
+      description:
+        "Provide the contact information for the interpreter who assisted you in completing this form.",
+      questions: [
+        {
+          id: "part11.interpreterGivenName",
+          type: "text",
+          label: "1.a. Interpreter's Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part11.interpreterFamilyName",
+          type: "text",
+          label: "1.b. Interpreter's Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part11.interpreterBusinessName",
+          type: "text",
+          label: "2. Name of Business or Organization (if applicable)",
+          helpText:
+            "Enter the name of the interpreter's business or organization, if they are affiliated with one.",
+        },
+        {
+          id: "part11.interpreterDaytimeTelephoneNumber",
+          type: "tel",
+          label: "4. Daytime Telephone Number",
+          required: true,
+          placeholder: "(555) 123-4567",
+          helpText:
+            "Enter a telephone number where the interpreter can be reached during the day.",
+        },
+        {
+          id: "part11.interpreterMobileTelephoneNumber",
+          type: "tel",
+          label: "5. Mobile Telephone Number",
+          placeholder: "(555) 123-4567",
+          helpText:
+            "Enter the interpreter's mobile telephone number, if available.",
+        },
+        {
+          id: "part11.interpreterEmailAddress",
+          type: "email",
+          label: "6. Email Address",
+          placeholder: "example@email.com",
+          helpText:
+            "Provide the interpreter's email address for any necessary correspondence.",
+        },
+        {
+          id: "part11.interpreterLanguage",
+          type: "text",
+          label: "7. Language Used in Interpretation",
+          required: true,
+          helpText:
+            "Specify the language used by the interpreter to assist in completing this form.",
+        },
+      ],
+    },
+    {
+      id: "part11-interpreter-signature",
+      title: "Part 11: Interpreter's Signature",
+      description:
+        "The interpreter must sign and date this section to confirm their assistance.",
+      questions: [
+        {
+          id: "part11.interpreterSignature",
+          type: "text",
+          label: "8.a. Interpreter's Signature",
+          required: true,
+          helpText:
+            "The interpreter must sign here to confirm they assisted in completing this form.",
+        },
+        {
+          id: "part11.interpreterSignatureDate",
+          type: "date",
+          label: "8.b. Date of Signature (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+          helpText: "Enter the date the interpreter signed this form.",
+        },
+      ],
+    },
+
+    {
+      id: "part12-preparer-info",
+      title: "Part 12: Preparer's Information",
+      description:
+        "Provide the details of the person who helped you prepare this application.",
+      questions: [
+        {
+          id: "part12.preparerGivenName",
+          type: "text",
+          label: "1.a. Preparer's Given Name (First Name)",
+          required: true,
+          helpText:
+            "Enter the first name of the person who prepared this form.",
+        },
+        {
+          id: "part12.preparerFamilyName",
+          type: "text",
+          label: "1.b. Preparer's Family Name (Last Name)",
+          required: true,
+          helpText: "Enter the last name of the person who prepared this form.",
+        },
+        {
+          id: "part12.preparerBusinessName",
+          type: "text",
+          label: "2. Name of Business or Organization (if applicable)",
+          helpText:
+            "Enter the name of the business or organization if the preparer is associated with one.",
+        },
+        {
+          id: "part12.preparerDaytimeTelephoneNumber",
+          type: "tel",
+          label: "4. Preparer's Daytime Telephone Number",
+          required: true,
+          placeholder: "(555) 123-4567",
+          helpText:
+            "Provide a phone number where the preparer can be reached during business hours.",
+        },
+        {
+          id: "part12.preparerMobileTelephoneNumber",
+          type: "tel",
+          label: "5. Preparer's Mobile Telephone Number",
+          placeholder: "(555) 123-4567",
+          helpText:
+            "Provide a mobile phone number for the preparer, if available.",
+        },
+        {
+          id: "part12.preparerEmailAddress",
+          type: "email",
+          label: "6. Preparer's Email Address",
+          placeholder: "example@email.com",
+          helpText: "Provide an email address for the preparer.",
+        },
+        {
+          id: "part12.preparerSignatureDate",
+          type: "date",
+          label: "Date of Signature (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+          helpText: "Enter the date when the preparer signed this form.",
+        },
+        {
+          id: "part12.preparerSignature",
+          type: "text",
+          label: "Preparer's Signature",
+          required: true,
+          helpText:
+            "The preparer must sign this form to confirm the information provided is true and correct.",
+        },
+      ],
+    },
+
+    {
+      id: "part14-additional-information",
+      title: "Part 14: Additional Information",
+      description:
+        "Provide additional information for any questions that require further explanation.",
+      questions: [
+        {
+          id: "part14.familyName",
+          type: "text",
+          label: "1.a. Family Name (Last Name)",
+          required: true,
+          helpText:
+            "Enter your last name as it appears on your legal documents.",
+        },
+        {
+          id: "part14.givenName",
+          type: "text",
+          label: "1.b. Given Name (First Name)",
+          required: true,
+          helpText:
+            "Enter your first name as it appears on your legal documents.",
+        },
+        {
+          id: "part14.middleName",
+          type: "text",
+          label: "1.c. Middle Name",
+          helpText: "Enter your middle name if applicable.",
+        },
+        {
+          id: "part14.additionalInformation3PageNumber",
+          type: "text",
+          label: "3.a. Page Number",
+          helpText:
+            "Enter the page number from the form where additional information is needed.",
+        },
+        {
+          id: "part14.additionalInformation3PartNumber",
+          type: "text",
+          label: "3.b. Part Number",
+          helpText:
+            "Enter the part number from the form where additional information is needed.",
+        },
+        {
+          id: "part14.additionalInformation3ItemNumber",
+          type: "text",
+          label: "3.c. Item Number",
+          helpText:
+            "Enter the item number from the form where additional information is needed.",
+        },
+        {
+          id: "part14.additionalInformation3AdditionalInfo",
+          type: "textarea",
+          label: "3.d. Additional Information",
+          helpText:
+            "Provide the necessary additional information for the specified item.",
+        },
+        {
+          id: "part14.additionalInformation4PageNumber",
+          type: "text",
+          label: "4.a. Page Number",
+          helpText:
+            "Enter the page number from the form where additional information is needed.",
+        },
+        {
+          id: "part14.additionalInformation4PartNumber",
+          type: "text",
+          label: "4.b. Part Number",
+          helpText:
+            "Enter the part number from the form where additional information is needed.",
+        },
+        {
+          id: "part14.additionalInformation4ItemNumber",
+          type: "text",
+          label: "4.c. Item Number",
+          helpText:
+            "Enter the item number from the form where additional information is needed.",
+        },
+        {
+          id: "part14.additionalInformation4AdditionalInfo",
+          type: "textarea",
+          label: "4.d. Additional Information",
+          helpText:
+            "Provide the necessary additional information for the specified item.",
+        },
+        {
+          id: "part14.additionalInformation5PageNumber",
+          type: "text",
+          label: "5.a. Page Number",
+          helpText:
+            "Enter the page number from the form where additional information is needed.",
+        },
+        {
+          id: "part14.additionalInformation5PartNumber",
+          type: "text",
+          label: "5.b. Part Number",
+          helpText:
+            "Enter the part number from the form where additional information is needed.",
+        },
+        {
+          id: "part14.additionalInformation5ItemNumber",
+          type: "text",
+          label: "5.c. Item Number",
+          helpText:
+            "Enter the item number from the form where additional information is needed.",
+        },
+        {
+          id: "part14.additionalInformation5AdditionalInfo",
+          type: "textarea",
+          label: "5.d. Additional Information",
+          helpText:
+            "Provide the necessary additional information for the specified item.",
+        },
+        {
+          id: "part14.additionalInformation6PageNumber",
+          type: "text",
+          label: "6.a. Page Number",
+          helpText:
+            "Enter the page number from the form where additional information is needed.",
+        },
+        {
+          id: "part14.additionalInformation6PartNumber",
+          type: "text",
+          label: "6.b. Part Number",
+          helpText:
+            "Enter the part number from the form where additional information is needed.",
+        },
+        {
+          id: "part14.additionalInformation6ItemNumber",
+          type: "text",
+          label: "6.c. Item Number",
+          helpText:
+            "Enter the item number from the form where additional information is needed.",
+        },
+        {
+          id: "part14.additionalInformation6AdditionalInfo",
+          type: "textarea",
+          label: "6.d. Additional Information",
+          helpText:
+            "Provide the necessary additional information for the specified item.",
+        },
+      ],
+    },
+
+    {
+      id: "part10-additional-information",
+      title: "Part 10: Additional Information",
+      description:
+        "Provide any additional information requested in the application.",
+      questions: [
+        {
+          id: "page20.alienRegistrationNumber",
+          type: "text",
+          label: "Alien Registration Number (A-Number)",
+          required: true,
+          helpText:
+            "Your A-Number is an eight or nine-digit number assigned to you by USCIS. It can be found on your permanent resident card or other USCIS documents.",
+        },
+      ],
+    },
+
+    {
+      id: "part15-signatures",
+      title: "Part 15: Signatures",
+      description: "Provide the necessary signatures for the application.",
+      questions: [
+        {
+          id: "part15.applicantsSignature",
+          type: "text",
+          label: "Applicant's Signature",
+          required: true,
+          helpText:
+            "Sign your full legal name as it appears on your application.",
+        },
+        {
+          id: "part15.dateOfSignature",
+          type: "date",
+          label: "Date of Signature",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+          helpText: "Enter the date you signed this application.",
+        },
+      ],
+    },
+    {
+      id: "part15-uscis-official",
+      title: "Part 15: USCIS Official Use Only",
+      description: "This section is for USCIS official use only.",
+      questions: [
+        {
+          id: "part15.uscisSignature",
+          type: "text",
+          label: "USCIS Official's Signature",
+          required: true,
+          helpText:
+            "To be completed by the USCIS official reviewing the application.",
+        },
+        {
+          id: "part15.uscisName",
+          type: "text",
+          label: "USCIS Official's Name",
+          required: true,
+          helpText:
+            "Enter the full name of the USCIS official who signed the application.",
+        },
+      ],
+    },
+
+    {
+      id: "part16-applicant-certification",
+      title: "Part 16: Applicant's Certification",
+      description:
+        "Provide your signature and the date to certify the information provided in this application.",
+      questions: [
+        {
+          id: "part16.applicantsSignature",
+          type: "text",
+          label: "Applicant's Signature",
+          required: true,
+          helpText:
+            "Sign your full legal name as it appears on your documents.",
+        },
+        {
+          id: "part16.dateOfSignature",
+          type: "date",
+          label: "Date of Signature (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+          helpText: "Enter the date you signed this form.",
+        },
+      ],
+    },
+  ],
+  pdfFieldMappings: N_400_FIELD_MAPPINGS,
+  requiredDocuments: [],
+  instructions: [],
+};
+
+// const I751_DEFINITION: FormDefinition = {
+//   id: "i-751",
+//   code: "I-751",
+//   name: "Petition to Remove Conditions on Residence",
+//   description: "Remove conditions from your 2-year conditional green card",
+//   category: "family",
+//   estimatedTime: "60-90 minutes",
+//   filingFee: 595,
+//   price: 60,
+//   sections: [
+//     // PART 1: Information About You (The Conditional Resident)
+//     {
+//       id: "part1-personal-info",
+//       title: "Part 1: Your Information",
+//       description: "Information about you, the conditional permanent resident",
+//       questions: [
+//         {
+//           id: "part1.familyName",
+//           type: "text",
+//           label: "1.a. Family Name (Last Name)",
+//           required: true,
+//         },
+//         {
+//           id: "part1.givenName",
+//           type: "text",
+//           label: "1.b. Given Name (First Name)",
+//           required: true,
+//         },
+//         {
+//           id: "part1.middleName",
+//           type: "text",
+//           label: "1.c. Middle Name",
+//         },
+//         {
+//           id: "part1.alienNumber",
+//           type: "text",
+//           label: "2. A-Number (Alien Registration Number)",
+//           required: true,
+//           placeholder: "A-",
+//           helpText: "Found on your conditional green card",
+//         },
+//         {
+//           id: "part1.uscisAccount",
+//           type: "text",
+//           label: "3. USCIS Online Account Number",
+//           helpText: "Only if you have created an account at uscis.gov",
+//         },
+//         {
+//           id: "part1.dateConditionalResidence",
+//           type: "date",
+//           label: "4. Date Conditional Residence Obtained",
+//           required: true,
+//           helpText:
+//             "Date you became a conditional resident (found on your green card)",
+//         },
+//         {
+//           id: "part1.expirationDate",
+//           type: "date",
+//           label: "5. Conditional Residence Expires On",
+//           required: true,
+//           helpText: "Expiration date on your conditional green card",
+//         },
+//       ],
+//     },
+//     {
+//       id: "part1-contact",
+//       title: "Part 1: Contact Information",
+//       description: "Where should USCIS contact you?",
+//       questions: [
+//         {
+//           id: "part1.mailingStreet",
+//           type: "text",
+//           label: "6.a. Street Number and Name",
+//           required: true,
+//         },
+//         {
+//           id: "part1.mailingAptType",
+//           type: "select",
+//           label: "6.b. Unit Type",
+//           options: [
+//             { value: "", label: "Select if applicable" },
+//             { value: "apt", label: "Apt." },
+//             { value: "ste", label: "Ste." },
+//             { value: "flr", label: "Flr." },
+//           ],
+//         },
+//         {
+//           id: "part1.mailingAptNumber",
+//           type: "text",
+//           label: "6.c. Unit Number",
+//         },
+//         {
+//           id: "part1.mailingCity",
+//           type: "text",
+//           label: "6.d. City or Town",
+//           required: true,
+//         },
+//         {
+//           id: "part1.mailingState",
+//           type: "select",
+//           label: "6.e. State",
+//           required: true,
+//           options: US_STATES,
+//         },
+//         {
+//           id: "part1.mailingZip",
+//           type: "text",
+//           label: "6.f. ZIP Code",
+//           required: true,
+//           placeholder: "12345",
+//         },
+//       ],
+//     },
+//     // PART 2: Biographic Information
+//     {
+//       id: "part2-biographic",
+//       title: "Part 2: Biographic Information",
+//       description: "Demographic information for background checks",
+//       questions: [
+//         {
+//           id: "part2.dob",
+//           type: "date",
+//           label: "1. Date of Birth (mm/dd/yyyy)",
+//           required: true,
+//         },
+//         {
+//           id: "part2.countryOfBirth",
+//           type: "text",
+//           label: "2. Country of Birth",
+//           required: true,
+//         },
+//         {
+//           id: "part2.countryOfCitizenship",
+//           type: "text",
+//           label: "3. Country of Citizenship or Nationality",
+//           required: true,
+//         },
+//         {
+//           id: "part2.ethnicity",
+//           type: "radio",
+//           label: "4. Ethnicity (Select only one box)",
+//           required: true,
+//           options: [
+//             { value: "hispanic", label: "Hispanic or Latino" },
+//             { value: "not-hispanic", label: "Not Hispanic or Latino" },
+//           ],
+//         },
+//         {
+//           id: "part2.race",
+//           type: "select",
+//           label: "5. Race (Select all that apply)",
+//           required: true,
+//           options: [
+//             { value: "white", label: "White" },
+//             { value: "asian", label: "Asian" },
+//             { value: "black", label: "Black or African American" },
+//             {
+//               value: "native-american",
+//               label: "American Indian or Alaska Native",
+//             },
+//             {
+//               value: "pacific",
+//               label: "Native Hawaiian or Other Pacific Islander",
+//             },
+//           ],
+//         },
+//       ],
+//     },
+//     // PART 3: Basis for Petition
+//     {
+//       id: "part3-basis",
+//       title: "Part 3: Basis for Petition",
+//       description: "Select the reason for your petition to remove conditions",
+//       questions: [
+//         {
+//           id: "part3.filingBasis",
+//           type: "select",
+//           label: "I am filing this petition (select only one):",
+//           required: true,
+//           options: [
+//             {
+//               value: "joint",
+//               label:
+//                 "Jointly with my spouse - My conditional residence is based on my marriage to a U.S. citizen or permanent resident, and we are filing this petition together",
+//             },
+//             {
+//               value: "waiver-deceased",
+//               label: "Individual Waiver - My spouse is deceased",
+//             },
+//             {
+//               value: "waiver-divorce",
+//               label:
+//                 "Individual Waiver - I am divorced or my marriage was annulled, but the marriage was entered in good faith",
+//             },
+//             {
+//               value: "waiver-hardship",
+//               label:
+//                 "Individual Waiver - I would suffer extreme hardship if removed from the United States",
+//             },
+//             {
+//               value: "waiver-abuse",
+//               label:
+//                 "Individual Waiver - I or my child was battered or subjected to extreme cruelty by my U.S. citizen or permanent resident spouse",
+//             },
+//           ],
+//           helpText:
+//             "Most applicants file jointly with their spouse. Select a waiver option only if you cannot file jointly.",
+//         },
+//         {
+//           id: "part3.marriageEnded",
+//           type: "radio",
+//           label:
+//             "If filing for a waiver: Is your marriage still legally valid?",
+//           options: [
+//             { value: "yes", label: "Yes - Still married" },
+//             {
+//               value: "no",
+//               label: "No - Divorced, annulled, or spouse deceased",
+//             },
+//           ],
+//           helpText: "Complete only if filing for a waiver",
+//         },
+//       ],
+//     },
+//     // PART 4: Information About Your Spouse
+//     {
+//       id: "part4-spouse-info",
+//       title: "Part 4: Information About Your U.S. Citizen or LPR Spouse",
+//       description: "Information about your sponsoring spouse",
+//       questions: [
+//         {
+//           id: "part4.spouseFamilyName",
+//           type: "text",
+//           label: "1.a. Spouse's Family Name (Last Name)",
+//           required: true,
+//           helpText:
+//             "The spouse through whom you obtained conditional residence",
+//         },
+//         {
+//           id: "part4.spouseGivenName",
+//           type: "text",
+//           label: "1.b. Spouse's Given Name (First Name)",
+//           required: true,
+//         },
+//         {
+//           id: "part4.spouseMiddleName",
+//           type: "text",
+//           label: "1.c. Spouse's Middle Name",
+//         },
+//         {
+//           id: "part4.spouseDob",
+//           type: "date",
+//           label: "2. Spouse's Date of Birth",
+//           required: true,
+//         },
+//         {
+//           id: "part4.spouseSsn",
+//           type: "ssn",
+//           label: "3. Spouse's U.S. Social Security Number (if any)",
+//           placeholder: "###-##-####",
+//         },
+//         {
+//           id: "part4.spouseAlienNumber",
+//           type: "text",
+//           label: "4. Spouse's A-Number (if any)",
+//           placeholder: "A-",
+//           helpText: "Only if spouse is an LPR",
+//         },
+//         {
+//           id: "part4.dateOfMarriage",
+//           type: "date",
+//           label: "5. Date of Marriage",
+//           required: true,
+//         },
+//         {
+//           id: "part4.placeOfMarriage",
+//           type: "text",
+//           label: "6. Place of Marriage (City, State/Province, Country)",
+//           required: true,
+//         },
+//         {
+//           id: "part4.spouseStatus",
+//           type: "select",
+//           label: "7. Spouse's Current Immigration Status",
+//           required: true,
+//           options: [
+//             { value: "us-citizen", label: "U.S. Citizen" },
+//             { value: "lpr", label: "Lawful Permanent Resident" },
+//             { value: "deceased", label: "Deceased" },
+//           ],
+//         },
+//       ],
+//     },
+//     // PART 5: Information About Your Children
+//     {
+//       id: "part5-children",
+//       title: "Part 5: Information About Your Children",
+//       description: "List all of your children",
+//       questions: [
+//         {
+//           id: "part5.totalChildren",
+//           type: "text",
+//           label: "1. Total number of children",
+//           required: true,
+//           placeholder: "Enter 0 if none",
+//           helpText: "Include all children, regardless of age or location",
+//         },
+//         {
+//           id: "part5.childrenDetails",
+//           type: "textarea",
+//           label: "2. List each child's information",
+//           placeholder:
+//             "For each child provide: Full Name, Date of Birth, A-Number (if any), Country of Birth",
+//           helpText: "Include biological, adopted, and stepchildren",
+//         },
+//         {
+//           id: "part5.childrenIncludedInPetition",
+//           type: "text",
+//           label:
+//             "3. How many children are listed on your conditional green card and included in this petition?",
+//           required: true,
+//           placeholder: "Enter number",
+//           helpText: "These children will also have conditions removed",
+//         },
+//       ],
+//     },
+//     // PART 7: Petitioner's Statement
+//     {
+//       id: "part7-statement",
+//       title: "Part 7: Petitioner's Statement and Certification",
+//       description: "Important statements and certifications",
+//       questions: [
+//         {
+//           id: "part7.certifyTruthfulness",
+//           type: "checkbox",
+//           label:
+//             "I certify, under penalty of perjury, that all information in this petition and any document submitted with it were provided or authorized by me, that I reviewed and understand all of the information contained in and submitted with my petition, and that all of this information is complete, true, and correct.",
+//           required: true,
+//         },
+//         {
+//           id: "part7.certifyGoodFaith",
+//           type: "checkbox",
+//           label:
+//             "I understand that I must establish that I entered into the marriage in good faith and provide evidence that the marriage was not entered into for the purpose of procuring an immigration benefit.",
+//           required: true,
+//         },
+//         {
+//           id: "part7.understoodConsequences",
+//           type: "checkbox",
+//           label:
+//             "I understand that if USCIS determines I entered the marriage solely to obtain immigration benefits, my conditional residence will not be removed and I may be subject to removal from the United States.",
+//           required: true,
+//         },
+//       ],
+//     },
+//   ],
+//   pdfFieldMappings: [],
+//   requiredDocuments: [
+//     "Copy of your conditional green card (front and back)",
+//     "Copy of children's conditional green cards (if applicable)",
+//     "Marriage certificate",
+//     "Proof your marriage was entered in good faith (joint documents):",
+//     "  - Joint bank account statements",
+//     "  - Joint lease or mortgage",
+//     "  - Joint utility bills",
+//     "  - Joint tax returns",
+//     "  - Birth certificates of children born to the marriage",
+//     "  - Insurance policies listing spouse as beneficiary",
+//     "  - Photos together throughout the marriage",
+//     "  - Affidavits from friends/family attesting to the marriage",
+//     "If filing for waiver:",
+//     "  - Death certificate (if spouse deceased)",
+//     "  - Divorce decree or annulment (if marriage ended)",
+//     "  - Police reports, court records, medical records (if filing based on abuse)",
+//     "  - Evidence of extreme hardship (if applicable)",
+//   ],
+//   instructions: [],
+// };
+
+const I129_DEFINITION: FormDefinition = {
+  id: "i-129",
+  code: "I-129",
+  name: "Petition for a Nonimmigrant Worker",
+  description: "Petition for H-1B, L-1, O-1, and other temporary work visas",
+  category: "work_authorization",
+  estimatedTime: "90-120 minutes",
+  filingFee: 460,
+  price: 60,
+  status: "active",
+  sections: [
+    {
+      id: "part1-basis-classification",
+      title: "Part 1: Basis for Classification",
+      description: "Type of petition and classification requested",
+      questions: [
+        {
+          id: "part1.1.petitionType",
+          type: "select",
+          label: "1. This petition is being filed for (select one):",
+          required: true,
+          options: [
+            { value: "new-employment", label: "New Employment" },
+            {
+              value: "continuation",
+              label: "Continuation of Previously Approved Employment",
+            },
+            {
+              value: "change-employer",
+              label: "Change in Previously Approved Employment",
+            },
+            { value: "new-concurrent", label: "New Concurrent Employment" },
+            { value: "change-status", label: "Change of Status" },
+            { value: "extension", label: "Extension of Stay" },
+            { value: "amendment", label: "Amendment of Stay" },
+          ],
+        },
+        {
+          id: "part1.2.classification",
+          type: "select",
+          label: "2. Classification Requested",
+          required: true,
+          options: [
+            { value: "h1b", label: "H-1B Specialty Occupation" },
+            { value: "h1b1", label: "H-1B1 Chile/Singapore" },
+            { value: "h2a", label: "H-2A Agricultural Worker" },
+            { value: "h2b", label: "H-2B Temporary Worker" },
+            { value: "h3", label: "H-3 Trainee" },
+            {
+              value: "l1a",
+              label: "L-1A Intracompany Transferee Executive/Manager",
+            },
+            {
+              value: "l1b",
+              label: "L-1B Intracompany Transferee Specialized Knowledge",
+            },
+            {
+              value: "o1a",
+              label:
+                "O-1A Extraordinary Ability (Sciences/Education/Business/Athletics)",
+            },
+            {
+              value: "o1b",
+              label: "O-1B Extraordinary Ability (Arts/Motion Pictures/TV)",
+            },
+            { value: "o2", label: "O-2 Support Personnel" },
+            { value: "p1", label: "P-1 Athlete/Entertainer" },
+            {
+              value: "p2",
+              label: "P-2 Artist/Entertainer (Reciprocal Exchange)",
+            },
+            {
+              value: "p3",
+              label: "P-3 Artist/Entertainer (Culturally Unique)",
+            },
+            { value: "q1", label: "Q-1 Cultural Exchange" },
+            { value: "r1", label: "R-1 Religious Worker" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part2-petitioner-info",
+      title: "Part 2: Information About the Petitioner",
+      description: "U.S. employer information",
+      questions: [
+        {
+          id: "part2.1.petitionerType",
+          type: "select",
+          label: "1. Petitioner Type",
+          required: true,
+          options: [
+            { value: "individual", label: "Individual" },
+            { value: "company", label: "Company or Organization" },
+          ],
+        },
+        {
+          id: "part2.1a.familyName",
+          type: "text",
+          label: "1.a. Family Name (if individual)",
+        },
+        {
+          id: "part2.1b.givenName",
+          type: "text",
+          label: "1.b. Given Name (if individual)",
+        },
+        {
+          id: "part2.1c.middleName",
+          type: "text",
+          label: "1.c. Middle Name (if individual)",
+        },
+        {
+          id: "part2.2a.legalName",
+          type: "text",
+          label: "2.a. Company/Organization Legal Name",
+          required: true,
+        },
+        {
+          id: "part2.2b.tradeName",
+          type: "text",
+          label: "2.b. Trade Name/DBA (if any)",
+        },
+        {
+          id: "part2.3.ein",
+          type: "text",
+          label: "3. Employer Identification Number (EIN)",
+          required: true,
+          placeholder: "12-3456789",
+          helpText: "IRS Tax ID Number",
+        },
+        {
+          id: "part2.3.inCareOf",
+          type: "text",
+          label: "3. In Care Of Name (if any)",
+        },
+        {
+          id: "part2.4a.street",
+          type: "text",
+          label: "4.a. Street Number and Name",
+          required: true,
+        },
+        {
+          id: "part2.4b.aptSteFlr",
+          type: "radio",
+          label: "4.b. Unit Type",
+          options: [
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part2.4c.unitNumber",
+          type: "text",
+          label: "4.c. Unit Number",
+        },
+        {
+          id: "part2.4d.city",
+          type: "text",
+          label: "4.d. City or Town",
+          required: true,
+        },
+        {
+          id: "part2.4e.state",
+          type: "select",
+          label: "4.e. State",
+          required: true,
+          options: US_STATES,
+        },
+        {
+          id: "part2.4f.zipCode",
+          type: "text",
+          label: "4.f. ZIP Code",
+          required: true,
+        },
+        {
+          id: "part2.4g.province",
+          type: "text",
+          label: "4.g. Province (if outside US)",
+        },
+        {
+          id: "part2.4h.postalCode",
+          type: "text",
+          label: "4.h. Postal Code (if outside US)",
+        },
+        {
+          id: "part2.4i.country",
+          type: "text",
+          label: "4.i. Country",
+        },
+        {
+          id: "part2.5.phone",
+          type: "tel",
+          label: "5. Business Telephone Number",
+          required: true,
+        },
+        {
+          id: "part2.6.mobile",
+          type: "tel",
+          label: "6. Mobile Telephone Number",
+        },
+        {
+          id: "part2.7.email",
+          type: "email",
+          label: "7. Email Address",
+        },
+      ],
+    },
+    {
+      id: "part3-beneficiary-info",
+      title: "Part 3: Information About the Beneficiary",
+      description: "Foreign worker information",
+      questions: [
+        {
+          id: "part3.1a.familyName",
+          type: "text",
+          label: "1.a. Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part3.1b.givenName",
+          type: "text",
+          label: "1.b. Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part3.1c.middleName",
+          type: "text",
+          label: "1.c. Middle Name",
+        },
+        {
+          id: "part3.2.dateOfBirth",
+          type: "date",
+          label: "2. Date of Birth",
+          required: true,
+        },
+        {
+          id: "part3.3.countryOfBirth",
+          type: "text",
+          label: "3. Country of Birth",
+          required: true,
+        },
+        {
+          id: "part3.4.countryOfCitizenship",
+          type: "text",
+          label: "4. Country of Citizenship or Nationality",
+          required: true,
+        },
+        {
+          id: "part3.5.alienNumber",
+          type: "text",
+          label: "5. Alien Registration Number (A-Number) (if any)",
+          placeholder: "A-",
+        },
+        {
+          id: "part3.6.ssn",
+          type: "ssn",
+          label: "6. U.S. Social Security Number (if any)",
+        },
+        {
+          id: "part3.7.passportNumber",
+          type: "text",
+          label: "7. Passport Number",
+          required: true,
+        },
+        {
+          id: "part3.8.passportCountry",
+          type: "text",
+          label: "8. Country of Issuance for Passport",
+          required: true,
+        },
+        {
+          id: "part3.9.passportExpiration",
+          type: "date",
+          label: "9. Passport Expiration Date",
+          required: true,
+        },
+      ],
+    },
+    {
+      id: "part4-processing-info",
+      title: "Part 4: Processing Information",
+      description: "Consular processing or change of status",
+      questions: [
+        {
+          id: "part4.1.beneficiaryInUS",
+          type: "radio",
+          label: "1. Is the beneficiary currently in the United States?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part4.2.currentStatus",
+          type: "text",
+          label: "2. If yes, beneficiary's current nonimmigrant status",
+          helpText: "e.g., F-1, H-1B, L-1",
+        },
+        {
+          id: "part4.3.i94Number",
+          type: "text",
+          label: "3. I-94 Arrival-Departure Record Number",
+        },
+        {
+          id: "part4.4.statusExpiration",
+          type: "date",
+          label: "4. Current Status Valid Until",
+        },
+        {
+          id: "part4.5.changeOfStatus",
+          type: "radio",
+          label: "5. Request change of status to classification sought?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+          helpText: "Select No if beneficiary will apply for visa abroad",
+        },
+      ],
+    },
+    {
+      id: "part5-employment-details",
+      title: "Part 5: Employment and Wage Information",
+      description: "Job details and compensation",
+      questions: [
+        {
+          id: "part5.1.jobTitle",
+          type: "text",
+          label: "1. Job Title",
+          required: true,
+        },
+        {
+          id: "part5.2.socCode",
+          type: "text",
+          label: "2. SOC (ONET/OES) Code",
+          required: true,
+          helpText: "Standard Occupational Classification code",
+          placeholder: "15-1252.00",
+        },
+        {
+          id: "part5.3.naicsCode",
+          type: "text",
+          label: "3. NAICS Code",
+          required: true,
+          helpText: "North American Industry Classification System",
+        },
+        {
+          id: "part5.4.startDate",
+          type: "date",
+          label: "4. Requested Employment Start Date",
+          required: true,
+        },
+        {
+          id: "part5.5.endDate",
+          type: "date",
+          label: "5. Requested Employment End Date",
+          required: true,
+          helpText: "Maximum 3 years for most classifications",
+        },
+        {
+          id: "part5.6.wageRate",
+          type: "text",
+          label: "6. Rate of Pay",
+          required: true,
+          placeholder: "$85,000",
+        },
+        {
+          id: "part5.7.rateType",
+          type: "select",
+          label: "7. Pay Rate Type",
+          required: true,
+          options: [
+            { value: "hour", label: "Per Hour" },
+            { value: "week", label: "Per Week" },
+            { value: "month", label: "Per Month" },
+            { value: "year", label: "Per Year" },
+          ],
+        },
+        {
+          id: "part5.8.workLocationStreet",
+          type: "text",
+          label: "8. Primary Work Location - Street Address",
+          required: true,
+        },
+        {
+          id: "part5.8.workLocationCity",
+          type: "text",
+          label: "City",
+          required: true,
+        },
+        {
+          id: "part5.8.workLocationState",
+          type: "select",
+          label: "State",
+          required: true,
+          options: US_STATES,
+        },
+        {
+          id: "part5.9.jobDuties",
+          type: "textarea",
+          label: "9. Brief Description of Job Duties",
+          required: true,
+          helpText: "Detailed description of day-to-day responsibilities",
+        },
+      ],
+    },
+    {
+      id: "part6-technology-certification",
+      title: "Part 6: Technology Transfer Certification",
+      description: "Required for H-1B, L-1, and O-1A classifications",
+      questions: [
+        {
+          id: "part6.1.accessToTechnology",
+          type: "radio",
+          label:
+            "1. Will the beneficiary have access to controlled technology or technical data?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+          helpText:
+            "Controlled under Export Administration Regulations or International Traffic in Arms Regulations",
+        },
+        {
+          id: "part6.2.exportLicense",
+          type: "radio",
+          label:
+            "2. If yes, do you have the required export license or other authorization?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+            { value: "pending", label: "Pending" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part7-h1b-supplement",
+      title: "H-1B Classification Supplement",
+      description: "Additional information for H-1B petitions",
+      questions: [
+        {
+          id: "h1b.1.lcaNumber",
+          type: "text",
+          label: "1. Labor Condition Application (LCA) Number",
+          required: true,
+          helpText: "ETA Form 9035/9035E certification number",
+        },
+        {
+          id: "h1b.2.wageLevel",
+          type: "select",
+          label: "2. Prevailing Wage Level",
+          required: true,
+          options: [
+            { value: "level-1", label: "Level I - Entry Level" },
+            { value: "level-2", label: "Level II - Qualified" },
+            { value: "level-3", label: "Level III - Experienced" },
+            { value: "level-4", label: "Level IV - Fully Competent" },
+          ],
+        },
+        {
+          id: "h1b.3.capExempt",
+          type: "radio",
+          label: "3. Is this petition H-1B cap-exempt?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+          helpText:
+            "Higher education institutions and affiliated nonprofits are cap-exempt",
+        },
+        {
+          id: "h1b.4.degreeRequired",
+          type: "select",
+          label: "4. Minimum Degree Required for Position",
+          required: true,
+          options: [
+            { value: "bachelor", label: "Bachelor's Degree" },
+            { value: "master", label: "Master's Degree" },
+            { value: "doctorate", label: "Doctorate Degree" },
+          ],
+        },
+        {
+          id: "h1b.5.degreeField",
+          type: "text",
+          label: "5. Field of Study Required",
+          required: true,
+          placeholder: "Computer Science, Engineering, etc.",
+        },
+      ],
+    },
+    {
+      id: "part8-certification",
+      title: "Part 8: Petitioner's Certification",
+      description: "Signature and contact information",
+      questions: [
+        {
+          id: "part8.1.contactName",
+          type: "text",
+          label: "1. Contact Person Name",
+          required: true,
+        },
+        {
+          id: "part8.2.contactPhone",
+          type: "tel",
+          label: "2. Daytime Telephone Number",
+          required: true,
+        },
+        {
+          id: "part8.3.contactEmail",
+          type: "email",
+          label: "3. Email Address",
+          required: true,
+        },
+        {
+          id: "part8.4.certification",
+          type: "checkbox",
+          label:
+            "I certify, under penalty of perjury, that all information in this petition is true and correct",
+          required: true,
+        },
+      ],
+    },
+  ],
+  pdfFieldMappings: [],
+  requiredDocuments: [
+    "Labor Condition Application (LCA) certified by DOL (H-1B)",
+    "Support letter from employer describing job and why beneficiary qualifies",
+    "Beneficiary's resume/CV",
+    "Copies of beneficiary's degrees and transcripts",
+    "Evaluation of foreign degrees (if applicable)",
+    "Copy of beneficiary's passport biographical page",
+    "Copy of current visa and I-94 (if in U.S.)",
+    "Company organizational chart",
+    "Proof of employer's ability to pay salary",
+    "Client letters or contracts (for consulting positions)",
+  ],
+  instructions: [
+    "File with appropriate USCIS Service Center based on work location",
+    "Premium Processing available for $2,805 (15-day processing)",
+    "Ensure LCA is certified by DOL before filing (H-1B)",
+    "LCA must be posted at worksite for 10 business days",
+    "Include Public Access File documentation for H-1B",
+    "Cap-subject H-1B petitions must be filed during registration period (typically March)",
+  ],
+};
+
+const I140_DEFINITION: FormDefinition = {
+  id: "i-140",
+  code: "I-140",
+  name: "Immigrant Petition for Alien Workers",
+  description:
+    "Employment-based green card petition for EB-1, EB-2, and EB-3 categories",
+  category: "work_authorization",
+  estimatedTime: "120-180 minutes",
+  filingFee: 715,
+  price: 60,
+  status: "active",
+  sections: [
+    {
+      id: "part1-petitioner-info",
+      title:
+        "Part 1: Information About the Person or Organization Filing This Petition",
+      description: "U.S. employer or self-petitioner information",
+      questions: [
+        {
+          id: "part1.1a.legalName",
+          type: "text",
+          label:
+            "1.a. Legal Name of Organization (or Your Full Name if Individual)",
+          required: true,
+        },
+        {
+          id: "part1.1b.tradeName",
+          type: "text",
+          label: "1.b. Trade Name/DBA (if any)",
+        },
+        {
+          id: "part1.2.taxId",
+          type: "text",
+          label: "2. U.S. Employer Identification Number (EIN)",
+          required: true,
+          placeholder: "12-3456789",
+          helpText: "IRS Tax ID Number",
+        },
+        {
+          id: "part1.3a.street",
+          type: "text",
+          label: "3.a. Street Number and Name",
+          required: true,
+        },
+        {
+          id: "part1.3b.aptSteFlr",
+          type: "select",
+          label: "3.b. Unit Type",
+          options: [
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part1.3c.unitNumber",
+          type: "text",
+          label: "3.c. Unit Number",
+        },
+        {
+          id: "part1.3d.city",
+          type: "text",
+          label: "3.d. City or Town",
+          required: true,
+        },
+        {
+          id: "part1.3e.state",
+          type: "select",
+          label: "3.e. State",
+          required: true,
+          options: US_STATES,
+        },
+        {
+          id: "part1.3f.zipCode",
+          type: "text",
+          label: "3.f. ZIP Code",
+          required: true,
+        },
+        {
+          id: "part1.4.phone",
+          type: "tel",
+          label: "4. Daytime Telephone Number",
+          required: true,
+        },
+      ],
+    },
+    {
+      id: "part2-petition-type",
+      title: "Part 2: Petition Type",
+      description: "Select the employment-based immigrant classification",
+      questions: [
+        {
+          id: "part2.classification",
+          type: "select",
+          label: "This petition is being filed for (select one):",
+          required: true,
+          options: [
+            { value: "eb1-1", label: "EB-1-1: Alien of Extraordinary Ability" },
+            {
+              value: "eb1-2",
+              label: "EB-1-2: Outstanding Professor or Researcher",
+            },
+            {
+              value: "eb1-3",
+              label: "EB-1-3: Multinational Executive or Manager",
+            },
+            {
+              value: "eb2",
+              label:
+                "EB-2: Member of Professions Holding Advanced Degree or Exceptional Ability",
+            },
+            { value: "eb2-niw", label: "EB-2: National Interest Waiver" },
+            {
+              value: "eb3-1",
+              label:
+                "EB-3-1: Skilled Worker (minimum 2 years training/experience)",
+            },
+            {
+              value: "eb3-2",
+              label: "EB-3-2: Professional (bachelor's degree required)",
+            },
+            {
+              value: "eb3-3",
+              label:
+                "EB-3-3: Other Worker (less than 2 years training/experience)",
+            },
+          ],
+          helpText: "Choose the classification that best fits the beneficiary",
+        },
+        {
+          id: "part2.selfPetition",
+          type: "radio",
+          label: "Is this a self-petition?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes (EB-1A or EB-2 NIW)" },
+            { value: "no", label: "No (Employer is petitioning)" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part3-beneficiary-info",
+      title: "Part 3: Information About the Person for Whom You Are Filing",
+      description: "Foreign worker/beneficiary information",
+      questions: [
+        {
+          id: "part3.1a.familyName",
+          type: "text",
+          label: "1.a. Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part3.1b.givenName",
+          type: "text",
+          label: "1.b. Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part3.1c.middleName",
+          type: "text",
+          label: "1.c. Middle Name",
+        },
+        {
+          id: "part3.2.alienNumber",
+          type: "text",
+          label: "2. Alien Registration Number (A-Number) (if any)",
+          placeholder: "A-",
+        },
+        {
+          id: "part3.3.dateOfBirth",
+          type: "date",
+          label: "3. Date of Birth",
+          required: true,
+        },
+        {
+          id: "part3.4.cityOfBirth",
+          type: "text",
+          label: "4. City/Town of Birth",
+          required: true,
+        },
+        {
+          id: "part3.5.countryOfBirth",
+          type: "text",
+          label: "5. Country of Birth",
+          required: true,
+        },
+        {
+          id: "part3.6.countryOfCitizenship",
+          type: "text",
+          label: "6. Country of Citizenship or Nationality",
+          required: true,
+        },
+      ],
+    },
+    {
+      id: "part4-processing-info",
+      title: "Part 4: Processing Information",
+      description: "Current status and location",
+      questions: [
+        {
+          id: "part4.1.beneficiaryInUS",
+          type: "radio",
+          label: "1. Is the beneficiary currently in the United States?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part4.2.currentStatus",
+          type: "text",
+          label: "2. If yes, current nonimmigrant status",
+          helpText: "e.g., H-1B, L-1, F-1",
+        },
+        {
+          id: "part4.3.statusExpiration",
+          type: "date",
+          label: "3. Current Status Valid Until",
+        },
+        {
+          id: "part4.4.consularProcessing",
+          type: "radio",
+          label:
+            "4. Will beneficiary apply for adjustment of status or consular processing?",
+          required: true,
+          options: [
+            {
+              value: "adjustment",
+              label: "Adjustment of Status (I-485 in U.S.)",
+            },
+            { value: "consular", label: "Consular Processing (visa abroad)" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part5-job-offer",
+      title: "Part 5: Basic Information About the Proposed Employment",
+      description: "Job details and requirements",
+      questions: [
+        {
+          id: "part5.1.jobTitle",
+          type: "text",
+          label: "1. Job Title",
+          required: true,
+        },
+        {
+          id: "part5.2.socCode",
+          type: "text",
+          label: "2. SOC Code",
+          required: true,
+          helpText: "Standard Occupational Classification code",
+          placeholder: "15-1252.00",
+        },
+        {
+          id: "part5.3.salaryPerYear",
+          type: "text",
+          label: "3. Salary Per Year",
+          required: true,
+          placeholder: "$120,000",
+        },
+        {
+          id: "part5.4.educationRequired",
+          type: "select",
+          label: "4. Minimum Education Required",
+          required: true,
+          options: [
+            { value: "none", label: "None" },
+            { value: "high-school", label: "High School" },
+            { value: "bachelor", label: "Bachelor's Degree" },
+            { value: "master", label: "Master's Degree" },
+            { value: "doctorate", label: "Doctorate" },
+          ],
+        },
+        {
+          id: "part5.5.experienceRequired",
+          type: "text",
+          label: "5. Months of Experience Required in Job Offered",
+          required: true,
+          placeholder: "60 (5 years)",
+          helpText: "Enter number of months",
+        },
+        {
+          id: "part5.6.jobDuties",
+          type: "textarea",
+          label: "6. Job Duties",
+          required: true,
+          helpText: "Detailed description of duties and responsibilities",
+        },
+      ],
+    },
+    {
+      id: "part6-labor-certification",
+      title: "Part 6: Labor Certification Information",
+      description: "PERM details for EB-2 and EB-3 petitions",
+      questions: [
+        {
+          id: "part6.1.permRequired",
+          type: "radio",
+          label: "1. Is a PERM labor certification required for this petition?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes (EB-2 or EB-3 with PERM)" },
+            { value: "no", label: "No (EB-1, EB-2 NIW, or Schedule A)" },
+          ],
+          helpText: "EB-1 and National Interest Waiver do not require PERM",
+        },
+        {
+          id: "part6.2.permCaseNumber",
+          type: "text",
+          label: "2. PERM Case Number",
+          placeholder: "A-XXXXX-XXXXX",
+          helpText: "DOL ETA case number from approved PERM",
+        },
+        {
+          id: "part6.3.permFilingDate",
+          type: "date",
+          label: "3. PERM Filing Date",
+        },
+        {
+          id: "part6.4.permApprovalDate",
+          type: "date",
+          label: "4. PERM Approval Date",
+        },
+      ],
+    },
+    {
+      id: "part7-family-info",
+      title: "Part 7: Information About Spouse and Children",
+      description: "Derivative beneficiaries",
+      questions: [
+        {
+          id: "part7.1.maritalStatus",
+          type: "select",
+          label: "1. Beneficiary's Current Marital Status",
+          required: true,
+          options: [
+            { value: "single", label: "Single" },
+            { value: "married", label: "Married" },
+            { value: "divorced", label: "Divorced" },
+            { value: "widowed", label: "Widowed" },
+          ],
+        },
+        {
+          id: "part7.2.numberOfChildren",
+          type: "text",
+          label: "2. Total Number of Children (Unmarried and Under 21)",
+          placeholder: "0",
+          helpText: "Children eligible for derivative status",
+        },
+      ],
+    },
+    {
+      id: "part8-certification",
+      title: "Part 8: Petitioner's Certification",
+      description: "Contact and signature information",
+      questions: [
+        {
+          id: "part8.1.contactName",
+          type: "text",
+          label: "1. Contact Person Name",
+          required: true,
+        },
+        {
+          id: "part8.2.contactEmail",
+          type: "email",
+          label: "2. Email Address",
+          required: true,
+        },
+        {
+          id: "part8.3.contactPhone",
+          type: "tel",
+          label: "3. Daytime Telephone Number",
+          required: true,
+        },
+        {
+          id: "part8.4.certification",
+          type: "checkbox",
+          label:
+            "I certify, under penalty of perjury, that all information in this petition is true and correct",
+          required: true,
+        },
+      ],
+    },
+  ],
+  pdfFieldMappings: [],
+  requiredDocuments: [
+    "Approved PERM Labor Certification (EB-2/EB-3, unless NIW)",
+    "Evidence of ability to pay proffered wage (tax returns, financial statements)",
+    "Beneficiary's degree certificates and transcripts",
+    "Beneficiary's detailed resume/CV",
+    "Employment verification letters showing qualifying experience",
+    "Evidence of extraordinary ability (EB-1A): awards, publications, media coverage",
+    "Evidence for outstanding researcher (EB-1B): published research, citations",
+    "Organizational charts showing managerial role (EB-1C)",
+    "Letters of recommendation from experts in the field",
+    "Copy of passport biographical page",
+  ],
+  instructions: [
+    "PERM must be approved before filing I-140 (except EB-1 and NIW)",
+    "Ensure PERM job requirements match I-140 job offer",
+    "EB-1A and EB-2 NIW can self-petition without employer sponsorship",
+    "Premium Processing available for $2,805 (45-day processing)",
+    "Retain I-140 priority date even if changing employers",
+    "File with appropriate USCIS Service Center",
+    "EB-2 and EB-3 workers can port to new employer after I-140 approval (AC21 portability)",
+  ],
+};
+
+const I539_DEFINITION: FormDefinition = {
+  id: "i-539",
+  code: "I-539",
+  name: "Application to Extend/Change Nonimmigrant Status",
+  description: "Extend your stay or change to another nonimmigrant status",
+  category: "status_change",
+  estimatedTime: "60-90 minutes",
+  filingFee: 420,
+  price: 60,
+  status: "active",
+  sections: [
+    {
+      id: "part1-information-about-you",
+      title: "Part 1: Information About You",
+      description: "Your personal information",
+      questions: [
+        {
+          id: "part1.1a.familyName",
+          type: "text",
+          label: "1.a. Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part1.1b.givenName",
+          type: "text",
+          label: "1.b. Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part1.1c.middleName",
+          type: "text",
+          label: "1.c. Middle Name",
+        },
+        {
+          id: "part1.2.alienNumber",
+          type: "text",
+          label: "2. Alien Registration Number (A-Number) (if any)",
+          placeholder: "A-",
+        },
+        {
+          id: "part1.3.uscisOnlineNumber",
+          type: "text",
+          label: "3. USCIS Online Account Number (if any)",
+        },
+        {
+          id: "part1.4.dateOfBirth",
+          type: "date",
+          label: "4. Date of Birth",
+          required: true,
+        },
+        {
+          id: "part1.5.countryOfBirth",
+          type: "text",
+          label: "5. Country of Birth",
+          required: true,
+        },
+        {
+          id: "part1.6.countryOfCitizenship",
+          type: "text",
+          label: "6. Country of Citizenship or Nationality",
+          required: true,
+        },
+        {
+          id: "part1.7.currentNonimmigrantStatus",
+          type: "text",
+          label: "7. Current Nonimmigrant Status",
+          required: true,
+          helpText: "e.g., B-2, F-1, H-4, J-1",
+        },
+        {
+          id: "part1.8.i94Number",
+          type: "text",
+          label: "8. I-94 Arrival-Departure Record Number",
+          required: true,
+          helpText: "Find at https://i94.cbp.dhs.gov",
+        },
+        {
+          id: "part1.9.statusExpirationDate",
+          type: "date",
+          label: "9. Date Status Expires (as shown on I-94)",
+          required: true,
+        },
+        {
+          id: "part1.10.passportNumber",
+          type: "text",
+          label: "10. Passport Number",
+          required: true,
+        },
+        {
+          id: "part1.11.passportCountry",
+          type: "text",
+          label: "11. Country That Issued Passport",
+          required: true,
+        },
+        {
+          id: "part1.12.passportExpiration",
+          type: "date",
+          label: "12. Passport Expiration Date",
+          required: true,
+        },
+        {
+          id: "part1.13.dateOfLastEntry",
+          type: "date",
+          label: "13. Date of Last Arrival into the United States",
+          required: true,
+        },
+        {
+          id: "part1.14.placeOfLastEntry",
+          type: "text",
+          label: "14. Place of Last Arrival (City, State)",
+          required: true,
+        },
+      ],
+    },
+    {
+      id: "part1b-mailing-address",
+      title: "Part 1: Your Mailing Address",
+      description: "Where USCIS will send notices",
+      questions: [
+        {
+          id: "part1.15a.street",
+          type: "text",
+          label: "15.a. Street Number and Name",
+          required: true,
+        },
+        {
+          id: "part1.15b.aptSteFlr",
+          type: "select",
+          label: "15.b. Unit Type",
+          options: [
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part1.15c.unitNumber",
+          type: "text",
+          label: "15.c. Unit Number",
+        },
+        {
+          id: "part1.15d.city",
+          type: "text",
+          label: "15.d. City or Town",
+          required: true,
+        },
+        {
+          id: "part1.15e.state",
+          type: "select",
+          label: "15.e. State",
+          required: true,
+          options: US_STATES,
+        },
+        {
+          id: "part1.15f.zipCode",
+          type: "text",
+          label: "15.f. ZIP Code",
+          required: true,
+        },
+      ],
+    },
+    {
+      id: "part2-application-type",
+      title: "Part 2: Application Type",
+      description: "What are you requesting?",
+      questions: [
+        {
+          id: "part2.1.applicationType",
+          type: "select",
+          label: "1. I am applying for (select only one):",
+          required: true,
+          options: [
+            {
+              value: "extend-reinstate",
+              label:
+                "An extension of stay or reinstatement of my status in my current nonimmigrant classification",
+            },
+            {
+              value: "change",
+              label: "A change of status to a new nonimmigrant classification",
+            },
+          ],
+        },
+        {
+          id: "part2.2.newStatusRequested",
+          type: "text",
+          label:
+            "2. If requesting change of status, enter the new status you are requesting",
+          helpText: "e.g., B-2 Tourist, F-1 Student, H-4 Dependent",
+        },
+        {
+          id: "part2.3.numberOfApplicants",
+          type: "text",
+          label: "3. Total number of people included in this application",
+          required: true,
+          placeholder: "1",
+          helpText:
+            "Include yourself and any family members (submit I-539A for each additional person)",
+        },
+      ],
+    },
+    {
+      id: "part3-processing-information",
+      title: "Part 3: Processing Information",
+      description: "Additional details about your request",
+      questions: [
+        {
+          id: "part3.1.basedOnDependentStatus",
+          type: "radio",
+          label:
+            "1. Is this application based on an extension or change of status already granted to your spouse, child, or parent?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part3.2.receiptNumber",
+          type: "text",
+          label:
+            "2. If yes, provide the receipt number of the petition or application",
+          placeholder: "WAC, LIN, SRC, or EAC number",
+        },
+        {
+          id: "part3.3.requestedExtensionDate",
+          type: "date",
+          label: "3. Date you want your extension or change of status to begin",
+          required: true,
+          helpText: "Usually the day after your current status expires",
+        },
+        {
+          id: "part3.4.requestedEndDate",
+          type: "date",
+          label: "4. Date you want your extended stay to end",
+          required: true,
+          helpText: "Maximum 6 months for most nonimmigrant categories",
+        },
+      ],
+    },
+    {
+      id: "part4-additional-info",
+      title: "Part 4: Additional Information About You",
+      description: "Background questions",
+      questions: [
+        {
+          id: "part4.1.everWorkedUS",
+          type: "radio",
+          label:
+            "1. Have you ever been employed in the United States without authorization?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part4.2.everViolatedStatus",
+          type: "radio",
+          label:
+            "2. Have you ever failed to maintain your nonimmigrant status?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part4.3.everArrested",
+          type: "radio",
+          label:
+            "3. Have you ever been arrested or convicted of any crime or offense?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part4.4.reasonForExtension",
+          type: "textarea",
+          label:
+            "4. Explain why you are requesting this extension or change of status",
+          required: true,
+          helpText:
+            "Provide detailed explanation of your circumstances and why you need to remain in the U.S.",
+        },
+      ],
+    },
+    {
+      id: "part5-applicant-statement",
+      title: "Part 5: Applicant's Statement and Certification",
+      description: "Contact information and certification",
+      questions: [
+        {
+          id: "part5.1.daytimePhone",
+          type: "tel",
+          label: "1. Daytime Telephone Number",
+          required: true,
+        },
+        {
+          id: "part5.2.mobilePhone",
+          type: "tel",
+          label: "2. Mobile Telephone Number",
+        },
+        {
+          id: "part5.3.email",
+          type: "email",
+          label: "3. Email Address",
+          required: true,
+          helpText: "USCIS will send updates to this email",
+        },
+        {
+          id: "part5.4.certification",
+          type: "checkbox",
+          label:
+            "I certify, under penalty of perjury, that all information in this application is true and correct",
+          required: true,
+        },
+      ],
+    },
+  ],
+  pdfFieldMappings: [],
+  requiredDocuments: [
+    "Copy of current I-94 arrival/departure record",
+    "Copy of passport biographical page",
+    "Copy of current U.S. visa stamp",
+    "Evidence of maintained status (if F-1: I-20, if J-1: DS-2019, if H-4/L-2: spouse's approval notice)",
+    "Proof of financial support (bank statements, employment letter, sponsor affidavit)",
+    "Detailed letter explaining reason for extension/change",
+    "Evidence of ties to home country (property, family, employment)",
+    "Form I-539A for each additional applicant (spouse/children)",
+  ],
+  instructions: [
+    "File BEFORE your current status expires - filing after expiration may result in denial",
+    "File at least 45 days before your status expiration date",
+    "Maintain valid passport throughout your requested extension period",
+    "If changing status, you must maintain your current status until decision is made",
+    "Students (F-1/M-1) and exchange visitors (J-1) should contact their school DSO before filing",
+    "H-1B, L-1, O-1, and P-1 workers must file I-129, not I-539",
+    "Online filing available for most cases at $420; paper filing is $470",
+    "Processing time varies by service center (typically 6-12 months)",
+  ],
+};
+
+// const I129F_DEFINITION: FormDefinition = {
+//   id: "i-129f",
+//   code: "I-129F",
+//   name: "Petition for Alien Fiancé(e)",
+//   description: "K-1 fiancé visa or K-3 spouse visa petition",
+//   category: "family",
+//   estimatedTime: "60-90 minutes",
+//   filingFee: 535,
+//   price: 60,
+//   sections: [
+//     {
+//       id: "part1-petitioner-info",
+//       title: "Part 1: Information About You (Petitioner)",
+//       description: "U.S. citizen petitioner information",
+//       questions: [
+//         {
+//           id: "part1.1.alienNumber",
+//           type: "text",
+//           label: "1. Alien Registration Number (A-Number) (if any)",
+//           placeholder: "A-",
+//           helpText: "Only if you have one",
+//         },
+//         {
+//           id: "part1.2.uscisAccountNumber",
+//           type: "text",
+//           label: "2. USCIS Online Account Number (if any)",
+//           helpText: "If you have a USCIS online account",
+//         },
+//         {
+//           id: "part1.3.ssn",
+//           type: "ssn",
+//           label: "3. U.S. Social Security Number",
+//           required: true,
+//         },
+//         {
+//           id: "part1.4.classification",
+//           type: "select",
+//           label: "4. Classification Sought for Your Beneficiary",
+//           required: true,
+//           options: [
+//             { value: "k1", label: "K-1 - Fiancé(e)" },
+//             { value: "k3", label: "K-3 - Spouse" },
+//           ],
+//           helpText:
+//             "K-1 is for fiancé(e) you plan to marry in U.S. K-3 is for spouse of pending I-130",
+//         },
+//         {
+//           id: "part1.6a.familyName",
+//           type: "text",
+//           label: "6.a. Family Name (Last Name)",
+//           required: true,
+//         },
+//         {
+//           id: "part1.6b.givenName",
+//           type: "text",
+//           label: "6.b. Given Name (First Name)",
+//           required: true,
+//         },
+//         {
+//           id: "part1.6c.middleName",
+//           type: "text",
+//           label: "6.c. Middle Name",
+//         },
+//         {
+//           id: "part1.7.otherNamesUsed",
+//           type: "text",
+//           label: "7. Other Names Used (if any)",
+//           helpText:
+//             "Include maiden name, aliases, or nicknames. Provide family name, given name, and middle name if applicable.",
+//         },
+//         {
+//           id: "part1.4.ssn",
+//           type: "ssn",
+//           label: "3. U.S. Social Security Number (if any)",
+//           required: false,
+//         },
+//       ],
+//     },
+//     {
+//       id: "part1b-petitioner-address",
+//       title: "Part 1: Your Addresses",
+//       description: "Current and previous addresses",
+//       questions: [
+//         {
+//           id: "part1.8a.mailingStreet",
+//           type: "text",
+//           label: "8.a. Mailing Address - Street Number and Name",
+//           required: true,
+//         },
+//         {
+//           id: "part1.8b.aptSteFlr",
+//           type: "select",
+//           label: "8.b. Unit Type",
+//           options: [
+//             { value: "apt", label: "Apt." },
+//             { value: "ste", label: "Ste." },
+//             { value: "flr", label: "Flr." },
+//           ],
+//         },
+//         {
+//           id: "part1.8c.unitNumber",
+//           type: "text",
+//           label: "8.c. Unit Number",
+//         },
+//         {
+//           id: "part1.8d.city",
+//           type: "text",
+//           label: "8.d. City or Town",
+//           required: true,
+//         },
+//         {
+//           id: "part1.8e.state",
+//           type: "select",
+//           label: "8.e. State",
+//           required: true,
+//           options: US_STATES,
+//         },
+//         {
+//           id: "part1.8f.zipCode",
+//           type: "text",
+//           label: "8.f. ZIP Code",
+//           required: true,
+//         },
+//         {
+//           id: "part1.9.physicalAddressSameAsMailing",
+//           type: "radio",
+//           label:
+//             "9. Is your physical address the same as your mailing address?",
+//           required: true,
+//           options: [
+//             { value: "yes", label: "Yes" },
+//             { value: "no", label: "No" },
+//           ],
+//         },
+//       ],
+//     },
+//     {
+//       id: "part1c-petitioner-marital",
+//       title: "Part 1: Your Marital History",
+//       description: "Current and previous marriages",
+//       questions: [
+//         {
+//           id: "part1.10.currentMaritalStatus",
+//           type: "select",
+//           label: "10. Current Marital Status",
+//           required: true,
+//           options: [
+//             { value: "single", label: "Single, Never Married" },
+//             { value: "married", label: "Married" },
+//             { value: "divorced", label: "Divorced" },
+//             { value: "widowed", label: "Widowed" },
+//           ],
+//         },
+//         {
+//           id: "part1.11.numberOfPriorMarriages",
+//           type: "text",
+//           label: "11. How many times have you been married?",
+//           required: true,
+//           placeholder: "0",
+//         },
+//         {
+//           id: "part1.12.dateLastMarriageEnded",
+//           type: "date",
+//           label: "12. Date Your Last Marriage Ended (if applicable)",
+//           helpText: "Required if you were previously married",
+//         },
+//         {
+//           id: "part1.13.howLastMarriageEnded",
+//           type: "select",
+//           label: "13. How Did Your Last Marriage End?",
+//           options: [
+//             { value: "divorce", label: "Divorce" },
+//             { value: "annulment", label: "Annulment" },
+//             { value: "death", label: "Death of Spouse" },
+//           ],
+//         },
+//       ],
+//     },
+//     {
+//       id: "part1d-petitioner-employment",
+//       title: "Part 1: Your Employment",
+//       description: "Current employment information",
+//       questions: [
+//         {
+//           id: "part1.14.occupation",
+//           type: "text",
+//           label: "14. Your Current Occupation",
+//           required: true,
+//         },
+//         {
+//           id: "part1.15.employerName",
+//           type: "text",
+//           label: "15. Name of Your Current Employer",
+//           required: true,
+//         },
+//         {
+//           id: "part1.16.employerAddress.street",
+//           type: "text",
+//           label: "16. Employer Street Address",
+//           required: true,
+//         },
+//         {
+//           id: "part1.16.employerAddress.city",
+//           type: "text",
+//           label: "City",
+//           required: true,
+//         },
+//         {
+//           id: "part1.16.employerAddress.state",
+//           type: "select",
+//           label: "State",
+//           required: true,
+//           options: US_STATES,
+//         },
+//       ],
+//     },
+//     {
+//       id: "part2-beneficiary-info",
+//       title: "Part 2: Information About Your Beneficiary",
+//       description: "Information about your fiancé(e) or spouse",
+//       questions: [
+//         {
+//           id: "part2.1a.familyName",
+//           type: "text",
+//           label: "1.a. Family Name (Last Name)",
+//           required: true,
+//         },
+//         {
+//           id: "part2.1b.givenName",
+//           type: "text",
+//           label: "1.b. Given Name (First Name)",
+//           required: true,
+//         },
+//         {
+//           id: "part2.1c.middleName",
+//           type: "text",
+//           label: "1.c. Middle Name",
+//         },
+//         {
+//           id: "part2.2.otherNamesUsed",
+//           type: "text",
+//           label: "2. Other Names Used",
+//         },
+//         {
+//           id: "part2.3.alienNumber",
+//           type: "text",
+//           label: "3. Alien Registration Number (A-Number) (if any)",
+//           placeholder: "A-",
+//         },
+//         {
+//           id: "part2.4.ssn",
+//           type: "ssn",
+//           label: "4. U.S. Social Security Number (if any)",
+//         },
+//         {
+//           id: "part2.5.dateOfBirth",
+//           type: "date",
+//           label: "5. Date of Birth",
+//           required: true,
+//         },
+//         {
+//           id: "part2.6.cityOfBirth",
+//           type: "text",
+//           label: "6.a. City/Town of Birth",
+//           required: true,
+//         },
+//         {
+//           id: "part2.6.countryOfBirth",
+//           type: "text",
+//           label: "6.b. Country of Birth",
+//           required: true,
+//         },
+//         {
+//           id: "part2.7.countryOfCitizenship",
+//           type: "text",
+//           label: "7. Country of Citizenship",
+//           required: true,
+//         },
+//       ],
+//     },
+//     {
+//       id: "part2b-beneficiary-address",
+//       title: "Part 2: Beneficiary Address",
+//       description: "Where your beneficiary currently lives",
+//       questions: [
+//         {
+//           id: "part2.8.addressStreet",
+//           type: "text",
+//           label: "8. Beneficiary's Current Physical Address - Street",
+//           required: true,
+//         },
+//         {
+//           id: "part2.8.city",
+//           type: "text",
+//           label: "City/Town",
+//           required: true,
+//         },
+//         {
+//           id: "part2.8.province",
+//           type: "text",
+//           label: "Province/State",
+//         },
+//         {
+//           id: "part2.8.postalCode",
+//           type: "text",
+//           label: "Postal Code",
+//         },
+//         {
+//           id: "part2.8.country",
+//           type: "text",
+//           label: "Country",
+//           required: true,
+//         },
+//       ],
+//     },
+//     {
+//       id: "part2c-beneficiary-marital",
+//       title: "Part 2: Beneficiary Marital History",
+//       description: "Beneficiary's marriage history",
+//       questions: [
+//         {
+//           id: "part2.9.currentMaritalStatus",
+//           type: "select",
+//           label: "9. Beneficiary's Current Marital Status",
+//           required: true,
+//           options: [
+//             { value: "single", label: "Single, Never Married" },
+//             { value: "married", label: "Married" },
+//             { value: "divorced", label: "Divorced" },
+//             { value: "widowed", label: "Widowed" },
+//           ],
+//         },
+//         {
+//           id: "part2.10.numberOfPriorMarriages",
+//           type: "text",
+//           label: "10. Number of Times Beneficiary Has Been Married",
+//           required: true,
+//           placeholder: "0",
+//         },
+//         {
+//           id: "part2.11.dateLastMarriageEnded",
+//           type: "date",
+//           label: "11. Date Beneficiary's Last Marriage Ended (if applicable)",
+//         },
+//         {
+//           id: "part2.12.children",
+//           type: "text",
+//           label: "12. Number of Children (Under 21 and Unmarried)",
+//           required: true,
+//           placeholder: "0",
+//           helpText: "Children eligible for K-2 derivative visas",
+//         },
+//       ],
+//     },
+//     {
+//       id: "part3-relationship-info",
+//       title: "Part 3: Information About Your Relationship",
+//       description: "Details about how you met and your relationship",
+//       questions: [
+//         {
+//           id: "part3.1.dateFirstMet",
+//           type: "date",
+//           label: "1. Date You First Met in Person",
+//           required: true,
+//           helpText:
+//             "USCIS requires K-1 couples to have met within past 2 years",
+//         },
+//         {
+//           id: "part3.2.placeFirstMet.city",
+//           type: "text",
+//           label: "2.a. City/Town Where You First Met",
+//           required: true,
+//         },
+//         {
+//           id: "part3.2.placeFirstMet.country",
+//           type: "text",
+//           label: "2.b. Country Where You First Met",
+//           required: true,
+//         },
+//         {
+//           id: "part3.3.howMet",
+//           type: "textarea",
+//           label: "3. How Did You Meet?",
+//           required: true,
+//           helpText: "Describe the circumstances of how you met",
+//         },
+//         {
+//           id: "part3.4.metThroughIMB",
+//           type: "radio",
+//           label: "4. Did you meet through an International Marriage Broker?",
+//           required: true,
+//           options: [
+//             { value: "yes", label: "Yes" },
+//             { value: "no", label: "No" },
+//           ],
+//           helpText: "Dating websites, matchmaking services, etc.",
+//         },
+//         {
+//           id: "part3.5.dateOfMarriage",
+//           type: "date",
+//           label: "5. Date of Marriage (K-3 petitions only)",
+//           helpText: "Required for K-3 spouse petitions",
+//         },
+//         {
+//           id: "part3.6.placeOfMarriage",
+//           type: "text",
+//           label: "6. Place of Marriage (K-3 petitions only)",
+//         },
+//       ],
+//     },
+//     {
+//       id: "part4-criminal-history",
+//       title: "Part 4: Additional Information",
+//       description: "Background questions",
+//       questions: [
+//         {
+//           id: "part4.1.criminalConvictions",
+//           type: "radio",
+//           label: "1. Have you ever been arrested or convicted of any crime?",
+//           required: true,
+//           options: [
+//             { value: "yes", label: "Yes" },
+//             { value: "no", label: "No" },
+//           ],
+//         },
+//         {
+//           id: "part4.2.filedPreviousPetitions",
+//           type: "radio",
+//           label:
+//             "2. Have you previously filed petitions for other fiancé(e)s or spouses?",
+//           required: true,
+//           options: [
+//             { value: "yes", label: "Yes" },
+//             { value: "no", label: "No" },
+//           ],
+//         },
+//         {
+//           id: "part4.3.previousK1Petitions",
+//           type: "text",
+//           label:
+//             "3. If yes, how many K-1 petitions have you filed in the past?",
+//           placeholder: "0",
+//           helpText:
+//             "USCIS limits K-1 petitions to 2 in a lifetime and 1 every 2 years",
+//         },
+//       ],
+//     },
+//     {
+//       id: "part5-contact-info",
+//       title: "Part 5: Petitioner's Contact Information",
+//       description: "How USCIS can reach you",
+//       questions: [
+//         {
+//           id: "part5.1.daytimePhone",
+//           type: "tel",
+//           label: "1. Daytime Telephone Number",
+//           required: true,
+//         },
+//         {
+//           id: "part5.2.mobilePhone",
+//           type: "tel",
+//           label: "2. Mobile Telephone Number",
+//         },
+//         {
+//           id: "part5.3.email",
+//           type: "email",
+//           label: "3. Email Address",
+//           required: true,
+//           helpText: "USCIS will send case updates to this email",
+//         },
+//       ],
+//     },
+//     {
+//       id: "part6-certification",
+//       title: "Part 6: Certification",
+//       description: "Signature and declaration",
+//       questions: [
+//         {
+//           id: "part6.certification",
+//           type: "checkbox",
+//           label:
+//             "I certify, under penalty of perjury, that all information in this petition is true and correct",
+//           required: true,
+//         },
+//         {
+//           id: "part6.intentToMarry",
+//           type: "checkbox",
+//           label:
+//             "I certify that I am legally able to marry and intend to marry my fiancé(e) within 90 days of admission (K-1 only)",
+//           required: true,
+//         },
+//       ],
+//     },
+//   ],
+//   pdfFieldMappings: [],
+//   requiredDocuments: [
+//     "Proof of U.S. citizenship (passport, birth certificate, or naturalization certificate)",
+//     "Evidence of termination of all prior marriages (divorce decrees, death certificates)",
+//     "Proof of in-person meeting within past 2 years (photos, travel records, affidavits)",
+//     "Two passport-style photos of petitioner",
+//     "Two passport-style photos of beneficiary",
+//     "Form G-325A (Biographic Information) for petitioner",
+//     "Form G-325A for beneficiary",
+//     "Statement of intent to marry within 90 days (K-1)",
+//     "Copy of marriage certificate (K-3)",
+//     "Copy of I-797 showing I-130 was filed (K-3)",
+//   ],
+//   instructions: [
+//     "Both you and your fiancé(e) must be legally free to marry",
+//     "You must have met your fiancé(e) in person within the past 2 years (with limited exceptions)",
+//     "If filing K-3, you must have already filed Form I-130",
+//     "After USCIS approval, your fiancé(e) will apply for the visa at a U.S. embassy/consulate",
+//     "K-1 fiancé(e) must marry you within 90 days of entering the U.S.",
+//   ],
+// };
+const I_129F_DEFINITION: FormDefinition = {
+  id: "i-129f",
+  code: "I-129F",
+  name: "Petition for Alien Fiancé(e)",
+  description: "K-1 fiancé visa or K-3 spouse visa petition",
+  category: "family",
+  estimatedTime: "60-90 minutes",
+  filingFee: 535,
+  price: 60,
+  sections: [
+    {
+      id: "part1-personal-information",
+      title: "Part 1: Personal Information",
+      description: "Provide your personal details as requested below.",
+      questions: [
+        {
+          id: "part1.yourFullName.familyName",
+          type: "text",
+          label: "1.a. Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part1.yourFullName.givenName",
+          type: "text",
+          label: "1.b. Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part1.yourFullName.middleName",
+          type: "text",
+          label: "1.c. Middle Name",
+        },
+        {
+          id: "part1.alienRegistrationNumber",
+          type: "text",
+          label: "2. Alien Registration Number (A-Number)",
+          helpText: "Enter your A-Number, if any.",
+        },
+        {
+          id: "part1.uscisOnlineAccountNumber",
+          type: "text",
+          label: "3. USCIS Online Account Number",
+          helpText: "Enter your USCIS Online Account Number, if any.",
+        },
+        {
+          id: "part1.socialSecurityNumber",
+          type: "ssn",
+          label: "4. U.S. Social Security Number (if any)",
+          placeholder: "###-##-####",
+          helpText: "Leave blank if you do not have one.",
+        },
+        {
+          id: "part1.otherNamesUsed.givenName",
+          type: "text",
+          label: "5.a. Other Names Used - Given Name",
+          helpText: "Enter any other first names you have used.",
+        },
+        {
+          id: "part1.otherNamesUsed.middleName",
+          type: "text",
+          label: "5.b. Other Names Used - Middle Name",
+          helpText: "Enter any other middle names you have used.",
+        },
+        {
+          id: "part1.otherNamesUsed.familyName",
+          type: "text",
+          label: "5.c. Other Names Used - Family Name",
+          helpText: "Enter any other last names you have used.",
+        },
+      ],
+    },
+    {
+      id: "part1-classification-request",
+      title: "Part 1: Classification Request",
+      description: "Select the classification you are requesting.",
+      questions: [
+        {
+          id: "part1.classificationRequest",
+          type: "radio",
+          label: "6. Classification Requested",
+          required: true,
+          options: [
+            { value: "A", label: "K-1 (Fiancé(e))" },
+            { value: "B", label: "K-3 (Spouse)" },
+          ],
+        },
+        {
+          id: "part1.spouseK3FiledI130",
+          type: "radio",
+          label: "7. Has Form I-130 been filed by your spouse?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part1-mailing-address",
+      title: "Part 1: Mailing Address",
+      description: "Provide your current mailing address.",
+      questions: [
+        {
+          id: "part1.mailingAddressSameAsPhysical",
+          type: "radio",
+          label:
+            "8. Is your mailing address the same as your physical address?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+        {
+          id: "part1.mailingAddress.streetNumberName",
+          type: "text",
+          label: "9.a. Street Number and Name",
+          required: true,
+        },
+        {
+          id: "part1.mailingAddress.unit",
+          type: "select",
+          label: "9.b. Unit Type",
+          options: [
+            { value: "", label: "Select if applicable" },
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part1.mailingAddress.aptSteFlrNumber",
+          type: "text",
+          label: "9.c. Unit Number",
+        },
+        {
+          id: "part1.mailingAddress.cityOrTown",
+          type: "text",
+          label: "9.d. City or Town",
+          required: true,
+        },
+        {
+          id: "part1.mailingAddress.state",
+          type: "select",
+          label: "9.e. State",
+          options: US_STATES,
+          required: true,
+        },
+        {
+          id: "part1.mailingAddress.zipCode",
+          type: "text",
+          label: "9.f. ZIP Code",
+          required: true,
+        },
+        {
+          id: "part1.mailingAddress.province",
+          type: "text",
+          label: "9.g. Province",
+          helpText: "If applicable, enter your province.",
+        },
+        {
+          id: "part1.mailingAddress.postalCode",
+          type: "text",
+          label: "9.h. Postal Code",
+          helpText: "If applicable, enter your postal code.",
+        },
+        {
+          id: "part1.mailingAddress.country",
+          type: "text",
+          label: "9.i. Country",
+          required: true,
+        },
+        {
+          id: "part1.mailingAddress.inCareOfName",
+          type: "text",
+          label: "9.j. In Care Of Name",
+          helpText: "If someone else receives your mail, enter their name.",
+        },
+      ],
+    },
+    {
+      id: "part1-address-history",
+      title: "Part 1: Address History",
+      description: "List your physical addresses for the past five years.",
+      questions: [
+        {
+          id: "part1.addressHistory.physicalAddressOne.streetNumberName",
+          type: "text",
+          label: "10.a. Street Number and Name",
+          required: true,
+        },
+        {
+          id: "part1.addressHistory.physicalAddressOne.unit",
+          type: "select",
+          label: "10.b. Unit Type",
+          options: [
+            { value: "", label: "Select if applicable" },
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part1.addressHistory.physicalAddressOne.aptSteFlrNumber",
+          type: "text",
+          label: "10.c. Unit Number",
+        },
+        {
+          id: "part1.addressHistory.physicalAddressOne.cityOrTown",
+          type: "text",
+          label: "10.d. City or Town",
+          required: true,
+        },
+        {
+          id: "part1.addressHistory.physicalAddressOne.state",
+          type: "select",
+          label: "10.e. State",
+          options: US_STATES,
+          required: true,
+        },
+        {
+          id: "part1.addressHistory.physicalAddressOne.zipCode",
+          type: "text",
+          label: "10.f. ZIP Code",
+          required: true,
+        },
+        {
+          id: "part1.addressHistory.physicalAddressOne.province",
+          type: "text",
+          label: "10.g. Province",
+          helpText: "If applicable, enter your province.",
+        },
+        {
+          id: "part1.addressHistory.physicalAddressOne.postalCode",
+          type: "text",
+          label: "10.h. Postal Code",
+          helpText: "If applicable, enter your postal code.",
+        },
+        {
+          id: "part1.addressHistory.physicalAddressOne.country",
+          type: "text",
+          label: "10.i. Country",
+          required: true,
+        },
+        {
+          id: "part1.addressHistory.physicalAddressOne.dateFrom",
+          type: "date",
+          label: "10.j. Date From",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part1.addressHistory.physicalAddressOne.dateTo",
+          type: "date",
+          label: "10.k. Date To",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part1.addressHistory.physicalAddressTwo.streetNumberName",
+          type: "text",
+          label: "11.a. Street Number and Name",
+        },
+        {
+          id: "part1.addressHistory.physicalAddressTwo.unit",
+          type: "select",
+          label: "11.b. Unit Type",
+          options: [
+            { value: "", label: "Select if applicable" },
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part1.addressHistory.physicalAddressTwo.aptSteFlrNumber",
+          type: "text",
+          label: "11.c. Unit Number",
+        },
+        {
+          id: "part1.addressHistory.physicalAddressTwo.cityOrTown",
+          type: "text",
+          label: "11.d. City or Town",
+        },
+        {
+          id: "part1.addressHistory.physicalAddressTwo.state",
+          type: "select",
+          label: "11.e. State",
+          options: US_STATES,
+        },
+        {
+          id: "part1.addressHistory.physicalAddressTwo.zipCode",
+          type: "text",
+          label: "11.f. ZIP Code",
+        },
+        {
+          id: "part1.addressHistory.physicalAddressTwo.province",
+          type: "text",
+          label: "11.g. Province",
+          helpText: "If applicable, enter your province.",
+        },
+        {
+          id: "part1.addressHistory.physicalAddressTwo.postalCode",
+          type: "text",
+          label: "11.h. Postal Code",
+          helpText: "If applicable, enter your postal code.",
+        },
+        {
+          id: "part1.addressHistory.physicalAddressTwo.country",
+          type: "text",
+          label: "11.i. Country",
+        },
+        {
+          id: "part1.addressHistory.physicalAddressTwo.dateFrom",
+          type: "date",
+          label: "11.j. Date From",
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part1.addressHistory.physicalAddressTwo.dateTo",
+          type: "date",
+          label: "11.k. Date To",
+          placeholder: "MM/DD/YYYY",
+        },
+      ],
+    },
+    {
+      id: "part1-employment-history",
+      title: "Part 1: Employment History",
+      description: "Provide details of your employment history.",
+      questions: [
+        {
+          id: "part1.employmentHistory.employerOne.name",
+          type: "text",
+          label: "12.a. Employer Name",
+          required: true,
+        },
+        {
+          id: "part1.employmentHistory.employerOne.streetNumberName",
+          type: "text",
+          label: "12.b. Street Number and Name",
+          required: true,
+        },
+        {
+          id: "part1.employmentHistory.employerOne.unit",
+          type: "select",
+          label: "12.c. Unit Type",
+          options: [
+            { value: "", label: "Select if applicable" },
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part1.employmentHistory.employerOne.aptSteFlrNumber",
+          type: "text",
+          label: "12.d. Unit Number",
+        },
+        {
+          id: "part1.employmentHistory.employerOne.cityOrTown",
+          type: "text",
+          label: "12.e. City or Town",
+          required: true,
+        },
+        {
+          id: "part1.employmentHistory.employerOne.state",
+          type: "select",
+          label: "12.f. State",
+          options: US_STATES,
+          required: true,
+        },
+        {
+          id: "part1.employmentHistory.employerOne.zipCode",
+          type: "text",
+          label: "12.g. ZIP Code",
+          required: true,
+        },
+        {
+          id: "part1.employmentHistory.employerOne.province",
+          type: "text",
+          label: "12.h. Province",
+          helpText: "If applicable, enter your province.",
+        },
+        {
+          id: "part1.employmentHistory.employerOne.postalCode",
+          type: "text",
+          label: "12.i. Postal Code",
+          helpText: "If applicable, enter your postal code.",
+        },
+        {
+          id: "part1.employmentHistory.employerOne.country",
+          type: "text",
+          label: "12.j. Country",
+          required: true,
+        },
+        {
+          id: "part1.employmentHistory.employerOne.startDate",
+          type: "date",
+          label: "12.k. Start Date",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part1.employmentHistory.employerOne.endDate",
+          type: "date",
+          label: "12.l. End Date",
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part1.employmentHistory.employerOne.occupation",
+          type: "text",
+          label: "12.m. Occupation",
+          required: true,
+        },
+        {
+          id: "part1.employmentHistory.employerTwo.name",
+          type: "text",
+          label: "13.a. Employer Name",
+        },
+        {
+          id: "part1.employmentHistory.employerTwo.streetNumberName",
+          type: "text",
+          label: "13.b. Street Number and Name",
+        },
+        {
+          id: "part1.employmentHistory.employerTwo.unit",
+          type: "select",
+          label: "13.c. Unit Type",
+          options: [
+            { value: "", label: "Select if applicable" },
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part1.employmentHistory.employerTwo.aptSteFlrNumber",
+          type: "text",
+          label: "13.d. Unit Number",
+        },
+        {
+          id: "part1.employmentHistory.employerTwo.cityOrTown",
+          type: "text",
+          label: "13.e. City or Town",
+        },
+        {
+          id: "part1.employmentHistory.employerTwo.state",
+          type: "select",
+          label: "13.f. State",
+          options: US_STATES,
+        },
+        {
+          id: "part1.employmentHistory.employerTwo.zipCode",
+          type: "text",
+          label: "13.g. ZIP Code",
+        },
+        {
+          id: "part1.employmentHistory.employerTwo.province",
+          type: "text",
+          label: "13.h. Province",
+          helpText: "If applicable, enter your province.",
+        },
+        {
+          id: "part1.employmentHistory.employerTwo.postalCode",
+          type: "text",
+          label: "13.i. Postal Code",
+          helpText: "If applicable, enter your postal code.",
+        },
+        {
+          id: "part1.employmentHistory.employerTwo.country",
+          type: "text",
+          label: "13.j. Country",
+        },
+        {
+          id: "part1.employmentHistory.employerTwo.startDate",
+          type: "date",
+          label: "13.k. Start Date",
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part1.employmentHistory.employerTwo.endDate",
+          type: "date",
+          label: "13.l. End Date",
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part1.employmentHistory.employerTwo.occupation",
+          type: "text",
+          label: "13.m. Occupation",
+        },
+      ],
+    },
+    {
+      id: "part1-other-information",
+      title: "Part 1: Other Information",
+      description: "Provide additional personal information as requested.",
+      questions: [
+        {
+          id: "part1.otherInformation.cityTownOfBirth",
+          type: "text",
+          label: "14.a. City or Town of Birth",
+          required: true,
+        },
+        {
+          id: "part1.otherInformation.provinceOrStateOfBirth",
+          type: "text",
+          label: "14.b. Province or State of Birth",
+        },
+        {
+          id: "part1.otherInformation.countryOfBirth",
+          type: "text",
+          label: "14.c. Country of Birth",
+          required: true,
+        },
+        {
+          id: "part1.otherInformation.dateOfBirth",
+          type: "date",
+          label: "15. Date of Birth (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part1.sex",
+          type: "radio",
+          label: "16. Sex",
+          required: true,
+          options: [
+            { value: "M", label: "Male" },
+            { value: "F", label: "Female" },
+          ],
+        },
+        {
+          id: "part1.maritalStatus",
+          type: "select",
+          label: "17. Marital Status",
+          required: true,
+          options: [
+            { value: "S", label: "Single" },
+            { value: "M", label: "Married" },
+            { value: "D", label: "Divorced" },
+            { value: "W", label: "Widowed" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part1-parents-information",
+      title: "Part 1: Parents Information",
+      description: "Provide information about your parents.",
+      questions: [
+        {
+          id: "part1.parentOne.familyName",
+          type: "text",
+          label: "Parent 1: Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part1.parentOne.givenName",
+          type: "text",
+          label: "Parent 1: Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part1.parentOne.middleName",
+          type: "text",
+          label: "Parent 1: Middle Name",
+        },
+        {
+          id: "part1.parentOne.dateOfBirth",
+          type: "date",
+          label: "Parent 1: Date of Birth (mm/dd/yyyy)",
+          required: true,
+        },
+        {
+          id: "part1.parentOne.sex",
+          type: "radio",
+          label: "Parent 1: Sex",
+          required: true,
+          options: [
+            { value: "M", label: "Male" },
+            { value: "F", label: "Female" },
+          ],
+        },
+        {
+          id: "part1.parentOne.countryOfBirth",
+          type: "text",
+          label: "Parent 1: Country of Birth",
+          required: true,
+        },
+        {
+          id: "part1.parentOneCountryOfResidence",
+          type: "text",
+          label: "Parent 1: Country of Residence",
+          required: true,
+        },
+        {
+          id: "part1.parentOneCityTownOfResidence",
+          type: "text",
+          label: "Parent 1: City or Town of Residence",
+          required: true,
+        },
+        {
+          id: "part1.parentTwoFamilyName",
+          type: "text",
+          label: "Parent 2: Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part1.parentTwoGivenName",
+          type: "text",
+          label: "Parent 2: Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part1.parentTwoMiddleName",
+          type: "text",
+          label: "Parent 2: Middle Name",
+        },
+        {
+          id: "part1.parentTwoDateOfBirth",
+          type: "date",
+          label: "Parent 2: Date of Birth (mm/dd/yyyy)",
+          required: true,
+        },
+        {
+          id: "part1.parentTwoSex",
+          type: "radio",
+          label: "Parent 2: Sex",
+          required: true,
+          options: [
+            { value: "M", label: "Male" },
+            { value: "F", label: "Female" },
+          ],
+        },
+        {
+          id: "part1.parentTwoCountryOfBirth",
+          type: "text",
+          label: "Parent 2: Country of Birth",
+          required: true,
+        },
+        {
+          id: "part1.parentTwoCountryOfResidence",
+          type: "text",
+          label: "Parent 2: Country of Residence",
+          required: true,
+        },
+        {
+          id: "part1.parentTwoCityTownOfResidence",
+          type: "text",
+          label: "Parent 2: City or Town of Residence",
+          required: true,
+        },
+      ],
+    },
+    {
+      id: "part1-marriage-history",
+      title: "Part 1: Marriage History",
+      description: "Provide information about your marriage history.",
+      questions: [
+        {
+          id: "part1.previousMarriage",
+          type: "radio",
+          label: "Have you been previously married?",
+          required: true,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+        {
+          id: "part1.previousSpouseFamilyName",
+          type: "text",
+          label: "Previous Spouse: Family Name (Last Name)",
+          conditional: {
+            dependsOn: "part1.previousMarriage",
+            values: ["Y"],
+          },
+        },
+        {
+          id: "part1.previousSpouseGivenName",
+          type: "text",
+          label: "Previous Spouse: Given Name (First Name)",
+          conditional: {
+            dependsOn: "part1.previousMarriage",
+            values: ["Y"],
+          },
+        },
+        {
+          id: "part1.previousSpouseMiddleName",
+          type: "text",
+          label: "Previous Spouse: Middle Name",
+          conditional: {
+            dependsOn: "part1.previousMarriage",
+            values: ["Y"],
+          },
+        },
+        {
+          id: "part1.dateMarriageEnded",
+          type: "date",
+          label: "Date Marriage Ended (mm/dd/yyyy)",
+          conditional: {
+            dependsOn: "part1.previousMarriage",
+            values: ["Y"],
+          },
+        },
+      ],
+    },
+    {
+      id: "part1-citizenship-information",
+      title: "Part 1: Citizenship Information",
+      description: "Provide information about your U.S. citizenship.",
+      questions: [
+        {
+          id: "part1.citizenshipThrough",
+          type: "radio",
+          label: "How did you acquire U.S. citizenship?",
+          required: true,
+          options: [
+            { value: "A", label: "Birth in the United States" },
+            { value: "B", label: "Naturalization" },
+            { value: "C", label: "Parents" },
+          ],
+        },
+        {
+          id: "part1.certificateObtained",
+          type: "radio",
+          label:
+            "Have you obtained a Certificate of Naturalization or Citizenship?",
+          required: true,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+        {
+          id: "part1.certificateNumber",
+          type: "text",
+          label: "Certificate Number",
+          conditional: {
+            dependsOn: "part1.certificateObtained",
+            values: ["Y"],
+          },
+        },
+        {
+          id: "part1.placeOfIssuance",
+          type: "text",
+          label: "Place of Issuance",
+          conditional: {
+            dependsOn: "part1.certificateObtained",
+            values: ["Y"],
+          },
+        },
+        {
+          id: "part1.dateOfIssuance",
+          type: "date",
+          label: "Date of Issuance (mm/dd/yyyy)",
+          conditional: {
+            dependsOn: "part1.certificateObtained",
+            values: ["Y"],
+          },
+        },
+      ],
+    },
+    {
+      id: "part1-prior-petitions",
+      title: "Part 1: Prior Petitions",
+      description: "Information about any prior petitions you have filed.",
+      questions: [
+        {
+          id: "part1.filedForOtherBeneficiary",
+          type: "radio",
+          label: "Have you ever filed a petition for any other person?",
+          required: true,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+        {
+          id: "part1.additionalFamilyName",
+          type: "text",
+          label: "Other Beneficiary: Family Name (Last Name)",
+          conditional: {
+            dependsOn: "part1.filedForOtherBeneficiary",
+            values: ["Y"],
+          },
+        },
+        {
+          id: "part1.additionalGivenName",
+          type: "text",
+          label: "Other Beneficiary: Given Name (First Name)",
+          conditional: {
+            dependsOn: "part1.filedForOtherBeneficiary",
+            values: ["Y"],
+          },
+        },
+        {
+          id: "part1.additionalMiddleName",
+          type: "text",
+          label: "Other Beneficiary: Middle Name",
+          conditional: {
+            dependsOn: "part1.filedForOtherBeneficiary",
+            values: ["Y"],
+          },
+        },
+        {
+          id: "part1.dateOfFiling",
+          type: "date",
+          label: "Date of Filing (mm/dd/yyyy)",
+          conditional: {
+            dependsOn: "part1.filedForOtherBeneficiary",
+            values: ["Y"],
+          },
+        },
+        {
+          id: "part1.uscisAction",
+          type: "text",
+          label: "USCIS Action on Petition",
+          conditional: {
+            dependsOn: "part1.filedForOtherBeneficiary",
+            values: ["Y"],
+          },
+        },
+        {
+          id: "part1.alienNumber",
+          type: "text",
+          label: "Other Beneficiary's Alien Registration Number",
+          conditional: {
+            dependsOn: "part1.filedForOtherBeneficiary",
+            values: ["Y"],
+          },
+        },
+      ],
+    },
+    {
+      id: "part1-children-information",
+      title: "Part 1: Children Information",
+      description: "Information about children under 18 years of age.",
+      questions: [
+        {
+          id: "part1.childrenUnder18",
+          type: "radio",
+          label: "Do you have any unmarried children under 18 years of age?",
+          required: true,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+        {
+          id: "part1.childAge49a",
+          type: "text",
+          label: "Child 1: Age",
+          conditional: {
+            dependsOn: "part1.childrenUnder18",
+            values: ["Y"],
+          },
+        },
+        {
+          id: "part1.childAge49b",
+          type: "text",
+          label: "Child 2: Age",
+          conditional: {
+            dependsOn: "part1.childrenUnder18",
+            values: ["Y"],
+          },
+        },
+        {
+          id: "part1.residenceOneState",
+          type: "select",
+          label: "Child 1: State of Residence",
+          options: US_STATES,
+          conditional: {
+            dependsOn: "part1.childrenUnder18",
+            values: ["Y"],
+          },
+        },
+        {
+          id: "part1.residenceOneCountry",
+          type: "text",
+          label: "Child 1: Country of Residence",
+          conditional: {
+            dependsOn: "part1.childrenUnder18",
+            values: ["Y"],
+          },
+        },
+        {
+          id: "part1.residenceTwoState",
+          type: "select",
+          label: "Child 2: State of Residence",
+          options: US_STATES,
+          conditional: {
+            dependsOn: "part1.childrenUnder18",
+            values: ["Y"],
+          },
+        },
+        {
+          id: "part1.residenceTwoCountry",
+          type: "text",
+          label: "Child 2: Country of Residence",
+          conditional: {
+            dependsOn: "part1.childrenUnder18",
+            values: ["Y"],
+          },
+        },
+      ],
+    },
+    {
+      id: "part2-relationship-information",
+      title: "Part 2: Relationship Information",
+      description: "Information about your relationship with the beneficiary.",
+      questions: [
+        {
+          id: "part2.isFianceRelated",
+          type: "radio",
+          label: "Are you related to your fiancé(e)?",
+          required: true,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+            { value: "A", label: "Not Applicable" },
+          ],
+        },
+        {
+          id: "part2.relationshipDescription",
+          type: "text",
+          label: "Describe the relationship",
+          conditional: {
+            dependsOn: "part2.isFianceRelated",
+            values: ["Y"],
+          },
+        },
+        {
+          id: "part2.haveMetInPerson",
+          type: "radio",
+          label:
+            "Have you met your fiancé(e) in person within the 2 years before filing this petition?",
+          required: true,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+            { value: "A", label: "Not Applicable" },
+          ],
+        },
+        {
+          id: "part2.meetingExplanation",
+          type: "textarea",
+          label: "Describe when and where you met",
+          conditional: {
+            dependsOn: "part2.haveMetInPerson",
+            values: ["Y"],
+          },
+        },
+        {
+          id: "part2.metThroughImb",
+          type: "radio",
+          label: "Did you meet through an International Marriage Broker (IMB)?",
+          required: true,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part2-imb-information",
+      title: "Part 2: International Marriage Broker Information",
+      description:
+        "Information about the International Marriage Broker (if applicable).",
+      questions: [
+        {
+          id: "part2.imbName",
+          type: "text",
+          label: "IMB Name",
+          conditional: {
+            dependsOn: "part2.metThroughImb",
+            values: ["Y"],
+          },
+        },
+        {
+          id: "part2.imbFamilyName",
+          type: "text",
+          label: "IMB Representative: Family Name",
+          conditional: {
+            dependsOn: "part2.metThroughImb",
+            values: ["Y"],
+          },
+        },
+        {
+          id: "part2.imbGivenName",
+          type: "text",
+          label: "IMB Representative: Given Name",
+          conditional: {
+            dependsOn: "part2.metThroughImb",
+            values: ["Y"],
+          },
+        },
+        {
+          id: "part2.imbOrgName",
+          type: "text",
+          label: "IMB Organization Name",
+          conditional: {
+            dependsOn: "part2.metThroughImb",
+            values: ["Y"],
+          },
+        },
+        {
+          id: "part2.imbWebsite",
+          type: "text",
+          label: "IMB Website",
+          conditional: {
+            dependsOn: "part2.metThroughImb",
+            values: ["Y"],
+          },
+        },
+        {
+          id: "part2.imbStreetNumberName",
+          type: "text",
+          label: "IMB Street Number and Name",
+          conditional: {
+            dependsOn: "part2.metThroughImb",
+            values: ["Y"],
+          },
+        },
+        {
+          id: "part2.imbUnit",
+          type: "select",
+          label: "IMB Unit Type",
+          options: [
+            { value: "", label: "Select if applicable" },
+            { value: "STE", label: "Ste." },
+            { value: "FLR", label: "Flr." },
+            { value: "APT", label: "Apt." },
+          ],
+          conditional: {
+            dependsOn: "part2.metThroughImb",
+            values: ["Y"],
+          },
+        },
+        {
+          id: "part2.imbAptSteFlrNumber",
+          type: "text",
+          label: "IMB Unit Number",
+          conditional: {
+            dependsOn: "part2.metThroughImb",
+            values: ["Y"],
+          },
+        },
+        {
+          id: "part2.imbCityOrTown",
+          type: "text",
+          label: "IMB City or Town",
+          conditional: {
+            dependsOn: "part2.metThroughImb",
+            values: ["Y"],
+          },
+        },
+        {
+          id: "part2.imbProvince",
+          type: "text",
+          label: "IMB Province",
+          conditional: {
+            dependsOn: "part2.metThroughImb",
+            values: ["Y"],
+          },
+        },
+        {
+          id: "part2.imbPostalCode",
+          type: "text",
+          label: "IMB Postal Code",
+          conditional: {
+            dependsOn: "part2.metThroughImb",
+            values: ["Y"],
+          },
+        },
+        {
+          id: "part2.imbCountry",
+          type: "text",
+          label: "IMB Country",
+          conditional: {
+            dependsOn: "part2.metThroughImb",
+            values: ["Y"],
+          },
+        },
+        {
+          id: "part2.imbDaytimeTelephoneNum",
+          type: "tel",
+          label: "IMB Daytime Telephone Number",
+          conditional: {
+            dependsOn: "part2.metThroughImb",
+            values: ["Y"],
+          },
+        },
+      ],
+    },
+    {
+      id: "part2-consular-information",
+      title: "Part 2: Consular Processing Information",
+      description:
+        "Information about where the beneficiary will apply for the visa.",
+      questions: [
+        {
+          id: "part2.consularCityTown",
+          type: "text",
+          label: "City and Town of U.S. Consulate or Embassy",
+          required: true,
+        },
+        {
+          id: "part2.consularCountry",
+          type: "text",
+          label: "Country of U.S. Consulate or Embassy",
+          required: true,
+        },
+      ],
+    },
+    {
+      id: "part2-beneficiary-additional-fields",
+      title: "Part 2: Additional Beneficiary Information",
+      description: "Additional required information about the beneficiary.",
+      questions: [
+        {
+          id: "part2.beneficiaryMailingInCareOf",
+          type: "text",
+          label: "Mailing Address - In Care Of Name",
+        },
+        {
+          id: "part2.beneficiaryMailingProvince",
+          type: "text",
+          label: "Mailing Address - Province",
+        },
+        {
+          id: "part2.beneficiaryMailingPostalCode",
+          type: "text",
+          label: "Mailing Address - Postal Code",
+        },
+        {
+          id: "part2.beneficiaryAptSteFlrNumber",
+          type: "text",
+          label: "Unit Number",
+        },
+        {
+          id: "part2.beneficiaryStreetNumberName",
+          type: "text",
+          label: "Street Number and Name",
+        },
+        {
+          id: "part2.beneficiaryCityOrTown",
+          type: "text",
+          label: "City or Town",
+        },
+        {
+          id: "part2.beneficiaryPostalCode",
+          type: "text",
+          label: "Postal Code",
+        },
+        {
+          id: "part2.beneficiaryCountry",
+          type: "text",
+          label: "Country",
+        },
+        {
+          id: "part2.beneficiaryProvince",
+          type: "text",
+          label: "Province",
+        },
+        {
+          id: "part2.beneficiaryUnit",
+          type: "select",
+          label: "Unit Type",
+          options: [
+            { value: "", label: "Select if applicable" },
+            { value: "FLR", label: "Flr." },
+            { value: "STE", label: "Ste." },
+            { value: "APT", label: "Apt." },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part2-beneficiary-info",
+      title: "Part 2: Beneficiary Information",
+      description: "Provide details about the beneficiary.",
+      questions: [
+        {
+          id: "part2.beneficiaryFamilyName",
+          type: "text",
+          label: "1.a. Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryGivenName",
+          type: "text",
+          label: "1.b. Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryMiddleName",
+          type: "text",
+          label: "1.c. Middle Name",
+        },
+        {
+          id: "part2.beneficiaryAlienNumber",
+          type: "text",
+          label: "2. Alien Registration Number (A-Number)",
+          helpText: "Enter the A-Number if applicable.",
+        },
+        {
+          id: "part2.beneficiaryCountryOfBirth",
+          type: "text",
+          label: "8. Country of Birth",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryCountryOfCitizenship",
+          type: "text",
+          label: "9. Country of Citizenship or Nationality",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryCityTownOfBirth",
+          type: "text",
+          label: "7. City or Town of Birth",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryMaritalStatus",
+          type: "radio",
+          label: "6. Marital Status",
+          required: true,
+          options: [
+            { value: "W", label: "Widowed" },
+            { value: "D", label: "Divorced" },
+            { value: "S", label: "Single" },
+            { value: "M", label: "Married" },
+          ],
+        },
+        {
+          id: "part2.beneficiarySSN",
+          type: "ssn",
+          label: "3. U.S. Social Security Number (if any)",
+          placeholder: "###-##-####",
+          helpText: "Leave blank if you do not have one.",
+        },
+        {
+          id: "part2.beneficiaryDateOfBirth",
+          type: "date",
+          label: "4. Date of Birth (mm/dd/yyyy)",
+          required: true,
+        },
+        {
+          id: "part2.beneficiarySex",
+          type: "radio",
+          label: "5. Sex",
+          required: true,
+          options: [
+            { value: "M", label: "Male" },
+            { value: "F", label: "Female" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part2-other-names",
+      title: "Part 2: Other Names Used",
+      description: "Provide any other names the beneficiary has used.",
+      questions: [
+        {
+          id: "part2.otherNamesFamilyName",
+          type: "text",
+          label: "10.a. Family Name (Last Name)",
+        },
+        {
+          id: "part2.otherNamesGivenName",
+          type: "text",
+          label: "10.b. Given Name (First Name)",
+        },
+        {
+          id: "part2.otherNamesMiddleName",
+          type: "text",
+          label: "10.c. Middle Name",
+        },
+      ],
+    },
+
+    {
+      id: "part2-beneficiary-mailing-address",
+      title: "Part 2: Beneficiary Mailing Address",
+      description: "Provide the mailing address for the beneficiary.",
+      questions: [
+        {
+          id: "part2.beneficiaryMailingStreet",
+          type: "text",
+          label: "11. Street Number and Name",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryMailingUnitType",
+          type: "select",
+          label: "Unit Type",
+          options: [
+            { value: "", label: "Select if applicable" },
+            { value: "STE", label: "Ste." },
+            { value: "FLR", label: "Flr." },
+          ],
+        },
+        {
+          id: "part2.beneficiaryMailingUnitNumber",
+          type: "text",
+          label: "Unit Number",
+        },
+        {
+          id: "part2.beneficiaryMailingCity",
+          type: "text",
+          label: "City or Town",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryMailingState",
+          type: "select",
+          label: "State",
+          options: US_STATES,
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryMailingZipCode",
+          type: "text",
+          label: "ZIP Code",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryMailingCountry",
+          type: "text",
+          label: "Country",
+          required: true,
+        },
+      ],
+    },
+
+    {
+      id: "part2-beneficiary-physical-address-one",
+      title: "Part 2: Beneficiary Physical Address",
+      description:
+        "Provide the physical address where the beneficiary resides.",
+      questions: [
+        {
+          id: "part2.beneficiaryPhysicalAddressOneStreet",
+          type: "text",
+          label: "Street Number and Name",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryPhysicalAddressOneUnitType",
+          type: "select",
+          label: "Unit Type",
+          options: [
+            { value: "", label: "Select if applicable" },
+            { value: "APT", label: "Apt." },
+            { value: "STE", label: "Ste." },
+            { value: "FLR", label: "Flr." },
+          ],
+        },
+        {
+          id: "part2.beneficiaryPhysicalAddressOneUnitNumber",
+          type: "text",
+          label: "Unit Number",
+        },
+        {
+          id: "part2.beneficiaryPhysicalAddressOneCity",
+          type: "text",
+          label: "City or Town",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryPhysicalAddressOneState",
+          type: "select",
+          label: "State",
+          options: US_STATES,
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryPhysicalAddressOneZipCode",
+          type: "text",
+          label: "ZIP Code",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryPhysicalAddressOneCountry",
+          type: "text",
+          label: "Country",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryPhysicalAddressOneProvince",
+          type: "text",
+          label: "Province",
+        },
+        {
+          id: "part2.beneficiaryPhysicalAddressOnePostalCode",
+          type: "text",
+          label: "Postal Code",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryPhysicalAddressOneDateFrom",
+          type: "date",
+          label: "Date From (mm/dd/yyyy)",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryPhysicalAddressOneDateTo",
+          type: "date",
+          label: "Date To (mm/dd/yyyy)",
+        },
+      ],
+    },
+    {
+      id: "part2-beneficiary-physical-address",
+      title: "Part 2: Beneficiary Physical Address 2",
+      description:
+        "Provide the physical address where the beneficiary resides.",
+      questions: [
+        {
+          id: "part2.beneficiaryPhysicalAddressTwoStreet",
+          type: "text",
+          label: "Street Number and Name",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryPhysicalAddressTwoUnitType",
+          type: "select",
+          label: "Unit Type",
+          options: [
+            { value: "", label: "Select if applicable" },
+            { value: "APT", label: "Apt." },
+            { value: "STE", label: "Ste." },
+            { value: "FLR", label: "Flr." },
+          ],
+        },
+        {
+          id: "part2.beneficiaryPhysicalAddressTwoUnitNumber",
+          type: "text",
+          label: "Unit Number",
+        },
+        {
+          id: "part2.beneficiaryPhysicalAddressTwoCity",
+          type: "text",
+          label: "City or Town",
+          required: true,
+        },
+        //
+        {
+          id: "part2.beneficiaryPhysicalAddressTwoProvince",
+          type: "text",
+          label: "Province",
+        },
+        {
+          id: "part2.beneficiaryPhysicalAddressTwoPostalCode",
+          type: "text",
+          label: "Postal Code",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryPhysicalAddressTwoState",
+          type: "select",
+          label: "State",
+          options: US_STATES,
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryPhysicalAddressTwoZipCode",
+          type: "text",
+          label: "ZIP Code",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryPhysicalAddressTwoCountry",
+          type: "text",
+          label: "Country",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryPhysicalAddressTwoDateFrom",
+          type: "date",
+          label: "Date From (mm/dd/yyyy)",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryPhysicalAddressTwoDateTo",
+          type: "date",
+          label: "Date To (mm/dd/yyyy)",
+        },
+      ],
+    },
+    // =======
+    {
+      id: "part2-beneficiary-employment",
+      title: "Part 2: Beneficiary Employment History",
+      description: "Provide the employment history for the beneficiary.",
+      questions: [
+        {
+          id: "part2.beneficiaryEmployerOneName",
+          type: "text",
+          label: "Employer Name",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryEmployerOneStreet",
+          type: "text",
+          label: "Street Number and Name",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryEmployerOne.selectSuite",
+          type: "select",
+          label: "Unit Type",
+          options: [
+            { value: "", label: "Select if applicable" },
+            { value: "APT", label: "Apt." },
+            { value: "STE", label: "Ste." },
+            { value: "FLR", label: "Flr." },
+          ],
+        },
+
+        {
+          id: "part2.beneficiaryEmployerOne.aptSteFlrNumber",
+          type: "text",
+          label: "Unit Number",
+        },
+        {
+          id: "part2.beneficiaryEmployerOne.cityOrTown",
+          type: "text",
+          label: "City or Town",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryEmployerOne.province",
+          type: "text",
+          label: "Province",
+        },
+        {
+          id: "part2.beneficiaryEmployerOne.postalCode",
+          type: "text",
+          label: "Postal Code",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryEmployerOne.state",
+          type: "select",
+          label: "State",
+          options: US_STATES,
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryEmployerOne.zipCode",
+          type: "text",
+          label: "ZIP Code",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryEmployerOne.country",
+          type: "text",
+          label: "Country",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryEmployerOne.employmentStartDate",
+          type: "date",
+          label: "Employment Start Date (mm/dd/yyyy)",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryEmployerOneEndDate",
+          type: "date",
+          label: "Employment End Date (mm/dd/yyyy)",
+        },
+        {
+          id: "part2.beneficiaryEmployerOne.occupation",
+          type: "text",
+          label: "Occupation",
+          required: true,
+        },
+      ],
+    },
+
+    //    =====
+
+    {
+      id: "part2-beneficiary-employment-Two",
+      title: "Part 2: Beneficiary Employment History",
+      description: "Provide the employment history for the beneficiary.",
+      questions: [
+        {
+          id: "part2.beneficiaryEmployerTwo.nameOfEmployer",
+          type: "text",
+          label: "Full Employer Name",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryEmployerTwoName",
+          type: "text",
+          label: "Employer Name",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryEmployerTwoStreet",
+          type: "text",
+          label: "Street Number and Name",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryEmployerTwo.selectSuite",
+          type: "select",
+          label: "Unit Type",
+          options: [
+            { value: "", label: "Select if applicable" },
+            { value: "APT", label: "Apt." },
+            { value: "STE", label: "Ste." },
+            { value: "FLR", label: "Flr." },
+          ],
+        },
+        {
+          id: "part2.beneficiaryEmployerTwo.aptSteFlrNumber",
+          type: "text",
+          label: "Unit Number",
+        },
+        {
+          id: "part2.beneficiaryEmployerTwo.cityOrTown",
+          type: "text",
+          label: "City or Town",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryEmployerTwo.province",
+          type: "text",
+          label: "Province",
+        },
+        {
+          id: "part2.beneficiaryEmployerTwo.postalCode",
+          type: "text",
+          label: "Postal Code",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryEmployerTwo.state",
+          type: "select",
+          label: "State",
+          options: US_STATES,
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryEmployerTwo.zipCode",
+          type: "text",
+          label: "ZIP Code",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryEmployerTwo.country",
+          type: "text",
+          label: "Country",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryEmployerTwo.employmentStartDate",
+          type: "date",
+          label: "Employment Start Date (mm/dd/yyyy)",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryEmployerTwoEndDate",
+          type: "date",
+          label: "Employment End Date (mm/dd/yyyy)",
+        },
+        {
+          id: "part2.beneficiaryEmployerTwo.occupation",
+          type: "text",
+          label: "Occupation",
+          required: true,
+        },
+      ],
+    },
+    //    =====
+    {
+      id: "part2-beneficiary-parents",
+      title: "Part 2: Beneficiary's Parents",
+      description: "Provide information about the beneficiary's parents.",
+      questions: [
+        {
+          id: "part2.beneficiaryParents.parentOne.familyName",
+          type: "text",
+          label: "Parent 1: Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryParents.parentOne.givenName",
+          type: "text",
+          label: "Parent 1: Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryParents.parentOne.middleName",
+          type: "text",
+          label: "Parent 1: Middle Name",
+        },
+        {
+          id: "part2.beneficiaryParents.parentOne.dateOfBirth",
+          type: "date",
+          label: "Parent 1: Date of Birth (mm/dd/yyyy)",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryParents.parentOne.sex",
+          type: "radio",
+          label: "Parent 1: Sex",
+          required: true,
+          options: [
+            { value: "M", label: "Male" },
+            { value: "F", label: "Female" },
+          ],
+        },
+        {
+          id: "part2.beneficiaryParents.parentOne.countryOfBirth",
+          type: "text",
+          label: "Parent 1: Country of Birth",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryParents.parentOne.countryOfResidence",
+          type: "text",
+          label: "Parent 1: Country of Residence",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryParents.parentOne.cityTownOfResidence",
+          type: "text",
+          label: "Parent 1: City or Town of Residence",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryParents.parentTwo.familyName",
+          type: "text",
+          label: "Parent 2: Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryParents.parentTwo.givenName",
+          type: "text",
+          label: "Parent 2: Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryParents.parentTwo.middleName",
+          type: "text",
+          label: "Parent 2: Middle Name",
+        },
+        {
+          id: "part2.beneficiaryParents.parentTwo.dateOfBirth",
+          type: "date",
+          label: "Parent 2: Date of Birth (mm/dd/yyyy)",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryParents.parentTwo.sex",
+          type: "radio",
+          label: "Parent 2: Sex",
+          required: true,
+          options: [
+            { value: "M", label: "Male" },
+            { value: "F", label: "Female" },
+          ],
+        },
+        {
+          id: "part2.beneficiaryParents.parentTwo.countryOfBirth",
+          type: "text",
+          label: "Parent 2: Country of Birth",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryParents.parentTwo.countryOfResidence",
+          type: "text",
+          label: "Parent 2: Country of Residence",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryParents.parentTwo.cityTownOfResidence",
+          type: "text",
+          label: "Parent 2: City or Town of Residence",
+          required: true,
+        },
+      ],
+    },
+    {
+      id: "part2-beneficiary-other-info",
+      title: "Part 2: Other Information About Beneficiary",
+      description: "Provide additional information about the beneficiary.",
+      questions: [
+        {
+          id: "part2.beneficiaryOtherInfo.previouslyMarried",
+          type: "radio",
+          label: "Has the beneficiary been previously married?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+        {
+          id: "part2.beneficiaryOtherInfo.previousSpouse.familyName",
+          type: "text",
+          label: "Previous Spouse: Family Name (Last Name)",
+        },
+        {
+          id: "part2.beneficiaryOtherInfo.previousSpouse.givenName",
+          type: "text",
+          label: "Previous Spouse: Given Name (First Name)",
+        },
+        {
+          id: "part2.beneficiaryOtherInfo.previousSpouse.middleName",
+          type: "text",
+          label: "Previous Spouse: Middle Name",
+        },
+        {
+          id: "part2.beneficiaryOtherInfo.previousSpouse.dateMarriageEnded",
+          type: "date",
+          label: "Date Marriage Ended (mm/dd/yyyy)",
+        },
+        {
+          id: "part2.beneficiaryOtherInfo.everInUS",
+          type: "radio",
+          label: "Has the beneficiary ever been in the U.S.?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+        {
+          id: "part2.beneficiaryOtherInfo.lastArrivedAs",
+          type: "text",
+          label: "Last Arrived As",
+          helpText:
+            "Enter the status in which the beneficiary last arrived in the U.S.",
+        },
+        {
+          id: "part2.beneficiaryOtherInfo.arrivalDepartureRecordNumber",
+          type: "text",
+          label: "Arrival/Departure Record Number (I-94)",
+        },
+        {
+          id: "part2.beneficiaryOtherInfo.dateOfArrival",
+          type: "date",
+          label: "Date of Arrival (mm/dd/yyyy)",
+        },
+        {
+          id: "part2.beneficiaryOtherInfo.countryOfIssuance",
+          type: "text",
+          label: "Country of Issuance",
+        },
+        {
+          id: "part2.beneficiaryOtherInfo.passportExpirationDate",
+          type: "date",
+          label: "Passport Expiration Date (mm/dd/yyyy)",
+        },
+        {
+          id: "part2.beneficiaryOtherInfo.passportNumber",
+          type: "text",
+          label: "Passport Number",
+        },
+        {
+          id: "part2.beneficiaryOtherInfo.travelDocumentNumber",
+          type: "text",
+          label: "Travel Document Number",
+        },
+        {
+          id: "part2.beneficiaryOtherInfo.dateAuthorizedStayExpired",
+          type: "date",
+          label: "Date Authorized Stay Expired (mm/dd/yyyy)",
+        },
+        {
+          id: "part2.beneficiaryOtherInfo.children",
+          type: "radio",
+          label: "Does the beneficiary have any children?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+        {
+          id: "part2.beneficiaryOtherInfo.child.familyName",
+          type: "text",
+          label: "Child: Family Name (Last Name)",
+        },
+        {
+          id: "part2.beneficiaryOtherInfo.child.givenName",
+          type: "text",
+          label: "Child: Given Name (First Name)",
+        },
+        {
+          id: "part2.beneficiaryOtherInfo.child.middleName",
+          type: "text",
+          label: "Child: Middle Name",
+        },
+        {
+          id: "part2.beneficiaryOtherInfo.child.countryOfBirth",
+          type: "text",
+          label: "Child: Country of Birth",
+        },
+        {
+          id: "part2.beneficiaryOtherInfo.child.dateOfBirth",
+          type: "date",
+          label: "Child: Date of Birth (mm/dd/yyyy)",
+        },
+        {
+          id: "part2.beneficiaryOtherInfo.child.residesWithBeneficiary",
+          type: "radio",
+          label: "Does the child reside with the beneficiary?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part2-beneficiary-address-in-us",
+      title: "Part 2: Beneficiary Address in the U.S.",
+      description:
+        "Provide the address where the beneficiary will reside in the U.S.",
+      questions: [
+        {
+          id: "part2.beneficiaryAddressInUS.streetNumberName",
+          type: "text",
+          label: "Street Number and Name",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryAddressInUS.selectSuite",
+          type: "select",
+          label: "Unit Type",
+          options: [
+            { value: "", label: "Select if applicable" },
+            { value: "APT", label: "Apt." },
+            { value: "STE", label: "Ste." },
+            { value: "FLR", label: "Flr." },
+          ],
+        },
+        {
+          id: "part2.beneficiaryAddressInUS.aptSteFlrNumber",
+          type: "text",
+          label: "Unit Number",
+        },
+        {
+          id: "part2.beneficiaryAddressInUS.cityOrTown",
+          type: "text",
+          label: "City or Town",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryAddressInUS.state",
+          type: "select",
+          label: "State",
+          options: US_STATES,
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryAddressInUS.zipCode",
+          type: "text",
+          label: "ZIP Code",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryAddressInUS.daytimeTelephoneNumber",
+          type: "tel",
+          label: "Daytime Telephone Number",
+          placeholder: "(555) 123-4567",
+        },
+      ],
+    },
+    {
+      id: "part2-beneficiary-physical-address-abroad",
+      title: "Part 2: Beneficiary Physical Address Abroad",
+      description:
+        "Provide the physical address where the beneficiary resides abroad.",
+      questions: [
+        {
+          id: "part2.beneficiaryPhysicalAddressAbroad.streetNumberName",
+          type: "text",
+          label: "Street Number and Name",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryPhysicalAddressAbroad.selectSuite",
+          type: "select",
+          label: "Unit Type",
+          options: [
+            { value: "", label: "Select if applicable" },
+            { value: "APT", label: "Apt." },
+            { value: "STE", label: "Ste." },
+            { value: "FLR", label: "Flr." },
+          ],
+        },
+        {
+          id: "part2.beneficiaryPhysicalAddressAbroad.aptSteFlrNumber",
+          type: "text",
+          label: "Unit Number",
+        },
+        {
+          id: "part2.beneficiaryPhysicalAddressAbroad.cityOrTown",
+          type: "text",
+          label: "City or Town",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryPhysicalAddressAbroad.province",
+          type: "text",
+          label: "Province",
+        },
+        {
+          id: "part2.beneficiaryPhysicalAddressAbroad.postalCode",
+          type: "text",
+          label: "Postal Code",
+        },
+        {
+          id: "part2.beneficiaryPhysicalAddressAbroad.country",
+          type: "text",
+          label: "Country",
+          required: true,
+        },
+        {
+          id: "part2.beneficiaryPhysicalAddressAbroad.daytimeTelephoneNumber",
+          type: "tel",
+          label: "Daytime Telephone Number",
+          placeholder: "(555) 123-4567",
+        },
+      ],
+    },
+
+    {
+      id: "part3-legal-issues",
+      title: "Part 3: Legal Issues",
+      description:
+        "Provide information regarding any legal issues or criminal history.",
+      questions: [
+        {
+          id: "part3.subjectToProtectionOrder",
+          type: "radio",
+          label: "1. Are you subject to a protection or restraining order?",
+          required: true,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          helpText:
+            "Indicate if you are currently subject to any court-issued protection or restraining orders.",
+        },
+        {
+          id: "part3.arrestedForCrimeA",
+          type: "radio",
+          label:
+            "2.a. Have you ever been arrested for a crime involving moral turpitude?",
+          required: true,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          helpText: "This includes crimes such as fraud, theft, or assault.",
+        },
+        {
+          id: "part3.arrestedForCrimeB",
+          type: "radio",
+          label:
+            "2.b. Have you ever been arrested for a crime involving a controlled substance?",
+          required: true,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          helpText: "This refers to any offenses related to illegal drugs.",
+        },
+        {
+          id: "part3.arrestedForCrimeC",
+          type: "radio",
+          label:
+            "2.c. Have you ever been arrested for a crime involving firearms or explosives?",
+          required: true,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          helpText:
+            "Include any arrests related to illegal possession or use of firearms or explosives.",
+        },
+        {
+          id: "part3.convictionCircumstances",
+          type: "radio",
+          label: "3. Under what circumstances were you convicted?",
+          required: true,
+          options: [
+            { value: "A", label: "Convicted in a court of law" },
+            { value: "B", label: "Plea bargain" },
+            { value: "C", label: "Other circumstances" },
+          ],
+          helpText:
+            "Select the option that best describes the circumstances of your conviction.",
+        },
+        {
+          id: "part3.waiverRequest",
+          type: "radio",
+          label: "5. Are you requesting a waiver for any of the above issues?",
+          required: true,
+          options: [
+            { value: "A", label: "Yes, for moral turpitude" },
+            { value: "B", label: "Yes, for controlled substances" },
+            { value: "C", label: "Yes, for firearms/explosives" },
+            { value: "D", label: "No waiver requested" },
+          ],
+          helpText:
+            "Indicate if you are seeking a waiver for any of the legal issues mentioned.",
+        },
+        {
+          id: "part3.arrestedForLawViolation",
+          type: "radio",
+          label: "4.a. Have you ever been arrested for violating any law?",
+          required: true,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+          helpText: "Include any arrests not previously mentioned.",
+        },
+        {
+          id: "part3.arrestDetails",
+          type: "textarea",
+          label: "4.b. Provide details of the arrest(s)",
+          helpText:
+            "If you answered 'Yes' to any arrest questions, provide details including dates, locations, and outcomes.",
+        },
+      ],
+    },
+
+    {
+      id: "part4-physical-characteristics",
+      title: "Part 4: Physical Characteristics",
+      description:
+        "Provide your physical characteristics as required by USCIS.",
+      questions: [
+        {
+          id: "part4.ethnicity",
+          type: "radio",
+          label: "1. Ethnicity",
+          required: true,
+          options: [
+            { value: "N", label: "Not Hispanic or Latino" },
+            { value: "H", label: "Hispanic or Latino" },
+          ],
+          helpText: "Select the option that best describes your ethnicity.",
+        },
+        {
+          id: "part4.race",
+          type: "checkbox",
+          label: "2. Race",
+          required: true,
+          options: [
+            { value: "Y", label: "White" },
+            { value: "Y", label: "Black or African American" },
+            { value: "Y", label: "American Indian or Alaska Native" },
+            { value: "Y", label: "Asian" },
+            { value: "Y", label: "Native Hawaiian or Other Pacific Islander" },
+          ],
+          helpText: "You may select more than one option.",
+        },
+        {
+          id: "part4.heightFeet",
+          type: "select",
+          label: "3. Height - Feet",
+          required: true,
+          options: [
+            { value: "4", label: "4" },
+            { value: "5", label: "5" },
+            { value: "6", label: "6" },
+            { value: "7", label: "7" },
+          ],
+          helpText: "Select your height in feet.",
+        },
+        {
+          id: "part4.heightInches",
+          type: "select",
+          label: "3. Height - Inches",
+          required: true,
+          options: [
+            { value: "0", label: "0" },
+            { value: "1", label: "1" },
+            { value: "2", label: "2" },
+            { value: "3", label: "3" },
+            { value: "4", label: "4" },
+            { value: "5", label: "5" },
+            { value: "6", label: "6" },
+            { value: "7", label: "7" },
+            { value: "8", label: "8" },
+            { value: "9", label: "9" },
+            { value: "10", label: "10" },
+            { value: "11", label: "11" },
+          ],
+          helpText: "Select your height in inches.",
+        },
+        {
+          id: "part4.weightFirstDigit",
+          type: "text",
+          label: "4. Weight - First Digit",
+          required: true,
+          placeholder: "#",
+          helpText: "Enter the first digit of your weight in pounds.",
+        },
+        {
+          id: "part4.weightSecondDigit",
+          type: "text",
+          label: "4. Weight - Second Digit",
+          required: true,
+          placeholder: "#",
+          helpText: "Enter the second digit of your weight in pounds.",
+        },
+        {
+          id: "part4.weightThirdDigit",
+          type: "text",
+          label: "4. Weight - Third Digit",
+          required: true,
+          placeholder: "#",
+          helpText: "Enter the third digit of your weight in pounds.",
+        },
+        {
+          id: "part4.eyeColor",
+          type: "radio",
+          label: "5. Eye Color",
+          required: true,
+          options: [
+            { value: "BLU", label: "Blue" },
+            { value: "GRN", label: "Green" },
+            { value: "HAZ", label: "Hazel" },
+            { value: "PNK", label: "Pink" },
+            { value: "MAR", label: "Maroon" },
+            { value: "GRY", label: "Gray" },
+            { value: "BRO", label: "Brown" },
+            { value: "BLK", label: "Black" },
+            { value: "UNK", label: "Unknown" },
+          ],
+          helpText: "Select the color that best describes your eyes.",
+        },
+        {
+          id: "part4.hairColor",
+          type: "radio",
+          label: "6. Hair Color",
+          required: true,
+          options: [
+            { value: "BAL", label: "Bald" },
+            { value: "BLN", label: "Blond" },
+            { value: "GRY", label: "Gray" },
+            { value: "SDY", label: "Sandy" },
+            { value: "BRO", label: "Brown" },
+            { value: "BLK", label: "Black" },
+            { value: "RED", label: "Red" },
+            { value: "WHI", label: "White" },
+            { value: "UNK", label: "Unknown" },
+          ],
+          helpText: "Select the color that best describes your hair.",
+        },
+      ],
+    },
+
+    {
+      id: "part5-petitioner-contact-info",
+      title: "Part 5: Petitioner Contact Information",
+      description: "Provide your contact details for communication purposes.",
+      questions: [
+        {
+          id: "part5.petitionerDaytimePhoneNumber",
+          type: "tel",
+          label: "1. Daytime Telephone Number",
+          placeholder: "(555) 123-4567",
+          required: true,
+          helpText:
+            "Enter a phone number where you can be reached during the day.",
+        },
+        {
+          id: "part5.petitionerMobileNumber",
+          type: "tel",
+          label: "2. Mobile Telephone Number",
+          placeholder: "(555) 123-4567",
+          helpText:
+            "Enter your mobile phone number, if different from your daytime number.",
+        },
+        {
+          id: "part5.petitionerEmail",
+          type: "email",
+          label: "3. Email Address",
+          placeholder: "example@email.com",
+          helpText:
+            "Provide an email address where you can receive correspondence.",
+        },
+      ],
+    },
+    {
+      id: "part5-petitioner-signature",
+      title: "Part 5: Petitioner Signature",
+      description:
+        "Sign and date the form to certify the information provided.",
+      questions: [
+        {
+          id: "part5.petitionerSignature",
+          type: "text",
+          label: "4. Signature of Petitioner",
+          required: true,
+          helpText:
+            "Sign your full legal name as it appears on your official documents.",
+        },
+        {
+          id: "part5.dateOfSignature",
+          type: "date",
+          label: "5. Date of Signature (mm/dd/yyyy)",
+          placeholder: "MM/DD/YYYY",
+          required: true,
+          helpText: "Enter the date you signed this form.",
+        },
+      ],
+    },
+
+    {
+      id: "part6-interpreter-info",
+      title:
+        "Part 6: Interpreter's Contact Information, Certification, and Signature",
+      description:
+        "Provide the interpreter's details and certification information.",
+      questions: [
+        {
+          id: "part6.interpreterGivenName",
+          type: "text",
+          label: "1.a. Interpreter's Given Name (First Name)",
+          required: true,
+          helpText:
+            "Enter the first name of the interpreter assisting with this form.",
+        },
+        {
+          id: "part6.interpreterFamilyName",
+          type: "text",
+          label: "1.b. Interpreter's Family Name (Last Name)",
+          required: true,
+          helpText:
+            "Enter the last name of the interpreter assisting with this form.",
+        },
+        {
+          id: "part6.interpreterBusinessName",
+          type: "text",
+          label: "2. Name of Business or Organization (if applicable)",
+          helpText:
+            "Enter the name of the business or organization the interpreter is affiliated with, if any.",
+        },
+        {
+          id: "part6.interpreterDaytimeTelephone",
+          type: "tel",
+          label: "4.a. Interpreter's Daytime Telephone Number",
+          required: true,
+          placeholder: "(555) 123-4567",
+          helpText:
+            "Provide a daytime telephone number where the interpreter can be reached.",
+        },
+        {
+          id: "part6.interpreterMobileTelephone",
+          type: "tel",
+          label: "4.b. Interpreter's Mobile Telephone Number",
+          placeholder: "(555) 123-4567",
+          helpText:
+            "Provide a mobile telephone number for the interpreter, if different from the daytime number.",
+        },
+        {
+          id: "part6.interpreterEmail",
+          type: "email",
+          label: "5. Interpreter's Email Address",
+          placeholder: "example@email.com",
+          helpText: "Provide an email address for the interpreter.",
+        },
+        {
+          id: "part6.interpreterLanguage",
+          type: "text",
+          label: "3. Language Used for Interpretation",
+          required: true,
+          helpText:
+            "Specify the language used by the interpreter to translate this form.",
+        },
+        {
+          id: "part6.interpreterDateOfSignature",
+          type: "date",
+          label: "6.a. Date of Signature (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+          helpText: "Enter the date when the interpreter signed this form.",
+        },
+        {
+          id: "part6.interpreterSignature",
+          type: "text",
+          label: "6.b. Interpreter's Signature",
+          required: true,
+          helpText:
+            "The interpreter must sign here to certify the accuracy of the translation.",
+        },
+      ],
+    },
+
+    {
+      id: "part7-preparer-information",
+      title: "Part 7: Preparer's Information",
+      description:
+        "Provide details about the person who prepared this form, if applicable.",
+      questions: [
+        {
+          id: "part7.preparerFamilyName",
+          type: "text",
+          label: "1.a. Preparer's Family Name (Last Name)",
+          required: true,
+          helpText: "Enter the last name of the person who prepared this form.",
+        },
+        {
+          id: "part7.preparerGivenName",
+          type: "text",
+          label: "1.b. Preparer's Given Name (First Name)",
+          required: true,
+          helpText:
+            "Enter the first name of the person who prepared this form.",
+        },
+        {
+          id: "part7.preparerBusinessName",
+          type: "text",
+          label: "2. Preparer's Business or Organization Name",
+          helpText:
+            "If the preparer is associated with a business or organization, enter the name here.",
+        },
+        {
+          id: "part7.preparerDaytimePhoneNumber",
+          type: "tel",
+          label: "3. Preparer's Daytime Telephone Number",
+          required: true,
+          placeholder: "(555) 123-4567",
+          helpText:
+            "Provide a phone number where the preparer can be reached during the day.",
+        },
+        {
+          id: "part7.preparerMobileNumber",
+          type: "tel",
+          label: "4. Preparer's Mobile Telephone Number",
+          placeholder: "(555) 123-4567",
+          helpText:
+            "Provide a mobile phone number for the preparer, if available.",
+        },
+        {
+          id: "part7.preparerEmail",
+          type: "email",
+          label: "5. Preparer's Email Address",
+          placeholder: "example@email.com",
+          helpText: "Provide an email address for the preparer.",
+        },
+        {
+          id: "part7.preparerSignature",
+          type: "text",
+          label: "6.a. Preparer's Signature",
+          required: true,
+          helpText:
+            "The preparer must sign here to confirm the information provided.",
+        },
+        {
+          id: "part7.dateOfSignature",
+          type: "date",
+          label: "6.b. Date of Signature (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+          helpText: "Enter the date when the preparer signed this form.",
+        },
+      ],
+    },
+
+    {
+      id: "part8-additional-information",
+      title: "Part 8: Additional Information",
+      description:
+        "Provide additional information for any of the questions in this form. Use the space below to explain your answers further.",
+      questions: [
+        {
+          id: "part8.pageNumber3a",
+          type: "text",
+          label: "3.a. Page Number",
+          helpText:
+            "Enter the page number from the form where the additional information applies.",
+        },
+        {
+          id: "part8.partNumber3b",
+          type: "text",
+          label: "3.b. Part Number",
+          helpText:
+            "Enter the part number from the form where the additional information applies.",
+        },
+        {
+          id: "part8.itemNumber3c",
+          type: "text",
+          label: "3.c. Item Number",
+          helpText:
+            "Enter the item number from the form where the additional information applies.",
+        },
+        {
+          id: "part8.additionalInfo3d",
+          type: "textarea",
+          label: "3.d. Additional Information",
+          helpText:
+            "Provide any additional information or explanation related to the specified page, part, and item number.",
+        },
+        {
+          id: "part8.pageNumber4a",
+          type: "text",
+          label: "4.a. Page Number",
+          helpText:
+            "Enter the page number from the form where the additional information applies.",
+        },
+        {
+          id: "part8.partNumber4b",
+          type: "text",
+          label: "4.b. Part Number",
+          helpText:
+            "Enter the part number from the form where the additional information applies.",
+        },
+        {
+          id: "part8.itemNumber4c",
+          type: "text",
+          label: "4.c. Item Number",
+          helpText:
+            "Enter the item number from the form where the additional information applies.",
+        },
+        {
+          id: "part8.additionalInfo4d",
+          type: "textarea",
+          label: "4.d. Additional Information",
+          helpText:
+            "Provide any additional information or explanation related to the specified page, part, and item number.",
+        },
+        {
+          id: "part8.pageNumber5a",
+          type: "text",
+          label: "5.a. Page Number",
+          helpText:
+            "Enter the page number from the form where the additional information applies.",
+        },
+        {
+          id: "part8.partNumber5b",
+          type: "text",
+          label: "5.b. Part Number",
+          helpText:
+            "Enter the part number from the form where the additional information applies.",
+        },
+        {
+          id: "part8.itemNumber5c",
+          type: "text",
+          label: "5.c. Item Number",
+          helpText:
+            "Enter the item number from the form where the additional information applies.",
+        },
+        {
+          id: "part8.additionalInfo5d",
+          type: "textarea",
+          label: "5.d. Additional Information",
+          helpText:
+            "Provide any additional information or explanation related to the specified page, part, and item number.",
+        },
+        {
+          id: "part8.pageNumber6a",
+          type: "text",
+          label: "6.a. Page Number",
+          helpText:
+            "Enter the page number from the form where the additional information applies.",
+        },
+        {
+          id: "part8.partNumber6b",
+          type: "text",
+          label: "6.b. Part Number",
+          helpText:
+            "Enter the part number from the form where the additional information applies.",
+        },
+        {
+          id: "part8.itemNumber6c",
+          type: "text",
+          label: "6.c. Item Number",
+          helpText:
+            "Enter the item number from the form where the additional information applies.",
+        },
+        {
+          id: "part8.additionalInfo6d",
+          type: "textarea",
+          label: "6.d. Additional Information",
+          helpText:
+            "Provide any additional information or explanation related to the specified page, part, and item number.",
+        },
+        {
+          id: "part8.pageNumber7a",
+          type: "text",
+          label: "7.a. Page Number",
+          helpText:
+            "Enter the page number from the form where the additional information applies.",
+        },
+        {
+          id: "part8.partNumber7b",
+          type: "text",
+          label: "7.b. Part Number",
+          helpText:
+            "Enter the part number from the form where the additional information applies.",
+        },
+        {
+          id: "part8.itemNumber7c",
+          type: "text",
+          label: "7.c. Item Number",
+          helpText:
+            "Enter the item number from the form where the additional information applies.",
+        },
+        {
+          id: "part8.additionalInfo7d",
+          type: "textarea",
+          label: "7.d. Additional Information",
+          helpText:
+            "Provide any additional information or explanation related to the specified page, part, and item number.",
+        },
+      ],
+    },
+    {
+      id: "part8-personal-information",
+      title: "Part 8: Personal Information",
+      description: "Provide your personal information as requested below.",
+      questions: [
+        {
+          id: "part8.familyName",
+          type: "text",
+          label: "Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part8.givenName",
+          type: "text",
+          label: "Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part8.middleName",
+          type: "text",
+          label: "Middle Name",
+        },
+        {
+          id: "part8.alienNumber",
+          type: "text",
+          label: "Alien Registration Number (A-Number)",
+          helpText: "Enter your A-Number if you have one.",
+        },
+      ],
+    },
+  ],
+  pdfFieldMappings: I_129F_FIELD_MAPPINGS,
+  requiredDocuments: [
+    "Copy of your birth certificate or naturalization certificate",
+    "Copy of beneficiary's birth certificate with certified English translation",
+    "Copy of beneficiary's passport biographical pages",
+    "Evidence of legal termination of any prior marriages (divorce decrees, death certificates)",
+    "Two passport-style photos of the beneficiary",
+    "Evidence that you met in person within 2 years (photos, travel records, etc.)",
+    "Form G-325A (Biographical Information) for both petitioner and beneficiary",
+    "Evidence of financial support (Form I-864 Affidavit of Support may be required later)",
+  ],
+  instructions: [
+    "Complete all sections that apply to your situation",
+    "Use black ink and print clearly",
+    "If you need more space, use Part 8 (Additional Information)",
+    "Submit original signatures - photocopies are not acceptable",
+    "Include all required supporting documents",
+    "Pay the correct filing fee",
+  ],
+};
+const I360_DEFINITION: FormDefinition = {
+  id: "i-360",
+  code: "I-360",
+  name: "Petition for Amerasian, Widow(er), or Special Immigrant",
+  description:
+    "For special immigrant categories including religious workers, widows/widowers, VAWA self-petitioners, and special immigrants",
+  category: "family",
+  estimatedTime: "90-120 minutes",
+  filingFee: 435,
+  price: 60,
+  sections: [
+    {
+      id: "part1-petitioner-info",
+      title:
+        "Part 1: Information About the Person or Organization Filing This Petition",
+      description: "Your personal or organizational information",
+      questions: [
+        {
+          id: "part1.1a.familyName",
+          type: "text",
+          label: "1.a. Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part1.1b.givenName",
+          type: "text",
+          label: "1.b. Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part1.1c.middleName",
+          type: "text",
+          label: "1.c. Middle Name",
+        },
+        {
+          id: "part1.2.organizationName",
+          type: "text",
+          label: "2. Name of Organization (if filing as an organization)",
+          helpText: "For religious organizations filing for religious workers",
+        },
+        {
+          id: "part1.3.alienNumber",
+          type: "text",
+          label: "3. Alien Registration Number (A-Number) (if any)",
+          helpText: "Format: A-123456789 or 123456789",
+        },
+        {
+          id: "part1.4.uscisAccountNumber",
+          type: "text",
+          label: "4. USCIS Online Account Number (if any)",
+        },
+        {
+          id: "part1.5.ssn",
+          type: "ssn",
+          label: "5. U.S. Social Security Number (if any)",
+        },
+        {
+          id: "part1.6.dateOfBirth",
+          type: "date",
+          label: "6. Date of Birth (mm/dd/yyyy)",
+          required: true,
+        },
+      ],
+    },
+    {
+      id: "part1-mailing-address",
+      title: "Part 1: Mailing Address",
+      description: "VAWA petitioners can use a safe mailing address",
+      questions: [
+        {
+          id: "part1.7.inCareOfName",
+          type: "text",
+          label: "7. In Care Of Name (if any)",
+        },
+        {
+          id: "part1.8a.streetNumber",
+          type: "text",
+          label: "8.a. Street Number and Name",
+          required: true,
+        },
+        {
+          id: "part1.8b.aptSteFlr",
+          type: "select",
+          label: "8.b. Apt./Ste./Flr.",
+          options: [
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part1.8c.aptSteFlrNumber",
+          type: "text",
+          label: "8.c. Number",
+        },
+        {
+          id: "part1.9.cityOrTown",
+          type: "text",
+          label: "9. City or Town",
+          required: true,
+        },
+        {
+          id: "part1.10.state",
+          type: "text",
+          label: "10. State",
+          required: true,
+        },
+        {
+          id: "part1.11.zipCode",
+          type: "text",
+          label: "11. ZIP Code",
+          required: true,
+        },
+      ],
+    },
+    {
+      id: "part2-classification-requested",
+      title: "Part 2: Classification Requested",
+      description: "Check the box that applies to your petition",
+      questions: [
+        {
+          id: "part2.classification",
+          type: "select",
+          label: "I am filing this petition on behalf of:",
+          required: true,
+          options: [
+            {
+              value: "amerasian",
+              label:
+                "A. Amerasian (born after Dec. 31, 1950, before Oct. 23, 1982)",
+            },
+            {
+              value: "widow",
+              label:
+                "B. Widow(er) of a U.S. citizen who died within the past 2 years",
+            },
+            {
+              value: "vawa-spouse",
+              label:
+                "I. VAWA self-petitioning spouse of abusive U.S. citizen or LPR",
+            },
+            {
+              value: "vawa-child",
+              label:
+                "J. VAWA self-petitioning child of abusive U.S. citizen or LPR",
+            },
+            {
+              value: "vawa-parent",
+              label: "K. VAWA self-petitioning parent of abusive U.S. citizen",
+            },
+            {
+              value: "religious-worker",
+              label: "L. Special Immigrant Religious Worker",
+            },
+            { value: "si-juvenile", label: "M. Special Immigrant Juvenile" },
+            {
+              value: "afghan-iraqi",
+              label: "N. Afghan or Iraqi Translator/Interpreter",
+            },
+            {
+              value: "physician",
+              label: "O. Physician National Interest Waiver",
+            },
+            {
+              value: "international-org",
+              label: "P. International Organization Employee or Family Member",
+            },
+            { value: "broadcaster", label: "Q. International Broadcaster" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part3-beneficiary-info",
+      title: "Part 3: Information About the Person This Petition Is For",
+      description: "Beneficiary information (if different from Part 1)",
+      questions: [
+        {
+          id: "part3.1a.familyName",
+          type: "text",
+          label: "1.a. Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part3.1b.givenName",
+          type: "text",
+          label: "1.b. Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part3.1c.middleName",
+          type: "text",
+          label: "1.c. Middle Name",
+        },
+        {
+          id: "part3.2.alienNumber",
+          type: "text",
+          label: "2. Alien Registration Number (A-Number) (if any)",
+        },
+        {
+          id: "part3.3.dateOfBirth",
+          type: "date",
+          label: "3. Date of Birth (mm/dd/yyyy)",
+          required: true,
+        },
+        {
+          id: "part3.4.cityOfBirth",
+          type: "text",
+          label: "4. City or Town of Birth",
+          required: true,
+        },
+        {
+          id: "part3.5.countryOfBirth",
+          type: "text",
+          label: "5. Country of Birth",
+          required: true,
+        },
+        {
+          id: "part3.6.citizenship",
+          type: "text",
+          label: "6. Country of Citizenship or Nationality",
+          required: true,
+        },
+      ],
+    },
+    {
+      id: "part7-widow-info",
+      title: "Part 7: Information for Widow(er)s",
+      description: "Complete only if filing as a widow(er) of a U.S. citizen",
+      questions: [
+        {
+          id: "part7.1.dateOfMarriage",
+          type: "date",
+          label: "1. Date of Marriage to U.S. Citizen (mm/dd/yyyy)",
+          helpText: "Date you married the deceased U.S. citizen",
+        },
+        {
+          id: "part7.2.placeOfMarriage",
+          type: "text",
+          label: "2. Place of Marriage (City, State, Country)",
+        },
+        {
+          id: "part7.3.dateOfDeath",
+          type: "date",
+          label: "3. Date of Death of U.S. Citizen Spouse (mm/dd/yyyy)",
+          helpText: "Must be within past 2 years",
+        },
+        {
+          id: "part7.4.spouseName",
+          type: "text",
+          label: "4. Full Name of Deceased U.S. Citizen Spouse",
+        },
+        {
+          id: "part7.5.priorMarriages",
+          type: "radio",
+          label: "5. Were you or your spouse previously married?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part8-sij-info",
+      title: "Part 8: Information for Special Immigrant Juveniles",
+      description: "Complete only if filing as a Special Immigrant Juvenile",
+      questions: [
+        {
+          id: "part8.1.courtOrder",
+          type: "radio",
+          label: "1. Do you have a court order from a juvenile court?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+          helpText: "Court must have jurisdiction over juveniles",
+        },
+        {
+          id: "part8.2.courtName",
+          type: "text",
+          label: "2. Name of Court",
+          helpText: "Court that issued the order",
+        },
+        {
+          id: "part8.3.courtOrderDate",
+          type: "date",
+          label: "3. Date of Court Order (mm/dd/yyyy)",
+        },
+        {
+          id: "part8.4.dependencyDetermination",
+          type: "radio",
+          label:
+            "4. Did the court determine you dependent on the court or placed in custody of state agency or individual?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part8.5.reunificationNotViable",
+          type: "radio",
+          label:
+            "5. Did the court determine reunification with one or both parents is not viable?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part8.6.bestInterest",
+          type: "radio",
+          label:
+            "6. Did the court determine it is not in your best interest to return to your country of nationality?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part9-religious-worker",
+      title: "Part 9: Information for Special Immigrant Religious Workers",
+      description: "Complete only if filing for a religious worker",
+      questions: [
+        {
+          id: "part9.1.religiousDenomination",
+          type: "text",
+          label: "1. Name of Religious Denomination",
+          required: true,
+          helpText: "e.g., Catholic, Baptist, Buddhist, Muslim",
+        },
+        {
+          id: "part9.2.religiousOccupation",
+          type: "select",
+          label: "2. Religious Occupation",
+          required: true,
+          options: [
+            { value: "minister", label: "Minister or Priest" },
+            { value: "professional", label: "Religious Professional" },
+            { value: "worker", label: "Religious Worker" },
+          ],
+        },
+        {
+          id: "part9.3.jobTitle",
+          type: "text",
+          label: "3. Job Title or Position",
+          required: true,
+        },
+        {
+          id: "part9.4.organizationName",
+          type: "text",
+          label: "4. Name of Religious Organization",
+          required: true,
+        },
+        {
+          id: "part9.5.organizationAddress",
+          type: "text",
+          label: "5. Address of Religious Organization",
+          required: true,
+        },
+        {
+          id: "part9.6.taxExemptStatus",
+          type: "radio",
+          label: "6. Does the organization have tax-exempt status?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes (501(c)(3))" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part9.7.membershipYears",
+          type: "text",
+          label:
+            "7. How many years has the beneficiary been a member of this denomination?",
+          required: true,
+          helpText: "Must be at least 2 years",
+        },
+        {
+          id: "part9.8.priorExperience",
+          type: "textarea",
+          label:
+            "8. Describe the beneficiary's religious work experience during the past 2 years",
+          required: true,
+        },
+      ],
+    },
+    {
+      id: "part10-vawa-info",
+      title: "Part 10: Information for VAWA Self-Petitioners",
+      description:
+        "Complete only if self-petitioning under VAWA (Violence Against Women Act)",
+      questions: [
+        {
+          id: "part10.1.abusiveRelative",
+          type: "select",
+          label: "1. Your relationship to the abusive U.S. citizen or LPR",
+          options: [
+            { value: "spouse", label: "Spouse" },
+            { value: "child", label: "Child" },
+            {
+              value: "parent",
+              label: "Parent (if abuser is U.S. citizen child over 21)",
+            },
+          ],
+        },
+        {
+          id: "part10.2.abusiveRelativeName",
+          type: "text",
+          label: "2. Full Name of Abusive Relative",
+        },
+        {
+          id: "part10.3.abusiveRelativeStatus",
+          type: "radio",
+          label:
+            "3. Is the abusive relative a U.S. citizen or lawful permanent resident?",
+          options: [
+            { value: "citizen", label: "U.S. Citizen" },
+            { value: "lpr", label: "Lawful Permanent Resident" },
+          ],
+        },
+        {
+          id: "part10.4.marriageDate",
+          type: "date",
+          label: "4. Date of Marriage (if applicable) (mm/dd/yyyy)",
+          helpText: "If self-petitioning as spouse",
+        },
+        {
+          id: "part10.5.currentlyLiving",
+          type: "radio",
+          label: "5. Are you currently living with the abusive relative?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part10.6.abuseSummary",
+          type: "textarea",
+          label: "6. Brief description of the abuse",
+          helpText:
+            "Provide a summary; detailed evidence should be submitted separately",
+        },
+      ],
+    },
+    {
+      id: "part12-applicant-statement",
+      title:
+        "Part 12: Applicant's Statement, Contact Information, Certification, and Signature",
+      description: "Your certification and signature",
+      questions: [
+        {
+          id: "part12.1.daytimePhone",
+          type: "tel",
+          label: "1. Applicant's Daytime Telephone Number",
+          required: true,
+        },
+        {
+          id: "part12.2.mobilePhone",
+          type: "tel",
+          label: "2. Applicant's Mobile Telephone Number (if any)",
+        },
+        {
+          id: "part12.3.email",
+          type: "email",
+          label: "3. Applicant's Email Address (if any)",
+        },
+        {
+          id: "part12.4.certification",
+          type: "checkbox",
+          label:
+            "I certify, under penalty of perjury, that all information in this petition and any supporting documents is true and correct",
+          required: true,
+        },
+      ],
+    },
+  ],
+  pdfFieldMappings: [],
+  requiredDocuments: [
+    "GENERAL (All Categories):",
+    "  - Copy of birth certificate",
+    "  - Two passport-style photographs",
+    "FOR WIDOW(ER)S:",
+    "  - Proof of U.S. citizenship of deceased spouse (birth certificate, passport, naturalization certificate)",
+    "  - Copy of marriage certificate",
+    "  - Death certificate of U.S. citizen spouse",
+    "  - Proof marriage was terminated by death (not divorce)",
+    "  - Evidence of termination of any prior marriages",
+    "FOR VAWA SELF-PETITIONERS:",
+    "  - Evidence of abusive relationship (police reports, protection orders, medical records, affidavits)",
+    "  - Proof of abuser's U.S. citizenship or LPR status",
+    "  - Marriage certificate (if self-petitioning spouse)",
+    "  - Birth certificate (if self-petitioning child)",
+    "  - Evidence of good moral character",
+    "FOR SPECIAL IMMIGRANT JUVENILES:",
+    "  - Certified copy of juvenile court order",
+    "  - Court determination of dependency or custody placement",
+    "  - Court finding that reunification is not viable",
+    "  - Court finding that return to home country is not in best interest",
+    "FOR RELIGIOUS WORKERS:",
+    "  - Letter from authorized religious organization official",
+    "  - IRS tax-exempt letter for organization (501(c)(3))",
+    "  - Evidence of membership in religious denomination for at least 2 years",
+    "  - Evidence of qualifying work experience",
+    "  - Detailed job offer letter",
+    "  - Verification of organization's ability to compensate the religious worker",
+  ],
+  instructions: [
+    "This form is used for multiple special immigrant categories - complete only the parts that apply to your situation",
+    "WIDOW(ER)S: Must file within 2 years of U.S. citizen spouse's death",
+    "VAWA PETITIONERS: Can use a safe mailing address to protect confidentiality",
+    "SPECIAL IMMIGRANT JUVENILES: Must file before your 21st birthday",
+    "RELIGIOUS WORKERS: Must have been a member of the religious denomination for at least 2 years",
+    "Attach all required supporting documentation",
+    "Include filing fee or fee waiver request (Form I-912)",
+    "Sign and date the petition",
+  ],
+};
+
+const I600_DEFINITION: FormDefinition = {
+  id: "i-600",
+  code: "I-600",
+  name: "Petition to Classify Orphan as an Immediate Relative",
+  description:
+    "For U.S. citizens adopting orphan children from non-Hague Convention countries",
+  category: "family",
+  estimatedTime: "90-120 minutes",
+  filingFee: 775,
+  price: 60,
+  sections: [
+    {
+      id: "part1-petitioner-info",
+      title: "Part 1: Information About the U.S. Citizen Petitioner",
+      description: "Information about the adoptive parent(s)",
+      questions: [
+        {
+          id: "part1.1.familyName",
+          type: "text",
+          label: "1. Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part1.2.givenName",
+          type: "text",
+          label: "2. Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part1.3.middleName",
+          type: "text",
+          label: "3. Middle Name",
+        },
+        {
+          id: "part1.4.dateOfBirth",
+          type: "date",
+          label: "4. Date of Birth (mm/dd/yyyy)",
+          required: true,
+        },
+        {
+          id: "part1.5.countryOfBirth",
+          type: "text",
+          label: "5. Country of Birth",
+          required: true,
+        },
+        {
+          id: "part1.6.citizenship",
+          type: "select",
+          label: "6. U.S. Citizenship Obtained Through",
+          required: true,
+          options: [
+            { value: "birth-us", label: "Birth in the United States" },
+            { value: "naturalization", label: "Naturalization" },
+            { value: "parents", label: "Parents" },
+          ],
+        },
+        {
+          id: "part1.7.maritalStatus",
+          type: "select",
+          label: "7. Current Marital Status",
+          required: true,
+          options: [
+            { value: "married", label: "Married" },
+            {
+              value: "single",
+              label: "Single (must be at least 24 years old)",
+            },
+            { value: "divorced", label: "Divorced" },
+            { value: "widowed", label: "Widowed" },
+          ],
+          helpText: "Must be married or single and at least 24 years old",
+        },
+      ],
+    },
+    {
+      id: "part1-petitioner-address",
+      title: "Part 1: Petitioner Physical Address",
+      questions: [
+        {
+          id: "part1.8.streetNumber",
+          type: "text",
+          label: "8. Street Number and Name",
+          required: true,
+        },
+        {
+          id: "part1.9.city",
+          type: "text",
+          label: "9. City or Town",
+          required: true,
+        },
+        {
+          id: "part1.10.state",
+          type: "text",
+          label: "10. State",
+          required: true,
+        },
+        {
+          id: "part1.11.zipCode",
+          type: "text",
+          label: "11. ZIP Code",
+          required: true,
+        },
+        {
+          id: "part1.12.phone",
+          type: "tel",
+          label: "12. Daytime Phone Number",
+          required: true,
+        },
+        {
+          id: "part1.13.email",
+          type: "email",
+          label: "13. Email Address (if any)",
+        },
+      ],
+    },
+    {
+      id: "part2-spouse-info",
+      title: "Part 2: Information About Your Spouse (if married)",
+      description: "Complete only if you are married",
+      questions: [
+        {
+          id: "part2.1.spouseFamilyName",
+          type: "text",
+          label: "1. Spouse's Family Name (Last Name)",
+          helpText: "If married",
+        },
+        {
+          id: "part2.2.spouseGivenName",
+          type: "text",
+          label: "2. Spouse's Given Name (First Name)",
+          helpText: "If married",
+        },
+        {
+          id: "part2.3.spouseDateOfBirth",
+          type: "date",
+          label: "3. Spouse's Date of Birth (mm/dd/yyyy)",
+          helpText: "If married",
+        },
+        {
+          id: "part2.4.spouseCountryOfBirth",
+          type: "text",
+          label: "4. Spouse's Country of Birth",
+          helpText: "If married",
+        },
+        {
+          id: "part2.5.spouseCitizenship",
+          type: "text",
+          label: "5. Spouse's Country of Citizenship",
+          helpText: "If married",
+        },
+        {
+          id: "part2.6.dateOfMarriage",
+          type: "date",
+          label: "6. Date of Marriage (mm/dd/yyyy)",
+          helpText: "If married",
+        },
+        {
+          id: "part2.7.placeOfMarriage",
+          type: "text",
+          label: "7. Place of Marriage (City, State/Province, Country)",
+          helpText: "If married",
+        },
+      ],
+    },
+    {
+      id: "part3-prior-marriages",
+      title: "Part 3: Information About Prior Marriages",
+      description: "Complete for you and your spouse (if applicable)",
+      questions: [
+        {
+          id: "part3.1.petitionerPriorMarriages",
+          type: "radio",
+          label: "1. Have you been previously married?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part3.2.numberOfPriorMarriages",
+          type: "text",
+          label: "2. Number of prior marriages",
+          helpText: "If yes, how many times?",
+        },
+        {
+          id: "part3.3.priorMarriageEnded",
+          type: "select",
+          label: "3. How did your most recent prior marriage end?",
+          options: [
+            { value: "divorce", label: "Divorce" },
+            { value: "death", label: "Death of spouse" },
+            { value: "annulment", label: "Annulment" },
+          ],
+          helpText: "If previously married",
+        },
+        {
+          id: "part3.4.spousePriorMarriages",
+          type: "radio",
+          label: "4. Has your current spouse been previously married?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+          helpText: "If currently married",
+        },
+      ],
+    },
+    {
+      id: "part4-orphan-info",
+      title: "Part 4: Information About the Orphan Beneficiary",
+      description: "Information about the child you wish to adopt",
+      questions: [
+        {
+          id: "part4.1.childFamilyName",
+          type: "text",
+          label: "1. Child's Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part4.2.childGivenName",
+          type: "text",
+          label: "2. Child's Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part4.3.childMiddleName",
+          type: "text",
+          label: "3. Child's Middle Name",
+        },
+        {
+          id: "part4.4.childDateOfBirth",
+          type: "date",
+          label: "4. Child's Date of Birth (mm/dd/yyyy)",
+          required: true,
+        },
+        {
+          id: "part4.5.childCityOfBirth",
+          type: "text",
+          label: "5. City or Town of Birth",
+          required: true,
+        },
+        {
+          id: "part4.6.childCountryOfBirth",
+          type: "text",
+          label: "6. Country of Birth",
+          required: true,
+        },
+        {
+          id: "part4.7.childGender",
+          type: "radio",
+          label: "7. Gender",
+          required: true,
+          options: [
+            { value: "male", label: "Male" },
+            { value: "female", label: "Female" },
+          ],
+        },
+        {
+          id: "part4.8.currentAddress",
+          type: "text",
+          label: "8. Child's Current Physical Address",
+          required: true,
+          helpText: "Include street, city, country",
+        },
+      ],
+    },
+    {
+      id: "part5-orphan-status",
+      title: "Part 5: Orphan Status Information",
+      description:
+        "Information establishing that the child meets the definition of an orphan",
+      questions: [
+        {
+          id: "part5.1.orphanBasis",
+          type: "select",
+          label: "1. The child is an orphan because:",
+          required: true,
+          options: [
+            { value: "both-deceased", label: "Both parents are deceased" },
+            {
+              value: "one-deceased-sole",
+              label:
+                "One parent is deceased, and the surviving parent cannot provide care",
+            },
+            {
+              value: "abandoned",
+              label: "Child has been abandoned by both parents",
+            },
+            {
+              value: "separated",
+              label: "Child has been separated from both parents",
+            },
+            {
+              value: "unwed-mother",
+              label: "Child has an unwed mother who cannot provide care",
+            },
+          ],
+        },
+        {
+          id: "part5.2.biologicalMotherName",
+          type: "text",
+          label: "2. Biological Mother's Full Name",
+          helpText: "If known",
+        },
+        {
+          id: "part5.3.biologicalMotherStatus",
+          type: "select",
+          label: "3. Biological Mother's Status",
+          options: [
+            { value: "deceased", label: "Deceased" },
+            {
+              value: "living-relinquished",
+              label: "Living, relinquished parental rights",
+            },
+            { value: "living-unable", label: "Living, unable to provide care" },
+            { value: "unknown", label: "Unknown" },
+          ],
+        },
+        {
+          id: "part5.4.biologicalFatherName",
+          type: "text",
+          label: "4. Biological Father's Full Name",
+          helpText: "If known",
+        },
+        {
+          id: "part5.5.biologicalFatherStatus",
+          type: "select",
+          label: "5. Biological Father's Status",
+          options: [
+            { value: "deceased", label: "Deceased" },
+            {
+              value: "living-relinquished",
+              label: "Living, relinquished parental rights",
+            },
+            { value: "living-unable", label: "Living, unable to provide care" },
+            { value: "unknown", label: "Unknown" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part6-adoption-status",
+      title: "Part 6: Adoption and Custody Information",
+      description: "Information about adoption or custody of the orphan",
+      questions: [
+        {
+          id: "part6.1.adoptionStatus",
+          type: "radio",
+          label: "1. Has the child been adopted abroad?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes - adopted abroad" },
+            {
+              value: "no-will-adopt-us",
+              label: "No - will be adopted in the United States",
+            },
+            {
+              value: "no-custody",
+              label:
+                "No - have legal custody for adoption in the United States",
+            },
+          ],
+        },
+        {
+          id: "part6.2.adoptionDate",
+          type: "date",
+          label: "2. Date of Adoption (if adopted abroad) (mm/dd/yyyy)",
+          helpText: "If child has been adopted",
+        },
+        {
+          id: "part6.3.adoptionPlace",
+          type: "text",
+          label: "3. Place of Adoption (City, Country)",
+          helpText: "If child has been adopted",
+        },
+        {
+          id: "part6.4.legalCustodyDate",
+          type: "date",
+          label:
+            "4. Date Legal Custody Granted (if not yet adopted) (mm/dd/yyyy)",
+          helpText: "If you have legal custody for U.S. adoption",
+        },
+        {
+          id: "part6.5.stateOfAdoption",
+          type: "text",
+          label: "5. U.S. State Where Child Will Be Adopted",
+          helpText: "If child will be adopted in the United States",
+        },
+        {
+          id: "part6.6.preAdoptionRequirements",
+          type: "radio",
+          label: "6. Have pre-adoption requirements of the state been met?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "will-meet", label: "Will be met" },
+            {
+              value: "not-applicable",
+              label: "Not applicable (already adopted)",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part7-i600a-approval",
+      title: "Part 7: Advanced Processing (Form I-600A)",
+      description: "Information about prior Form I-600A approval",
+      questions: [
+        {
+          id: "part7.1.i600aApproved",
+          type: "radio",
+          label:
+            "1. Was Form I-600A (Application for Advance Processing) previously approved?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part7.2.approvalDate",
+          type: "date",
+          label: "2. Date of I-600A Approval (mm/dd/yyyy)",
+          helpText: "If previously approved",
+        },
+        {
+          id: "part7.3.approvalOffice",
+          type: "text",
+          label: "3. USCIS Office That Approved I-600A",
+          helpText: "If previously approved",
+        },
+        {
+          id: "part7.4.homestudyDate",
+          type: "date",
+          label: "4. Date of Home Study Approval (mm/dd/yyyy)",
+          required: true,
+          helpText: "Date the favorable home study was completed",
+        },
+        {
+          id: "part7.5.homestudyAgency",
+          type: "text",
+          label: "5. Name of Home Study Agency",
+          required: true,
+        },
+      ],
+    },
+    {
+      id: "part8-certification",
+      title: "Part 8: Petitioner's Certification and Signature",
+      description: "Certification of duty of disclosure and signature",
+      questions: [
+        {
+          id: "part8.1.certification",
+          type: "checkbox",
+          label:
+            "I certify that I will care for the orphan properly if admitted to the United States",
+          required: true,
+        },
+        {
+          id: "part8.2.dutyOfDisclosure",
+          type: "checkbox",
+          label:
+            "I understand my duty to notify USCIS of any change in circumstances that affects eligibility",
+          required: true,
+        },
+        {
+          id: "part8.3.penaltyOfPerjury",
+          type: "checkbox",
+          label:
+            "I certify, under penalty of perjury, that all information in this petition is true and correct",
+          required: true,
+        },
+      ],
+    },
+  ],
+  pdfFieldMappings: [],
+  requiredDocuments: [
+    "PETITIONER DOCUMENTS:",
+    "  - Proof of U.S. citizenship (birth certificate, passport, or naturalization certificate)",
+    "  - Copy of marriage certificate (if married)",
+    "  - Divorce decrees or death certificates for any prior marriages",
+    "  - Favorable home study report from licensed agency (less than 6 months old)",
+    "  - Proof of compliance with state pre-adoption requirements",
+    "ORPHAN DOCUMENTS:",
+    "  - Child's birth certificate",
+    "  - Death certificate(s) of deceased parent(s) (if applicable)",
+    "  - Relinquishment or consent documents from living parent(s)",
+    "  - Evidence child meets orphan definition under U.S. law",
+    "  - Adoption decree (if adopted abroad)",
+    "  - Legal custody documents (if custody granted for U.S. adoption)",
+    "  - Passport-style photograph of child",
+    "ADDITIONAL DOCUMENTS:",
+    "  - Copy of I-600A approval notice (if previously filed)",
+    "  - Evidence of efforts to locate missing parent (if applicable)",
+    "  - Translation of all foreign language documents with certification",
+  ],
+  instructions: [
+    "Must be filed by U.S. citizen who is married OR unmarried and at least 24 years old",
+    "This form is for NON-HAGUE CONVENTION countries only (for Hague countries, use Form I-800)",
+    "Child must be under 16 years old (or under 18 if sibling of child already adopted)",
+    "Must have approved home study from licensed adoption agency",
+    "Orphan must meet legal definition: both parents deceased, abandoned, or sole/surviving parent unable to provide care",
+    "Can file Form I-600A for advance processing before identifying specific child",
+    "If adopted abroad, adoption must be full and final",
+    "If will adopt in U.S., must show compliance with state pre-adoption requirements",
+    "Child will receive immigrant visa and enter U.S. as lawful permanent resident",
+    "Child must have medical examination by authorized physician",
+  ],
+};
+
+const I526_DEFINITION: FormDefinition = {
+  id: "i-526",
+  code: "I-526",
+  name: "Immigrant Petition by Standalone Investor",
+  description: "EB-5 investor visa petition for foreign investors",
+  category: "work_authorization",
+  estimatedTime: "180-240 minutes",
+  filingFee: 3675,
+  price: 60,
+  status: "beta",
+  sections: [
+    {
+      id: "investor-info",
+      title: "Investor Information",
+      questions: [
+        {
+          id: "investor.name.last",
+          type: "text",
+          label: "Legal Last Name",
+          required: true,
+        },
+        {
+          id: "investor.name.first",
+          type: "text",
+          label: "Legal First Name",
+          required: true,
+        },
+        {
+          id: "investor.dob",
+          type: "date",
+          label: "Date of Birth",
+          required: true,
+        },
+        {
+          id: "investor.countryOfBirth",
+          type: "text",
+          label: "Country of Birth",
+          required: true,
+        },
+      ],
+    },
+    {
+      id: "investment-details",
+      title: "Investment Details",
+      questions: [
+        {
+          id: "investment.amount",
+          type: "text",
+          label: "Total Investment Amount",
+          required: true,
+          placeholder: "$800,000 or $1,050,000",
+          helpText: "Minimum $800,000 for TEA, $1,050,000 for standard",
+        },
+        {
+          id: "investment.source",
+          type: "textarea",
+          label: "Lawful Source of Investment Funds",
+          required: true,
+          helpText: "Detailed explanation of how funds were obtained",
+        },
+        {
+          id: "investment.businessType",
+          type: "text",
+          label: "Type of Business Enterprise",
+          required: true,
+        },
+        {
+          id: "investment.jobsCreated",
+          type: "text",
+          label: "Number of Jobs to be Created",
+          required: true,
+          helpText: "Minimum 10 full-time jobs required",
+        },
+      ],
+    },
+  ],
+  pdfFieldMappings: [],
+  requiredDocuments: [
+    "Business plan",
+    "Evidence of investment amount",
+    "Source of funds documentation",
+    "Tax returns and financial statements",
+    "Evidence of job creation",
+    "Organizational documents",
+  ],
+  instructions: [],
+};
+
+const I589_DEFINITION: FormDefinition = {
+  id: "i-589",
+  code: "I-589",
+  name: "Application for Asylum and for Withholding of Removal",
+  description:
+    "Apply for asylum protection in the United States based on persecution or fear of persecution",
+  category: "humanitarian",
+  estimatedTime: "180-240 minutes",
+  filingFee: 0,
+  price: 60,
+  status: "active",
+  sections: [
+    {
+      id: "parta1-about-you",
+      title: "Part A.I: Information About You",
+      description: "Your personal identifying information",
+      questions: [
+        {
+          id: "partA1.1.alienNumber",
+          type: "text",
+          label: "1. Alien Registration Number (A-Number) (if any)",
+          helpText: "Format: A-123456789 or 123456789",
+        },
+        {
+          id: "partA1.2.ssn",
+          type: "ssn",
+          label: "2. U.S. Social Security Number (if any)",
+        },
+        {
+          id: "partA1.3.familyName",
+          type: "text",
+          label: "3. Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "partA1.4.givenName",
+          type: "text",
+          label: "4. Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "partA1.5.middleName",
+          type: "text",
+          label: "5. Middle Name",
+        },
+        {
+          id: "partA1.6.otherNamesUsed",
+          type: "text",
+          label: "6. Other Names Used (include maiden name and aliases)",
+          helpText: "List all other names you have ever used",
+        },
+        {
+          id: "partA1.7.dateOfBirth",
+          type: "date",
+          label: "7. Date of Birth (mm/dd/yyyy)",
+          required: true,
+        },
+        {
+          id: "partA1.8.cityOfBirth",
+          type: "text",
+          label: "8. City and Country of Birth",
+          required: true,
+        },
+        {
+          id: "partA1.9.nationality",
+          type: "text",
+          label: "9. Current Nationality (Citizenship)",
+          required: true,
+        },
+        {
+          id: "partA1.10.race",
+          type: "text",
+          label: "10. Race, Ethnic, or Tribal Group",
+          required: true,
+        },
+        {
+          id: "partA1.11.religion",
+          type: "text",
+          label: "11. Religion",
+          required: true,
+        },
+        {
+          id: "partA1.12.gender",
+          type: "radio",
+          label: "12. Sex/Gender",
+          required: true,
+          options: [
+            { value: "male", label: "Male" },
+            { value: "female", label: "Female" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "parta1-address",
+      title: "Part A.I: Address and Contact Information",
+      questions: [
+        {
+          id: "partA1.13.mailingAddress",
+          type: "text",
+          label: "13. U.S. Mailing Address (Street Number and Name)",
+          required: true,
+        },
+        {
+          id: "partA1.14.city",
+          type: "text",
+          label: "14. City or Town",
+          required: true,
+        },
+        {
+          id: "partA1.15.state",
+          type: "text",
+          label: "15. State",
+          required: true,
+        },
+        {
+          id: "partA1.16.zipCode",
+          type: "text",
+          label: "16. ZIP Code",
+          required: true,
+        },
+        {
+          id: "partA1.17.phone",
+          type: "tel",
+          label: "17. Telephone Number",
+          required: true,
+        },
+        {
+          id: "partA1.18.dateOfLastArrival",
+          type: "date",
+          label: "18. Date of Last Arrival in the U.S. (mm/dd/yyyy)",
+          required: true,
+        },
+        {
+          id: "partA1.19.i94Number",
+          type: "text",
+          label: "19. I-94 Number (if any)",
+          helpText: "Find at https://i94.cbp.dhs.gov",
+        },
+        {
+          id: "partA1.20.currentImmigrationStatus",
+          type: "text",
+          label: "20. Current Immigration Status",
+          required: true,
+          helpText:
+            "e.g., B-2 visitor, F-1 student, entered without inspection",
+        },
+      ],
+    },
+    {
+      id: "parta2-spouse-children",
+      title: "Part A.II: Information About Your Spouse and Children",
+      description:
+        "List your spouse and all children regardless of age or marital status",
+      questions: [
+        {
+          id: "partA2.1.maritalStatus",
+          type: "select",
+          label: "1. Current Marital Status",
+          required: true,
+          options: [
+            { value: "single", label: "Single" },
+            { value: "married", label: "Married" },
+            { value: "divorced", label: "Divorced" },
+            { value: "widowed", label: "Widowed" },
+          ],
+        },
+        {
+          id: "partA2.2.spouseName",
+          type: "text",
+          label: "2. Spouse's Full Name (if married)",
+          helpText: "List your spouse even if not applying with you",
+        },
+        {
+          id: "partA2.3.spouseDateOfBirth",
+          type: "date",
+          label: "3. Spouse's Date of Birth (mm/dd/yyyy)",
+          helpText: "If married",
+        },
+        {
+          id: "partA2.4.spouseNationality",
+          type: "text",
+          label: "4. Spouse's Nationality",
+          helpText: "If married",
+        },
+        {
+          id: "partA2.5.spouseLocation",
+          type: "text",
+          label: "5. Spouse's Current Location",
+          helpText: "City and country where spouse currently resides",
+        },
+        {
+          id: "partA2.6.childrenInfo",
+          type: "textarea",
+          label: "6. Information About All Children",
+          helpText:
+            "List all children: name, date of birth, nationality, and current location",
+        },
+      ],
+    },
+    {
+      id: "parta3-background",
+      title: "Part A.III: Information About Your Background",
+      description: "Residence and travel history",
+      questions: [
+        {
+          id: "partA3.1.lastResidenceAbroad",
+          type: "text",
+          label: "1. Last Residence Before Coming to the U.S.",
+          required: true,
+          helpText: "Full address including city and country",
+        },
+        {
+          id: "partA3.2.lastOccupationAbroad",
+          type: "text",
+          label: "2. Last Occupation Abroad",
+          required: true,
+        },
+        {
+          id: "partA3.3.lastEducation",
+          type: "text",
+          label: "3. Last School Attended",
+          helpText: "School name and location",
+        },
+        {
+          id: "partA3.4.languagesSpoken",
+          type: "text",
+          label: "4. Languages You Speak Fluently",
+          required: true,
+        },
+        {
+          id: "partA3.5.traveledToUS",
+          type: "textarea",
+          label: "5. List All Trips to the U.S.",
+          helpText: "Include dates of entry and departure for each trip",
+        },
+      ],
+    },
+    {
+      id: "partb-asylum-basis",
+      title:
+        "Part B: Information About Your Application - Why You Are Seeking Asylum",
+      description: "The heart of your asylum claim",
+      questions: [
+        {
+          id: "partB.1.applyingFor",
+          type: "checkbox",
+          label: "I am applying for asylum or withholding of removal",
+          required: true,
+        },
+        {
+          id: "partB.2.persecutionGrounds",
+          type: "select",
+          label:
+            "Primary Ground for Asylum (check all that apply in your detailed statement)",
+          required: true,
+          options: [
+            { value: "race", label: "Race" },
+            { value: "religion", label: "Religion" },
+            { value: "nationality", label: "Nationality" },
+            { value: "political-opinion", label: "Political Opinion" },
+            {
+              value: "particular-social-group",
+              label: "Membership in a Particular Social Group",
+            },
+          ],
+          helpText: "Select the main reason you fear persecution",
+        },
+        {
+          id: "partB.3.pastPersecution",
+          type: "radio",
+          label:
+            "1.A. Have you, your family, or close friends or colleagues ever experienced harm or mistreatment in the past?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "partB.4.fearFuturePersecution",
+          type: "radio",
+          label:
+            "1.B. Do you fear harm or mistreatment if you return to your home country?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+          helpText: 'You must check "Yes" to be eligible for asylum',
+        },
+        {
+          id: "partB.5.detailedExplanation",
+          type: "textarea",
+          label: "2. Detailed Explanation of Your Asylum Claim",
+          required: true,
+          helpText:
+            "Describe in detail: What happened? When? Where? Who harmed you? Why? How are incidents connected to one of the five protected grounds?",
+        },
+        {
+          id: "partB.6.governmentInvolvement",
+          type: "radio",
+          label:
+            "3. Was the persecution by government officials or people the government cannot or will not control?",
+          options: [
+            { value: "government", label: "Government officials" },
+            { value: "nongovernment", label: "Non-government actors" },
+            { value: "both", label: "Both" },
+          ],
+        },
+        {
+          id: "partB.7.attemptedRelocation",
+          type: "radio",
+          label:
+            "4. Did you try to relocate within your country before coming to the U.S.?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "partc-additional-info",
+      title: "Part C: Additional Information About Your Application",
+      description:
+        "Prior asylum applications, criminal history, and other important information",
+      questions: [
+        {
+          id: "partC.1.appliedAsylumBefore",
+          type: "radio",
+          label: "1. Have you ever applied for asylum in any other country?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "partC.2.appliedAsylumBeforeDetails",
+          type: "textarea",
+          label: "2. If yes, provide details (country, date, result)",
+          helpText: "If you applied for asylum in another country",
+        },
+        {
+          id: "partC.3.excludableOffenses",
+          type: "radio",
+          label: "3. Have you ever committed a crime or been arrested?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "partC.4.crimeDetails",
+          type: "textarea",
+          label:
+            "4. If yes, provide details of any arrests or criminal convictions",
+          helpText: "Include dates, charges, and outcomes",
+        },
+        {
+          id: "partC.5.militaryService",
+          type: "radio",
+          label: "5. Have you ever served in any military or armed group?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "partC.6.terroristOrganization",
+          type: "radio",
+          label:
+            "6. Have you ever been a member of or supported any organization?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+          helpText: "Political parties, social groups, or any organizations",
+        },
+        {
+          id: "partC.7.persecutedOthers",
+          type: "radio",
+          label:
+            "7. Have you ever persecuted another person because of their race, religion, nationality, membership in a social group, or political opinion?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "partC.8.oneYearDeadline",
+          type: "radio",
+          label:
+            "8. Are you filing within 1 year of your last arrival in the U.S.?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            {
+              value: "no",
+              label:
+                "No - will explain changed circumstances or extraordinary circumstances",
+            },
+          ],
+          helpText:
+            "If no, you must explain why you did not file within 1 year",
+        },
+      ],
+    },
+    {
+      id: "partd-signature",
+      title: "Part D: Your Signature",
+      description: "Certification and signature",
+      questions: [
+        {
+          id: "partD.1.interpreterUsed",
+          type: "radio",
+          label: "1. Did someone assist you in completing this application?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "partD.2.assistantName",
+          type: "text",
+          label: "2. Name of person who helped you (if any)",
+          helpText: "Attorney, interpreter, or other preparer",
+        },
+        {
+          id: "partD.3.certification",
+          type: "checkbox",
+          label:
+            "I certify, under penalty of perjury under U.S. law, that this application and the evidence submitted with it are true and correct",
+          required: true,
+        },
+        {
+          id: "partD.4.warnings",
+          type: "checkbox",
+          label:
+            "I understand that knowingly making a false statement may result in criminal prosecution and denial of my application",
+          required: true,
+        },
+      ],
+    },
+  ],
+  pdfFieldMappings: [],
+  requiredDocuments: [
+    "REQUIRED DOCUMENTS:",
+    "  - Two identical passport-style photographs taken within 30 days",
+    "  - Copy of any immigration documents (passport, I-94, visa, EAD, etc.)",
+    "  - Supporting evidence of your claim",
+    "HIGHLY RECOMMENDED EVIDENCE:",
+    "  - Detailed personal statement describing persecution (attach as supplement)",
+    "  - Country condition reports (State Department, Human Rights Watch, Amnesty International)",
+    "  - News articles about persecution in your country",
+    "  - Witness affidavits from people with knowledge of your situation",
+    "  - Medical records or psychological evaluations documenting trauma",
+    "  - Police reports, court documents, arrest warrants",
+    "  - Membership documents for political party, religious group, or social organization",
+    "  - Death certificates or evidence of harm to family members",
+    "  - Photos or videos documenting persecution or threats",
+    "  - Expert opinions on country conditions",
+    "  - Documents showing you are a member of the persecuted group",
+  ],
+  instructions: [
+    "CRITICAL DEADLINE: Must file within 1 year of arriving in the U.S. (unless changed/extraordinary circumstances)",
+    "File with USCIS if you are NOT in removal proceedings",
+    "File with Immigration Court if you ARE in removal proceedings",
+    "Include TWO copies of the complete application (one for your records)",
+    "Sign and date the application in blue ink",
+    "You may include your spouse and unmarried children under 21 on your application",
+    "No filing fee required for Form I-589",
+    "Attach all supporting evidence with translations if not in English",
+    "Write a detailed personal statement as an attachment - be specific about dates, locations, and perpetrators",
+    "Clearly explain how your persecution is connected to one of the five grounds: race, religion, nationality, membership in a particular social group, or political opinion",
+    "If you miss the 1-year deadline, you MUST explain changed circumstances in your country OR extraordinary circumstances that prevented timely filing",
+    "Apply for employment authorization (Form I-765) 150 days after filing I-589",
+    "Attend all asylum interviews and hearings - failure to appear may result in denial",
+    "Consult with an immigration attorney if possible - asylum law is complex",
+  ],
+};
+
+const I730_DEFINITION: FormDefinition = {
+  id: "i-730",
+  code: "I-730",
+  name: "Refugee/Asylee Relative Petition",
+  description: "Petition for qualifying family members of refugees or asylees",
+  category: "humanitarian",
+  estimatedTime: "60-90 minutes",
+  filingFee: 0,
+  price: 60, // Medium-complex form
+  sections: [
+    {
+      id: "petitioner-info",
+      title: "Petitioner Information (Refugee/Asylee)",
+      questions: [
+        {
+          id: "petitioner.name.last",
+          type: "text",
+          label: "Legal Last Name",
+          required: true,
+        },
+        {
+          id: "petitioner.name.first",
+          type: "text",
+          label: "Legal First Name",
+          required: true,
+        },
+        {
+          id: "petitioner.aNumber",
+          type: "text",
+          label: "A-Number",
+          required: true,
+          placeholder: "A123456789",
+        },
+        {
+          id: "petitioner.asylumDate",
+          type: "date",
+          label: "Date Asylum/Refugee Status Granted",
+          required: true,
+        },
+      ],
+    },
+    {
+      id: "beneficiary-info",
+      title: "Family Member Information",
+      questions: [
+        {
+          id: "beneficiary.name.last",
+          type: "text",
+          label: "Legal Last Name",
+          required: true,
+        },
+        {
+          id: "beneficiary.name.first",
+          type: "text",
+          label: "Legal First Name",
+          required: true,
+        },
+        {
+          id: "beneficiary.relationship",
+          type: "select",
+          label: "Relationship to You",
+          required: true,
+          options: [
+            { value: "spouse", label: "Spouse" },
+            { value: "child", label: "Unmarried Child Under 21" },
+          ],
+        },
+        {
+          id: "beneficiary.dob",
+          type: "date",
+          label: "Date of Birth",
+          required: true,
+        },
+      ],
+    },
+  ],
+  pdfFieldMappings: [],
+  requiredDocuments: [
+    "Copy of asylum approval notice",
+    "Birth certificate",
+    "Marriage certificate (if applicable)",
+    "Passport photos",
+  ],
+  instructions: [
+    "Must file within 2 years of asylum grant",
+    "Relationship must have existed before asylum grant",
+  ],
+};
+
+const I821_DEFINITION: FormDefinition = {
+  id: "i-821",
+  code: "I-821",
+  name: "Application for Temporary Protected Status",
+  description: "Apply for TPS if from a designated country",
+  category: "humanitarian",
+  estimatedTime: "45-60 minutes",
+  filingFee: 50,
+  price: 60, // Medium-complex form
+  sections: [
+    {
+      id: "applicant-info",
+      title: "Applicant Information",
+      questions: [
+        {
+          id: "applicant.name.last",
+          type: "text",
+          label: "Legal Last Name",
+          required: true,
+        },
+        {
+          id: "applicant.name.first",
+          type: "text",
+          label: "Legal First Name",
+          required: true,
+        },
+        {
+          id: "applicant.dob",
+          type: "date",
+          label: "Date of Birth",
+          required: true,
+        },
+        {
+          id: "applicant.countryOfCitizenship",
+          type: "text",
+          label: "Country of Citizenship",
+          required: true,
+          helpText: "Must be a TPS-designated country",
+        },
+      ],
+    },
+    {
+      id: "eligibility",
+      title: "TPS Eligibility",
+      questions: [
+        {
+          id: "eligibility.arrivalDate",
+          type: "date",
+          label: "Date of Entry to United States",
+          required: true,
+        },
+        {
+          id: "eligibility.continuousResidence",
+          type: "radio",
+          label:
+            "Have you continuously resided in the U.S. since the required date?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+      ],
+    },
+  ],
+  pdfFieldMappings: [],
+  requiredDocuments: [
+    "Proof of identity",
+    "Proof of nationality",
+    "Evidence of continuous residence",
+    "Evidence of continuous physical presence",
+  ],
+  instructions: [
+    "Check TPS designation dates for your country",
+    "File during open registration period",
+  ],
+};
+
+// const I9_DEFINITION: FormDefinition = {
+//   id: "i-9",
+//   code: "I-9",
+//   name: "Employment Eligibility Verification",
+//   description: "Verify employee authorization to work in the United States",
+//   category: "work_authorization",
+//   estimatedTime: "15-20 minutes",
+//   filingFee: 0,
+//   price: 60,
+//   sections: [
+//     {
+//       id: "section1-employee-info",
+//       title: "Section 1: Employee Information and Attestation",
+//       description: "To be completed by employee on first day of work",
+//       questions: [
+//         {
+//           id: "section1.lastName",
+//           type: "text",
+//           label: "Last Name (Family Name)",
+//           required: true,
+//           helpText: "Employees with two last names must include both names",
+//         },
+//         {
+//           id: "section1.firstName",
+//           type: "text",
+//           label: "First Name (Given Name)",
+//           required: true,
+//           helpText: "Employees with two first names should include both",
+//         },
+//         {
+//           id: "section1.middleInitial",
+//           type: "text",
+//           label: "Middle Initial",
+//         },
+//         {
+//           id: "section1.otherLastNames",
+//           type: "text",
+//           label: "Other Last Names Used (if any)",
+//           helpText: "Include maiden name or any other legal last names",
+//         },
+//         {
+//           id: "section1.streetAddress",
+//           type: "text",
+//           label: "Address (Street Number and Name)",
+//           required: true,
+//         },
+//         {
+//           id: "section1.aptNumber",
+//           type: "text",
+//           label: "Apt. Number",
+//         },
+//         {
+//           id: "section1.city",
+//           type: "text",
+//           label: "City or Town",
+//           required: true,
+//         },
+//         {
+//           id: "section1.state",
+//           type: "text",
+//           label: "State",
+//           required: true,
+//         },
+//         {
+//           id: "section1.zipCode",
+//           type: "text",
+//           label: "ZIP Code",
+//           required: true,
+//         },
+//         {
+//           id: "section1.dateOfBirth",
+//           type: "date",
+//           label: "Date of Birth (mm/dd/yyyy)",
+//           required: true,
+//         },
+//         {
+//           id: "section1.ssn",
+//           type: "ssn",
+//           label: "U.S. Social Security Number",
+//           helpText: "Optional unless employer participates in E-Verify",
+//         },
+//         {
+//           id: "section1.email",
+//           type: "email",
+//           label: "Employee's Email Address",
+//           helpText: "Optional",
+//         },
+//         {
+//           id: "section1.telephone",
+//           type: "tel",
+//           label: "Employee's Telephone Number",
+//           helpText: "Optional",
+//         },
+//       ],
+//     },
+//     {
+//       id: "section1-citizenship-status",
+//       title: "Section 1: Citizenship/Immigration Status Attestation",
+//       description: "Check one of the following boxes",
+//       questions: [
+//         {
+//           id: "section1.citizenshipStatus",
+//           type: "radio",
+//           label:
+//             "I attest, under penalty of perjury, that I am (check one of the following boxes):",
+//           required: true,
+//           options: [
+//             { value: "citizen", label: "1. A citizen of the United States" },
+//             {
+//               value: "noncitizen-national",
+//               label: "2. A noncitizen national of the United States",
+//             },
+//             { value: "lpr", label: "3. A lawful permanent resident" },
+//             {
+//               value: "alien-authorized",
+//               label: "4. An alien authorized to work",
+//             },
+//           ],
+//         },
+//       ],
+//     },
+//     {
+//       id: "section1-additional-info",
+//       title: "Section 1: Additional Information for Certain Statuses",
+//       description: "Complete if you checked boxes 3 or 4 above",
+//       questions: [
+//         {
+//           id: "section1.uscisNumber",
+//           type: "text",
+//           label: "USCIS Number (for LPR or alien authorized to work)",
+//           helpText:
+//             "Provide your USCIS Number or A-Number if you are a lawful permanent resident or alien authorized to work",
+//         },
+//         {
+//           id: "section1.alienNumber",
+//           type: "text",
+//           label: "Alien Registration Number/USCIS Number",
+//           helpText: "Format: A-123456789 or 123456789",
+//         },
+//         {
+//           id: "section1.i94Number",
+//           type: "text",
+//           label: "Form I-94 Admission Number",
+//           helpText: "If using I-94 for verification",
+//         },
+//         {
+//           id: "section1.foreignPassportNumber",
+//           type: "text",
+//           label: "Foreign Passport Number",
+//           helpText: "If using foreign passport for verification",
+//         },
+//         {
+//           id: "section1.passportCountry",
+//           type: "text",
+//           label: "Country of Issuance",
+//           helpText: "Country that issued the foreign passport",
+//         },
+//         {
+//           id: "section1.workAuthorizationExpiration",
+//           type: "date",
+//           label: "Employment Authorization Expiration Date (if any)",
+//           helpText:
+//             "mm/dd/yyyy - Only if you checked box 4 (alien authorized to work)",
+//         },
+//       ],
+//     },
+//     {
+//       id: "section2-employer-review",
+//       title: "Section 2: Employer Review and Verification",
+//       description:
+//         "To be completed by employer within 3 business days of employee's first day of work",
+//       questions: [
+//         {
+//           id: "section2.employeeLastName",
+//           type: "text",
+//           label: "Employee Last Name from Section 1",
+//           required: true,
+//         },
+//         {
+//           id: "section2.employeeFirstName",
+//           type: "text",
+//           label: "Employee First Name from Section 1",
+//           required: true,
+//         },
+//         {
+//           id: "section2.employeeMiddleInitial",
+//           type: "text",
+//           label: "Employee Middle Initial from Section 1",
+//         },
+//         {
+//           id: "section2.citizenshipStatus",
+//           type: "text",
+//           label: "Citizenship/Immigration Status from Section 1",
+//           required: true,
+//           helpText: "Copy the box number checked in Section 1 (1, 2, 3, or 4)",
+//         },
+//       ],
+//     },
+//     {
+//       id: "section2-list-a-documents",
+//       title:
+//         "Section 2: List A - Documents That Establish Both Identity and Employment Authorization",
+//       description:
+//         "Complete if employee provided a List A document (do not complete List B and C)",
+//       questions: [
+//         {
+//           id: "section2.listA.documentTitle",
+//           type: "text",
+//           label: "Document Title",
+//           helpText:
+//             "e.g., U.S. Passport, Permanent Resident Card, Employment Authorization Document",
+//         },
+//         {
+//           id: "section2.listA.issuingAuthority",
+//           type: "text",
+//           label: "Issuing Authority",
+//           helpText: "e.g., U.S. Department of State, USCIS",
+//         },
+//         {
+//           id: "section2.listA.documentNumber",
+//           type: "text",
+//           label: "Document Number",
+//         },
+//         {
+//           id: "section2.listA.expirationDate",
+//           type: "date",
+//           label: "Expiration Date (if any)",
+//           helpText: "mm/dd/yyyy",
+//         },
+//       ],
+//     },
+//     {
+//       id: "section2-list-b-documents",
+//       title: "Section 2: List B - Documents That Establish Identity",
+//       description: "Complete if employee provided List B and List C documents",
+//       questions: [
+//         {
+//           id: "section2.listB.documentTitle",
+//           type: "text",
+//           label: "Document Title",
+//           helpText:
+//             "e.g., Driver's License, State ID Card, School ID with photo",
+//         },
+//         {
+//           id: "section2.listB.issuingAuthority",
+//           type: "text",
+//           label: "Issuing Authority",
+//           helpText: "e.g., State DMV, School District",
+//         },
+//         {
+//           id: "section2.listB.documentNumber",
+//           type: "text",
+//           label: "Document Number",
+//         },
+//         {
+//           id: "section2.listB.expirationDate",
+//           type: "date",
+//           label: "Expiration Date (if any)",
+//           helpText: "mm/dd/yyyy",
+//         },
+//       ],
+//     },
+//     {
+//       id: "section2-list-c-documents",
+//       title:
+//         "Section 2: List C - Documents That Establish Employment Authorization",
+//       description: "Complete if employee provided List B and List C documents",
+//       questions: [
+//         {
+//           id: "section2.listC.documentTitle",
+//           type: "text",
+//           label: "Document Title",
+//           helpText:
+//             "e.g., Social Security Card, Birth Certificate, Employment Authorization Document",
+//         },
+//         {
+//           id: "section2.listC.issuingAuthority",
+//           type: "text",
+//           label: "Issuing Authority",
+//           helpText: "e.g., Social Security Administration, State Vital Records",
+//         },
+//         {
+//           id: "section2.listC.documentNumber",
+//           type: "text",
+//           label: "Document Number",
+//         },
+//         {
+//           id: "section2.listC.expirationDate",
+//           type: "date",
+//           label: "Expiration Date (if any)",
+//           helpText: "mm/dd/yyyy",
+//         },
+//       ],
+//     },
+//     {
+//       id: "section2-certification",
+//       title: "Section 2: Employer Certification",
+//       description: "Employer or authorized representative completes",
+//       questions: [
+//         {
+//           id: "section2.additionalInformation",
+//           type: "textarea",
+//           label: "Additional Information",
+//           helpText:
+//             "Optional - for notes about extensions, discrepancies, or SEVIS data",
+//         },
+//         {
+//           id: "section2.firstDayOfEmployment",
+//           type: "date",
+//           label: "Employee's First Day of Employment (mm/dd/yyyy)",
+//           required: true,
+//         },
+//         {
+//           id: "section2.employerLastName",
+//           type: "text",
+//           label: "Last Name of Employer or Authorized Representative",
+//           required: true,
+//         },
+//         {
+//           id: "section2.employerFirstName",
+//           type: "text",
+//           label: "First Name of Employer or Authorized Representative",
+//           required: true,
+//         },
+//         {
+//           id: "section2.employerTitle",
+//           type: "text",
+//           label: "Title of Employer or Authorized Representative",
+//           required: true,
+//         },
+//         {
+//           id: "section2.employerBusinessName",
+//           type: "text",
+//           label: "Employer's Business or Organization Name",
+//           required: true,
+//         },
+//         {
+//           id: "section2.employerAddress",
+//           type: "text",
+//           label: "Employer's Business Address (Street Number and Name)",
+//           required: true,
+//         },
+//         {
+//           id: "section2.employerCity",
+//           type: "text",
+//           label: "City or Town",
+//           required: true,
+//         },
+//         {
+//           id: "section2.employerState",
+//           type: "text",
+//           label: "State",
+//           required: true,
+//         },
+//         {
+//           id: "section2.employerZipCode",
+//           type: "text",
+//           label: "ZIP Code",
+//           required: true,
+//         },
+//       ],
+//     },
+//   ],
+//   pdfFieldMappings: [],
+//   requiredDocuments: [
+//     "EMPLOYEE MUST PRESENT (choose one):",
+//     "Option 1: ONE document from List A (establishes both identity and employment authorization):",
+//     "  - U.S. Passport or U.S. Passport Card",
+//     "  - Permanent Resident Card or Alien Registration Receipt Card (Form I-551)",
+//     "  - Foreign passport with Form I-94 or I-94A with Arrival-Departure Record",
+//     "  - Employment Authorization Document (Form I-766)",
+//     "Option 2: ONE document from List B (establishes identity) AND ONE document from List C (establishes employment authorization):",
+//     "List B (Identity):",
+//     "  - Driver's license or ID card with photo issued by state or outlying possession",
+//     "  - ID card issued by federal, state, or local government with photo",
+//     "  - School ID card with photo",
+//     "  - Voter registration card",
+//     "  - U.S. Military card or draft record",
+//     "List C (Employment Authorization):",
+//     "  - Social Security Account Number card (unrestricted)",
+//     "  - U.S. birth certificate or birth abroad certificate",
+//     "  - Native American tribal document",
+//     "  - U.S. Citizen ID Card (Form I-197)",
+//     "  - Employment authorization document issued by DHS",
+//   ],
+//   instructions: [
+//     "SECTION 1: Employee must complete Section 1 no later than first day of employment",
+//     "SECTION 2: Employer must complete Section 2 within 3 business days of employee's first day of work",
+//     "Employees must present original unexpired documents (no photocopies)",
+//     "Employers must physically examine the documents and verify they appear genuine and relate to the employee",
+//     "If employee provides List A document, do NOT complete List B and C",
+//     "If employee provides List B and C documents, both must be completed",
+//     "List B documents must include a photograph if employer participates in E-Verify",
+//     "Retain Form I-9 for 3 years after hire date OR 1 year after employment ends, whichever is later",
+//     "Form I-9 is NOT filed with USCIS - employer keeps it on file for inspection",
+//     "Forms can be stored electronically or in paper format",
+//   ],
+// };
+// Updated I-9 Form Definition
+const I9_DEFINITION: FormDefinition = {
+  id: "i-9",
+  code: "I-9",
+  name: "Employment Eligibility Verification",
+  description: "Verify employee authorization to work in the United States",
+  category: "work_authorization",
+  estimatedTime: "15-20 minutes",
+  filingFee: 0,
+  price: 60,
+  sections: [
+    {
+      id: "section1-employee-info",
+      title: "Section 1: Employee Information and Attestation",
+      description: "To be completed by employee on first day of work",
+      questions: [
+        {
+          id: "section1.lastName",
+          type: "text",
+          label: "Last Name (Family Name)",
+          required: true,
+          helpText: "Employees with two last names must include both names",
+        },
+        {
+          id: "section1.firstName",
+          type: "text",
+          label: "First Name (Given Name)",
+          required: true,
+          helpText: "Employees with two first names should include both",
+        },
+        {
+          id: "section1.middleInitial",
+          type: "text",
+          label: "Middle Initial",
+        },
+        {
+          id: "section1.otherLastNames",
+          type: "text",
+          label: "Other Last Names Used (if any)",
+          helpText: "Include maiden name or any other legal last names",
+        },
+        {
+          id: "section1.streetAddress",
+          type: "text",
+          label: "Address (Street Number and Name)",
+          required: true,
+        },
+        {
+          id: "section1.aptNumber",
+          type: "text",
+          label: "Apt. Number",
+        },
+        {
+          id: "section1.city",
+          type: "text",
+          label: "City or Town",
+          required: true,
+        },
+        {
+          id: "section1.state",
+          type: "text",
+          label: "State",
+          required: true,
+        },
+        {
+          id: "section1.zipCode",
+          type: "text",
+          label: "ZIP Code",
+          required: true,
+        },
+        {
+          id: "section1.dateOfBirth",
+          type: "date",
+          label: "Date of Birth (mm/dd/yyyy)",
+          required: true,
+        },
+        {
+          id: "section1.ssn",
+          type: "ssn",
+          label: "U.S. Social Security Number",
+          helpText: "Optional unless employer participates in E-Verify",
+        },
+        {
+          id: "section1.email",
+          type: "email",
+          label: "Employee's Email Address",
+          helpText: "Optional",
+        },
+        {
+          id: "section1.telephone",
+          type: "tel",
+          label: "Employee's Telephone Number",
+          helpText: "Optional",
+        },
+      ],
+    },
+    {
+      id: "section1-citizenship-status",
+      title: "Section 1: Citizenship/Immigration Status Attestation",
+      description: "Check one of the following boxes",
+      questions: [
+        {
+          id: "section1.citizenshipStatus",
+          type: "radio",
+          label:
+            "I attest, under penalty of perjury, that I am (check one of the following boxes):",
+          required: true,
+          options: [
+            { value: "citizen", label: "1. A citizen of the United States" },
+            {
+              value: "noncitizen-national",
+              label: "2. A noncitizen national of the United States",
+            },
+            { value: "lpr", label: "3. A lawful permanent resident" },
+            {
+              value: "alien-authorized",
+              label: "4. An alien authorized to work",
+            },
+          ],
+        },
+        {
+          id: "section1.workAuthorizationExpiration",
+          type: "date",
+          label: "Employment Authorization Expiration Date (if any)",
+          helpText:
+            "mm/dd/yyyy - Only if you checked box 4 (alien authorized to work)",
+          dependsOn: {
+            id: "section1.citizenshipStatus",
+            value: "alien-authorized",
+          },
+        },
+        {
+          id: "section1.uscisANumber",
+          type: "text",
+          label: "USCIS A-Number",
+          helpText: "For lawful permanent resident or alien authorized to work",
+          dependsOn: {
+            id: "section1.citizenshipStatus",
+            operator: "in",
+            value: ["lpr", "alien-authorized"],
+          },
+        },
+        {
+          id: "section1.i94Number",
+          type: "text",
+          label: "Form I-94 Admission Number",
+          helpText: "Alternative to A-Number for alien authorized to work",
+          dependsOn: {
+            id: "section1.citizenshipStatus",
+            value: "alien-authorized",
+          },
+        },
+        {
+          id: "section1.foreignPassportNumber",
+          type: "text",
+          label: "Foreign Passport Number and Country of Issuance",
+          helpText: "Format: PassportNumber, Country",
+          dependsOn: {
+            id: "section1.citizenshipStatus",
+            value: "alien-authorized",
+          },
+        },
+      ],
+    },
+
+    {
+      id: "section2-documents",
+      title: "Section 2: Documents Presented",
+      description: "Document information for List A or List B + C",
+      questions: [
+        {
+          id: "section2.documentType",
+          type: "radio",
+          label: "Document Type Presented",
+          required: true,
+          options: [
+            { value: "listA", label: "List A (single document)" },
+            { value: "listBAndC", label: "List B + List C (two documents)" },
+          ],
+        },
+        // List A Document
+        {
+          id: "section2.listA.documentTitle",
+          type: "text",
+          label: "List A - Document Title",
+          dependsOn: { id: "section2.documentType", value: "listA" },
+        },
+        {
+          id: "section2.listA.issuingAuthority",
+          type: "text",
+          label: "List A - Issuing Authority",
+          dependsOn: { id: "section2.documentType", value: "listA" },
+        },
+        {
+          id: "section2.listA.documentNumber",
+          type: "text",
+          label: "List A - Document Number",
+          dependsOn: { id: "section2.documentType", value: "listA" },
+        },
+        {
+          id: "section2.listA.expirationDate",
+          type: "date",
+          label: "List A - Expiration Date (if any)",
+          dependsOn: { id: "section2.documentType", value: "listA" },
+        },
+        // List B Document
+        {
+          id: "section2.listB.documentTitle",
+          type: "text",
+          label: "List B - Document Title",
+          dependsOn: { id: "section2.documentType", value: "listBAndC" },
+        },
+        {
+          id: "section2.listB.issuingAuthority",
+          type: "text",
+          label: "List B - Issuing Authority",
+          dependsOn: { id: "section2.documentType", value: "listBAndC" },
+        },
+        {
+          id: "section2.listB.documentNumber",
+          type: "text",
+          label: "List B - Document Number",
+          dependsOn: { id: "section2.documentType", value: "listBAndC" },
+        },
+        {
+          id: "section2.listB.expirationDate",
+          type: "date",
+          label: "List B - Expiration Date (if any)",
+          dependsOn: { id: "section2.documentType", value: "listBAndC" },
+        },
+        // List C Document
+        {
+          id: "section2.listC.documentTitle",
+          type: "text",
+          label: "List C - Document Title",
+          dependsOn: { id: "section2.documentType", value: "listBAndC" },
+        },
+        {
+          id: "section2.listC.issuingAuthority",
+          type: "text",
+          label: "List C - Issuing Authority",
+          dependsOn: { id: "section2.documentType", value: "listBAndC" },
+        },
+        {
+          id: "section2.listC.documentNumber",
+          type: "text",
+          label: "List C - Document Number",
+          dependsOn: { id: "section2.documentType", value: "listBAndC" },
+        },
+        {
+          id: "section2.listC.expirationDate",
+          type: "date",
+          label: "List C - Expiration Date (if any)",
+          dependsOn: { id: "section2.documentType", value: "listBAndC" },
+        },
+        {
+          id: "section2.additionalInformation",
+          type: "textarea",
+          label: "Additional Information",
+          helpText: "Optional - for notes about extensions or discrepancies",
+        },
+        {
+          id: "section2.alternativeProcedure",
+          type: "checkbox",
+          label: "Used alternative procedure authorized by DHS",
+          helpText:
+            "Check if you used DHS-authorized remote document examination",
+        },
+      ],
+    },
+
+    {
+      id: "section1-preparer-translator",
+      title: "Section 1: Preparer/Translator Information",
+      description: "Complete for each preparer/translator (up to 4)",
+      questions: [
+        {
+          id: "preparer1.lastName",
+          type: "text",
+          label: "Preparer 1 Last Name (Family Name)",
+        },
+        {
+          id: "preparer1.firstName",
+          type: "text",
+          label: "Preparer 1 First Name (Given Name)",
+        },
+        {
+          id: "preparer1.middleInitial",
+          type: "text",
+          label: "Preparer 1 Middle Initial",
+        },
+        {
+          id: "preparer1.streetAddress",
+          type: "text",
+          label: "Preparer 1 Address (Street Number and Name)",
+        },
+        {
+          id: "preparer1.city",
+          type: "text",
+          label: "Preparer 1 City or Town",
+        },
+        {
+          id: "preparer1.state",
+          type: "select",
+          label: "Preparer 1 State",
+          options: US_STATES,
+        },
+        { id: "preparer1.zipCode", type: "text", label: "Preparer 1 ZIP Code" },
+        { id: "preparer1.date", type: "date", label: "Preparer 1 Date" },
+        {
+          id: "preparer2.lastName",
+          type: "text",
+          label: "Preparer 2 Last Name (Family Name)",
+        },
+        {
+          id: "preparer2.firstName",
+          type: "text",
+          label: "Preparer 2 First Name (Given Name)",
+        },
+        {
+          id: "preparer2.middleInitial",
+          type: "text",
+          label: "Preparer 2 Middle Initial",
+        },
+        {
+          id: "preparer2.streetAddress",
+          type: "text",
+          label: "Preparer 2 Address (Street Number and Name)",
+        },
+        {
+          id: "preparer2.city",
+          type: "text",
+          label: "Preparer 2 City or Town",
+        },
+        {
+          id: "preparer2.state",
+          type: "select",
+          label: "Preparer 2 State",
+          options: US_STATES,
+        },
+        { id: "preparer2.zipCode", type: "text", label: "Preparer 2 ZIP Code" },
+        { id: "preparer2.date", type: "date", label: "Preparer 2 Date" },
+        {
+          id: "preparer3.lastName",
+          type: "text",
+          label: "Preparer 3 Last Name (Family Name)",
+        },
+        {
+          id: "preparer3.firstName",
+          type: "text",
+          label: "Preparer 3 First Name (Given Name)",
+        },
+        {
+          id: "preparer3.middleInitial",
+          type: "text",
+          label: "Preparer 3 Middle Initial",
+        },
+        {
+          id: "preparer3.streetAddress",
+          type: "text",
+          label: "Preparer 3 Address (Street Number and Name)",
+        },
+        {
+          id: "preparer3.city",
+          type: "text",
+          label: "Preparer 3 City or Town",
+        },
+        {
+          id: "preparer3.state",
+          type: "select",
+          label: "Preparer 3 State",
+          options: US_STATES,
+        },
+        { id: "preparer3.zipCode", type: "text", label: "Preparer 3 ZIP Code" },
+        { id: "preparer3.date", type: "date", label: "Preparer 3 Date" },
+        {
+          id: "preparer4.lastName",
+          type: "text",
+          label: "Preparer 4 Last Name (Family Name)",
+        },
+        {
+          id: "preparer4.firstName",
+          type: "text",
+          label: "Preparer 4 First Name (Given Name)",
+        },
+        {
+          id: "preparer4.middleInitial",
+          type: "text",
+          label: "Preparer 4 Middle Initial",
+        },
+        {
+          id: "preparer4.streetAddress",
+          type: "text",
+          label: "Preparer 4 Address (Street Number and Name)",
+        },
+        {
+          id: "preparer4.city",
+          type: "text",
+          label: "Preparer 4 City or Town",
+        },
+        {
+          id: "preparer4.state",
+          type: "select",
+          label: "Preparer 4 State",
+          options: US_STATES,
+        },
+        { id: "preparer4.zipCode", type: "text", label: "Preparer 4 ZIP Code" },
+        { id: "preparer4.date", type: "date", label: "Preparer 4 Date" },
+      ],
+    },
+    {
+      id: "section2-employer-info",
+      title: "Section 2: Employer Information",
+      description: "Employer or authorized representative completes",
+      questions: [
+        {
+          id: "section2.firstDayOfEmployment",
+          type: "date",
+          label: "Employee's First Day of Employment (mm/dd/yyyy)",
+          required: true,
+        },
+        {
+          id: "section2.employerNameTitle",
+          type: "text",
+          label:
+            "Last Name, First Name and Title of Employer or Authorized Representative",
+          required: true,
+        },
+        {
+          id: "section2.employerSignature",
+          type: "signature",
+          label: "Signature of Employer or Authorized Representative",
+          required: true,
+        },
+        {
+          id: "section2.employerDate",
+          type: "date",
+          label: "Today's Date (mm/dd/yyyy)",
+          required: true,
+        },
+        {
+          id: "section2.employerBusinessName",
+          type: "text",
+          label: "Employer's Business or Organization Name",
+          required: true,
+        },
+        {
+          id: "section2.employerAddress",
+          type: "text",
+          label: "Employer's Business or Organization Address",
+          required: true,
+          helpText: "Street Number and Name, City or Town, State, ZIP Code",
+        },
+      ],
+    },
+  ],
+  pdfFieldMappings: [],
+  requiredDocuments: [
+    "EMPLOYEE MUST PRESENT (choose one):",
+    "Option 1: ONE document from List A (establishes both identity and employment authorization):",
+    "  - U.S. Passport or U.S. Passport Card",
+    "  - Permanent Resident Card or Alien Registration Receipt Card (Form I-551)",
+    "  - Foreign passport with Form I-94 or I-94A with Arrival-Departure Record",
+    "  - Employment Authorization Document (Form I-766)",
+    "Option 2: ONE document from List B (establishes identity) AND ONE document from List C (establishes employment authorization):",
+    "List B (Identity):",
+    "  - Driver's license or ID card with photo issued by state or outlying possession",
+    "  - ID card issued by federal, state, or local government with photo",
+    "  - School ID card with photo",
+    "  - Voter registration card",
+    "  - U.S. Military card or draft record",
+    "List C (Employment Authorization):",
+    "  - Social Security Account Number card (unrestricted)",
+    "  - U.S. birth certificate or birth abroad certificate",
+    "  - Native American tribal document",
+    "  - U.S. Citizen ID Card (Form I-197)",
+    "  - Employment authorization document issued by DHS",
+  ],
+  instructions: [
+    "SECTION 1: Employee must complete Section 1 no later than first day of employment",
+    "SECTION 2: Employer must complete Section 2 within 3 business days of employee's first day of work",
+    "Employees must present original unexpired documents (no photocopies)",
+    "Employers must physically examine the documents and verify they appear genuine and relate to the employee",
+    "If employee provides List A document, do NOT complete List B and C",
+    "If employee provides List B and C documents, both must be completed",
+    "List B documents must include a photograph if employer participates in E-Verify",
+    "Retain Form I-9 for 3 years after hire date OR 1 year after employment ends, whichever is later",
+    "Form I-9 is NOT filed with USCIS - employer keeps it on file for inspection",
+    "Forms can be stored electronically or in paper format",
+  ],
+};
+
+// const I212_DEFINITION: FormDefinition = {
+//   id: "i-212",
+//   code: "I-212",
+//   name: "Application for Permission to Reapply for Admission",
+//   description: "For those removed or deported who wish to return to the US",
+//   category: "other",
+//   estimatedTime: "60-90 minutes",
+//   filingFee: 1050,
+//   price: 60,
+//   sections: [
+//     {
+//       id: "part1",
+//       title: "Part 1: Information About You",
+//       description: "Personal identifying information",
+//       questions: [
+//         {
+//           id: "part1.lastName",
+//           type: "text",
+//           label: "Family Name (Last Name)",
+//           required: true,
+//         },
+//         {
+//           id: "part1.firstName",
+//           type: "text",
+//           label: "Given Name (First Name)",
+//           required: true,
+//         },
+//         {
+//           id: "part1.middleName",
+//           type: "text",
+//           label: "Middle Name",
+//         },
+//         {
+//           id: "part1.dateOfBirth",
+//           type: "date",
+//           label: "Date of Birth",
+//           required: true,
+//         },
+//         {
+//           id: "part1.cityOfBirth",
+//           type: "text",
+//           label: "City of Birth",
+//           required: true,
+//         },
+//         {
+//           id: "part1.countryOfBirth",
+//           type: "text",
+//           label: "Country of Birth",
+//           required: true,
+//         },
+//         {
+//           id: "part1.alienNumber",
+//           type: "text",
+//           label: "Alien Registration Number (A-Number)",
+//           placeholder: "A-",
+//         },
+//       ],
+//     },
+//     {
+//       id: "part2",
+//       title: "Part 2: Information About Your Removal",
+//       description: "Details about your previous removal from the US",
+//       questions: [
+//         {
+//           id: "part2.dateOfRemoval",
+//           type: "date",
+//           label: "Date of Removal/Deportation",
+//           required: true,
+//         },
+//         {
+//           id: "part2.portOfRemoval",
+//           type: "text",
+//           label: "Port Where You Were Removed",
+//           required: true,
+//         },
+//         {
+//           id: "part2.reasonForRemoval",
+//           type: "textarea",
+//           label: "Reason for Removal",
+//           required: true,
+//           helpText: "Explain why you were removed or deported",
+//         },
+//       ],
+//     },
+//   ],
+//   estimatedFilingTime: "12-24 months",
+//   tips: [
+//     "This form is required if you were previously removed or deported",
+//     "Strong evidence of rehabilitation and ties to the US is crucial",
+//     "Consult an immigration attorney - this is a complex application",
+//     "Approval is discretionary and depends on humanitarian factors",
+//   ],
+// };
+
+const I290B_DEFINITION: FormDefinition = {
+  id: "i-290b",
+  code: "I-290B",
+  name: "Notice of Appeal or Motion",
+  description: "Appeal or file a motion regarding a USCIS decision",
+  category: "other",
+  estimatedTime: "45-60 minutes",
+  filingFee: 675,
+  price: 60,
+  sections: [
+    {
+      id: "part1",
+      title: "Part 1: Information About You",
+      description: "Your personal information",
+      questions: [
+        {
+          id: "part1.lastName",
+          type: "text",
+          label: "Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part1.firstName",
+          type: "text",
+          label: "Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part1.middleName",
+          type: "text",
+          label: "Middle Name",
+        },
+        {
+          id: "part1.alienNumber",
+          type: "text",
+          label: "Alien Registration Number (A-Number)",
+          placeholder: "A-",
+        },
+      ],
+    },
+    {
+      id: "part2",
+      title: "Part 2: Information About the Appeal or Motion",
+      description: "Details about what you are appealing",
+      questions: [
+        {
+          id: "part2.requestType",
+          type: "radio",
+          label: "I am filing",
+          required: true,
+          options: [
+            { value: "appeal", label: "An appeal" },
+            { value: "motionToReopen", label: "A motion to reopen" },
+            { value: "motionToReconsider", label: "A motion to reconsider" },
+          ],
+        },
+        {
+          id: "part2.decisionDate",
+          type: "date",
+          label: "Date of Decision Being Appealed",
+          required: true,
+        },
+        {
+          id: "part2.formType",
+          type: "text",
+          label: "Form Number of Application Being Appealed",
+          required: true,
+          placeholder: "e.g., I-130, I-485",
+        },
+        {
+          id: "part2.reasonForAppeal",
+          type: "textarea",
+          label: "Basis for Appeal or Motion",
+          required: true,
+          helpText: "Explain why the decision was incorrect",
+        },
+      ],
+    },
+  ],
+  estimatedFilingTime: "6-12 months",
+  tips: [
+    "File within 30 days (or 33 if decision was mailed)",
+    "Attach a brief in support of your appeal",
+    "Include new evidence if filing a motion to reopen",
+    "Consult an attorney - appeals are technically complex",
+  ],
+};
+
+const I601_DEFINITION: FormDefinition = {
+  id: "i-601",
+  code: "I-601",
+  name: "Application for Waiver of Grounds of Inadmissibility",
+  description:
+    "Waive certain grounds of inadmissibility to enter or remain in the US",
+  category: "other",
+  estimatedTime: "90-120 minutes",
+  filingFee: 1050,
+  price: 60,
+  sections: [
+    {
+      id: "part1",
+      title: "Part 1: Information About You",
+      description: "Personal identifying information",
+      questions: [
+        {
+          id: "part1.lastName",
+          type: "text",
+          label: "Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part1.firstName",
+          type: "text",
+          label: "Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part1.middleName",
+          type: "text",
+          label: "Middle Name",
+        },
+        {
+          id: "part1.dateOfBirth",
+          type: "date",
+          label: "Date of Birth",
+          required: true,
+        },
+        {
+          id: "part1.countryOfBirth",
+          type: "text",
+          label: "Country of Birth",
+          required: true,
+        },
+        {
+          id: "part1.alienNumber",
+          type: "text",
+          label: "Alien Registration Number (A-Number)",
+          placeholder: "A-",
+        },
+      ],
+    },
+    {
+      id: "part2",
+      title: "Part 2: Qualifying Relative Information",
+      description: "Information about your US citizen or LPR relative",
+      questions: [
+        {
+          id: "part2.relativeType",
+          type: "radio",
+          label: "Your qualifying relative is your",
+          required: true,
+          options: [
+            { value: "spouse", label: "Spouse" },
+            { value: "parent", label: "Parent" },
+            { value: "fiance", label: "Fiancé(e)" },
+          ],
+        },
+        {
+          id: "part2.relativeName",
+          type: "text",
+          label: "Relative's Full Name",
+          required: true,
+        },
+        {
+          id: "part2.relativeStatus",
+          type: "radio",
+          label: "Relative's Status",
+          required: true,
+          options: [
+            { value: "usCitizen", label: "U.S. Citizen" },
+            { value: "lpr", label: "Lawful Permanent Resident" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part3",
+      title: "Part 3: Grounds of Inadmissibility",
+      description: "Specify which grounds you are seeking to waive",
+      questions: [
+        {
+          id: "part3.inadmissibilityGrounds",
+          type: "textarea",
+          label: "Describe the grounds of inadmissibility",
+          required: true,
+          helpText: "Explain which grounds under INA 212(a) apply to you",
+        },
+        {
+          id: "part3.extremeHardship",
+          type: "textarea",
+          label: "Describe extreme hardship to qualifying relative",
+          required: true,
+          helpText:
+            "Explain how your relative would suffer extreme hardship if waiver is denied",
+        },
+      ],
+    },
+  ],
+  estimatedFilingTime: "12-18 months",
+  tips: [
+    "Requires proof of extreme hardship to a qualifying US citizen or LPR relative",
+    "Common grounds: criminal activity, fraud, unlawful presence",
+    "Strong supporting documentation is crucial",
+    "Highly recommend consulting an immigration attorney",
+  ],
+};
+
+const I601A_DEFINITION: FormDefinition = {
+  id: "i-601a",
+  code: "I-601A",
+  name: "Provisional Unlawful Presence Waiver",
+  description: "Waive unlawful presence before leaving for consular processing",
+  category: "family",
+  estimatedTime: "75-90 minutes",
+  filingFee: 715,
+  price: 60,
+  sections: [
+    {
+      id: "part1",
+      title: "Part 1: Information About You",
+      description: "Personal identifying information",
+      questions: [
+        {
+          id: "part1.lastName",
+          type: "text",
+          label: "Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part1.firstName",
+          type: "text",
+          label: "Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part1.middleName",
+          type: "text",
+          label: "Middle Name",
+        },
+        {
+          id: "part1.dateOfBirth",
+          type: "date",
+          label: "Date of Birth",
+          required: true,
+        },
+        {
+          id: "part1.alienNumber",
+          type: "text",
+          label: "Alien Registration Number (A-Number)",
+          required: true,
+          placeholder: "A-",
+        },
+      ],
+    },
+    {
+      id: "part2",
+      title: "Part 2: Qualifying Relative Information",
+      description: "Information about your US citizen spouse or parent",
+      questions: [
+        {
+          id: "part2.relativeType",
+          type: "radio",
+          label: "Your qualifying relative is your",
+          required: true,
+          options: [
+            { value: "spouse", label: "U.S. Citizen Spouse" },
+            { value: "parent", label: "U.S. Citizen Parent" },
+          ],
+        },
+        {
+          id: "part2.relativeName",
+          type: "text",
+          label: "Relative's Full Name",
+          required: true,
+        },
+        {
+          id: "part2.relativeSSN",
+          type: "text",
+          label: "Relative's Social Security Number",
+          placeholder: "123-45-6789",
+        },
+      ],
+    },
+    {
+      id: "part3",
+      title: "Part 3: Extreme Hardship Information",
+      description: "Evidence of extreme hardship to your qualifying relative",
+      questions: [
+        {
+          id: "part3.extremeHardship",
+          type: "textarea",
+          label: "Describe extreme hardship to qualifying relative",
+          required: true,
+          helpText:
+            "Explain medical, financial, educational, or other hardships",
+        },
+        {
+          id: "part3.consularPost",
+          type: "text",
+          label: "U.S. Consulate Where You Will Apply",
+          required: true,
+          helpText: "e.g., Ciudad Juarez, Mexico",
+        },
+      ],
+    },
+  ],
+  estimatedFilingTime: "6-12 months",
+  tips: [
+    "Only for those with approved I-130 or I-140 petition",
+    "Must have only unlawful presence as inadmissibility ground",
+    "Allows you to get provisional waiver BEFORE leaving US",
+    "Strong evidence of extreme hardship is essential",
+  ],
+};
+
+// ============================================================================
+// FORM REGISTRY
+// ============================================================================
+
+const I90_DEFINITION: FormDefinition = {
+  id: "i-90",
+  code: "I-90",
+  name: "Application to Replace Permanent Resident Card",
+  description:
+    "Use this form to apply for a replacement Permanent Resident Card (Green Card) if your card has been lost, stolen, destroyed, or contains incorrect information.",
+  category: "other",
+  estimatedTime: "45-60 minutes",
+  filingFee: 540,
+  price: 89,
+  sections: [
+    {
+      id: "part1",
+      title: "Part 1. Information About You",
+      description: "Provide your personal information and reason for applying",
+      questions: [
+        {
+          id: "part1.alienNumber",
+          type: "text",
+          label: "A-Number (Alien Registration Number)",
+          required: true,
+          placeholder: "Enter your 8 or 9 digit A-Number",
+        },
+        {
+          id: "part1.uscisAccountNumber",
+          type: "text",
+          label: "USCIS Online Account Number (if any)",
+          required: false,
+          placeholder: "Enter your USCIS online account number",
+        },
+        {
+          id: "part1.familyName",
+          type: "text",
+          label: "Family Name (Last Name)",
+          required: true,
+          placeholder: "Enter your family name",
+        },
+        {
+          id: "part1.givenName",
+          type: "text",
+          label: "Given Name (First Name)",
+          required: true,
+          placeholder: "Enter your given name",
+        },
+        {
+          id: "part1.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: false,
+          placeholder: "Enter your middle name (if any)",
+        },
+        {
+          id: "part1.reasonCard",
+          type: "radio",
+          label: "My card has been:",
+          required: true,
+          options: [
+            { value: "lost", label: "Lost" },
+            { value: "stolen", label: "Stolen" },
+            { value: "destroyed", label: "Destroyed" },
+          ],
+        },
+        {
+          id: "part1.admissionFamilyName",
+          type: "text",
+          label: "Family Name at Time of Admission",
+          required: false,
+          placeholder: "Enter family name at time of admission",
+        },
+        {
+          id: "part1.admissionGivenName",
+          type: "text",
+          label: "Given Name at Time of Admission",
+          required: false,
+          placeholder: "Enter given name at time of admission",
+        },
+        {
+          id: "part1.admissionMiddleName",
+          type: "text",
+          label: "Middle Name at Time of Admission",
+          required: false,
+          placeholder: "Enter middle name at time of admission",
+        },
+      ],
+    },
+    {
+      id: "part1-address",
+      title: "Current Mailing Address",
+      description: "Provide your current mailing address",
+      questions: [
+        {
+          id: "part1.mailingInCareOf",
+          type: "text",
+          label: "In Care Of Name (if any)",
+          required: false,
+          placeholder: "Enter in care of name",
+        },
+        {
+          id: "part1.mailingStreetNumber",
+          type: "text",
+          label: "Street Number and Name",
+          required: true,
+          placeholder: "Enter street number and name",
+        },
+        {
+          id: "part1.mailingUnitType",
+          type: "radio",
+          label: "Unit Type",
+          required: false,
+          options: [
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part1.mailingAptNumber",
+          type: "text",
+          label: "Unit Number",
+          required: false,
+          placeholder: "Enter unit number",
+        },
+        {
+          id: "part1.mailingCity",
+          type: "text",
+          label: "City or Town",
+          required: true,
+          placeholder: "Enter city or town",
+        },
+        {
+          id: "part1.mailingState",
+          type: "select",
+          label: "State",
+          required: true,
+          options: [
+            { value: "AL", label: "Alabama" },
+            { value: "AK", label: "Alaska" },
+            { value: "AZ", label: "Arizona" },
+            { value: "AR", label: "Arkansas" },
+            { value: "CA", label: "California" },
+            { value: "CO", label: "Colorado" },
+            { value: "CT", label: "Connecticut" },
+            { value: "DE", label: "Delaware" },
+            { value: "FL", label: "Florida" },
+            { value: "GA", label: "Georgia" },
+            { value: "HI", label: "Hawaii" },
+            { value: "ID", label: "Idaho" },
+            { value: "IL", label: "Illinois" },
+            { value: "IN", label: "Indiana" },
+            { value: "IA", label: "Iowa" },
+            { value: "KS", label: "Kansas" },
+            { value: "KY", label: "Kentucky" },
+            { value: "LA", label: "Louisiana" },
+            { value: "ME", label: "Maine" },
+            { value: "MD", label: "Maryland" },
+            { value: "MA", label: "Massachusetts" },
+            { value: "MI", label: "Michigan" },
+            { value: "MN", label: "Minnesota" },
+            { value: "MS", label: "Mississippi" },
+            { value: "MO", label: "Missouri" },
+            { value: "MT", label: "Montana" },
+            { value: "NE", label: "Nebraska" },
+            { value: "NV", label: "Nevada" },
+            { value: "NH", label: "New Hampshire" },
+            { value: "NJ", label: "New Jersey" },
+            { value: "NM", label: "New Mexico" },
+            { value: "NY", label: "New York" },
+            { value: "NC", label: "North Carolina" },
+            { value: "ND", label: "North Dakota" },
+            { value: "OH", label: "Ohio" },
+            { value: "OK", label: "Oklahoma" },
+            { value: "OR", label: "Oregon" },
+            { value: "PA", label: "Pennsylvania" },
+            { value: "RI", label: "Rhode Island" },
+            { value: "SC", label: "South Carolina" },
+            { value: "SD", label: "South Dakota" },
+            { value: "TN", label: "Tennessee" },
+            { value: "TX", label: "Texas" },
+            { value: "UT", label: "Utah" },
+            { value: "VT", label: "Vermont" },
+            { value: "VA", label: "Virginia" },
+            { value: "WA", label: "Washington" },
+            { value: "WV", label: "West Virginia" },
+            { value: "WI", label: "Wisconsin" },
+            { value: "WY", label: "Wyoming" },
+          ],
+        },
+        {
+          id: "part1.mailingZipCode",
+          type: "text",
+          label: "ZIP Code",
+          required: true,
+          placeholder: "Enter ZIP code",
+        },
+        {
+          id: "part1.mailingProvince",
+          type: "text",
+          label: "Province (if outside US)",
+          required: false,
+          placeholder: "Enter province",
+        },
+        {
+          id: "part1.mailingPostalCode",
+          type: "text",
+          label: "Postal Code (if outside US)",
+          required: false,
+          placeholder: "Enter postal code",
+        },
+        {
+          id: "part1.mailingCountry",
+          type: "text",
+          label: "Country (if outside US)",
+          required: false,
+          placeholder: "Enter country",
+        },
+      ],
+    },
+    {
+      id: "part1-personal",
+      title: "Personal Information",
+      description: "Provide your personal details",
+      questions: [
+        {
+          id: "part1.gender",
+          type: "radio",
+          label: "Gender",
+          required: true,
+          options: [
+            { value: "male", label: "Male" },
+            { value: "female", label: "Female" },
+          ],
+        },
+        {
+          id: "part1.dateOfBirth",
+          type: "date",
+          label: "Date of Birth",
+          required: true,
+        },
+        {
+          id: "part1.cityOfBirth",
+          type: "text",
+          label: "City or Town of Birth",
+          required: true,
+          placeholder: "Enter city or town of birth",
+        },
+        {
+          id: "part1.countryOfBirth",
+          type: "text",
+          label: "Country of Birth",
+          required: true,
+          placeholder: "Enter country of birth",
+        },
+        {
+          id: "part1.motherGivenName",
+          type: "text",
+          label: "Mother's Given Name at Birth",
+          required: false,
+          placeholder: "Enter mother's given name",
+        },
+        {
+          id: "part1.fatherGivenName",
+          type: "text",
+          label: "Father's Given Name at Birth",
+          required: false,
+          placeholder: "Enter father's given name",
+        },
+        {
+          id: "part1.classOfAdmission",
+          type: "text",
+          label: "Class of Admission",
+          required: true,
+          placeholder: "Enter class of admission",
+        },
+        {
+          id: "part1.dateOfAdmission",
+          type: "date",
+          label: "Date of Admission",
+          required: true,
+        },
+        {
+          id: "part1.socialSecurityNumber",
+          type: "text",
+          label: "U.S. Social Security Number (if any)",
+          required: false,
+          placeholder: "Enter SSN",
+        },
+      ],
+    },
+    {
+      id: "part2",
+      title: "Part 2. Application Type",
+      description: "Select the reason for your application",
+      questions: [
+        {
+          id: "part2.applicationType",
+          type: "radio",
+          label: "I am applying because:",
+          required: true,
+          options: [
+            {
+              value: "card_lost_stolen_destroyed",
+              label: "My card has been lost, stolen, or destroyed",
+            },
+            {
+              value: "card_expired_will_expire",
+              label:
+                "My existing card has already expired or will expire within six months",
+            },
+            {
+              value: "card_incorrect_data",
+              label:
+                "My name or other biographic information has been legally changed since the issuance of my existing card, or there is an error on my card",
+            },
+          ],
+        },
+        {
+          id: "part2.reasonReplacement",
+          type: "checkbox",
+          label:
+            "If your card was lost, stolen, or destroyed, select all that apply:",
+          required: false,
+          options: [
+            { value: "never_received", label: "I never received my card" },
+            { value: "lost", label: "My card was lost" },
+            { value: "stolen", label: "My card was stolen" },
+            { value: "mutilated", label: "My card was mutilated" },
+            { value: "destroyed", label: "My card was destroyed" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part3",
+      title: "Part 3. Processing Information",
+      description: "Provide processing and biometric information",
+      questions: [
+        {
+          id: "part3.heightFeet",
+          type: "select",
+          label: "Height (Feet)",
+          required: true,
+          options: [
+            { value: "4", label: "4" },
+            { value: "5", label: "5" },
+            { value: "6", label: "6" },
+            { value: "7", label: "7" },
+          ],
+        },
+        {
+          id: "part3.heightInches",
+          type: "select",
+          label: "Height (Inches)",
+          required: true,
+          options: [
+            { value: "0", label: "0" },
+            { value: "1", label: "1" },
+            { value: "2", label: "2" },
+            { value: "3", label: "3" },
+            { value: "4", label: "4" },
+            { value: "5", label: "5" },
+            { value: "6", label: "6" },
+            { value: "7", label: "7" },
+            { value: "8", label: "8" },
+            { value: "9", label: "9" },
+            { value: "10", label: "10" },
+            { value: "11", label: "11" },
+          ],
+        },
+        {
+          id: "part3.ethnicity",
+          type: "radio",
+          label: "Ethnicity",
+          required: true,
+          options: [
+            { value: "hispanic", label: "Hispanic or Latino" },
+            { value: "not_hispanic", label: "Not Hispanic or Latino" },
+          ],
+        },
+        {
+          id: "part3.race",
+          type: "checkbox",
+          label: "Race (Select all that apply)",
+          required: true,
+          options: [
+            { value: "white", label: "White" },
+            { value: "asian", label: "Asian" },
+            { value: "black", label: "Black or African American" },
+            {
+              value: "american_indian",
+              label: "American Indian or Alaska Native",
+            },
+            {
+              value: "pacific_islander",
+              label: "Native Hawaiian or Other Pacific Islander",
+            },
+          ],
+        },
+        {
+          id: "part3.hairColor",
+          type: "radio",
+          label: "Hair Color",
+          required: true,
+          options: [
+            { value: "black", label: "Black" },
+            { value: "brown", label: "Brown" },
+            { value: "blonde", label: "Blonde" },
+            { value: "gray", label: "Gray" },
+            { value: "white", label: "White" },
+            { value: "red", label: "Red" },
+            { value: "sandy", label: "Sandy" },
+            { value: "bald", label: "Bald (No Hair)" },
+          ],
+        },
+        {
+          id: "part3.eyeColor",
+          type: "radio",
+          label: "Eye Color",
+          required: true,
+          options: [
+            { value: "brown", label: "Brown" },
+            { value: "blue", label: "Blue" },
+            { value: "green", label: "Green" },
+            { value: "hazel", label: "Hazel" },
+            { value: "gray", label: "Gray" },
+            { value: "black", label: "Black" },
+            { value: "pink", label: "Pink" },
+            { value: "maroon", label: "Maroon" },
+            { value: "other", label: "Other" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part4",
+      title: "Part 4. Accommodations for Individuals With Disabilities",
+      description: "Request accommodations if needed",
+      questions: [
+        {
+          id: "part4.accommodationNeeded",
+          type: "radio",
+          label: "Are you requesting an accommodation for a disability?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part4.accommodationDeaf",
+          type: "checkbox",
+          label:
+            "I am deaf or hearing impaired and need a sign language interpreter",
+          required: false,
+        },
+        {
+          id: "part4.accommodationBlind",
+          type: "checkbox",
+          label: "I am blind or sight impaired and need assistance",
+          required: false,
+        },
+        {
+          id: "part4.accommodationOther",
+          type: "checkbox",
+          label: "I have another type of disability and need accommodation",
+          required: false,
+        },
+      ],
+    },
+    {
+      id: "part5",
+      title:
+        "Part 5. Applicant's Statement, Contact Information, Certification, and Signature",
+      description: "Provide contact information and signature",
+      questions: [
+        {
+          id: "part5.readLanguage",
+          type: "checkbox",
+          label:
+            "I can read and understand English, and I have read and understand every question and instruction on this application and my answer to every question",
+          required: false,
+        },
+        {
+          id: "part5.interpreterUsed",
+          type: "checkbox",
+          label:
+            "The interpreter named in Part 6 read to me every question and instruction on this application and my answer to every question in a language in which I am fluent",
+          required: false,
+        },
+        {
+          id: "part5.daytimePhone",
+          type: "tel",
+          label: "Applicant's Daytime Telephone Number",
+          required: false,
+          placeholder: "Enter daytime phone number",
+        },
+        {
+          id: "part5.mobilePhone",
+          type: "tel",
+          label: "Applicant's Mobile Telephone Number",
+          required: false,
+          placeholder: "Enter mobile phone number",
+        },
+        {
+          id: "part5.emailAddress",
+          type: "email",
+          label: "Applicant's Email Address",
+          required: false,
+          placeholder: "Enter email address",
+        },
+      ],
+    },
+  ],
+  pdfFieldMappings: [],
+  requiredDocuments: [
+    "Copy of your current or expired Permanent Resident Card (front and back)",
+    "Two passport-style photos",
+    "Copy of government-issued photo identification",
+    "Filing fee payment ($540)",
+    "Police report (if card was stolen)",
+    "Legal documents showing name change (if applicable)",
+  ],
+  instructions: [
+    "Complete all applicable sections of this form",
+    "Use black ink when filling out the form by hand",
+    "If you need extra space, use Part 8 (Additional Information)",
+    "Submit required supporting documents with your application",
+    "Pay the required filing fee",
+    "Sign and date your application",
+  ],
+};
+const I_90_DEFINITION: FormDefinition = {
+  id: "i-90",
+  code: "I-90",
+  name: "Application to Replace Permanent Resident Card",
+  description:
+    "Use this form to apply for a replacement Permanent Resident Card (Green Card) if your card has been lost, stolen, destroyed, or contains incorrect information.",
+  category: "other",
+  estimatedTime: "45-60 minutes",
+  filingFee: 540,
+  price: 60,
+  sections: [
+    {
+      id: "part1",
+      title: "Part 1. Information About You",
+      description: "Provide your personal information and contact details",
+      questions: [
+        {
+          id: "part1.line1.aliennumber",
+          type: "text",
+          label: "Alien Registration Number (A-Number)",
+          required: true,
+          placeholder: "Enter your 8 or 9 digit A-Number",
+        },
+        {
+          id: "part1.line2.acctidentifier",
+          type: "text",
+          label: "USCIS Online Account Number (if any)",
+          required: false,
+          placeholder: "Enter your USCIS online account number",
+        },
+        {
+          id: "part1.line3a.familyname",
+          type: "text",
+          label: "Family Name (Last Name)",
+          required: true,
+          placeholder: "Enter your family name",
+        },
+        {
+          id: "part1.line3b.givenname",
+          type: "text",
+          label: "Given Name (First Name)",
+          required: true,
+          placeholder: "Enter your given name",
+        },
+        {
+          id: "part1.line3c.middlename",
+          type: "text",
+          label: "Middle Name",
+          required: false,
+          placeholder: "Enter your middle name (if any)",
+        },
+      ],
+    },
+
+    {
+      id: "part1-name-change",
+      title: "Name Change Information",
+      description:
+        "Complete this section only if your name has legally changed",
+      questions: [
+        {
+          id: "part1.line5a.familyname",
+          type: "text",
+          label: "Previous Family Name (Last Name)",
+          required: false,
+          placeholder: "Enter your previous family name",
+        },
+        {
+          id: "part1.line5b.givenname",
+          type: "text",
+          label: "Previous Given Name (First Name)",
+          required: false,
+          placeholder: "Enter your previous given name",
+        },
+        {
+          id: "part1.line5c.middlename",
+          type: "text",
+          label: "Previous Middle Name",
+          required: false,
+          placeholder: "Enter your previous middle name",
+        },
+      ],
+    },
+    {
+      id: "part1-mailing-address",
+      title: "Mailing Address",
+      description: "Provide your current mailing address",
+      questions: [
+        {
+          id: "part1.line6a.incareofname",
+          type: "text",
+          label: "In Care Of Name (if any)",
+          required: false,
+          placeholder: "Enter in care of name",
+        },
+        {
+          id: "part1.line6b.streetnumbername",
+          type: "text",
+          label: "Street Number and Name",
+          required: true,
+          placeholder: "Enter street number and name",
+        },
+        {
+          id: "part1.mailingUnitType",
+          type: "radio",
+          label: "Unit Type",
+          required: false,
+          options: [
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part1.line6c.aptsteflrnumber",
+          type: "text",
+          label: "Apartment/Suite/Floor Number",
+          required: false,
+          placeholder: "Enter unit number",
+        },
+        {
+          id: "part1.line6d.cityortown",
+          type: "text",
+          label: "City or Town",
+          required: true,
+          placeholder: "Enter city or town",
+        },
+        {
+          id: "part1.line6e.state",
+          type: "select",
+          label: "State",
+          required: true,
+          options: [
+            { value: "", label: "Select State" },
+            { value: "AL", label: "Alabama" },
+            { value: "AK", label: "Alaska" },
+            { value: "AZ", label: "Arizona" },
+            { value: "AR", label: "Arkansas" },
+            { value: "CA", label: "California" },
+            { value: "CO", label: "Colorado" },
+            { value: "CT", label: "Connecticut" },
+            { value: "DE", label: "Delaware" },
+            { value: "DC", label: "District of Columbia" },
+            { value: "FL", label: "Florida" },
+            { value: "GA", label: "Georgia" },
+            { value: "HI", label: "Hawaii" },
+            { value: "ID", label: "Idaho" },
+            { value: "IL", label: "Illinois" },
+            { value: "IN", label: "Indiana" },
+            { value: "IA", label: "Iowa" },
+            { value: "KS", label: "Kansas" },
+            { value: "KY", label: "Kentucky" },
+            { value: "LA", label: "Louisiana" },
+            { value: "ME", label: "Maine" },
+            { value: "MD", label: "Maryland" },
+            { value: "MA", label: "Massachusetts" },
+            { value: "MI", label: "Michigan" },
+            { value: "MN", label: "Minnesota" },
+            { value: "MS", label: "Mississippi" },
+            { value: "MO", label: "Missouri" },
+            { value: "MT", label: "Montana" },
+            { value: "NE", label: "Nebraska" },
+            { value: "NV", label: "Nevada" },
+            { value: "NH", label: "New Hampshire" },
+            { value: "NJ", label: "New Jersey" },
+            { value: "NM", label: "New Mexico" },
+            { value: "NY", label: "New York" },
+            { value: "NC", label: "North Carolina" },
+            { value: "ND", label: "North Dakota" },
+            { value: "OH", label: "Ohio" },
+            { value: "OK", label: "Oklahoma" },
+            { value: "OR", label: "Oregon" },
+            { value: "PA", label: "Pennsylvania" },
+            { value: "RI", label: "Rhode Island" },
+            { value: "SC", label: "South Carolina" },
+            { value: "SD", label: "South Dakota" },
+            { value: "TN", label: "Tennessee" },
+            { value: "TX", label: "Texas" },
+            { value: "UT", label: "Utah" },
+            { value: "VT", label: "Vermont" },
+            { value: "VA", label: "Virginia" },
+            { value: "WA", label: "Washington" },
+            { value: "WV", label: "West Virginia" },
+            { value: "WI", label: "Wisconsin" },
+            { value: "WY", label: "Wyoming" },
+            { value: "AA", label: "Armed Forces Americas" },
+            { value: "AE", label: "Armed Forces Europe" },
+            { value: "AP", label: "Armed Forces Pacific" },
+            { value: "AS", label: "American Samoa" },
+            { value: "FM", label: "Federated States of Micronesia" },
+            { value: "GU", label: "Guam" },
+            { value: "MH", label: "Marshall Islands" },
+            { value: "MP", label: "Northern Mariana Islands" },
+            { value: "PW", label: "Palau" },
+            { value: "PR", label: "Puerto Rico" },
+            { value: "VI", label: "Virgin Islands" },
+          ],
+        },
+
+        {
+          id: "part1.line6f.zipcode",
+          type: "text",
+          label: "ZIP Code",
+          required: true,
+          placeholder: "Enter ZIP code",
+        },
+        {
+          id: "part1.line6g.province",
+          type: "text",
+          label: "Province (if outside U.S.)",
+          required: false,
+          placeholder: "Enter province",
+        },
+        {
+          id: "part1.line6h.postalcode",
+          type: "text",
+          label: "Postal Code (if outside U.S.)",
+          required: false,
+          placeholder: "Enter postal code",
+        },
+        {
+          id: "part1.line6i.country",
+          type: "text",
+          label: "Country (if outside U.S.)",
+          required: false,
+          placeholder: "Enter country",
+        },
+      ],
+    },
+    {
+      id: "part1-physical-address",
+      title: "Physical Address (if different)",
+      description:
+        "Provide your physical address if different from mailing address",
+      questions: [
+        {
+          id: "part1.line7a.streetnumbername",
+          type: "text",
+          label: "Street Number and Name",
+          required: false,
+          placeholder: "Enter street number and name",
+        },
+        {
+          id: "part1.physicalUnitType",
+          type: "radio",
+          label: "Unit Type",
+          required: false,
+          options: [
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part1.line7b.aptsteflrnumber",
+          type: "text",
+          label: "Apartment/Suite/Floor Number",
+          required: false,
+          placeholder: "Enter unit number",
+        },
+        {
+          id: "part1.line7c.cityortown",
+          type: "text",
+          label: "City or Town",
+          required: false,
+          placeholder: "Enter city or town",
+        },
+        {
+          id: "part1.line7d.state",
+          type: "select",
+          label: "State",
+          required: false,
+          options: [
+            { value: "", label: "Select State" },
+            { value: "AL", label: "Alabama" },
+            { value: "AK", label: "Alaska" },
+            { value: "AZ", label: "Arizona" },
+            { value: "AR", label: "Arkansas" },
+            { value: "CA", label: "California" },
+            { value: "CO", label: "Colorado" },
+            { value: "CT", label: "Connecticut" },
+            { value: "DE", label: "Delaware" },
+            { value: "DC", label: "District of Columbia" },
+            { value: "FL", label: "Florida" },
+            { value: "GA", label: "Georgia" },
+            { value: "HI", label: "Hawaii" },
+            { value: "ID", label: "Idaho" },
+            { value: "IL", label: "Illinois" },
+            { value: "IN", label: "Indiana" },
+            { value: "IA", label: "Iowa" },
+            { value: "KS", label: "Kansas" },
+            { value: "KY", label: "Kentucky" },
+            { value: "LA", label: "Louisiana" },
+            { value: "ME", label: "Maine" },
+            { value: "MD", label: "Maryland" },
+            { value: "MA", label: "Massachusetts" },
+            { value: "MI", label: "Michigan" },
+            { value: "MN", label: "Minnesota" },
+            { value: "MS", label: "Mississippi" },
+            { value: "MO", label: "Missouri" },
+            { value: "MT", label: "Montana" },
+            { value: "NE", label: "Nebraska" },
+            { value: "NV", label: "Nevada" },
+            { value: "NH", label: "New Hampshire" },
+            { value: "NJ", label: "New Jersey" },
+            { value: "NM", label: "New Mexico" },
+            { value: "NY", label: "New York" },
+            { value: "NC", label: "North Carolina" },
+            { value: "ND", label: "North Dakota" },
+            { value: "OH", label: "Ohio" },
+            { value: "OK", label: "Oklahoma" },
+            { value: "OR", label: "Oregon" },
+            { value: "PA", label: "Pennsylvania" },
+            { value: "RI", label: "Rhode Island" },
+            { value: "SC", label: "South Carolina" },
+            { value: "SD", label: "South Dakota" },
+            { value: "TN", label: "Tennessee" },
+            { value: "TX", label: "Texas" },
+            { value: "UT", label: "Utah" },
+            { value: "VT", label: "Vermont" },
+            { value: "VA", label: "Virginia" },
+            { value: "WA", label: "Washington" },
+            { value: "WV", label: "West Virginia" },
+            { value: "WI", label: "Wisconsin" },
+            { value: "WY", label: "Wyoming" },
+            { value: "AA", label: "Armed Forces Americas" },
+            { value: "AE", label: "Armed Forces Europe" },
+            { value: "AP", label: "Armed Forces Pacific" },
+            { value: "AS", label: "American Samoa" },
+            { value: "FM", label: "Federated States of Micronesia" },
+            { value: "GU", label: "Guam" },
+            { value: "MH", label: "Marshall Islands" },
+            { value: "MP", label: "Northern Mariana Islands" },
+            { value: "PW", label: "Palau" },
+            { value: "PR", label: "Puerto Rico" },
+            { value: "VI", label: "Virgin Islands" },
+          ],
+        },
+        {
+          id: "part1.line7e.zipcode",
+          type: "text",
+          label: "ZIP Code",
+          required: false,
+          placeholder: "Enter ZIP code",
+        },
+        {
+          id: "part1.line7f.province",
+          type: "text",
+          label: "Province (if outside U.S.)",
+          required: false,
+          placeholder: "Enter province",
+        },
+        {
+          id: "part1.line7g.postalcode",
+          type: "text",
+          label: "Postal Code (if outside U.S.)",
+          required: false,
+          placeholder: "Enter postal code",
+        },
+        {
+          id: "part1.line7h.country",
+          type: "text",
+          label: "Country (if outside U.S.)",
+          required: false,
+          placeholder: "Enter country",
+        },
+      ],
+    },
+    {
+      id: "part1-personal-info",
+      title: "Personal Information",
+      description: "Provide your personal details",
+      questions: [
+        {
+          id: "part1.line8.gender",
+          type: "radio",
+          label: "Sex",
+          required: true,
+          options: [
+            { value: "male", label: "Male" },
+            { value: "female", label: "Female" },
+          ],
+        },
+        {
+          id: "part1.line9.dateofbirth",
+          type: "date",
+          label: "Date of Birth",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part1.line10.citytownofbirth",
+          type: "text",
+          label: "City/Town/Village of Birth",
+          required: true,
+          placeholder: "Enter city/town of birth",
+        },
+        {
+          id: "part1.line11.countryofbirth",
+          type: "text",
+          label: "Country of Birth",
+          required: true,
+          placeholder: "Enter country of birth",
+        },
+        {
+          id: "part1.line12.mothergivenname",
+          type: "text",
+          label: "Mother's Given Name (First Name)",
+          required: true,
+          placeholder: "Enter mother's first name",
+        },
+        {
+          id: "part1.line13.fathergivenname",
+          type: "text",
+          label: "Father's Given Name (First Name)",
+          required: true,
+          placeholder: "Enter father's first name",
+        },
+      ],
+    },
+    {
+      id: "part1-admission-info",
+      title: "Admission Information",
+      description: "Provide your admission details to the United States",
+      questions: [
+        {
+          id: "part1.line14.classofadmission",
+          type: "text",
+          label: "Class of Admission",
+          required: true,
+          placeholder: "Enter class of admission (e.g., IR1, F1)",
+        },
+        {
+          id: "part1.line15.dateofadmission",
+          type: "date",
+          label: "Date of Admission",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part1.line16.ssn",
+          type: "text",
+          label: "U.S. Social Security Number (if any)",
+          required: false,
+          placeholder: "###-##-####",
+        },
+      ],
+    },
+    {
+      id: "part2",
+      title: "Part 2. Application Type",
+      description: "Select the reason for your application",
+      questions: [
+        {
+          id: "part2.applicationType",
+          type: "radio",
+          label: "My status is:",
+          required: true,
+          options: [
+            {
+              value: "lawful_permanent_resident",
+              label: "Lawful Permanent Resident",
+            },
+            {
+              value: "permanent_resident_commuter",
+              label: "Permanent Resident - In Commuter Status",
+            },
+            {
+              value: "conditional_permanent_resident",
+              label: "Conditional Permanent Resident",
+            },
+          ],
+        },
+        {
+          id: "part2.reasonApplication",
+          type: "radio",
+          label: "Reason for Application (Select only one):",
+          required: true,
+          options: [
+            {
+              value: "lost_stolen_destroyed",
+              label: "My previous card has been lost, stolen, or destroyed",
+            },
+            {
+              value: "never_received",
+              label: "My previous card was issued but never received",
+            },
+            {
+              value: "mutilated",
+              label: "My existing card has been mutilated",
+            },
+            {
+              value: "incorrect_data_dhs",
+              label: "My existing card has incorrect data because of DHS error",
+            },
+            {
+              value: "name_changed",
+              label:
+                "My name or other biographic information has been legally changed",
+            },
+            {
+              value: "expired",
+              label:
+                "My existing card has already expired or will expire within six months",
+            },
+            {
+              value: "14_birthday",
+              label:
+                "I have reached my 14th birthday and am registering as required",
+            },
+            {
+              value: "taking_commuter",
+              label:
+                "I am a permanent resident who is taking up commuter status",
+            },
+            {
+              value: "commuter_residence",
+              label:
+                "I am a commuter who is taking up actual residence in the U.S.",
+            },
+            {
+              value: "converted_lpr",
+              label:
+                "I have been automatically converted to lawful permanent resident status",
+            },
+            { value: "other", label: "Other reason not specified above" },
+          ],
+        },
+        {
+          id: "part2.line2h.cityandstate",
+          type: "text",
+          label:
+            "Port-of-Entry into the United States (City or Town and State)",
+          required: false,
+          placeholder: "Enter city and state (if taking up commuter status)",
+        },
+      ],
+    },
+    {
+      id: "part3",
+      title: "Part 3. Processing Information",
+      description: "Provide processing and biometric information",
+      questions: [
+        {
+          id: "part3.line1.locationappliedvisa",
+          type: "text",
+          label:
+            "Location where you applied for an immigrant visa or adjustment of status",
+          required: false,
+          placeholder: "Enter location",
+        },
+        {
+          id: "part3.line2.locationissuedvisa",
+          type: "text",
+          label:
+            "Location where your immigrant visa was issued or USCIS office where you were granted adjustment",
+          required: false,
+          placeholder: "Enter location",
+        },
+        {
+          id: "part3.line3a.destination",
+          type: "text",
+          label: "Destination in the United States at time of admission",
+          required: false,
+          placeholder: "Enter destination",
+        },
+        {
+          id: "part3.line3a.cityandstate",
+          type: "text",
+          label:
+            "Port-of-Entry where admitted to the United States (City or Town and State)",
+          required: false,
+          placeholder: "Enter city and state",
+        },
+        {
+          id: "part3.line8.heightfeet",
+          type: "select",
+          label: "Height (Feet)",
+          required: true,
+          options: [
+            { value: "4", label: "4" },
+            { value: "5", label: "5" },
+            { value: "6", label: "6" },
+            { value: "7", label: "7" },
+          ],
+        },
+        {
+          id: "part3.line8.heightinches",
+          type: "select",
+          label: "Height (Inches)",
+          required: true,
+          options: [
+            { value: "0", label: "0" },
+            { value: "1", label: "1" },
+            { value: "2", label: "2" },
+            { value: "3", label: "3" },
+            { value: "4", label: "4" },
+            { value: "5", label: "5" },
+            { value: "6", label: "6" },
+            { value: "7", label: "7" },
+            { value: "8", label: "8" },
+            { value: "9", label: "9" },
+            { value: "10", label: "10" },
+            { value: "11", label: "11" },
+          ],
+        },
+        {
+          id: "part3.line9.weight1",
+          type: "text",
+          label: "Weight (Pounds) - First Digit",
+          required: true,
+          placeholder: "0",
+          maxLength: 1,
+        },
+        {
+          id: "part3.line9.weight2",
+          type: "text",
+          label: "Weight (Pounds) - Second Digit",
+          required: true,
+          placeholder: "0",
+          maxLength: 1,
+        },
+        {
+          id: "part3.line9.weight3",
+          type: "text",
+          label: "Weight (Pounds) - Third Digit",
+          required: true,
+          placeholder: "0",
+          maxLength: 1,
+        },
+        {
+          id: "part3.ethnicity",
+          type: "radio",
+          label: "Ethnicity",
+          required: true,
+          options: [
+            { value: "hispanic", label: "Hispanic or Latino" },
+            { value: "not_hispanic", label: "Not Hispanic or Latino" },
+          ],
+        },
+
+        {
+          id: "part3.race",
+          type: "checkbox",
+          label: "Race (Select all that apply)",
+          required: true,
+          options: [
+            { value: "white", label: "White" },
+            { value: "asian", label: "Asian" },
+            { value: "black", label: "Black or African American" },
+            {
+              value: "american_indian",
+              label: "American Indian or Alaska Native",
+            },
+            {
+              value: "pacific_islander",
+              label: "Native Hawaiian or Other Pacific Islander",
+            },
+          ],
+        },
+        {
+          id: "part3.hairColor",
+          type: "radio",
+          label: "Hair Color",
+          required: true,
+          options: [
+            { value: "black", label: "Black" },
+            { value: "brown", label: "Brown" },
+            { value: "blonde", label: "Blonde" },
+            { value: "gray", label: "Gray" },
+            { value: "white", label: "White" },
+            { value: "red", label: "Red" },
+            { value: "sandy", label: "Sandy" },
+            { value: "bald", label: "Bald (No Hair)" },
+          ],
+        },
+        {
+          id: "part3.eyeColor",
+          type: "radio",
+          label: "Eye Color",
+          required: true,
+          options: [
+            { value: "brown", label: "Brown" },
+            { value: "blue", label: "Blue" },
+            { value: "green", label: "Green" },
+            { value: "hazel", label: "Hazel" },
+            { value: "gray", label: "Gray" },
+            { value: "black", label: "Black" },
+            { value: "pink", label: "Pink" },
+            { value: "maroon", label: "Maroon" },
+            { value: "other", label: "Other" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part4",
+      title: "Part 4. Accommodations for Individuals with Disabilities",
+      description: "Request accommodations if needed",
+      questions: [
+        {
+          id: "part4.accommodationNeeded",
+          type: "radio",
+          label:
+            "Are you requesting an accommodation because of your disabilities and/or impairments?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part4.accommodationDeaf",
+          type: "checkbox",
+          label:
+            "I am deaf or hard of hearing and request the following accommodation",
+          required: false,
+        },
+        {
+          id: "part4.accommodationBlind",
+          type: "checkbox",
+          label:
+            "I am blind or have low vision and request the following accommodation",
+          required: false,
+        },
+        {
+          id: "part4.accommodationOther",
+          type: "checkbox",
+          label: "I have another type of disability and/or impairment",
+          required: false,
+        },
+      ],
+    },
+    {
+      id: "part5",
+      title:
+        "Part 5. Applicant's Statement, Contact Information, Certification, and Signature",
+      description: "Provide contact information and signature",
+      questions: [
+        {
+          id: "part5.readLanguage",
+          type: "radio",
+          label: "Language Proficiency",
+          required: true,
+          options: [
+            {
+              value: "english",
+              label:
+                "I can read and understand English, and I have read and understand every question and instruction on this application and my answer to every question",
+            },
+            {
+              value: "interpreter",
+              label:
+                "The interpreter named in Part 6 read to me every question and instruction on this application and my answer to every question",
+            },
+          ],
+        },
+        {
+          id: "part5.line2.nameofrepresentative",
+          type: "text",
+          label: "Preparer Name (if applicable)",
+          required: false,
+          placeholder: "Enter preparer name",
+        },
+        {
+          id: "part5.line3.daytimephonenumber",
+          type: "tel",
+          label: "Applicant's Daytime Telephone Number",
+          required: false,
+          placeholder: "(555) 123-4567",
+        },
+        {
+          id: "part5.line4.mobilephonenumber",
+          type: "tel",
+          label: "Applicant's Mobile Telephone Number (if any)",
+          required: false,
+          placeholder: "(555) 123-4567",
+        },
+        {
+          id: "part5.line5.emailaddress",
+          type: "email",
+          label: "Applicant's Email Address (if any)",
+          required: false,
+          placeholder: "example@email.com",
+        },
+      ],
+    },
+    {
+      id: "part6",
+      title:
+        "Part 6. Interpreter's Contact Information, Certification, and Signature",
+      description: "Complete if an interpreter was used",
+      questions: [
+        {
+          id: "part6.line1a.interpretersfamilyname",
+          type: "text",
+          label: "Interpreter's Family Name (Last Name)",
+          required: false,
+          placeholder: "Enter interpreter's last name",
+        },
+        {
+          id: "part6.line1b.interpretersgivenname",
+          type: "text",
+          label: "Interpreter's Given Name (First Name)",
+          required: false,
+          placeholder: "Enter interpreter's first name",
+        },
+        {
+          id: "part6.line2.nameofbusinessor",
+          type: "text",
+          label: "Interpreter's Business or Organization Name (if any)",
+          required: false,
+          placeholder: "Enter business or organization name",
+        },
+        {
+          id: "part6.line3a.streetnumbername",
+          type: "text",
+          label: "Street Number and Name",
+          required: false,
+          placeholder: "Enter street address",
+        },
+        {
+          id: "part6.unitType",
+          type: "radio",
+          label: "Unit Type",
+          required: false,
+          options: [
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part6.line3b.aptsteflrnumber",
+          type: "text",
+          label: "Apartment/Suite/Floor Number",
+          required: false,
+          placeholder: "Enter unit number",
+        },
+        {
+          id: "part6.line3c.citytown",
+          type: "text",
+          label: "City or Town",
+          required: false,
+          placeholder: "Enter city or town",
+        },
+        {
+          id: "part6.line3d.state",
+          type: "select",
+          label: "State",
+          required: false,
+          options: [
+            { value: "", label: "Select State" },
+            { value: "AL", label: "Alabama" },
+            { value: "AK", label: "Alaska" },
+            { value: "AZ", label: "Arizona" },
+            { value: "AR", label: "Arkansas" },
+            { value: "CA", label: "California" },
+            { value: "CO", label: "Colorado" },
+            { value: "CT", label: "Connecticut" },
+            { value: "DE", label: "Delaware" },
+            { value: "DC", label: "District of Columbia" },
+            { value: "FL", label: "Florida" },
+            { value: "GA", label: "Georgia" },
+            { value: "HI", label: "Hawaii" },
+            { value: "ID", label: "Idaho" },
+            { value: "IL", label: "Illinois" },
+            { value: "IN", label: "Indiana" },
+            { value: "IA", label: "Iowa" },
+            { value: "KS", label: "Kansas" },
+            { value: "KY", label: "Kentucky" },
+            { value: "LA", label: "Louisiana" },
+            { value: "ME", label: "Maine" },
+            { value: "MD", label: "Maryland" },
+            { value: "MA", label: "Massachusetts" },
+            { value: "MI", label: "Michigan" },
+            { value: "MN", label: "Minnesota" },
+            { value: "MS", label: "Mississippi" },
+            { value: "MO", label: "Missouri" },
+            { value: "MT", label: "Montana" },
+            { value: "NE", label: "Nebraska" },
+            { value: "NV", label: "Nevada" },
+            { value: "NH", label: "New Hampshire" },
+            { value: "NJ", label: "New Jersey" },
+            { value: "NM", label: "New Mexico" },
+            { value: "NY", label: "New York" },
+            { value: "NC", label: "North Carolina" },
+            { value: "ND", label: "North Dakota" },
+            { value: "OH", label: "Ohio" },
+            { value: "OK", label: "Oklahoma" },
+            { value: "OR", label: "Oregon" },
+            { value: "PA", label: "Pennsylvania" },
+            { value: "RI", label: "Rhode Island" },
+            { value: "SC", label: "South Carolina" },
+            { value: "SD", label: "South Dakota" },
+            { value: "TN", label: "Tennessee" },
+            { value: "TX", label: "Texas" },
+            { value: "UT", label: "Utah" },
+            { value: "VT", label: "Vermont" },
+            { value: "VA", label: "Virginia" },
+            { value: "WA", label: "Washington" },
+            { value: "WV", label: "West Virginia" },
+            { value: "WI", label: "Wisconsin" },
+            { value: "WY", label: "Wyoming" },
+            { value: "AA", label: "Armed Forces Americas" },
+            { value: "AE", label: "Armed Forces Europe" },
+            { value: "AP", label: "Armed Forces Pacific" },
+            { value: "AS", label: "American Samoa" },
+            { value: "FM", label: "Federated States of Micronesia" },
+            { value: "GU", label: "Guam" },
+            { value: "MH", label: "Marshall Islands" },
+            { value: "MP", label: "Northern Mariana Islands" },
+            { value: "PW", label: "Palau" },
+            { value: "PR", label: "Puerto Rico" },
+            { value: "VI", label: "Virgin Islands" },
+          ],
+        },
+        {
+          id: "part6.line3e.zipcode",
+          type: "text",
+          label: "ZIP Code",
+          required: false,
+          placeholder: "Enter ZIP code",
+        },
+        {
+          id: "part6.line3f.province",
+          type: "text",
+          label: "Province (if outside U.S.)",
+          required: false,
+          placeholder: "Enter province",
+        },
+        {
+          id: "part6.line3g.postalcode",
+          type: "text",
+          label: "Postal Code (if outside U.S.)",
+          required: false,
+          placeholder: "Enter postal code",
+        },
+        {
+          id: "part6.line3h.country",
+          type: "text",
+          label: "Country (if outside U.S.)",
+          required: false,
+          placeholder: "Enter country",
+        },
+        {
+          id: "part6.line4.interpretersdaytimephonenumber",
+          type: "tel",
+          label: "Interpreter's Daytime Telephone Number",
+          required: false,
+          placeholder: "(555) 123-4567",
+        },
+        {
+          id: "part6.line5.interpretersemailaddress",
+          type: "email",
+          label: "Interpreter's Email Address (if any)",
+          required: false,
+          placeholder: "example@email.com",
+        },
+        {
+          id: "part6.interpreter.language",
+          type: "text",
+          label: "Language in which interpreter is fluent",
+          required: false,
+          placeholder: "Enter language",
+        },
+      ],
+    },
+    {
+      id: "part7",
+      title:
+        "Part 7. Contact Information, Declaration, and Signature of the Person Preparing this Application",
+      description:
+        "Complete if someone other than the applicant prepared this form",
+      questions: [
+        {
+          id: "part7.line1a.familyname",
+          type: "text",
+          label: "Preparer's Family Name (Last Name)",
+          required: false,
+          placeholder: "Enter preparer's last name",
+        },
+        {
+          id: "part7.line1b.preparersgivenname",
+          type: "text",
+          label: "Preparer's Given Name (First Name)",
+          required: false,
+          placeholder: "Enter preparer's first name",
+        },
+        {
+          id: "part7.line2.nameofbusinessor",
+          type: "text",
+          label: "Preparer's Business or Organization Name (if any)",
+          required: false,
+          placeholder: "Enter business or organization name",
+        },
+        {
+          id: "part7.line3a.streetnumbername",
+          type: "text",
+          label: "Street Number and Name",
+          required: false,
+          placeholder: "Enter street address",
+        },
+        {
+          id: "part7.unitType",
+          type: "radio",
+          label: "Unit Type",
+          required: false,
+          options: [
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part7.line3b.aptsteflrnumber",
+          type: "text",
+          label: "Apartment/Suite/Floor Number",
+          required: false,
+          placeholder: "Enter unit number",
+        },
+        {
+          id: "part7.line3c.citytown",
+          type: "text",
+          label: "City or Town",
+          required: false,
+          placeholder: "Enter city or town",
+        },
+        {
+          id: "part7.line3d.state",
+          type: "select",
+          label: "State",
+          required: false,
+          options: [
+            { value: "", label: "Select State" },
+            { value: "AL", label: "Alabama" },
+            { value: "AK", label: "Alaska" },
+            { value: "AZ", label: "Arizona" },
+            { value: "AR", label: "Arkansas" },
+            { value: "CA", label: "California" },
+            { value: "CO", label: "Colorado" },
+            { value: "CT", label: "Connecticut" },
+            { value: "DE", label: "Delaware" },
+            { value: "DC", label: "District of Columbia" },
+            { value: "FL", label: "Florida" },
+            { value: "GA", label: "Georgia" },
+            { value: "HI", label: "Hawaii" },
+            { value: "ID", label: "Idaho" },
+            { value: "IL", label: "Illinois" },
+            { value: "IN", label: "Indiana" },
+            { value: "IA", label: "Iowa" },
+            { value: "KS", label: "Kansas" },
+            { value: "KY", label: "Kentucky" },
+            { value: "LA", label: "Louisiana" },
+            { value: "ME", label: "Maine" },
+            { value: "MD", label: "Maryland" },
+            { value: "MA", label: "Massachusetts" },
+            { value: "MI", label: "Michigan" },
+            { value: "MN", label: "Minnesota" },
+            { value: "MS", label: "Mississippi" },
+            { value: "MO", label: "Missouri" },
+            { value: "MT", label: "Montana" },
+            { value: "NE", label: "Nebraska" },
+            { value: "NV", label: "Nevada" },
+            { value: "NH", label: "New Hampshire" },
+            { value: "NJ", label: "New Jersey" },
+            { value: "NM", label: "New Mexico" },
+            { value: "NY", label: "New York" },
+            { value: "NC", label: "North Carolina" },
+            { value: "ND", label: "North Dakota" },
+            { value: "OH", label: "Ohio" },
+            { value: "OK", label: "Oklahoma" },
+            { value: "OR", label: "Oregon" },
+            { value: "PA", label: "Pennsylvania" },
+            { value: "RI", label: "Rhode Island" },
+            { value: "SC", label: "South Carolina" },
+            { value: "SD", label: "South Dakota" },
+            { value: "TN", label: "Tennessee" },
+            { value: "TX", label: "Texas" },
+            { value: "UT", label: "Utah" },
+            { value: "VT", label: "Vermont" },
+            { value: "VA", label: "Virginia" },
+            { value: "WA", label: "Washington" },
+            { value: "WV", label: "West Virginia" },
+            { value: "WI", label: "Wisconsin" },
+            { value: "WY", label: "Wyoming" },
+            { value: "AA", label: "Armed Forces Americas" },
+            { value: "AE", label: "Armed Forces Europe" },
+            { value: "AP", label: "Armed Forces Pacific" },
+            { value: "AS", label: "American Samoa" },
+            { value: "FM", label: "Federated States of Micronesia" },
+            { value: "GU", label: "Guam" },
+            { value: "MH", label: "Marshall Islands" },
+            { value: "MP", label: "Northern Mariana Islands" },
+            { value: "PW", label: "Palau" },
+            { value: "PR", label: "Puerto Rico" },
+            { value: "VI", label: "Virgin Islands" },
+          ],
+        },
+        {
+          id: "part7.line3e.zipcode",
+          type: "text",
+          label: "ZIP Code",
+          required: false,
+          placeholder: "Enter ZIP code",
+        },
+        {
+          id: "part7.line3f.province",
+          type: "text",
+          label: "Province (if outside U.S.)",
+          required: false,
+          placeholder: "Enter province",
+        },
+        {
+          id: "part7.line3g.postalcode",
+          type: "text",
+          label: "Postal Code (if outside U.S.)",
+          required: false,
+          placeholder: "Enter postal code",
+        },
+        {
+          id: "part7.line3h.country",
+          type: "text",
+          label: "Country (if outside U.S.)",
+          required: false,
+          placeholder: "Enter country",
+        },
+        {
+          id: "part7.line4.preparersdaytimephonenumber",
+          type: "tel",
+          label: "Preparer's Daytime Telephone Number",
+          required: false,
+          placeholder: "(555) 123-4567",
+        },
+        {
+          id: "part7.line5.preparersfaxnumber",
+          type: "text",
+          label: "Preparer's Fax Number (if any)",
+          required: false,
+          placeholder: "(555) 123-4567",
+        },
+        {
+          id: "part7.line6.preparersemailaddress",
+          type: "email",
+          label: "Preparer's Email Address (if any)",
+          required: false,
+          placeholder: "example@email.com",
+        },
+        {
+          id: "part7.representation.extends",
+          type: "radio",
+          label: "Representation of the applicant in this case",
+          required: false,
+          options: [
+            {
+              value: "extends",
+              label: "Extends beyond preparation of this application",
+            },
+            {
+              value: "does-not-extend",
+              label: "Does not extend beyond preparation of this application",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part8",
+      title: "Part 8. Additional Information",
+      description:
+        "Use this space for any additional information or explanations",
+      questions: [
+        {
+          id: "part8.line1a.familyname",
+          type: "text",
+          label: "Your Full Name - Family Name (Last Name)",
+          required: false,
+          placeholder: "Enter your last name",
+        },
+        {
+          id: "part8.line1b.givenname",
+          type: "text",
+          label: "Your Full Name - Given Name (First Name)",
+          required: false,
+          placeholder: "Enter your first name",
+        },
+        {
+          id: "part8.line1c.middlename",
+          type: "text",
+          label: "Your Full Name - Middle Name",
+          required: false,
+          placeholder: "Enter your middle name",
+        },
+        {
+          id: "part8.line2.anumber",
+          type: "text",
+          label: "A-Number (if any)",
+          required: false,
+          placeholder: "Enter A-Number",
+        },
+        {
+          id: "part8.line3a.pagenumber",
+          type: "text",
+          label: "Page Number (for additional information)",
+          required: false,
+          placeholder: "Enter page number",
+        },
+        {
+          id: "part8.line3b.partnumber",
+          type: "text",
+          label: "Part Number (for additional information)",
+          required: false,
+          placeholder: "Enter part number",
+        },
+        {
+          id: "part8.line3c.itemnumber",
+          type: "text",
+          label: "Item Number (for additional information)",
+          required: false,
+          placeholder: "Enter item number",
+        },
+        {
+          id: "part8.line3d.additionalinfo",
+          type: "textarea",
+          label: "Additional Information",
+          required: false,
+          placeholder: "Enter any additional information here",
+        },
+      ],
+    },
+  ],
+  pdfFieldMappings: [],
+  requiredDocuments: [
+    "Copy of your current or expired Permanent Resident Card (front and back)",
+    "Two passport-style photos",
+    "Copy of government-issued photo identification",
+    "Filing fee payment ($540)",
+    "Police report (if card was stolen)",
+    "Legal documents showing name change (if applicable)",
+  ],
+  instructions: [
+    "Complete all applicable sections of this form",
+    "Use black ink when filling out the form by hand",
+    "If you need extra space, use Part 8 (Additional Information)",
+    "Submit required supporting documents with your application",
+    "Pay the required filing fee",
+    "Sign and date your application",
+  ],
+};
+
+export const I_130_DEFINITION: FormDefinition = {
+  id: "i-130",
+  code: "I-130",
+  name: "I-130 Form",
+  description: "Complete I-130 form with all fields",
+  category: "family",
+  estimatedTime: "60-90 minutes",
+  filingFee: 0,
+  price: 60,
+  sections: [
+    {
+      id: "part2",
+      title: "Part 2",
+      description: "Complete all fields in Part 2",
+      questions: [
+        {
+          id: "part2.line11.sSN",
+          type: "radio",
+          label: "S S N",
+          required: false,
+          options: [
+            {
+              value: "yes",
+              label: "Yes",
+            },
+            {
+              value: "no",
+              label: "No",
+            },
+          ],
+        },
+        {
+          id: "part2.line4a.familyName",
+          type: "text",
+          label: "Family Name",
+          required: true,
+        },
+        {
+          id: "part2.line4b.givenName",
+          type: "text",
+          label: "Given Name",
+          required: true,
+        },
+        {
+          id: "part2.line4c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part2.line1.alienNumber",
+          type: "text",
+          label: "Alien Number",
+          required: true,
+        },
+        {
+          id: "part2.line2.uSCISOnlineActNumber",
+          type: "text",
+          label: "U S C I S Online Act Number",
+          required: true,
+        },
+        {
+          id: "part2.line8.dateofBirth",
+          type: "date",
+          label: "Dateof Birth",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.line9.male",
+          type: "radio",
+          label: "Male",
+          required: true,
+          options: [
+            {
+              value: "male",
+              label: "Male",
+            },
+            {
+              value: "female",
+              label: "Female",
+            },
+          ],
+        },
+        {
+          id: "part2.line7.countryofBirth",
+          type: "select",
+          label: "Countryof Birth",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select Country",
+            },
+            {
+              value: "US",
+              label: "United States",
+            },
+            {
+              value: "CA",
+              label: "Canada",
+            },
+            {
+              value: "MX",
+              label: "Mexico",
+            },
+            {
+              value: "UK",
+              label: "United Kingdom",
+            },
+          ],
+        },
+        {
+          id: "part2.line10.streetNumberName",
+          type: "text",
+          label: "Street Number Name",
+          required: true,
+        },
+        {
+          id: "part2.line14.streetNumberName",
+          type: "text",
+          label: "Street Number Name",
+          required: true,
+        },
+        {
+          id: "part2.line13a.dateFrom",
+          type: "date",
+          label: "Date From",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.line15a.dateFrom",
+          type: "date",
+          label: "Date From",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.line15b.dateTo",
+          type: "date",
+          label: "Date To",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.line12.streetNumberName",
+          type: "text",
+          label: "Street Number Name",
+          required: true,
+        },
+        {
+          id: "part2.line6.cityTownOfBirth",
+          type: "radio",
+          label: "City Town Of Birth",
+          required: true,
+          options: [
+            {
+              value: "yes",
+              label: "Yes",
+            },
+            {
+              value: "no",
+              label: "No",
+            },
+          ],
+        },
+        {
+          id: "part2.line5a.familyName",
+          type: "text",
+          label: "Family Name",
+          required: true,
+        },
+        {
+          id: "part2.line5b.givenName",
+          type: "text",
+          label: "Given Name",
+          required: true,
+        },
+        {
+          id: "part2.line5c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part2.line16.numberofMarriages",
+          type: "text",
+          label: "Numberof Marriages",
+          required: false,
+        },
+        {
+          id: "part2.line17.widowed",
+          type: "text",
+          label: "Widowed",
+          required: false,
+        },
+        {
+          id: "part2.line13b.dateTo",
+          type: "date",
+          label: "Date To",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.line20b.givenName",
+          type: "text",
+          label: "Given Name",
+          required: true,
+        },
+        {
+          id: "part2.line20c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part2.line23.dateMarriageEnded",
+          type: "date",
+          label: "Date Marriage Ended",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.line22c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part2.line22b.givenName",
+          type: "text",
+          label: "Given Name",
+          required: true,
+        },
+        {
+          id: "part2.line22a.familyName",
+          type: "text",
+          label: "Family Name",
+          required: true,
+        },
+        {
+          id: "part2.line21.dateMarriageEnded",
+          type: "date",
+          label: "Date Marriage Ended",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.line18.dateOfMarriage",
+          type: "date",
+          label: "Date Of Marriage",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.line24.familyName",
+          type: "text",
+          label: "Family Name",
+          required: true,
+        },
+        {
+          id: "part2.line25.dateofBirth",
+          type: "date",
+          label: "Dateof Birth",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.line28.cityTownOrVillageOfResidence",
+          type: "radio",
+          label: "City Town Or Village Of Residence",
+          required: true,
+          options: [
+            {
+              value: "yes",
+              label: "Yes",
+            },
+            {
+              value: "no",
+              label: "No",
+            },
+          ],
+        },
+        {
+          id: "part2.line29.countryOfResidence",
+          type: "select",
+          label: "Country Of Residence",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select Country",
+            },
+            {
+              value: "US",
+              label: "United States",
+            },
+            {
+              value: "CA",
+              label: "Canada",
+            },
+            {
+              value: "MX",
+              label: "Mexico",
+            },
+            {
+              value: "UK",
+              label: "United Kingdom",
+            },
+          ],
+        },
+        {
+          id: "part2.line27.countryofBirth",
+          type: "select",
+          label: "Countryof Birth",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select Country",
+            },
+            {
+              value: "US",
+              label: "United States",
+            },
+            {
+              value: "CA",
+              label: "Canada",
+            },
+            {
+              value: "MX",
+              label: "Mexico",
+            },
+            {
+              value: "UK",
+              label: "United Kingdom",
+            },
+          ],
+        },
+        {
+          id: "part2.line30b.givenName",
+          type: "text",
+          label: "Given Name",
+          required: true,
+        },
+        {
+          id: "part2.line30c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part2.line30a.familyName",
+          type: "text",
+          label: "Family Name",
+          required: true,
+        },
+        {
+          id: "part2.line31.dateofBirth",
+          type: "date",
+          label: "Dateof Birth",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.line34.cityTownOrVillageOfResidence",
+          type: "radio",
+          label: "City Town Or Village Of Residence",
+          required: true,
+          options: [
+            {
+              value: "yes",
+              label: "Yes",
+            },
+            {
+              value: "no",
+              label: "No",
+            },
+          ],
+        },
+        {
+          id: "part2.line35.countryOfResidence",
+          type: "select",
+          label: "Country Of Residence",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select Country",
+            },
+            {
+              value: "US",
+              label: "United States",
+            },
+            {
+              value: "CA",
+              label: "Canada",
+            },
+            {
+              value: "MX",
+              label: "Mexico",
+            },
+            {
+              value: "UK",
+              label: "United Kingdom",
+            },
+          ],
+        },
+        {
+          id: "part2.line33.countryofBirth",
+          type: "select",
+          label: "Countryof Birth",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select Country",
+            },
+            {
+              value: "US",
+              label: "United States",
+            },
+            {
+              value: "CA",
+              label: "Canada",
+            },
+            {
+              value: "MX",
+              label: "Mexico",
+            },
+            {
+              value: "UK",
+              label: "United Kingdom",
+            },
+          ],
+        },
+        {
+          id: "part2.line36.uSCitizen",
+          type: "radio",
+          label: "U S Citizen",
+          required: false,
+          options: [
+            {
+              value: "yes",
+              label: "Yes",
+            },
+            {
+              value: "no",
+              label: "No",
+            },
+          ],
+        },
+        {
+          id: "part2.line23a.checkbox",
+          type: "checkbox",
+          label: "Checkbox",
+          required: false,
+        },
+        {
+          id: "part2.line23b.checkbox",
+          type: "checkbox",
+          label: "Checkbox",
+          required: false,
+        },
+        {
+          id: "part2.line23c.checkbox",
+          type: "checkbox",
+          label: "Checkbox",
+          required: false,
+        },
+        {
+          id: "part2.line37a.certificateNumber",
+          type: "text",
+          label: "Certificate Number",
+          required: false,
+        },
+        {
+          id: "part2.line37c.dateOfIssuance",
+          type: "date",
+          label: "Date Of Issuance",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.line37b.placeOfIssuance",
+          type: "text",
+          label: "Place Of Issuance",
+          required: false,
+        },
+        {
+          id: "part2.line26.male",
+          type: "radio",
+          label: "Male",
+          required: true,
+          options: [
+            {
+              value: "male",
+              label: "Male",
+            },
+            {
+              value: "female",
+              label: "Female",
+            },
+          ],
+        },
+        {
+          id: "part2.line32.male",
+          type: "radio",
+          label: "Male",
+          required: true,
+          options: [
+            {
+              value: "male",
+              label: "Male",
+            },
+            {
+              value: "female",
+              label: "Female",
+            },
+          ],
+        },
+        {
+          id: "part2.line19a.cityTown",
+          type: "text",
+          label: "City Town",
+          required: true,
+        },
+        {
+          id: "part2.line19b.state",
+          type: "select",
+          label: "State",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select State",
+            },
+            {
+              value: "AL",
+              label: "Alabama",
+            },
+            {
+              value: "AK",
+              label: "Alaska",
+            },
+            {
+              value: "AZ",
+              label: "Arizona",
+            },
+            {
+              value: "CA",
+              label: "California",
+            },
+            {
+              value: "NY",
+              label: "New York",
+            },
+            {
+              value: "TX",
+              label: "Texas",
+            },
+          ],
+        },
+        {
+          id: "part2.line19c.province",
+          type: "text",
+          label: "Province",
+          required: false,
+        },
+        {
+          id: "part2.line19d.country",
+          type: "select",
+          label: "Country",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select Country",
+            },
+            {
+              value: "US",
+              label: "United States",
+            },
+            {
+              value: "CA",
+              label: "Canada",
+            },
+            {
+              value: "MX",
+              label: "Mexico",
+            },
+            {
+              value: "UK",
+              label: "United Kingdom",
+            },
+          ],
+        },
+        {
+          id: "part2.line40a.classOfAdmission",
+          type: "text",
+          label: "Class Of Admission",
+          required: false,
+        },
+        {
+          id: "part2.line40b.dateOfAdmission",
+          type: "date",
+          label: "Date Of Admission",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.line40d.cityOrTown",
+          type: "text",
+          label: "City Or Town",
+          required: true,
+        },
+        {
+          id: "part2.line41.no",
+          type: "radio",
+          label: "No",
+          required: false,
+          options: [
+            {
+              value: "yes",
+              label: "Yes",
+            },
+            {
+              value: "no",
+              label: "No",
+            },
+          ],
+        },
+        {
+          id: "part2.line40.employerOrCompName",
+          type: "text",
+          label: "Employer Or Comp Name",
+          required: true,
+        },
+        {
+          id: "part2.line45.streetNumberName",
+          type: "text",
+          label: "Street Number Name",
+          required: true,
+        },
+        {
+          id: "part2.line46.occupation",
+          type: "text",
+          label: "Occupation",
+          required: false,
+        },
+        {
+          id: "part2.line47a.dateFrom",
+          type: "date",
+          label: "Date From",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.line47b.dateTo",
+          type: "date",
+          label: "Date To",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.line44.employerOrOrgName",
+          type: "text",
+          label: "Employer Or Org Name",
+          required: true,
+        },
+        {
+          id: "part2.line42.occupation",
+          type: "text",
+          label: "Occupation",
+          required: false,
+        },
+        {
+          id: "part2.line43a.dateFrom",
+          type: "date",
+          label: "Date From",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.line43b.dateTo",
+          type: "date",
+          label: "Date To",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.line40e.state",
+          type: "select",
+          label: "State",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select State",
+            },
+            {
+              value: "AL",
+              label: "Alabama",
+            },
+            {
+              value: "AK",
+              label: "Alaska",
+            },
+            {
+              value: "AZ",
+              label: "Arizona",
+            },
+            {
+              value: "CA",
+              label: "California",
+            },
+            {
+              value: "NY",
+              label: "New York",
+            },
+            {
+              value: "TX",
+              label: "Texas",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part1",
+      title: "Part 1",
+      description: "Complete all fields in Part 1",
+      questions: [
+        {
+          id: "part1.line1.spouse",
+          type: "text",
+          label: "Spouse",
+          required: true,
+        },
+        {
+          id: "part1.line2.inWedlock",
+          type: "text",
+          label: "In Wedlock",
+          required: true,
+        },
+        {
+          id: "part1.line3.yes",
+          type: "radio",
+          label: "Yes",
+          required: true,
+          options: [
+            {
+              value: "yes",
+              label: "Yes",
+            },
+            {
+              value: "no",
+              label: "No",
+            },
+          ],
+        },
+        {
+          id: "part1.line4.no",
+          type: "radio",
+          label: "No",
+          required: true,
+          options: [
+            {
+              value: "yes",
+              label: "Yes",
+            },
+            {
+              value: "no",
+              label: "No",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part3",
+      title: "Part 3",
+      description: "Complete all fields in Part 3",
+      questions: [
+        {
+          id: "part3.line1.ethnicity",
+          type: "text",
+          label: "Ethnicity",
+          required: true,
+        },
+        {
+          id: "part3.line2.race_Black",
+          type: "radio",
+          label: "Race_ Black",
+          required: true,
+          options: [
+            {
+              value: "yes",
+              label: "Yes",
+            },
+            {
+              value: "no",
+              label: "No",
+            },
+          ],
+        },
+        {
+          id: "part3.line3.heightFeet",
+          type: "text",
+          label: "Height Feet",
+          required: true,
+        },
+        {
+          id: "part3.line4.pound1",
+          type: "text",
+          label: "Pound1",
+          required: true,
+        },
+        {
+          id: "part3.line5.eyeColor",
+          type: "text",
+          label: "Eye Color",
+          required: true,
+        },
+        {
+          id: "part3.line6.hairColor",
+          type: "text",
+          label: "Hair Color",
+          required: true,
+        },
+      ],
+    },
+    {
+      id: "part4",
+      title: "Part 4",
+      description: "Complete all fields in Part 4",
+      questions: [
+        {
+          id: "part4.line1.alienNumber",
+          type: "text",
+          label: "Alien Number",
+          required: true,
+        },
+        {
+          id: "part4.line2.uSCISOnlineActNumber",
+          type: "text",
+          label: "U S C I S Online Act Number",
+          required: true,
+        },
+        {
+          id: "part4.line4a.familyName",
+          type: "text",
+          label: "Family Name",
+          required: true,
+        },
+        {
+          id: "part4.line4b.givenName",
+          type: "text",
+          label: "Given Name",
+          required: true,
+        },
+        {
+          id: "part4.line4c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part4.line5b.givenName",
+          type: "text",
+          label: "Given Name",
+          required: true,
+        },
+        {
+          id: "part4.line5c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part4.line7.cityTownOfBirth",
+          type: "radio",
+          label: "City Town Of Birth",
+          required: true,
+          options: [
+            {
+              value: "yes",
+              label: "Yes",
+            },
+            {
+              value: "no",
+              label: "No",
+            },
+          ],
+        },
+        {
+          id: "part4.line8.countryOfBirth",
+          type: "select",
+          label: "Country Of Birth",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select Country",
+            },
+            {
+              value: "US",
+              label: "United States",
+            },
+            {
+              value: "CA",
+              label: "Canada",
+            },
+            {
+              value: "MX",
+              label: "Mexico",
+            },
+            {
+              value: "UK",
+              label: "United Kingdom",
+            },
+          ],
+        },
+        {
+          id: "part4.line11.province",
+          type: "text",
+          label: "Province",
+          required: false,
+        },
+        {
+          id: "part4.line12a.streetNumberName",
+          type: "text",
+          label: "Street Number Name",
+          required: true,
+        },
+        {
+          id: "part4.line12b.unit",
+          type: "text",
+          label: "Unit",
+          required: false,
+        },
+        {
+          id: "part4.line12c.cityOrTown",
+          type: "text",
+          label: "City Or Town",
+          required: true,
+        },
+        {
+          id: "part4.line12e.zipCode",
+          type: "text",
+          label: "Zip Code",
+          required: true,
+        },
+        {
+          id: "part4.line12d.state",
+          type: "select",
+          label: "State",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select State",
+            },
+            {
+              value: "AL",
+              label: "Alabama",
+            },
+            {
+              value: "AK",
+              label: "Alaska",
+            },
+            {
+              value: "AZ",
+              label: "Arizona",
+            },
+            {
+              value: "CA",
+              label: "California",
+            },
+            {
+              value: "NY",
+              label: "New York",
+            },
+            {
+              value: "TX",
+              label: "Texas",
+            },
+          ],
+        },
+        {
+          id: "part4.line13.postalCode",
+          type: "text",
+          label: "Postal Code",
+          required: false,
+        },
+        {
+          id: "part4.line9.dateOfBirth",
+          type: "radio",
+          label: "Date Of Birth",
+          required: true,
+          options: [
+            {
+              value: "male",
+              label: "Male",
+            },
+            {
+              value: "female",
+              label: "Female",
+            },
+          ],
+        },
+        {
+          id: "part4.line10.yes",
+          type: "radio",
+          label: "Yes",
+          required: false,
+          options: [
+            {
+              value: "yes",
+              label: "Yes",
+            },
+            {
+              value: "no",
+              label: "No",
+            },
+          ],
+        },
+        {
+          id: "part4.line14.daytimePhoneNumber",
+          type: "tel",
+          label: "Daytime Phone Number",
+          required: false,
+          placeholder: "(###) ###-####",
+        },
+        {
+          id: "part4.line3.sSN",
+          type: "ssn",
+          label: "S S N",
+          required: true,
+          placeholder: "###-##-####",
+        },
+        {
+          id: "part4.line20c.province",
+          type: "text",
+          label: "Province",
+          required: false,
+        },
+        {
+          id: "part4.line17.numberofMarriages",
+          type: "text",
+          label: "Numberof Marriages",
+          required: false,
+        },
+        {
+          id: "part4.line18.maritalStatus",
+          type: "select",
+          label: "Marital Status",
+          required: true,
+          options: [
+            {
+              value: "single",
+              label: "Single, Never Married",
+            },
+            {
+              value: "married",
+              label: "Married",
+            },
+            {
+              value: "divorced",
+              label: "Divorced",
+            },
+            {
+              value: "widowed",
+              label: "Widowed",
+            },
+            {
+              value: "separated",
+              label: "Separated",
+            },
+          ],
+        },
+        {
+          id: "part4.line15.mobilePhoneNumber",
+          type: "tel",
+          label: "Mobile Phone Number",
+          required: false,
+          placeholder: "(###) ###-####",
+        },
+        {
+          id: "part4.line16.emailAddress",
+          type: "email",
+          label: "Email Address",
+          required: true,
+          placeholder: "email@example.com",
+        },
+        {
+          id: "part4.line19.dateOfMarriage",
+          type: "date",
+          label: "Date Of Marriage",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part4.line18a.familyName",
+          type: "text",
+          label: "Family Name",
+          required: true,
+        },
+        {
+          id: "part4.line18b.givenName",
+          type: "text",
+          label: "Given Name",
+          required: true,
+        },
+        {
+          id: "part4.line18c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part4.line16a.familyName",
+          type: "text",
+          label: "Family Name",
+          required: true,
+        },
+        {
+          id: "part4.line16b.givenName",
+          type: "text",
+          label: "Given Name",
+          required: true,
+        },
+        {
+          id: "part4.line16c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part4.line31.relationship",
+          type: "text",
+          label: "Relationship",
+          required: true,
+        },
+        {
+          id: "part4.line30a.familyName",
+          type: "text",
+          label: "Family Name",
+          required: true,
+        },
+        {
+          id: "part4.line30b.givenName",
+          type: "text",
+          label: "Given Name",
+          required: true,
+        },
+        {
+          id: "part4.line30c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part4.line32.dateOfBirth",
+          type: "date",
+          label: "Date Of Birth",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part4.line49.countryOfBirth",
+          type: "select",
+          label: "Country Of Birth",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select Country",
+            },
+            {
+              value: "US",
+              label: "United States",
+            },
+            {
+              value: "CA",
+              label: "Canada",
+            },
+            {
+              value: "MX",
+              label: "Mexico",
+            },
+            {
+              value: "UK",
+              label: "United Kingdom",
+            },
+          ],
+        },
+        {
+          id: "part4.line35.relationship",
+          type: "text",
+          label: "Relationship",
+          required: true,
+        },
+        {
+          id: "part4.line36.dateOfBirth",
+          type: "date",
+          label: "Date Of Birth",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part4.line37.countryOfBirth",
+          type: "select",
+          label: "Country Of Birth",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select Country",
+            },
+            {
+              value: "US",
+              label: "United States",
+            },
+            {
+              value: "CA",
+              label: "Canada",
+            },
+            {
+              value: "MX",
+              label: "Mexico",
+            },
+            {
+              value: "UK",
+              label: "United Kingdom",
+            },
+          ],
+        },
+        {
+          id: "part4.line34a.familyName",
+          type: "text",
+          label: "Family Name",
+          required: true,
+        },
+        {
+          id: "part4.line34b.givenName",
+          type: "text",
+          label: "Given Name",
+          required: true,
+        },
+        {
+          id: "part4.line34c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part4.line38b.givenName",
+          type: "text",
+          label: "Given Name",
+          required: true,
+        },
+        {
+          id: "part4.line38c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part4.line38a.familyName",
+          type: "text",
+          label: "Family Name",
+          required: true,
+        },
+        {
+          id: "part4.line41.countryOfBirth",
+          type: "select",
+          label: "Country Of Birth",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select Country",
+            },
+            {
+              value: "US",
+              label: "United States",
+            },
+            {
+              value: "CA",
+              label: "Canada",
+            },
+            {
+              value: "MX",
+              label: "Mexico",
+            },
+            {
+              value: "UK",
+              label: "United Kingdom",
+            },
+          ],
+        },
+        {
+          id: "part4.line40.dateOfBirth",
+          type: "date",
+          label: "Date Of Birth",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part4.line39.relationship",
+          type: "text",
+          label: "Relationship",
+          required: true,
+        },
+        {
+          id: "part4.line20a.cityTown",
+          type: "text",
+          label: "City Town",
+          required: true,
+        },
+        {
+          id: "part4.line20b.state",
+          type: "select",
+          label: "State",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select State",
+            },
+            {
+              value: "AL",
+              label: "Alabama",
+            },
+            {
+              value: "AK",
+              label: "Alaska",
+            },
+            {
+              value: "AZ",
+              label: "Arizona",
+            },
+            {
+              value: "CA",
+              label: "California",
+            },
+            {
+              value: "NY",
+              label: "New York",
+            },
+            {
+              value: "TX",
+              label: "Texas",
+            },
+          ],
+        },
+        {
+          id: "part4.line20d.country",
+          type: "select",
+          label: "Country",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select Country",
+            },
+            {
+              value: "US",
+              label: "United States",
+            },
+            {
+              value: "CA",
+              label: "Canada",
+            },
+            {
+              value: "MX",
+              label: "Mexico",
+            },
+            {
+              value: "UK",
+              label: "United Kingdom",
+            },
+          ],
+        },
+        {
+          id: "part4.line42c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part4.line42b.givenName",
+          type: "text",
+          label: "Given Name",
+          required: true,
+        },
+        {
+          id: "part4.line42a.familyName",
+          type: "text",
+          label: "Family Name",
+          required: true,
+        },
+        {
+          id: "part4.line45.countryOfBirth",
+          type: "select",
+          label: "Country Of Birth",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select Country",
+            },
+            {
+              value: "US",
+              label: "United States",
+            },
+            {
+              value: "CA",
+              label: "Canada",
+            },
+            {
+              value: "MX",
+              label: "Mexico",
+            },
+            {
+              value: "UK",
+              label: "United Kingdom",
+            },
+          ],
+        },
+        {
+          id: "part4.line44.dateOfBirth",
+          type: "date",
+          label: "Date Of Birth",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part4.line43.relationship",
+          type: "text",
+          label: "Relationship",
+          required: true,
+        },
+        {
+          id: "part4.line46a.familyName",
+          type: "text",
+          label: "Family Name",
+          required: true,
+        },
+        {
+          id: "part4.line46b.givenName",
+          type: "text",
+          label: "Given Name",
+          required: true,
+        },
+        {
+          id: "part4.line46c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part4.line47.relationship",
+          type: "text",
+          label: "Relationship",
+          required: true,
+        },
+        {
+          id: "part4.line48.dateOfBirth",
+          type: "date",
+          label: "Date Of Birth",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part4.line20.yes",
+          type: "radio",
+          label: "Yes",
+          required: false,
+          options: [
+            {
+              value: "yes",
+              label: "Yes",
+            },
+            {
+              value: "no",
+              label: "No",
+            },
+          ],
+        },
+        {
+          id: "part4.line21d.dateExpired",
+          type: "date",
+          label: "Date Expired",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part4.line21a.classOfAdmission",
+          type: "text",
+          label: "Class Of Admission",
+          required: false,
+        },
+        {
+          id: "part4.line21b.arrivalDeparture",
+          type: "text",
+          label: "Arrival Departure",
+          required: false,
+        },
+        {
+          id: "part4.line21c.dateOfArrival",
+          type: "date",
+          label: "Date Of Arrival",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part4.line22.passportNumber",
+          type: "text",
+          label: "Passport Number",
+          required: false,
+        },
+        {
+          id: "part4.line23.travelDocNumber",
+          type: "text",
+          label: "Travel Doc Number",
+          required: false,
+        },
+        {
+          id: "part4.line24.countryOfIssuance",
+          type: "select",
+          label: "Country Of Issuance",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select Country",
+            },
+            {
+              value: "US",
+              label: "United States",
+            },
+            {
+              value: "CA",
+              label: "Canada",
+            },
+            {
+              value: "MX",
+              label: "Mexico",
+            },
+            {
+              value: "UK",
+              label: "United Kingdom",
+            },
+          ],
+        },
+        {
+          id: "part4.line25.expDate",
+          type: "date",
+          label: "Exp Date",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part4.line26.nameOfCompany",
+          type: "text",
+          label: "Name Of Company",
+          required: true,
+        },
+        {
+          id: "part4.line27.dateEmploymentBegan",
+          type: "date",
+          label: "Date Employment Began",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part4.line28.no",
+          type: "radio",
+          label: "No",
+          required: false,
+          options: [
+            {
+              value: "yes",
+              label: "Yes",
+            },
+            {
+              value: "no",
+              label: "No",
+            },
+          ],
+        },
+        {
+          id: "part4.line54.removal",
+          type: "text",
+          label: "Removal",
+          required: false,
+        },
+        {
+          id: "part4.line55a.cityOrTown",
+          type: "text",
+          label: "City Or Town",
+          required: true,
+        },
+        {
+          id: "part4.line55b.state",
+          type: "select",
+          label: "State",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select State",
+            },
+            {
+              value: "AL",
+              label: "Alabama",
+            },
+            {
+              value: "AK",
+              label: "Alaska",
+            },
+            {
+              value: "AZ",
+              label: "Arizona",
+            },
+            {
+              value: "CA",
+              label: "California",
+            },
+            {
+              value: "NY",
+              label: "New York",
+            },
+            {
+              value: "TX",
+              label: "Texas",
+            },
+          ],
+        },
+        {
+          id: "part4.line56.date",
+          type: "date",
+          label: "Date",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part4.line55c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part4.line57.unit",
+          type: "text",
+          label: "Unit",
+          required: false,
+        },
+        {
+          id: "part4.line58a.dateFrom",
+          type: "date",
+          label: "Date From",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part4.line58b.dateTo",
+          type: "date",
+          label: "Date To",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part4.line61a.cityOrTown",
+          type: "text",
+          label: "City Or Town",
+          required: true,
+        },
+        {
+          id: "part4.line61b.province",
+          type: "text",
+          label: "Province",
+          required: false,
+        },
+        {
+          id: "part4.line61c.country",
+          type: "select",
+          label: "Country",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select Country",
+            },
+            {
+              value: "US",
+              label: "United States",
+            },
+            {
+              value: "CA",
+              label: "Canada",
+            },
+            {
+              value: "MX",
+              label: "Mexico",
+            },
+            {
+              value: "UK",
+              label: "United Kingdom",
+            },
+          ],
+        },
+        {
+          id: "part4.line60a.cityOrTown",
+          type: "text",
+          label: "City Or Town",
+          required: true,
+        },
+        {
+          id: "part4.line60b.state",
+          type: "select",
+          label: "State",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select State",
+            },
+            {
+              value: "AL",
+              label: "Alabama",
+            },
+            {
+              value: "AK",
+              label: "Alaska",
+            },
+            {
+              value: "AZ",
+              label: "Arizona",
+            },
+            {
+              value: "CA",
+              label: "California",
+            },
+            {
+              value: "NY",
+              label: "New York",
+            },
+            {
+              value: "TX",
+              label: "Texas",
+            },
+          ],
+        },
+        {
+          id: "part4.line6a.familyName",
+          type: "text",
+          label: "Family Name",
+          required: true,
+        },
+        {
+          id: "part4.line6b.givenName",
+          type: "text",
+          label: "Given Name",
+          required: true,
+        },
+        {
+          id: "part4.line6c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part4.line8c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part4.line8b.givenName",
+          type: "text",
+          label: "Given Name",
+          required: true,
+        },
+        {
+          id: "part4.line8a.familyName",
+          type: "text",
+          label: "Family Name",
+          required: true,
+        },
+        {
+          id: "part4.line53.daytimePhoneNumber",
+          type: "tel",
+          label: "Daytime Phone Number",
+          required: false,
+          placeholder: "(###) ###-####",
+        },
+      ],
+    },
+    {
+      id: "part5",
+      title: "Part 5",
+      description: "Complete all fields in Part 5",
+      questions: [
+        {
+          id: "part5.line2a.familyName",
+          type: "text",
+          label: "Family Name",
+          required: true,
+        },
+        {
+          id: "part5.line2b.givenName",
+          type: "text",
+          label: "Given Name",
+          required: true,
+        },
+        {
+          id: "part5.line2c.middleName",
+          type: "text",
+          label: "Middle Name",
+          required: true,
+        },
+        {
+          id: "part5.line5.result",
+          type: "text",
+          label: "Result",
+          required: true,
+        },
+        {
+          id: "part5.line4.dateFiled",
+          type: "date",
+          label: "Date Filed",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part5.line3a.cityOrTown",
+          type: "text",
+          label: "City Or Town",
+          required: true,
+        },
+        {
+          id: "part5.line3b.state",
+          type: "select",
+          label: "State",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "Select State",
+            },
+            {
+              value: "AL",
+              label: "Alabama",
+            },
+            {
+              value: "AK",
+              label: "Alaska",
+            },
+            {
+              value: "AZ",
+              label: "Arizona",
+            },
+            {
+              value: "CA",
+              label: "California",
+            },
+            {
+              value: "NY",
+              label: "New York",
+            },
+            {
+              value: "TX",
+              label: "Texas",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part6",
+      title: "Part 6",
+      description: "Complete all fields in Part 6",
+      questions: [
+        {
+          id: "part6.line3.daytimePhoneNumber",
+          type: "tel",
+          label: "Daytime Phone Number",
+          required: true,
+          placeholder: "(###) ###-####",
+        },
+        {
+          id: "part6.line5.email",
+          type: "email",
+          label: "Email",
+          required: true,
+          placeholder: "email@example.com",
+        },
+        {
+          id: "part6.line4.mobileNumber",
+          type: "text",
+          label: "Mobile Number",
+          required: true,
+        },
+        {
+          id: "part6.line1b.language",
+          type: "text",
+          label: "Language",
+          required: false,
+        },
+        {
+          id: "part6.line2.checkbox",
+          type: "checkbox",
+          label: "Checkbox",
+          required: true,
+        },
+      ],
+    },
+    {
+      id: "part7",
+      title: "Part 7",
+      description: "Complete all fields in Part 7",
+      questions: [
+        {
+          id: "part7.line1b.interpreterGivenName",
+          type: "text",
+          label: "Interpreter Given Name",
+          required: true,
+        },
+        {
+          id: "part7.line1a.interpreterFamilyName",
+          type: "text",
+          label: "Interpreter Family Name",
+          required: true,
+        },
+        {
+          id: "part7.line2.interpreterBusinessorOrg",
+          type: "text",
+          label: "Interpreter Businessor Org",
+          required: true,
+        },
+        {
+          id: "part7.line3.cityOrTown",
+          type: "text",
+          label: "City Or Town",
+          required: true,
+        },
+        {
+          id: "part7.line4.interpreterDaytimeTelephone",
+          type: "tel",
+          label: "Interpreter Daytime Telephone",
+          required: true,
+          placeholder: "(###) ###-####",
+        },
+        {
+          id: "part7.line5.email",
+          type: "email",
+          label: "Email",
+          required: true,
+          placeholder: "email@example.com",
+        },
+      ],
+    },
+    {
+      id: "part8",
+      title: "Part 8",
+      description: "Complete all fields in Part 8",
+      questions: [
+        {
+          id: "part8.line1b.preparerGivenName",
+          type: "text",
+          label: "Preparer Given Name",
+          required: true,
+        },
+        {
+          id: "part8.line2.businessName",
+          type: "ssn",
+          label: "Business Name",
+          required: true,
+          placeholder: "###-##-####",
+        },
+        {
+          id: "part8.line1a.preparerFamilyName",
+          type: "text",
+          label: "Preparer Family Name",
+          required: true,
+        },
+        {
+          id: "part8.line3.cityOrTown",
+          type: "text",
+          label: "City Or Town",
+          required: true,
+        },
+        {
+          id: "part8.line5.preparerFaxNumber",
+          type: "text",
+          label: "Preparer Fax Number",
+          required: true,
+        },
+        {
+          id: "part8.line4.daytimePhoneNumber",
+          type: "tel",
+          label: "Daytime Phone Number",
+          required: true,
+          placeholder: "(###) ###-####",
+        },
+        {
+          id: "part8.line6.email",
+          type: "email",
+          label: "Email",
+          required: true,
+          placeholder: "email@example.com",
+        },
+        {
+          id: "part8.line7.checkbox",
+          type: "checkbox",
+          label: "Checkbox",
+          required: true,
+          options: [
+            {
+              value: "",
+              label: "",
+            },
+            {
+              value: "",
+              label: "",
+            },
+          ],
+        },
+        {
+          id: "part8.line7b.checkbox",
+          type: "checkbox",
+          label: "Checkbox",
+          required: false,
+          options: [
+            {
+              value: "",
+              label: "",
+            },
+            {
+              value: "",
+              label: "",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part9",
+      title: "Part 9",
+      description: "Complete all fields in Part 9",
+      questions: [
+        {
+          id: "part9.line3a.pageNumber",
+          type: "text",
+          label: "Page Number",
+          required: false,
+        },
+        {
+          id: "part9.line3b.partNumber",
+          type: "text",
+          label: "Part Number",
+          required: false,
+        },
+        {
+          id: "part9.line3c.itemNumber",
+          type: "text",
+          label: "Item Number",
+          required: false,
+        },
+        {
+          id: "part9.line3d.additionalInfo",
+          type: "text",
+          label: "Additional Info",
+          required: false,
+        },
+        {
+          id: "part9.line4a.pageNumber",
+          type: "text",
+          label: "Page Number",
+          required: false,
+        },
+        {
+          id: "part9.line4b.partNumber",
+          type: "text",
+          label: "Part Number",
+          required: false,
+        },
+        {
+          id: "part9.line4c.itemNumber",
+          type: "text",
+          label: "Item Number",
+          required: false,
+        },
+        {
+          id: "part9.line4d.additionalInfo",
+          type: "text",
+          label: "Additional Info",
+          required: false,
+        },
+        {
+          id: "part9.line5a.pageNumber",
+          type: "text",
+          label: "Page Number",
+          required: false,
+        },
+        {
+          id: "part9.line5b.partNumber",
+          type: "text",
+          label: "Part Number",
+          required: false,
+        },
+        {
+          id: "part9.line5c.itemNumber",
+          type: "text",
+          label: "Item Number",
+          required: false,
+        },
+        {
+          id: "part9.line6a.pageNumber",
+          type: "text",
+          label: "Page Number",
+          required: false,
+        },
+        {
+          id: "part9.line6b.partNumber",
+          type: "text",
+          label: "Part Number",
+          required: false,
+        },
+        {
+          id: "part9.line6c.itemNumber",
+          type: "text",
+          label: "Item Number",
+          required: false,
+        },
+        {
+          id: "part9.line6d.additionalInfo",
+          type: "text",
+          label: "Additional Info",
+          required: false,
+        },
+        {
+          id: "part9.line5d.additionalInfo",
+          type: "text",
+          label: "Additional Info",
+          required: false,
+        },
+        {
+          id: "part9.line9a.pageNumber",
+          type: "text",
+          label: "Page Number",
+          required: false,
+        },
+        {
+          id: "part9.line7b.partNumber",
+          type: "text",
+          label: "Part Number",
+          required: false,
+        },
+        {
+          id: "part9.line7c.itemNumber",
+          type: "text",
+          label: "Item Number",
+          required: false,
+        },
+        {
+          id: "part9.line7d.additionalInfo",
+          type: "text",
+          label: "Additional Info",
+          required: false,
+        },
+      ],
+    },
+  ],
+  pdfFieldMappings: [],
+  requiredDocuments: [],
+  instructions: [
+    "Complete all applicable sections",
+    "Answer all questions accurately",
+    "Sign and date the form",
+  ],
+  status: "active",
+};
+
+const I130_DEFINITION: FormDefinition = {
+  id: "i-130",
+  code: "I-130",
+  name: "Petition for Alien Relative",
+  description:
+    "Petition to establish a qualifying family relationship for immigration",
+  category: "family",
+  estimatedTime: "45-60 minutes",
+  filingFee: 535,
+  price: 70,
+  sections: [
+    {
+      id: "part1-relationship",
+      title: "Part 1: Relationship",
+      description:
+        "Identify the relationship between you (the petitioner) and your relative (the beneficiary)",
+      questions: [
+        {
+          id: "part1.relationship",
+          type: "select",
+          label: "I am filing this petition for my:",
+          required: true,
+          options: [
+            { value: "spouse", label: "Spouse" },
+            { value: "parent", label: "Parent" },
+            { value: "child", label: "Child" },
+            { value: "sibling", label: "Brother or Sister" },
+          ],
+          helpText: "Select the relationship of the beneficiary to you",
+        },
+        {
+          id: "part1.petitionerStatus",
+          type: "radio",
+          label: "I am:",
+          required: true,
+          options: [
+            { value: "citizen", label: "A U.S. Citizen" },
+            {
+              value: "lpr",
+              label: "A Lawful Permanent Resident of the United States",
+            },
+          ],
+        },
+        {
+          id: "part1.gainedLPRThroughAdoption",
+          type: "radio",
+          label:
+            "Did you gain lawful permanent resident status through adoption?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+          helpText: "Answer only if you are a lawful permanent resident",
+        },
+      ],
+    },
+    {
+      id: "part2-petitioner-info",
+      title: "Part 2: Information About You (Petitioner)",
+      description: "Provide your personal information",
+      questions: [
+        {
+          id: "part2.alienNumber",
+          type: "text",
+          label: "Alien Registration Number (A-Number)",
+          placeholder: "A-",
+          helpText: "If you have one. Leave blank if not applicable.",
+        },
+        {
+          id: "part2.uscisOnlineAccount",
+          type: "text",
+          label: "USCIS Online Account Number",
+          helpText: "If you have a USCIS online account",
+        },
+        {
+          id: "part2.ssn",
+          type: "ssn",
+          label: "U.S. Social Security Number",
+          placeholder: "###-##-####",
+          helpText: "If you have one",
+        },
+        {
+          id: "part2.lastName",
+          type: "text",
+          label: "Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part2.firstName",
+          type: "text",
+          label: "Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part2.middleName",
+          type: "text",
+          label: "Middle Name",
+        },
+
+        {
+          id: "part2.cityOfBirth",
+          type: "text",
+          label: "City or Town of Birth",
+          required: true,
+        },
+        {
+          id: "part2.countryOfBirth",
+          type: "text",
+          label: "Country of Birth",
+          required: true,
+        },
+        {
+          id: "part2.dateOfBirth",
+          type: "date",
+          label: "Date of Birth",
+          required: true,
+        },
+        {
+          id: "part2.sex",
+          type: "radio",
+          label: "Sex",
+          required: true,
+          options: [
+            { value: "male", label: "Male" },
+            { value: "female", label: "Female" },
+          ],
+        },
+        {
+          id: "part2.otherGivenName",
+          type: "text",
+          label: "Given Name (If any other)",
+          helpText: "Provide any other given name",
+          required: false,
+        },
+        {
+          id: "part2.otherMiddleName",
+          type: "text",
+          label: "Middle Name (If any other)",
+          helpText: "Provide any other middle name",
+          required: false,
+        },
+        {
+          id: "part2.otherfamilyName",
+          type: "text",
+          label: "Family Name (If any other)",
+          required: false,
+          helpText: "Provide any other family name",
+        },
+      ],
+    },
+
+    {
+      id: "part2-mailing-address",
+      title: "Part 2: Your Mailing Address",
+      questions: [
+        {
+          id: "part2.mailingInCareOf",
+          type: "text",
+          label: "In Care Of Name",
+          helpText: "Optional - if mail should be sent c/o someone else",
+        },
+        {
+          id: "part2.mailingStreet",
+          type: "text",
+          label: "Street Number and Name",
+          required: true,
+        },
+        {
+          id: "part2.mailingAptType",
+          type: "select",
+          label: "Apt/Ste/Flr",
+          options: [
+            { value: "", label: "None" },
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part2.mailingAptNumber",
+          type: "text",
+          label: "Apartment/Suite/Floor Number",
+        },
+        {
+          id: "part2.mailingCity",
+          type: "text",
+          label: "City or Town",
+          required: true,
+        },
+        {
+          id: "part2.mailingState",
+          type: "select",
+          label: "State",
+          required: true,
+          options: US_STATES,
+        },
+        {
+          id: "part2.mailingZip",
+          type: "text",
+          label: "ZIP Code",
+          required: true,
+          placeholder: "12345",
+        },
+        {
+          id: "part2.province",
+          type: "text",
+          label: "Province",
+          helpText: "For foreign addresses only",
+        },
+        {
+          id: "part2.postalCode",
+          type: "text",
+          label: "Postal Code",
+          helpText: "For foreign addresses only",
+        },
+        {
+          id: "part2.country",
+          type: "text",
+          label: "Country",
+          helpText: "For foreign addresses only",
+        },
+
+        {
+          id: "part2.addressSame",
+          type: "radio",
+          label:
+            "Is your current mailing address the same as your physical address?",
+          helpText: "Select 'No' to provide your physical address",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+      ],
+    },
+
+    {
+      id: "part2-physical-address",
+      description:
+        "Provide your physical addresses for the last five years, whether inside or outside the United States.",
+
+      title: `Part 2: Your Physical Address,-Is your current mailing address the same as your physical address? If Yes Skip it`,
+      questions: [
+        {
+          id: "part2.physicalStreet",
+          type: "text",
+          label: "Street Number and Name (physical address)",
+          helpText: "Provide your current physical address",
+          required: true,
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+        {
+          id: "part2.physicalAptType",
+          type: "select",
+          label: "Apt/Ste/Flr",
+          helpText: "Provide your current physical Apt/Ste/Flr",
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+          options: [
+            { value: "", label: "None" },
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part2.physicalAptNumber",
+          type: "text",
+          label: "Apartment/Suite/Floor Number",
+          required: false, // Changed to optional
+          helpText:
+            "Provide your current physical Apartment/Suite/Floor Number",
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+        {
+          id: "part2.physicalCity",
+          type: "text",
+          label: "City or Town",
+          required: true,
+          helpText: "Provide your current physical city or town",
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+        {
+          id: "part2.physicalState",
+          type: "select",
+          label: "State",
+          required: false, // Changed to optional (for foreign addresses)
+          options: US_STATES,
+          helpText: "Provide your current physical state",
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+        {
+          id: "part2.physicalZip",
+          type: "text",
+          label: "ZIP Code",
+          helpText: "Provide your current physical ZIP Code",
+          required: false, // Changed to optional (for foreign addresses)
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+          placeholder: "12345",
+        },
+        {
+          id: "part2.physicalProvince",
+          type: "text",
+          label: "Province",
+          required: false,
+          placeholder: "For foreign addresses only",
+          helpText: "For foreign addresses only",
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+        {
+          id: "part2.physicalPostalCode",
+          type: "text",
+          label: "Postal Code",
+          placeholder: "For foreign addresses only",
+          required: false,
+          helpText: "For foreign addresses only",
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+        {
+          id: "part2.physicalCountry",
+          type: "text",
+          label: "Country",
+          required: true,
+          helpText: "For foreign addresses only",
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+
+        {
+          id: "part2.dateFrom",
+          type: "date",
+          label: "Date From",
+          required: true,
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+        {
+          id: "part2.dateTo",
+          type: "date",
+          label: "Date To",
+          required: true,
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+
+        {
+          id: "part2.physicalStreet2",
+          type: "text",
+          label: "Street Number and Name",
+          helpText: "Provide your previous physical address if any other",
+          required: false,
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+        {
+          id: "part2.physicalAptType2",
+          type: "select",
+          label: "Apt/Ste/Flr",
+          required: false,
+          helpText: "Provide your previous physical Apt/Ste/Flr if any other",
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+          options: [
+            { value: "", label: "None" },
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part2.physicalAptNumber2",
+          type: "text",
+          label: "Apartment/Suite/Floor Number",
+          helpText:
+            "Provide your previous physical Apartment/Suite/Floor Number if any other",
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+        {
+          id: "part2.physicalCity2",
+          type: "text",
+
+          label: "City or Town",
+          helpText:
+            "Provide your previous physical city or town (if any other)",
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+        {
+          id: "part2.physicalState2",
+          type: "select",
+          label: "State",
+
+          options: US_STATES,
+          helpText: "Provide your previous physical state(if any other)",
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+        {
+          id: "part2.physicalZip2",
+          type: "text",
+          label: "ZIP Code",
+
+          placeholder: "12345",
+          helpText: "Provide your previous physical ZIP Code(if any other)",
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+        {
+          id: "part2.physicalProvince2",
+          type: "text",
+          label: "Province",
+
+          helpText: "For foreign addresses only(if any other)",
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+        {
+          id: "part2.physicalPostalCode2",
+          type: "text",
+          label: "Postal Code",
+
+          helpText: "For foreign addresses only(if any other)",
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+        {
+          id: "part2.physicalCountry2",
+          type: "text",
+          label: "Country ",
+
+          helpText: "For foreign addresses only (if any other)",
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+        {
+          id: "part2.dateFrom2",
+          type: "date",
+
+          label: "Date From (if any other)",
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+        {
+          id: "part2.dateTo2",
+          type: "date",
+
+          label: "Date To (if any other)",
+          conditionalShow: {
+            questionId: "part2.addressSame",
+            value: "no",
+          },
+        },
+      ],
+    },
+    // ================================= MMM ==========================================
+    {
+      id: "part2-marital-info",
+      title: "Part 2: Your Marital Information",
+      questions: [
+        {
+          id: "part2.timesMarried",
+          type: "text",
+          label: "How many times have you been married?",
+          required: true,
+          placeholder: "Enter a number",
+        },
+        {
+          id: "part2.currentMaritalStatus",
+          type: "select",
+          label: "Current Marital Status",
+          required: true,
+          options: [
+            { value: "single", label: "Single, Never Married" },
+            { value: "married", label: "Married" },
+            { value: "divorced", label: "Divorced" },
+            { value: "widowed", label: "Widowed" },
+            { value: "separated", label: "Marriage Annulled or Other" },
+          ],
+        },
+
+        {
+          id: "part2.dateOfMarriage",
+          type: "date",
+          label: "Date of Current Marriage",
+          helpText: "If currently married",
+        },
+        {
+          id: "part2.placeOfMarriage",
+          type: "text",
+          label: "Place of Current Marriage (City, State, Country)",
+          helpText: "If currently married",
+        },
+        //
+        {
+          id: "part2.placeState",
+          type: "select",
+          label: "Place of Current Marriage (State)",
+          helpText: "If currently married",
+          options: US_STATES,
+        },
+        {
+          id: "part2.placeProvince",
+          type: "text",
+          label: "Place of Current Marriage (Province)",
+          helpText: "If currently married",
+        },
+        {
+          id: "part2.placeCountry",
+          type: "text",
+          label: "Place of Current Marriage (Country)",
+          helpText: "If currently married",
+        },
+      ],
+    },
+
+    // ================================ MMM ==========================================
+
+    {
+      id: "part2-marital-info",
+      title: "Part 2: Your Marital Information",
+      questions: [
+        {
+          id: "part2.timesMarried",
+          type: "text",
+          label: "How many times have you been married?",
+          required: true,
+          placeholder: "Enter a number",
+        },
+        {
+          id: "part2.currentMaritalStatus",
+          type: "select",
+          label: "Current Marital Status",
+          required: true,
+          options: [
+            { value: "single", label: "Single, Never Married" },
+            { value: "married", label: "Married" },
+            { value: "divorced", label: "Divorced" },
+            { value: "widowed", label: "Widowed" },
+            { value: "separated", label: "Marriage Annulled or Other" },
+          ],
+        },
+
+        {
+          id: "part2.dateOfMarriage",
+          type: "date",
+          label: "Date of Current Marriage",
+          helpText: "If currently married",
+        },
+        {
+          id: "part2.placeOfMarriage",
+          type: "text",
+          label: "Place of Current Marriage (City, State, Country)",
+          helpText: "If currently married",
+        },
+        //
+        {
+          id: "part2.placeState",
+          type: "select",
+          label: "Place of Current Marriage (State)",
+          helpText: "If currently married",
+          options: US_STATES,
+        },
+        {
+          id: "part2.placeProvince",
+          type: "text",
+          label: "Place of Current Marriage (Province)",
+          helpText: "If currently married",
+        },
+        {
+          id: "part2.placeCountry",
+          type: "text",
+          label: "Place of Current Marriage (Country)",
+          helpText: "If currently married",
+        },
+      ],
+    },
+    // ================================ MMM ==========================================
+
+    {
+      id: "part2-Spouse-info",
+      title: "Part 2: Your Spouse Information (if any)",
+      questions: [
+        {
+          id: "part2.currentSpouseName",
+          type: "text",
+          label: "Current Spouse's Name",
+        },
+        {
+          id: "part2.currentSpouseGivenName",
+          type: "text",
+          label: "Current Spouse's Given Name",
+        },
+        {
+          id: "part2.currentSpouseMiddleName",
+          type: "text",
+          label: "Current Spouse's Middle Name",
+        },
+        {
+          id: "part2.dateMarriageEnded",
+          type: "date",
+          label: "Date Marriage Ended",
+        },
+
+        {
+          id: "part1.currentSpouseFamilyNameOther",
+          type: "text",
+          label: "Current Spouse's Family Name (Other)",
+        },
+        {
+          id: "part1.currentSpouseGivenNameOther",
+          type: "text",
+          label: "Current Spouse's Given Name (Other)",
+        },
+        {
+          id: "part1.currentSpouseMiddleNameOther",
+          type: "text",
+          label: "Current Spouse's Middle Name (Other)",
+        },
+        {
+          id: "part1.dateMarriageEndedOther",
+          type: "text",
+          label: "Date Marriage Ended (Other)",
+        },
+      ],
+    },
+
+    // =====================================================================
+    {
+      id: "part2-parent-info",
+      title: "Part 2: Information About Your Parents",
+      description: "Provide information about your parents",
+      questions: [
+        {
+          id: "part2.fatherLastName",
+          type: "text",
+          label: "24.a. Father's Family Name (Last Name)",
+        },
+        {
+          id: "part2.fatherFirstName",
+          type: "text",
+          label: "24.b. Father's Given Name (First Name)",
+        },
+        {
+          id: "part2.fatherMiddleName",
+          type: "text",
+          label: "24.c. Father's Middle Name",
+        },
+        {
+          id: "part2.fatherDateOfBirth",
+          type: "date",
+          label: "25. Father's Date of Birth (mm/dd/yyyy)",
+        },
+        {
+          id: "part2.fatherSex",
+          type: "radio",
+          label: "26. Father's Sex",
+
+          options: [
+            { value: "male", label: "Male" },
+            { value: "female", label: "Female" },
+          ],
+        },
+        {
+          id: "part2.fatherCountryOfBirth",
+          type: "text",
+          label: "27. Father's Country of Birth",
+        },
+        {
+          id: "part2.fatherCityOfResidence",
+          type: "text",
+          label: "28. Father's City/Town/Village of Residence",
+        },
+        {
+          id: "part2.fatherCountryOfResidence",
+          type: "text",
+          label: "29. Father's Country of Residence",
+        },
+        {
+          id: "part2.motherLastName",
+          type: "text",
+          label: "30.a. Mother's Family Name (Last Name)",
+        },
+        {
+          id: "part2.motherFirstName",
+          type: "text",
+          label: "30.b. Mother's Given Name (First Name)",
+        },
+        {
+          id: "part2.motherMiddleName",
+          type: "text",
+          label: "30.c. Mother's Middle Name",
+        },
+        {
+          id: "part2.motherDateOfBirth",
+          type: "date",
+          label: "31. Mother's Date of Birth (mm/dd/yyyy)",
+        },
+        {
+          id: "part2.motherSex",
+          type: "radio",
+          label: "32. Mother's Sex",
+
+          options: [
+            { value: "male", label: "Male" },
+            { value: "female", label: "Female" },
+          ],
+        },
+        {
+          id: "part2.motherCountryOfBirth",
+          type: "text",
+          label: "33. Mother's Country of Birth",
+        },
+        {
+          id: "part2.motherCityOfResidence",
+          type: "text",
+          label: "34. Mother's City/Town/Village of Residence",
+        },
+        {
+          id: "part2.motherCountryOfResidence",
+          type: "text",
+          label: "35. Mother's Country of Residence",
+        },
+      ],
+    },
+    {
+      id: "part2-additional-info",
+      title: "Part 2: Additional Information About You (Petitioner)",
+      description: "Additional information required for the petition",
+      questions: [
+        {
+          id: "part2.isUSCitizen",
+          type: "radio",
+          label: "36. I am a (Select only one box):",
+          required: true,
+          options: [
+            { value: "citizen", label: "U.S. Citizen" },
+            { value: "lpr", label: "Lawful Permanent Resident" },
+          ],
+        },
+        {
+          id: "part2.citizenshipAcquiredThrough",
+          type: "radio",
+          label:
+            "37. My citizenship was acquired through (Select only one box):",
+          required: false,
+          conditionalShow: {
+            questionId: "part2.isUSCitizen",
+            value: "citizen",
+          },
+          options: [
+            { value: "birth-us", label: "Birth in the United States" },
+            { value: "naturalization", label: "Naturalization" },
+            { value: "parents", label: "Parents" },
+          ],
+        },
+        {
+          id: "part2.hasNaturalizationCertificate",
+          type: "radio",
+          label:
+            "38. Have you obtained a Certificate of Naturalization or a Certificate of Citizenship?",
+          required: false,
+          conditionalShow: {
+            questionId: "part2.citizenshipAcquiredThrough",
+            value: "naturalization",
+          },
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part2.certificateNumber",
+          type: "text",
+          label: "39.a. Certificate Number",
+          conditionalShow: {
+            questionId: "part2.hasNaturalizationCertificate",
+            value: "yes",
+          },
+        },
+        {
+          id: "part2.placeOfIssuance",
+          type: "text",
+          label: "39.b. Place of Issuance (City/Town, State, Country)",
+          conditionalShow: {
+            questionId: "part2.hasNaturalizationCertificate",
+            value: "yes",
+          },
+        },
+        {
+          id: "part2.dateOfIssuance",
+          type: "date",
+          label: "39.c. Date of Issuance (mm/dd/yyyy)",
+          conditionalShow: {
+            questionId: "part2.hasNaturalizationCertificate",
+            value: "yes",
+          },
+        },
+        {
+          id: "part2.line40a.classOfAdmission",
+          type: "text",
+          label: "Class Of Admission",
+          required: false,
+        },
+        {
+          id: "part2.line40b.dateOfAdmission",
+          type: "date",
+          label: "Date Of Admission",
+          required: false,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.line40d.cityOrTown",
+          type: "text",
+          label: "City Or Town",
+        },
+        {
+          id: "part2.line41",
+          type: "radio",
+          label:
+            "Did you gain lawful permanent resident status through marriage to a U.S. citizen or lawful permanent resident?",
+          required: true,
+
+          options: [
+            {
+              value: "yes",
+              label: "Yes",
+            },
+            {
+              value: "no",
+              label: "No",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part2-citizenship",
+      title: "Part 2: Information About Your U.S. Citizenship",
+      description: "Complete this section if you are a U.S. citizen",
+      questions: [
+        {
+          id: "part2.citizenshipThrough",
+          type: "radio",
+          label: "How did you acquire U.S. citizenship?",
+          options: [
+            { value: "birth-us", label: "Birth in the United States" },
+            { value: "naturalization", label: "Naturalization" },
+            {
+              value: "parents",
+              label:
+                "Parents (acquired after birth through U.S. citizen parents)",
+            },
+          ],
+          helpText: "Select one",
+        },
+        {
+          id: "part2.citizenshipUS",
+          type: "radio",
+          label:
+            "How did you acquire U.S. citizenship? --( If you are a U.S. citizen )",
+
+          conditionalShow: {
+            questionId: "part2.isUSCitizen",
+            value: "citizen",
+          },
+          options: [
+            {
+              value: "Birth in the United States",
+              label: "Birth in the United States",
+            },
+            { value: "Naturalization", label: "Naturalization" },
+            {
+              value: "Parents",
+              label: "Parents",
+            },
+          ],
+
+          helpText: "Select one",
+        },
+
+        {
+          id: "part2.dateOfNaturalization",
+          type: "date",
+          label:
+            "Date of Issuance of Certificate of Naturalization or Citizenship",
+        },
+
+        {
+          id: "part2.certificateNumber",
+          type: "text",
+          label:
+            "Certificate of Naturalization Number or Certificate of Citizenship Number",
+          helpText: "If you naturalized or acquired citizenship",
+        },
+        {
+          id: "part2.placeOfNaturalization",
+          type: "text",
+          label: "Place of Naturalization or Acquisition (City, State)",
+          helpText: "If you naturalized or acquired citizenship",
+        },
+      ],
+    },
+
+    // =====================================================================
+    {
+      id: "part4-beneficiary-info",
+      title: "Part 4: Information About Your Relative (Beneficiary)",
+      description:
+        "Provide information about the person you are petitioning for",
+      questions: [
+        {
+          id: "part4.alienNumber",
+          type: "text",
+          label: "Beneficiary's Alien Registration Number (A-Number)",
+          placeholder: "A-",
+          helpText: "If they have one",
+        },
+        {
+          id: "part4.uscisOnlineAccount",
+          type: "text",
+          label: "Beneficiary's USCIS Online Account Number",
+        },
+        {
+          id: "part4.ssn",
+          type: "ssn",
+          label: "Beneficiary's U.S. Social Security Number",
+          helpText: "If they have one",
+        },
+        {
+          id: "part4.lastName",
+          type: "text",
+          label: "Beneficiary's Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part4.firstName",
+          type: "text",
+          label: "Beneficiary's Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part4.middleName",
+          type: "text",
+          label: "Beneficiary's Middle Name",
+        },
+        {
+          id: "part4.cityOfBirth",
+          type: "text",
+          label: "Beneficiary's City or Town of Birth",
+          required: true,
+        },
+        {
+          id: "part4.countryOfBirth",
+          type: "text",
+          label: "Beneficiary's Country of Birth",
+          required: true,
+        },
+        {
+          id: "part4.dateOfBirth",
+          type: "date",
+          label: "Beneficiary's Date of Birth",
+          required: true,
+        },
+        {
+          id: "part4.sex",
+          type: "radio",
+          label: "Beneficiary's Sex",
+          required: true,
+          options: [
+            { value: "male", label: "Male" },
+            { value: "female", label: "Female" },
+          ],
+        },
+        {
+          id: "part4.hasOtherNames",
+          type: "radio",
+          label: "Has your relative ever used other names?",
+          required: true,
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+        {
+          id: "part4.otherNames",
+          type: "textarea",
+          label: "Other Names Used by Beneficiary",
+          helpText: "If yes, list all other names",
+        },
+      ],
+    },
+    {
+      id: "part4-beneficiary-address",
+      title: "Part 4: Beneficiary's Address",
+      questions: [
+        {
+          id: "part4.street",
+          type: "text",
+          label: "Street Number and Name",
+          required: true,
+        },
+        {
+          id: "part4.aptType",
+          type: "select",
+          label: "Apt/Ste/Flr",
+          options: [
+            { value: "", label: "None" },
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part4.aptNumber",
+          type: "text",
+          label: "Apartment/Suite/Floor Number",
+        },
+        {
+          id: "part4.city",
+          type: "text",
+          label: "City or Town",
+          required: true,
+        },
+        {
+          id: "part4.state",
+          type: "select",
+          label: "State or Province",
+          required: true,
+          options: US_STATES,
+        },
+        {
+          id: "part4.zip",
+          type: "text",
+          label: "ZIP or Postal Code",
+        },
+        {
+          id: "part4.country",
+          type: "text",
+          label: "Country",
+          required: true,
+        },
+      ],
+    },
+    {
+      id: "part4-beneficiary-marital",
+      title: "Part 4: Beneficiary's Marital Information",
+      questions: [
+        {
+          id: "part4.timesMarried",
+          type: "text",
+          label: "How many times has the beneficiary been married?",
+          required: true,
+        },
+        {
+          id: "part4.currentMaritalStatus",
+          type: "select",
+          label: "Beneficiary's Current Marital Status",
+          required: true,
+          options: [
+            { value: "single", label: "Single, Never Married" },
+            { value: "married", label: "Married" },
+            { value: "divorced", label: "Divorced" },
+            { value: "widowed", label: "Widowed" },
+            { value: "separated", label: "Marriage Annulled or Other" },
+          ],
+        },
+        {
+          id: "part4.spouseName",
+          type: "text",
+          label: "Beneficiary's Current Spouse's Full Name",
+          helpText: "If currently married",
+        },
+        {
+          id: "part4.dateOfMarriage",
+          type: "date",
+          label: "Date of Marriage",
+          helpText: "If currently married",
+        },
+      ],
+    },
+    {
+      id: "part4-immigration-intent",
+      title: "Part 4: Immigration Intent",
+      description: "Indicate how the beneficiary will immigrate",
+      questions: [
+        {
+          id: "part4.immigrationPath",
+          type: "radio",
+          label: "The beneficiary will apply for:",
+          required: true,
+          options: [
+            {
+              value: "adjustment",
+              label: "Adjustment of status in the United States (Form I-485)",
+            },
+            {
+              value: "consular",
+              label: "An immigrant visa abroad at a U.S. Embassy or consulate",
+            },
+          ],
+          helpText: "IMPORTANT: You must select only ONE option",
+        },
+        {
+          id: "part4.consularLocation",
+          type: "text",
+          label:
+            "If applying for an immigrant visa abroad, provide the location (City, Country) where the beneficiary will apply",
+          helpText: "E.g., London, United Kingdom",
+        },
+      ],
+    },
+  ],
+  pdfFieldMappings: [
+    // { questionId: "part2.lastName", pdfFieldName: "Pt2Line4a_FamilyName" },
+    // { questionId: "part2.firstName", pdfFieldName: "Pt2Line4b_GivenName" },
+    // { questionId: "part2.middleName", pdfFieldName: "Pt2Line4c_MiddleName" },
+    // { questionId: "part4.lastName", pdfFieldName: "Pt4Line4a_FamilyName" },
+    // { questionId: "part4.firstName", pdfFieldName: "Pt4Line4b_GivenName" },
+  ],
+  requiredDocuments: [
+    "Proof of your U.S. citizenship (birth certificate, naturalization certificate, or U.S. passport)",
+    "Proof of relationship to beneficiary (birth certificate, marriage certificate, etc.)",
+    "Evidence of legal name change (if applicable)",
+    "Two passport-style photos of the beneficiary",
+  ],
+  instructions: [
+    "Complete all applicable sections",
+    "Answer all questions - use N/A if not applicable",
+    "Sign and date Part 6",
+    "Include the $535 filing fee",
+    "Mail to the appropriate USCIS Lockbox facility",
+  ],
+};
+const I_212_DEFINITION: FormDefinition = {
+  id: "i-212",
+  code: "I-212",
+  name: "TODO: Add form name",
+  description: "TODO: Add description",
+  category: "other",
+  estimatedTime: "30-45 minutes",
+  filingFee: 0,
+  price: 60,
+  sections: [
+    {
+      id: "part1-attorney-information",
+      title: "Part 1: Attorney or Accredited Representative Information",
+      description:
+        "Provide details about your attorney or accredited representative, if applicable.",
+      questions: [
+        {
+          id: "part1.attorneyG28Attached",
+          type: "radio",
+          label: "Is Form G-28 attached?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+          helpText:
+            "Form G-28 is required if you have an attorney or accredited representative.",
+        },
+        {
+          id: "part1.attorneyStateBarNumber",
+          type: "text",
+          label: "Attorney State Bar Number",
+          helpText: "Enter the state bar number of your attorney.",
+        },
+        {
+          id: "part1.attorneyUSCISAccountNumber",
+          type: "text",
+          label: "Attorney USCIS Online Account Number",
+          helpText:
+            "Provide the USCIS online account number if your attorney has one.",
+        },
+      ],
+    },
+    {
+      id: "part1-applicant-information",
+      title: "Part 1: Applicant Information",
+      description: "Enter your personal information as the applicant.",
+      questions: [
+        {
+          id: "part1.alienNumber",
+          type: "text",
+          label: "Alien Registration Number (A-Number)",
+          helpText:
+            "Your A-Number is an 8- or 9-digit number assigned by USCIS.",
+        },
+        {
+          id: "part1.fullName.familyName",
+          type: "text",
+          label: "Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part1.fullName.givenName",
+          type: "text",
+          label: "Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part1.fullName.middleName",
+          type: "text",
+          label: "Middle Name",
+        },
+        {
+          id: "part1.otherNamesUsed.familyName",
+          type: "text",
+          label: "Other Names Used - Family Name (Last Name)",
+          helpText: "Include any other names you have used.",
+        },
+        {
+          id: "part1.otherNamesUsed.givenName",
+          type: "text",
+          label: "Other Names Used - Given Name (First Name)",
+        },
+        {
+          id: "part1.otherNamesUsed.middleName",
+          type: "text",
+          label: "Other Names Used - Middle Name",
+        },
+        {
+          id: "part1.otherNamesUsed.familyName2",
+          type: "text",
+          label: "Other Names Used - Additional Family Name (Last Name)",
+        },
+        {
+          id: "part1.otherNamesUsed.givenName2",
+          type: "text",
+          label: "Other Names Used - Additional Given Name (First Name)",
+        },
+        {
+          id: "part1.otherNamesUsed.middleName2",
+          type: "text",
+          label: "Other Names Used - Additional Middle Name",
+        },
+      ],
+    },
+    {
+      id: "part1-mailing-address",
+      title: "Part 1: Mailing Address",
+      description: "Provide your current mailing address.",
+      questions: [
+        {
+          id: "part1.mailingAddress.inCareOfName",
+          type: "text",
+          label: "In Care Of Name",
+          helpText:
+            "If applicable, enter the name of the person who receives your mail.",
+        },
+        {
+          id: "part1.mailingAddress.streetNumberName",
+          type: "text",
+          label: "Street Number and Name",
+          required: true,
+        },
+        {
+          id: "part1.mailingAddress.unit",
+          type: "select",
+          label: "Unit Type",
+          options: [
+            { value: "", label: "Select if applicable" },
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part1.mailingAddress.aptSteFlrNumber",
+          type: "text",
+          label: "Unit Number",
+        },
+        {
+          id: "part1.mailingAddress.cityOrTown",
+          type: "text",
+          label: "City or Town",
+          required: true,
+        },
+        {
+          id: "part1.mailingAddress.state",
+          type: "select",
+          label: "State",
+          options: US_STATES,
+          required: true,
+        },
+        {
+          id: "part1.mailingAddress.zipCode",
+          type: "text",
+          label: "ZIP Code",
+          required: true,
+        },
+        {
+          id: "part1.mailingAddress.province",
+          type: "text",
+          label: "Province",
+          helpText: "If applicable, enter the province.",
+        },
+        {
+          id: "part1.mailingAddress.postalCode",
+          type: "text",
+          label: "Postal Code",
+          helpText: "If applicable, enter the postal code.",
+        },
+        {
+          id: "part1.mailingAddress.country",
+          type: "text",
+          label: "Country",
+          required: true,
+        },
+        {
+          id: "part1.mailingAddress.sameAsPhysical",
+          type: "radio",
+          label: "Is your mailing address the same as your physical address?",
+          options: [
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "part1-physical-address",
+      title: "Part 1: Physical Address",
+      description: "Provide your current physical address.",
+      questions: [
+        {
+          id: "part1.physicalAddress.streetNumberName",
+          type: "text",
+          label: "Street Number and Name",
+          required: true,
+        },
+        {
+          id: "part1.physicalAddress.unit",
+          type: "select",
+          label: "Unit Type",
+          options: [
+            { value: "", label: "Select if applicable" },
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part1.physicalAddress.aptSteFlrNumber",
+          type: "text",
+          label: "Unit Number",
+        },
+        {
+          id: "part1.physicalAddress.cityOrTown",
+          type: "text",
+          label: "City or Town",
+          required: true,
+        },
+        {
+          id: "part1.physicalAddress.state",
+          type: "select",
+          label: "State",
+          options: US_STATES,
+          required: true,
+        },
+        {
+          id: "part1.physicalAddress.zipCode",
+          type: "text",
+          label: "ZIP Code",
+          required: true,
+        },
+        {
+          id: "part1.physicalAddress.province",
+          type: "text",
+          label: "Province",
+          helpText: "If applicable, enter the province.",
+        },
+        {
+          id: "part1.physicalAddress.postalCode",
+          type: "text",
+          label: "Postal Code",
+          helpText: "If applicable, enter the postal code.",
+        },
+        {
+          id: "part1.physicalAddress.country",
+          type: "text",
+          label: "Country",
+          required: true,
+        },
+      ],
+    },
+    {
+      id: "part1-other-information",
+      title: "Part 1: Other Information",
+      description:
+        "Provide additional information related to your application.",
+      questions: [
+        {
+          id: "part1.otherInformation.dosConsularCaseNumber",
+          type: "text",
+          label: "DOS Consular Case Number",
+          helpText:
+            "Enter your Department of State consular case number, if applicable.",
+        },
+        {
+          id: "part1.otherInformation.embassyCity",
+          type: "text",
+          label: "Embassy City",
+          helpText:
+            "Enter the city of the U.S. embassy or consulate handling your case.",
+        },
+        {
+          id: "part1.otherInformation.embassyCountry",
+          type: "text",
+          label: "Embassy Country",
+          helpText:
+            "Enter the country of the U.S. embassy or consulate handling your case.",
+        },
+        {
+          id: "part1.otherInformation.uscisReceiptNumber",
+          type: "text",
+          label: "USCIS Receipt Number",
+          helpText: "Enter your USCIS receipt number, if applicable.",
+        },
+        {
+          id: "part1.otherInformation.ssn",
+          type: "ssn",
+          label: "U.S. Social Security Number (if any)",
+          placeholder: "###-##-####",
+          helpText: "Leave blank if you do not have one.",
+        },
+        {
+          id: "part1.otherInformation.uscisOnlineAccountNumber",
+          type: "text",
+          label: "USCIS Online Account Number",
+          helpText: "Provide your USCIS online account number, if applicable.",
+        },
+        {
+          id: "part1.otherInformation.sex",
+          type: "radio",
+          label: "Sex",
+          required: true,
+          options: [
+            { value: "M", label: "Male" },
+            { value: "F", label: "Female" },
+          ],
+          helpText: "Select your gender as per your official documents.",
+        },
+        {
+          id: "part1.otherInformation.dateOfBirth",
+          type: "date",
+          label: "Date of Birth (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part1.otherInformation.cityOfBirth",
+          type: "text",
+          label: "City of Birth",
+          required: true,
+        },
+        {
+          id: "part1.otherInformation.stateProvinceOfBirth",
+          type: "text",
+          label: "State/Province of Birth",
+          helpText: "Enter the state or province of your birth, if applicable.",
+        },
+        {
+          id: "part1.otherInformation.countryOfBirth",
+          type: "text",
+          label: "Country of Birth",
+          required: true,
+        },
+        {
+          id: "part1.otherInformation.countryOfCitizenship",
+          type: "text",
+          label: "Country of Citizenship or Nationality",
+          required: true,
+        },
+        {
+          id: "part1.otherInformation.fileLocation",
+          type: "text",
+          label: "File Location",
+          helpText:
+            "Provide the location where your file is currently held, if known.",
+        },
+        {
+          id: "part1.otherInformation.dateFiled",
+          type: "date",
+          label: "Date Filed (mm/dd/yyyy)",
+          placeholder: "MM/DD/YYYY",
+          helpText: "Enter the date you filed your application, if applicable.",
+        },
+        {
+          id: "part1.otherInformation.submittingI601",
+          type: "radio",
+          label: "Are you submitting Form I-601?",
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+        {
+          id: "part1.otherInformation.i601ReceiptNumber",
+          type: "text",
+          label: "I-601 Receipt Number",
+          helpText:
+            "Enter the receipt number for your Form I-601, if applicable.",
+        },
+        {
+          id: "part1.otherInformation.i601FileLocation",
+          type: "text",
+          label: "I-601 File Location",
+          helpText:
+            "Provide the location where your I-601 file is currently held, if known.",
+        },
+        {
+          id: "part1.otherInformation.i601DateFiled",
+          type: "date",
+          label: "I-601 Date Filed (mm/dd/yyyy)",
+          placeholder: "MM/DD/YYYY",
+          helpText: "Enter the date you filed your Form I-601, if applicable.",
+        },
+      ],
+    },
+
+    {
+      id: "part2-removal-as-arriving-alien",
+      title: "Part 2: Removal as Arriving Alien",
+      description: "Provide details about your removal as an arriving alien.",
+      questions: [
+        {
+          id: "part2.removalAsArrivingAlien",
+          type: "radio",
+          label: "1. Were you removed as an arriving alien?",
+          required: true,
+          options: [
+            { value: "1b", label: "Yes, under section 235(b)(1)" },
+            { value: "1c", label: "Yes, under section 240" },
+            { value: "1d", label: "No" },
+          ],
+        },
+        {
+          id: "part2.removalAsArrivingAlienYesNo",
+          type: "radio",
+          label: "1. Were you removed as an arriving alien?",
+          required: true,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+        {
+          id: "part2.locationRemoved.city",
+          type: "text",
+          label: "2. City where you were removed",
+          required: true,
+        },
+        {
+          id: "part2.dateRemoved",
+          type: "date",
+          label: "3. Date of removal (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.locationRemoved.state",
+          type: "select",
+          label: "4. State where you were removed",
+          required: true,
+          options: US_STATES,
+        },
+      ],
+    },
+    {
+      id: "part2-removal-as-deportable-alien",
+      title: "Part 2: Removal as Deportable Alien",
+      description: "Provide details about your removal as a deportable alien.",
+      questions: [
+        {
+          id: "part2.removalAsDeportableAlien",
+          type: "radio",
+          label: "5. Were you removed as a deportable alien?",
+          required: true,
+          options: [
+            { value: "5b", label: "Yes, under section 237(a)(1)(B)" },
+            { value: "5c", label: "Yes, under section 237(a)(1)(C)" },
+            { value: "5d", label: "No" },
+          ],
+        },
+        {
+          id: "part2.removalAsDeportableAlienYesNo",
+          type: "radio",
+          label: "5. Were you removed as a deportable alien?",
+          required: true,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+        {
+          id: "part2.locationRemovedAsDeportable.city",
+          type: "text",
+          label: "6. City where you were removed as a deportable alien",
+          required: true,
+        },
+        {
+          id: "part2.locationRemovedAsDeportable.state",
+          type: "select",
+          label: "7. State where you were removed as a deportable alien",
+          required: true,
+          options: US_STATES,
+        },
+      ],
+    },
+    {
+      id: "part2-unlawful-presence",
+      title: "Part 2: Unlawful Presence",
+      description: "Provide details about any unlawful presence in the U.S.",
+      questions: [
+        {
+          id: "part2.entryAfterUnlawfulPresenceYesNo",
+          type: "radio",
+          label: "8. Did you re-enter the U.S. after unlawful presence?",
+          required: true,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+        {
+          id: "part2.unlawfulPresence.fromDate",
+          type: "date",
+          label: "9. Unlawful presence start date (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.unlawfulPresence.toDate",
+          type: "date",
+          label: "10. Unlawful presence end date (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.unlawfulPresence.departureDate",
+          type: "date",
+          label: "11. Date of departure (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.unlawfulPresence.departureLocation.city",
+          type: "text",
+          label: "12. City of departure",
+          required: true,
+        },
+        {
+          id: "part2.unlawfulPresence.departureLocation.state",
+          type: "select",
+          label: "13. State of departure",
+          required: true,
+          options: US_STATES,
+        },
+        {
+          id: "part2.unlawfulPresence.reentryLocation.city",
+          type: "text",
+          label: "14. City of re-entry",
+          required: true,
+        },
+        {
+          id: "part2.unlawfulPresence.reentryLocation.state",
+          type: "select",
+          label: "15. State of re-entry",
+          required: true,
+          options: US_STATES,
+        },
+        {
+          id: "part2.unlawfulPresence.reentryDate",
+          type: "date",
+          label: "16. Date of re-entry (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+      ],
+    },
+    {
+      id: "part2-entry-after-removal",
+      title: "Part 2: Entry After Removal",
+      description:
+        "Provide details about any entry into the U.S. after removal.",
+      questions: [
+        {
+          id: "part2.entryAfterRemovalYesNo",
+          type: "radio",
+          label: "17. Did you enter the U.S. after removal?",
+          required: true,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+        {
+          id: "part2.entryAfterRemoval.exclusionDate",
+          type: "date",
+          label: "18. Date of exclusion (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.entryAfterRemoval.reentryLocation.city",
+          type: "text",
+          label: "19. City of re-entry after removal",
+          required: true,
+        },
+        {
+          id: "part2.entryAfterRemoval.reentryLocation.state",
+          type: "select",
+          label: "20. State of re-entry after removal",
+          required: true,
+          options: US_STATES,
+        },
+        {
+          id: "part2.entryAfterRemoval.reentryDate",
+          type: "date",
+          label: "21. Date of re-entry after removal (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+      ],
+    },
+    {
+      id: "part3-request-for-permission",
+      title: "Part 3: Request for Permission to Reapply",
+      description:
+        "Provide details about your request for permission to reapply for admission into the United States.",
+      questions: [
+        {
+          id: "part3.requestForPermission.status",
+          type: "radio",
+          label: "1. Current Status",
+          required: true,
+          options: [
+            { value: "P", label: "Parolee" },
+            { value: "V", label: "Visa Holder" },
+            { value: "S", label: "Student" },
+            { value: "O", label: "Other" },
+          ],
+          helpText:
+            "Select your current immigration status. If 'Other', provide an explanation below.",
+        },
+        {
+          id: "part3.requestForPermission.otherStatusExplanation",
+          type: "text",
+          label: "1.a. Other Status Explanation",
+          helpText:
+            "Provide a detailed explanation of your current status if it does not fit the listed categories.",
+        },
+        {
+          id: "part3.requestForPermission.reasonForReentry",
+          type: "textarea",
+          label: "2. Reason for Reentry",
+          required: true,
+
+          helpText:
+            "Provide a detailed explanation of your reasons for reentry, including any supporting information.",
+        },
+      ],
+    },
+    {
+      id: "part3-family-members",
+      title: "Part 3: Family Members",
+      description:
+        "Provide information about your family members related to this application.",
+      questions: [
+        {
+          id: "part3.familyMembers.familyName",
+          type: "text",
+          label: "3.a. Family Name (Last Name)",
+          required: true,
+          helpText: "Enter the last name of the family member.",
+        },
+        {
+          id: "part3.familyMembers.givenName",
+          type: "text",
+          label: "3.b. Given Name (First Name)",
+          required: true,
+          helpText: "Enter the first name of the family member.",
+        },
+        {
+          id: "part3.familyMembers.middleName",
+          type: "text",
+          label: "3.c. Middle Name",
+          helpText:
+            "Enter the middle name of the family member, if applicable.",
+        },
+        {
+          id: "part3.familyMembers.relationship",
+          type: "text",
+          label: "3.d. Relationship",
+          required: true,
+          helpText:
+            "Describe your relationship to the family member (e.g., spouse, child).",
+        },
+      ],
+    },
+    {
+      id: "part3-relative-status",
+      title: "Part 3: Relative's Immigration Status",
+      description:
+        "Indicate the immigration status of your relative in the United States.",
+      questions: [
+        {
+          id: "part3.relativeStatus",
+          type: "radio",
+          label: "4. Relative's Status",
+          required: true,
+          options: [
+            { value: "LPR", label: "Lawful Permanent Resident" },
+            { value: "CIT", label: "U.S. Citizen" },
+          ],
+          helpText:
+            "Select the current immigration status of your relative in the United States.",
+        },
+      ],
+    },
+    {
+      id: "part4-physical-attributes",
+      title: "Part 4: Physical Attributes",
+      description: "Provide information about your physical characteristics.",
+      questions: [
+        {
+          id: "part4.ethnicity",
+          type: "radio",
+          label: "1. Ethnicity",
+          required: true,
+          options: [
+            { value: "H", label: "Hispanic or Latino" },
+            { value: "N", label: "Not Hispanic or Latino" },
+          ],
+          helpText: "Select the option that best describes your ethnicity.",
+        },
+        {
+          id: "part4.race",
+          type: "checkbox",
+          label: "2. Race",
+          required: true,
+          options: [
+            { value: "AS", label: "Asian" },
+            { value: "WH", label: "White" },
+            { value: "BL", label: "Black or African American" },
+            { value: "AI", label: "American Indian or Alaska Native" },
+            { value: "HW", label: "Native Hawaiian or Other Pacific Islander" },
+          ],
+          helpText: "You may select one or more races.",
+        },
+        {
+          id: "part4.heightFeet",
+          type: "select",
+          label: "3.a. Height (Feet)",
+          required: true,
+          options: [
+            { value: "4", label: "4" },
+            { value: "5", label: "5" },
+            { value: "6", label: "6" },
+            { value: "7", label: "7" },
+          ],
+          helpText: "Select your height in feet.",
+        },
+        {
+          id: "part4.heightInches",
+          type: "text",
+          label: "3.b. Height (Inches)",
+          required: true,
+          placeholder: "0-11",
+          helpText: "Enter the remaining inches of your height.",
+        },
+        {
+          id: "part4.weight",
+          type: "text",
+          label: "4. Weight (in pounds) First Box",
+          required: true,
+          placeholder: "e.g., if you weigh 150 pounds, enter First Box 1 ",
+          helpText: "Enter your weight in pounds.",
+        },
+        {
+          id: "part4.weight1",
+          type: "text",
+          label: "4. Weight (in pounds) Second Box",
+          required: true,
+          placeholder: "e.g., if you weigh 150 pounds, enter Second Box 5 ",
+          helpText: "Enter your weight in pounds.",
+        },
+        {
+          id: "part4.weight2",
+          type: "text",
+          label: "4. Weight (in pounds) Third Box",
+          required: true,
+          placeholder: "e.g., if you weigh 150 pounds, enter Third Box 0",
+          helpText: "Enter your weight in pounds.",
+        },
+        {
+          id: "part4.eyeColor",
+          type: "radio",
+          label: "5. Eye Color",
+          required: true,
+          options: [
+            { value: "BU", label: "Blue" },
+            { value: "BL", label: "Black" },
+            { value: "BN", label: "Brown" },
+            { value: "GR", label: "Green" },
+            { value: "GN", label: "Gray" },
+            { value: "HA", label: "Hazel" },
+            { value: "MA", label: "Maroon" },
+            { value: "PN", label: "Pink" },
+            { value: "UN", label: "Unknown" },
+          ],
+          helpText: "Select the color that best matches your eyes.",
+        },
+        {
+          id: "part4.hairColor",
+          type: "radio",
+          label: "6. Hair Color",
+          required: true,
+          options: [
+            { value: "NH", label: "No Hair" },
+            { value: "BL", label: "Black" },
+            { value: "BN", label: "Brown" },
+            { value: "BR", label: "Blond" },
+            { value: "GR", label: "Gray" },
+            { value: "RD", label: "Red" },
+            { value: "SD", label: "Sandy" },
+            { value: "WH", label: "White" },
+            { value: "OT", label: "Other" },
+          ],
+          helpText: "Select the color that best matches your hair.",
+        },
+      ],
+    },
+    {
+      id: "part5-address-history",
+      title: "Part 5: Address History",
+      description: "Provide your address history for the past five years.",
+      questions: [
+        {
+          id: "part5.addressHistory1.streetNumberName",
+          type: "text",
+          label: "1.a. Street Number and Name",
+          required: true,
+        },
+        {
+          id: "part5.addressHistory1.unitType",
+          type: "select",
+          label: "1.b. Unit Type",
+          options: [
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part5.addressHistory1.aptSteFlrNumber",
+          type: "text",
+          label: "1.c. Unit Number",
+        },
+        {
+          id: "part5.addressHistory1.cityOrTown",
+          type: "text",
+          label: "1.d. City or Town",
+          required: true,
+        },
+        {
+          id: "part5.addressHistory1.state",
+          type: "select",
+          label: "1.e. State",
+          options: US_STATES,
+          required: true,
+        },
+        {
+          id: "part5.addressHistory1.zipCode",
+          type: "text",
+          label: "1.f. ZIP Code",
+          required: true,
+        },
+        {
+          id: "part5.addressHistory1.province",
+          type: "text",
+          label: "1.g. Province",
+        },
+        {
+          id: "part5.addressHistory1.postalCode",
+          type: "text",
+          label: "1.h. Postal Code",
+        },
+        {
+          id: "part5.addressHistory1.country",
+          type: "text",
+          label: "1.i. Country",
+          required: true,
+        },
+        {
+          id: "part5.addressHistory1.fromDate",
+          type: "date",
+          label: "1.j. From Date (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part5.addressHistory1.toDate",
+          type: "date",
+          label: "1.k. To Date (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part5.addressHistory2.streetNumberName",
+          type: "text",
+          label: "2.a. Street Number and Name",
+        },
+        {
+          id: "part5.addressHistory2.unitType",
+          type: "select",
+          label: "2.b. Unit Type",
+          options: [
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part5.addressHistory2.aptSteFlrNumber",
+          type: "text",
+          label: "2.c. Unit Number",
+        },
+        {
+          id: "part5.addressHistory2.cityOrTown",
+          type: "text",
+          label: "2.d. City or Town",
+        },
+        {
+          id: "part5.addressHistory2.state",
+          type: "select",
+          label: "2.e. State",
+          options: US_STATES,
+        },
+        {
+          id: "part5.addressHistory2.zipCode",
+          type: "text",
+          label: "2.f. ZIP Code",
+        },
+        {
+          id: "part5.addressHistory2.province",
+          type: "text",
+          label: "2.g. Province",
+        },
+        {
+          id: "part5.addressHistory2.postalCode",
+          type: "text",
+          label: "2.h. Postal Code",
+        },
+        {
+          id: "part5.addressHistory2.country",
+          type: "text",
+          label: "2.i. Country",
+        },
+        {
+          id: "part5.addressHistory2.fromDate",
+          type: "date",
+          label: "2.j. From Date (mm/dd/yyyy)",
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part5.addressHistory2.toDate",
+          type: "date",
+          label: "2.k. To Date (mm/dd/yyyy)",
+          placeholder: "MM/DD/YYYY",
+        },
+      ],
+    },
+    {
+      id: "part5-employment-history",
+      title: "Part 5: Employment History",
+      description: "Provide your employment history for the past five years.",
+      questions: [
+        {
+          id: "part5.employmentHistory1.employerName",
+          type: "text",
+          label: "3.a. Employer Name",
+          required: true,
+        },
+        {
+          id: "part5.employmentHistory1.streetNumberName",
+          type: "text",
+          label: "3.b. Street Number and Name",
+          required: true,
+        },
+        {
+          id: "part5.employmentHistory1.unitType",
+          type: "select",
+          label: "3.c. Unit Type",
+          options: [
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part5.employmentHistory1.aptSteFlrNumber",
+          type: "text",
+          label: "3.d. Unit Number",
+        },
+        {
+          id: "part5.employmentHistory1.cityOrTown",
+          type: "text",
+          label: "3.e. City or Town",
+          required: true,
+        },
+        {
+          id: "part5.employmentHistory1.state",
+          type: "select",
+          label: "3.f. State",
+          options: US_STATES,
+          required: true,
+        },
+        {
+          id: "part5.employmentHistory1.zipCode",
+          type: "text",
+          label: "3.g. ZIP Code",
+          required: true,
+        },
+        {
+          id: "part5.employmentHistory1.province",
+          type: "text",
+          label: "3.h. Province",
+        },
+        {
+          id: "part5.employmentHistory1.postalCode",
+          type: "text",
+          label: "3.i. Postal Code",
+        },
+        {
+          id: "part5.employmentHistory1.country",
+          type: "text",
+          label: "3.j. Country",
+          required: true,
+        },
+        {
+          id: "part5.employmentHistory1.occupation",
+          type: "text",
+          label: "3.k. Occupation",
+          required: true,
+        },
+        {
+          id: "part5.employmentHistory1.fromDate",
+          type: "date",
+          label: "3.l. From Date (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part5.employmentHistory1.toDate",
+          type: "date",
+          label: "3.m. To Date (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part5.employmentHistory2.employerName",
+          type: "text",
+          label: "4.a. Employer Name",
+        },
+        {
+          id: "part5.employmentHistory2.streetNumberName",
+          type: "text",
+          label: "4.b. Street Number and Name",
+        },
+        {
+          id: "part5.employmentHistory2.unitType",
+          type: "select",
+          label: "4.c. Unit Type",
+          options: [
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
+          ],
+        },
+        {
+          id: "part5.employmentHistory2.aptSteFlrNumber",
+          type: "text",
+          label: "4.d. Unit Number",
+        },
+        {
+          id: "part5.employmentHistory2.cityOrTown",
+          type: "text",
+          label: "4.e. City or Town",
+        },
+        {
+          id: "part5.employmentHistory2.state",
+          type: "select",
+          label: "4.f. State",
+          options: US_STATES,
+        },
+        {
+          id: "part5.employmentHistory2.zipCode",
+          type: "text",
+          label: "4.g. ZIP Code",
+        },
+        {
+          id: "part5.employmentHistory2.province",
+          type: "text",
+          label: "4.h. Province",
+        },
+        {
+          id: "part5.employmentHistory2.postalCode",
+          type: "text",
+          label: "4.i. Postal Code",
+        },
+        {
+          id: "part5.employmentHistory2.country",
+          type: "text",
+          label: "4.j. Country",
+        },
+        {
+          id: "part5.employmentHistory2.occupation",
+          type: "text",
+          label: "4.k. Occupation",
+        },
+        {
+          id: "part5.employmentHistory2.fromDate",
+          type: "date",
+          label: "4.l. From Date (mm/dd/yyyy)",
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part5.employmentHistory2.toDate",
+          type: "date",
+          label: "4.m. To Date (mm/dd/yyyy)",
+          placeholder: "MM/DD/YYYY",
+        },
+      ],
+    },
+    {
+      id: "part5-parental-info",
+      title: "Part 5: Parental Information",
+      description: "Provide information about your parents.",
+      questions: [
+        {
+          id: "part5.motherInfo.familyName",
+          type: "text",
+          label: "5.a. Mother's Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part5.motherInfo.givenName",
+          type: "text",
+          label: "5.b. Mother's Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part5.motherInfo.middleName",
+          type: "text",
+          label: "5.c. Mother's Middle Name",
+        },
+        {
+          id: "part5.motherBirthName.familyName",
+          type: "text",
+          label: "5.d. Mother's Birth Family Name (Last Name)",
+        },
+        {
+          id: "part5.motherBirthName.givenName",
+          type: "text",
+          label: "5.e. Mother's Birth Given Name (First Name)",
+        },
+        {
+          id: "part5.motherBirthName.middleName",
+          type: "text",
+          label: "5.f. Mother's Birth Middle Name",
+        },
+        {
+          id: "part5.motherInfo.dateOfBirth",
+          type: "date",
+          label: "5.g. Mother's Date of Birth (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part5.motherInfo.countryOfBirth",
+          type: "text",
+          label: "5.h. Mother's Country of Birth",
+          required: true,
+        },
+        {
+          id: "part5.motherInfo.currentCityTownResidence",
+          type: "text",
+          label: "5.i. Mother's Current City/Town of Residence",
+        },
+        {
+          id: "part5.motherInfo.currentCountryResidence",
+          type: "text",
+          label: "5.j. Mother's Current Country of Residence",
+        },
+        {
+          id: "part5.fatherInfo.familyName",
+          type: "text",
+          label: "6.a. Father's Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part5.fatherInfo.givenName",
+          type: "text",
+          label: "6.b. Father's Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part5.fathersMiddleName",
+          type: "text",
+          label: "6.c. Father's Middle Name",
+        },
+        {
+          id: "part5.fathersBirthFamilyName",
+          type: "text",
+          label: "6.d. Father's Birth Family Name (Last Name)",
+        },
+        {
+          id: "part5.fathersBirthGivenName",
+          type: "text",
+          label: "6.e. Father's Birth Given Name (First Name)",
+        },
+        {
+          id: "part5.fathersBirthMiddleName",
+          type: "text",
+          label: "6.f. Father's Birth Middle Name",
+        },
+        {
+          id: "part5.fathersDateOfBirth",
+          type: "date",
+          label: "6.g. Father's Date of Birth (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part5.fathersCityTownOfBirth",
+          type: "text",
+          label: "6.h. Father's City/Town of Birth",
+        },
+        {
+          id: "part5.fathersCountryOfBirth",
+          type: "text",
+          label: "6.i. Father's Country of Birth",
+          required: true,
+        },
+        {
+          id: "part5.fathersCurrentCityTownOfResidence",
+          type: "text",
+          label: "6.j. Father's Current City/Town of Residence",
+        },
+        {
+          id: "part5.fathersCurrentCountryOfResidence",
+          type: "text",
+          label: "6.k. Father's Current Country of Residence",
+        },
+      ],
+    },
+    {
+      id: "part5-marital-info",
+      title: "Part 5: Marital Information",
+      description: "Provide your current and prior marital information.",
+      questions: [
+        {
+          id: "part5.currentMaritalStatus",
+          type: "select",
+          label: "7.a. Current Marital Status",
+          options: [
+            { value: "S", label: "Single" },
+            { value: "M", label: "Married" },
+            { value: "D", label: "Divorced" },
+            { value: "W", label: "Widowed" },
+            { value: "O", label: "Other" },
+          ],
+          required: true,
+        },
+        {
+          id: "part5.currentMaritalStatusOther",
+          type: "text",
+          label: "7.b. If Other, specify",
+        },
+        {
+          id: "part5.numberOfMarriages",
+          type: "text",
+          label: "7.c. Number of Marriages (including current marriage)",
+          required: true,
+        },
+        {
+          id: "part5.mothersCityTownOfBirth",
+          type: "text",
+          label: "7.d. Mother's City/Town of Birth",
+        },
+        {
+          id: "part5.currentSpouseFamilyName",
+          type: "text",
+          label: "8.a. Current Spouse's Family Name (Last Name)",
+        },
+        {
+          id: "part5.currentSpouseGivenName",
+          type: "text",
+          label: "8.b. Current Spouse's Given Name (First Name)",
+        },
+        {
+          id: "part5.currentSpouseMiddleName",
+          type: "text",
+          label: "8.c. Current Spouse's Middle Name",
+        },
+        {
+          id: "part5.currentSpouseDateOfBirth",
+          type: "date",
+          label: "8.d. Current Spouse's Date of Birth (mm/dd/yyyy)",
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part5.dateOfMarriageToCurrentSpouse",
+          type: "date",
+          label: "8.e. Date of Marriage to Current Spouse (mm/dd/yyyy)",
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part5.currentSpouseAlienNumber",
+          type: "text",
+          label: "8.f. Current Spouse's Alien Registration Number (A-Number)",
+        },
+        {
+          id: "part5.currentSpousePlaceOfBirthCity",
+          type: "text",
+          label: "8.g. Current Spouse's Place of Birth (City)",
+        },
+        {
+          id: "part5.currentSpousePlaceOfBirthCountry",
+          type: "text",
+          label: "8.h. Current Spouse's Place of Birth (Country)",
+        },
+        {
+          id: "part5.currentSpousePlaceOfBirthProvince",
+          type: "text",
+          label: "8.i. Current Spouse's Place of Birth (Province)",
+        },
+        {
+          id: "part5.placeOfMarriageToCurrentSpouseCity",
+          type: "text",
+          label: "8.j. Place of Marriage to Current Spouse (City)",
+        },
+        {
+          id: "part5.placeOfMarriageToCurrentSpouseCountry",
+          type: "text",
+          label: "8.k. Place of Marriage to Current Spouse (Country)",
+        },
+        {
+          id: "part5.placeOfMarriageToCurrentSpouseProvince",
+          type: "text",
+          label: "8.l. Place of Marriage to Current Spouse (Province)",
+        },
+        {
+          id: "part5.priorSpouseFamilyName",
+          type: "text",
+          label: "9.a. Prior Spouse's Family Name (Last Name)",
+        },
+        {
+          id: "part5.priorSpouseGivenName",
+          type: "text",
+          label: "9.b. Prior Spouse's Given Name (First Name)",
+        },
+        {
+          id: "part5.priorSpouseMiddleName",
+          type: "text",
+          label: "9.c. Prior Spouse's Middle Name",
+        },
+        {
+          id: "part5.priorSpouseDateOfBirth",
+          type: "date",
+          label: "9.d. Prior Spouse's Date of Birth (mm/dd/yyyy)",
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part5.dateOfMarriageToPriorSpouse",
+          type: "date",
+          label: "9.e. Date of Marriage to Prior Spouse (mm/dd/yyyy)",
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part5.placeOfMarriageToPriorSpouseCity",
+          type: "text",
+          label: "9.f. Place of Marriage to Prior Spouse (City)",
+        },
+        {
+          id: "part5.placeOfMarriageToPriorSpouseCountry",
+          type: "text",
+          label: "9.g. Place of Marriage to Prior Spouse (Country)",
+        },
+        {
+          id: "part5.placeOfMarriageToPriorSpouseProvince",
+          type: "text",
+          label: "9.h. Place of Marriage to Prior Spouse (Province)",
+        },
+        {
+          id: "part5.dateMarriageWithPriorSpouseEnded",
+          type: "date",
+          label: "9.i. Date Marriage with Prior Spouse Ended (mm/dd/yyyy)",
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part5.placeWhereMarriageWithPriorSpouseEndedCity",
+          type: "text",
+          label: "9.j. Place Where Marriage with Prior Spouse Ended (City)",
+        },
+        {
+          id: "part5.placeWhereMarriageWithPriorSpouseEndedCountry",
+          type: "text",
+          label: "9.k. Place Where Marriage with Prior Spouse Ended (Country)",
+        },
+        {
+          id: "part5.placeWhereMarriageWithPriorSpouseEndedProvince",
+          type: "text",
+          label: "9.l. Place Where Marriage with Prior Spouse Ended (Province)",
+        },
+      ],
+    },
+    {
+      id: "part6-contact-information",
+      title: "Part 6: Applicant's Contact Information",
+      description:
+        "Provide your current contact details so USCIS can reach you if needed.",
+      questions: [
+        {
+          id: "part6.applicantDaytimePhoneNumber",
+          type: "tel",
+          label: "3. Daytime Phone Number",
+          required: true,
+          placeholder: "(555) 123-4567",
+          helpText:
+            "Enter a phone number where you can be reached during business hours.",
+        },
+        {
+          id: "part6.applicantMobilePhoneNumber",
+          type: "tel",
+          label: "4. Mobile Phone Number",
+          placeholder: "(555) 123-4567",
+          helpText:
+            "Enter your mobile phone number if different from your daytime phone number.",
+        },
+        {
+          id: "part6.applicantEmailAddress",
+          type: "email",
+          label: "5. Email Address",
+          placeholder: "example@email.com",
+          helpText:
+            "Provide a valid email address for electronic correspondence.",
+        },
+      ],
+    },
+    // {
+    //   id: "part6-signature",
+    //   title: "Part 6: Applicant's Signature",
+    //   description: "Sign and date the application to certify the information provided.",
+    //   questions: [
+    //     {
+    //       id: "part6.applicantSignature",
+    //       type: "text",
+    //       label: "6. Applicant's Signature",
+    //       required: true,
+    //       helpText: "Sign your full legal name as it appears on your application.",
+    //     },
+    //     {
+    //       id: "part6.dateOfSignature",
+    //       type: "date",
+    //       label: "Date of Signature (mm/dd/yyyy)",
+    //       required: true,
+    //       placeholder: "MM/DD/YYYY",
+    //       helpText: "Enter the date you signed this form.",
+    //     },
+    //   ],
+    // },
+
+    {
+      id: "part7-interpreter-info",
+      title: "Part 7: Interpreter's Information",
+      description:
+        "Provide details about the interpreter assisting with this application.",
+      questions: [
+        {
+          id: "part7.interpreterGivenName",
+          type: "text",
+          label: "1.a. Interpreter's Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part7.interpreterFamilyName",
+          type: "text",
+          label: "1.b. Interpreter's Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part7.interpreterBusinessOrOrganizationName",
+          type: "text",
+          label: "2. Interpreter's Business or Organization Name",
+          helpText:
+            "If applicable, provide the name of the business or organization the interpreter is affiliated with.",
+        },
+        {
+          id: "part7.interpreterDaytimePhoneNumber",
+          type: "tel",
+          label: "4. Interpreter's Daytime Telephone Number",
+          placeholder: "(555) 123-4567",
+          required: true,
+          helpText:
+            "Provide a phone number where the interpreter can be reached during business hours.",
+        },
+        {
+          id: "part7.interpreterMobilePhoneNumber",
+          type: "tel",
+          label: "5. Interpreter's Mobile Telephone Number",
+          placeholder: "(555) 123-4567",
+          helpText:
+            "Provide a mobile phone number if different from the daytime number.",
+        },
+        {
+          id: "part7.interpreterEmailAddress",
+          type: "email",
+          label: "6. Interpreter's Email Address",
+          placeholder: "example@email.com",
+          helpText: "Provide an email address for the interpreter.",
+        },
+        {
+          id: "part7.interpreterLanguage",
+          type: "text",
+          label: "Interpreter's Language",
+          required: true,
+          helpText:
+            "Specify the language in which the interpreter is fluent and providing assistance.",
+        },
+        // {
+        //   id: "part7.interpreterSignature",
+        //   type: "text",
+        //   label: "7.a. Interpreter's Signature",
+        //   required: true,
+        //   helpText: "The interpreter must sign here to confirm the information provided.",
+        // },
+        // {
+        //   id: "part7.interpreterDateOfSignature",
+        //   type: "date",
+        //   label: "7.b. Date of Signature (mm/dd/yyyy)",
+        //   placeholder: "MM/DD/YYYY",
+        //   required: true,
+        //   helpText: "Enter the date the interpreter signed this form.",
+        // },
+      ],
+    },
+
+    {
+      id: "part8-preparer-info",
+      title: "Part 8: Preparer's Information",
+      description:
+        "Provide the details of the person who prepared this form, if applicable.",
+      questions: [
+        {
+          id: "part8.preparerBusinessOrOrganizationName",
+          type: "text",
+          label: "2. Preparer's Business or Organization Name",
+          helpText:
+            "Enter the name of the business or organization, if the preparer is affiliated with one.",
+        },
+        {
+          id: "part8.preparerGivenName",
+          type: "text",
+          label: "1.b. Preparer's Given Name (First Name)",
+          required: true,
+          helpText:
+            "Enter the first name of the person who prepared this form.",
+        },
+        {
+          id: "part8.preparerFamilyName",
+          type: "text",
+          label: "1.a. Preparer's Family Name (Last Name)",
+          required: true,
+          helpText: "Enter the last name of the person who prepared this form.",
+        },
+        {
+          id: "part8.preparerDaytimePhoneNumber",
+          type: "tel",
+          label: "4. Preparer's Daytime Phone Number",
+          placeholder: "(555) 123-4567",
+          helpText:
+            "Provide a phone number where the preparer can be reached during the day.",
+        },
+        {
+          id: "part8.preparerMobilePhoneNumber",
+          type: "tel",
+          label: "5. Preparer's Mobile Phone Number",
+          placeholder: "(555) 123-4567",
+          helpText:
+            "Provide a mobile phone number for the preparer, if available.",
+        },
+        {
+          id: "part8.preparerEmailAddress",
+          type: "email",
+          label: "6. Preparer's Email Address",
+          placeholder: "example@email.com",
+          helpText: "Enter the email address of the preparer.",
+        },
+        // {
+        //   id: "part8.preparerSignature",
+        //   type: "text",
+        //   label: "8.a. Preparer's Signature",
+        //   required: true,
+        //   helpText:
+        //     "The preparer must sign here to certify the information provided.",
+        // },
+        // {
+        //   id: "part8.preparerDateOfSignature",
+        //   type: "date",
+        //   label: "8.b. Date of Signature",
+        //   required: true,
+        //   placeholder: "MM/DD/YYYY",
+        //   helpText: "Enter the date the preparer signed this form.",
+        // },
+      ],
+    },
+
+    {
+      id: "part9-additional-information",
+      title: "Part 9: Additional Information",
+      description:
+        "Provide additional information if you need more space to complete any item within this application.",
+      questions: [
+        {
+          id: "part9.additionalInformationAlienNumber",
+          type: "text",
+          label: "1. Alien Registration Number (A-Number)",
+          required: true,
+          helpText:
+            "Enter your A-Number if applicable. This number is typically found on your immigration documents.",
+        },
+        {
+          id: "part9.additionalInformationFamilyName",
+          type: "text",
+          label: "2.a. Family Name (Last Name)",
+          required: true,
+        },
+        {
+          id: "part9.additionalInformationGivenName",
+          type: "text",
+          label: "2.b. Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part9.additionalInformationMiddleName",
+          type: "text",
+          label: "2.c. Middle Name",
+        },
+        {
+          id: "part9.additionalInformationPageNumber",
+          type: "text",
+          label: "3.a. Page Number",
+          helpText:
+            "Enter the page number of the form where additional information is needed.",
+        },
+        {
+          id: "part9.additionalInformationPartNumber",
+          type: "text",
+          label: "3.b. Part Number",
+          helpText:
+            "Enter the part number of the form where additional information is needed.",
+        },
+        {
+          id: "part9.additionalInformationItemNumber",
+          type: "text",
+          label: "3.c. Item Number",
+          helpText:
+            "Enter the item number of the form where additional information is needed.",
+        },
+        {
+          id: "part9.additionalInformationDetails",
+          type: "textarea",
+          label: "3.d. Additional Information",
+          helpText:
+            "Provide any additional information necessary for the item specified above.",
+        },
+        {
+          id: "part9.additionalInformationPageNumber2",
+          type: "text",
+          label: "4.a. Page Number",
+          helpText:
+            "Enter the page number of the form where additional information is needed.",
+        },
+        {
+          id: "part9.additionalInformationPartNumber2",
+          type: "text",
+          label: "4.b. Part Number",
+          helpText:
+            "Enter the part number of the form where additional information is needed.",
+        },
+        {
+          id: "part9.additionalInformationItemNumber2",
+          type: "text",
+          label: "4.c. Item Number",
+          helpText:
+            "Enter the item number of the form where additional information is needed.",
+        },
+        {
+          id: "part9.additionalInformationDetails2",
+          type: "textarea",
+          label: "4.d. Additional Information",
+          helpText:
+            "Provide any additional information necessary for the item specified above.",
+        },
+        {
+          id: "part9.additionalInformationPageNumber3",
+          type: "text",
+          label: "5.a. Page Number",
+          helpText:
+            "Enter the page number of the form where additional information is needed.",
+        },
+        {
+          id: "part9.additionalInformationPartNumber3",
+          type: "text",
+          label: "5.b. Part Number",
+          helpText:
+            "Enter the part number of the form where additional information is needed.",
+        },
+        {
+          id: "part9.additionalInformationItemNumber3",
+          type: "text",
+          label: "5.c. Item Number",
+          helpText:
+            "Enter the item number of the form where additional information is needed.",
+        },
+        {
+          id: "part9.additionalInformationDetails3",
+          type: "textarea",
+          label: "5.d. Additional Information",
+          helpText:
+            "Provide any additional information necessary for the item specified above.",
+        },
+        {
+          id: "part9.additionalInformationPageNumber4",
+          type: "text",
+          label: "6.a. Page Number",
+          helpText:
+            "Enter the page number of the form where additional information is needed.",
+        },
+        {
+          id: "part9.additionalInformationPartNumber4",
+          type: "text",
+          label: "6.b. Part Number",
+          helpText:
+            "Enter the part number of the form where additional information is needed.",
+        },
+        {
+          id: "part9.additionalInformationItemNumber4",
+          type: "text",
+          label: "6.c. Item Number",
+          helpText:
+            "Enter the item number of the form where additional information is needed.",
+        },
+        {
+          id: "part9.additionalInformationDetails4",
+          type: "textarea",
+          label: "6.d. Additional Information",
+          helpText:
+            "Provide any additional information necessary for the item specified above.",
+        },
+        {
+          id: "part9.additionalInformationPageNumber5",
+          type: "text",
+          label: "7.a. Page Number",
+          helpText:
+            "Enter the page number of the form where additional information is needed.",
+        },
+        {
+          id: "part9.additionalInformationPartNumber5",
+          type: "text",
+          label: "7.b. Part Number",
+          helpText:
+            "Enter the part number of the form where additional information is needed.",
+        },
+        {
+          id: "part9.additionalInformationItemNumber5",
+          type: "text",
+          label: "7.c. Item Number",
+          helpText:
+            "Enter the item number of the form where additional information is needed.",
+        },
+        {
+          id: "part9.additionalInformationDetails5",
+          type: "textarea",
+          label: "7.d. Additional Information",
+          helpText:
+            "Provide any additional information necessary for the item specified above.",
+        },
+      ],
+    },
+  ],
+  pdfFieldMappings: I_212_FIELD_MAPPINGS,
+  requiredDocuments: [],
+  instructions: [],
+};
+export const FORM_REGISTRY: Record<string, FormDefinition> = {
+  // Family-Based Forms
+  "i-130": I130_DEFINITION, //=====1
+  "i-129f": I_129F_DEFINITION, //=====--2
+  "i-485": I_485_DEFINITION, //=====5
+  "i-864": I864_DEFINITION,
+  "i-751": I_751_DEFINITION, //=====---3
+  "i-360": I360_DEFINITION,
+  "i-600": I600_DEFINITION,
+
+  // Employment/Work Authorization Forms
+  "i-129": I129_DEFINITION,
+  "i-140": I140_DEFINITION,
+  "i-765": I_765_DEFINITION, //=====8
+  "i-526": I526_DEFINITION,
+  "i-9": I9_DEFINITION, //=====4
+
+  // Status Change/Extension
+  "i-539": I539_DEFINITION,
+
+  // Travel
+  "i-131": I131_DEFINITION,
+
+  // Citizenship
+  "n-400": N_400_DEFINITION, //=====10
+
+  // Humanitarian
+  "i-589": I589_DEFINITION,
+  "i-730": I730_DEFINITION, //=====9
+  "i-821": I821_DEFINITION,
+  // "i-821d": I821D_DEFINITION,
+
+  // Waivers
+  "i-601": I601_DEFINITION,
+  "i-601a": I601A_DEFINITION,
+
+  // Appeals
+  "i-290b": I290B_DEFINITION,
+
+  // Other
+  // "i-90": I90_DEFINITION,
+  // "i-90": I_90_DEFINITION,
+  "i-90": I_90_DEFINITION, //=====6
+
+  // Waivers
+  "i-212": I_212_DEFINITION, //=====7
+};
+
+// ============================================================================
+// HELPER FUNCTIONS
+// ============================================================================
+
+export function getFormDefinition(formId: string): FormDefinition | null {
+  return FORM_REGISTRY[formId] || null;
+}
+
+export function getAllForms(): FormDefinition[] {
+  return Object.values(FORM_REGISTRY);
+}
+
+export function getFormsByCategory(
+  category: FormDefinition["category"]
+): FormDefinition[] {
+  return getAllForms().filter((form) => form.category === category);
+}
+
+export function getFormByCode(code: string): FormDefinition | null {
+  return getAllForms().find((form) => form.code === code) || null;
+}

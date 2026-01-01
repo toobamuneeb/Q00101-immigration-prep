@@ -4,82 +4,97 @@
  *
  * Fills USCIS PDF forms with user answers using field mappings.
  */
+"use server";
+import { PDFDocument } from "pdf-lib";
+import { readFileSync } from "fs";
+import { join } from "path";
+import {
+  I_130_AUTO_MAPPINGS,
+  type FieldMapping,
+} from "@/lib/constants/form-mappings/i-130-auto-mappings";
+import { I_130_FIELD_MAPPINGS } from "@/lib/constants/form-mappings/i-130-field-mappings";
+import { I_485_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-485-auto-mappings";
+import { I_765_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-765-auto-mappings";
+import { I_131_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-131-auto-mappings";
+import { I_864_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-864-auto-mappings";
+import { N_400_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/n-400-auto-mappings";
+import { I_751_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-751-auto-mappings";
 
-import { PDFDocument } from 'pdf-lib';
-import { readFileSync } from 'fs';
-import { join } from 'path';
-import { I_130_AUTO_MAPPINGS, type FieldMapping } from '@/lib/constants/form-mappings/i-130-auto-mappings';
-import { I_485_AUTO_MAPPINGS } from '@/lib/constants/form-mappings/i-485-auto-mappings';
-import { I_765_AUTO_MAPPINGS } from '@/lib/constants/form-mappings/i-765-auto-mappings';
-import { I_131_AUTO_MAPPINGS } from '@/lib/constants/form-mappings/i-131-auto-mappings';
-import { I_864_AUTO_MAPPINGS } from '@/lib/constants/form-mappings/i-864-auto-mappings';
-import { N_400_AUTO_MAPPINGS } from '@/lib/constants/form-mappings/n-400-auto-mappings';
-import { I_751_AUTO_MAPPINGS } from '@/lib/constants/form-mappings/i-751-auto-mappings';
-import { I_90_AUTO_MAPPINGS } from '@/lib/constants/form-mappings/i-90-auto-mappings';
-import { I_129_AUTO_MAPPINGS } from '@/lib/constants/form-mappings/i-129-auto-mappings';
-import { I_140_AUTO_MAPPINGS } from '@/lib/constants/form-mappings/i-140-auto-mappings';
-import { I_539_AUTO_MAPPINGS } from '@/lib/constants/form-mappings/i-539-auto-mappings';
-import { I_9_AUTO_MAPPINGS } from '@/lib/constants/form-mappings/i-9-auto-mappings';
-import { I_526_AUTO_MAPPINGS } from '@/lib/constants/form-mappings/i-526-auto-mappings';
-import { I_821D_AUTO_MAPPINGS } from '@/lib/constants/form-mappings/i-821d-auto-mappings';
-import { I_212_AUTO_MAPPINGS } from '@/lib/constants/form-mappings/i-212-auto-mappings';
-import { I_290B_AUTO_MAPPINGS } from '@/lib/constants/form-mappings/i-290b-auto-mappings';
-import { I_601_AUTO_MAPPINGS } from '@/lib/constants/form-mappings/i-601-auto-mappings';
-import { I_601A_AUTO_MAPPINGS } from '@/lib/constants/form-mappings/i-601a-auto-mappings';
-import { I_129F_AUTO_MAPPINGS } from '@/lib/constants/form-mappings/i-129f-auto-mappings';
-import { I_360_AUTO_MAPPINGS } from '@/lib/constants/form-mappings/i-360-auto-mappings';
-import { I_600_AUTO_MAPPINGS } from '@/lib/constants/form-mappings/i-600-auto-mappings';
-import { I_589_AUTO_MAPPINGS } from '@/lib/constants/form-mappings/i-589-auto-mappings';
+import { I_129_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-129-auto-mappings";
+import { I_140_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-140-auto-mappings";
+import { I_539_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-539-auto-mappings";
+import { I_9_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-9-auto-mappings";
+import { I_526_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-526-auto-mappings";
+import { I_821D_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-821d-auto-mappings";
+import { I_212_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-212-auto-mappings";
+import { I_290B_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-290b-auto-mappings";
+import { I_601_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-601-auto-mappings";
+import { I_601A_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-601a-auto-mappings";
+import { I_129F_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-129f-auto-mappings";
+import { I_360_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-360-auto-mappings";
+import { I_600_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-600-auto-mappings";
+import { I_589_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-589-auto-mappings";
+import { I_90_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-90-auto-mappings";
+import { I_131_FIELD_MAPPINGS } from "../constants/form-mappings/i-131-field-mappings";
+import { I_751_FIELD_MAPPINGS } from "../constants/form-mappings/i-751-field-mappings";
+import { I_765_FIELD_MAPPINGS } from "../constants/form-mappings/i-765-field-mappings";
+import { N_400_FIELD_MAPPINGS } from "../constants/form-mappings/n-400-field-mappings";
+import { I_212_FIELD_MAPPINGS } from "../constants/form-mappings/i-212-field-mappings";
+import { I_129F_FIELD_MAPPINGS } from "../constants/form-mappings/i-129f-field-mappings";
+import { I_485_FIELD_MAPPINGS } from "../constants/form-mappings/i-485-field-mappings";
+import { I_730_FIELD_MAPPINGS } from "../constants/form-mappings/i-730-field-mappings";
 
 /**
  * Get field mappings for a specific form
  */
 function getFormMappings(formId: string): FieldMapping[] {
   switch (formId.toLowerCase()) {
-    case 'i-130':
-      return I_130_AUTO_MAPPINGS;
-    case 'i-485':
-      return I_485_AUTO_MAPPINGS;
-    case 'i-765':
-      return I_765_AUTO_MAPPINGS;
-    case 'i-131':
-      return I_131_AUTO_MAPPINGS;
-    case 'i-864':
-      return I_864_AUTO_MAPPINGS;
-    case 'n-400':
-      return N_400_AUTO_MAPPINGS;
-    case 'i-751':
-      return I_751_AUTO_MAPPINGS;
-    case 'i-90':
+    case "i-90":
       return I_90_AUTO_MAPPINGS;
-    case 'i-129':
+    case "i-130":
+      return I_130_FIELD_MAPPINGS;
+    case "i-485":
+      return I_485_FIELD_MAPPINGS;
+    case "i-765":
+      return I_765_FIELD_MAPPINGS;
+    case "i-131":
+      return I_131_FIELD_MAPPINGS;
+    case "i-864":
+      return I_864_AUTO_MAPPINGS;
+    case "n-400":
+      return N_400_FIELD_MAPPINGS;
+    case "i-751":
+      return I_751_FIELD_MAPPINGS;
+    case "i-129":
       return I_129_AUTO_MAPPINGS;
-    case 'i-140':
+    case "i-140":
       return I_140_AUTO_MAPPINGS;
-    case 'i-539':
+    case "i-539":
       return I_539_AUTO_MAPPINGS;
-    case 'i-9':
+    case "i-9":
       return I_9_AUTO_MAPPINGS;
-    case 'i-526':
+    case "i-526":
       return I_526_AUTO_MAPPINGS;
-    case 'i-821d':
+    case "i-821d":
       return I_821D_AUTO_MAPPINGS;
-    case 'i-212':
-      return I_212_AUTO_MAPPINGS;
-    case 'i-290b':
+    case "i-212":
+      return I_212_FIELD_MAPPINGS;
+    case "i-290b":
       return I_290B_AUTO_MAPPINGS;
-    case 'i-601':
+    case "i-601":
       return I_601_AUTO_MAPPINGS;
-    case 'i-601a':
+    case "i-601a":
       return I_601A_AUTO_MAPPINGS;
-    case 'i-129f':
-      return I_129F_AUTO_MAPPINGS;
-    case 'i-360':
+    case "i-129f":
+      return I_129F_FIELD_MAPPINGS;
+    case "i-360":
       return I_360_AUTO_MAPPINGS;
-    case 'i-600':
+    case "i-600":
       return I_600_AUTO_MAPPINGS;
-    case 'i-589':
+    case "i-589":
       return I_589_AUTO_MAPPINGS;
+    case "i-730":
+      return I_730_FIELD_MAPPINGS;
     default:
       throw new Error(`No mappings available for form: ${formId}`);
   }
@@ -89,7 +104,7 @@ function getFormMappings(formId: string): FieldMapping[] {
  * Get PDF template path for a form
  */
 function getTemplatePath(formId: string): string {
-  const templatesDir = join(process.cwd(), 'public', 'pdf-templates');
+  const templatesDir = join(process.cwd(), "public", "pdf-templates");
   return join(templatesDir, `${formId.toLowerCase()}-unlocked.pdf`);
 }
 
@@ -97,14 +112,14 @@ function getTemplatePath(formId: string): string {
  * Format date for PDF (MM/DD/YYYY)
  */
 function formatDate(dateValue: any): string {
-  if (!dateValue) return '';
+  if (!dateValue) return "";
 
   try {
     const date = new Date(dateValue);
     if (isNaN(date.getTime())) return String(dateValue);
 
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
     const year = date.getFullYear();
 
     return `${month}/${day}/${year}`;
@@ -117,16 +132,26 @@ function formatDate(dateValue: any): string {
  * Format SSN for PDF (remove dashes)
  */
 function formatSSN(ssn: any): string {
-  if (!ssn) return '';
-  return String(ssn).replace(/\D/g, ''); // Remove all non-digit characters
+  if (!ssn) return "";
+  return String(ssn).replace(/\D/g, ""); // Remove all non-digit characters
 }
 
 /**
  * Format Alien Number for PDF (remove 'A' prefix and dashes)
  */
 function formatAlienNumber(alienNumber: any): string {
-  if (!alienNumber) return '';
-  return String(alienNumber).replace(/[^0-9]/g, ''); // Remove all non-digit characters
+  if (!alienNumber) return "";
+  return String(alienNumber).replace(/[^0-9]/g, ""); // Remove all non-digit characters
+}
+
+/**
+ * Format ZIP code for PDF (ensure 5 digits only)
+ */
+function formatZipCode(zipCode: any): string {
+  if (!zipCode) return "";
+  // Remove all non-digits and take only first 5 digits
+  const digits = String(zipCode).replace(/\D/g, "");
+  return digits.substring(0, 5);
 }
 
 /**
@@ -147,6 +172,12 @@ export async function fillPDF(
   // Get field mappings
   const mappings = getFormMappings(formId);
 
+  // Debug logging
+  console.log(`\n📋 Form ID: ${formId}`);
+  console.log(`📋 Total mappings:`, JSON.stringify(mappings, 2, null));
+  console.log(`📋 Answer keys:`, Object.keys(answers));
+  console.log(`📋 Sample answers:`, Object.keys(answers).slice(0, 5));
+
   // Track filled fields for debugging
   const filledFields: string[] = [];
   const failedFields: Array<{ field: string; error: string }> = [];
@@ -154,28 +185,70 @@ export async function fillPDF(
   // Fill each field
   for (const mapping of mappings) {
     try {
+      // Skip if mapping is invalid
+      if (!mapping || !mapping.pdfField || !mapping.questionId) {
+        console.warn("Skipping invalid mapping:", mapping);
+        continue;
+      }
+
       const value = answers[mapping.questionId];
 
       // Skip if no value provided
-      if (value === undefined || value === null || value === '') {
+      if (value === undefined || value === null || value === "") {
         continue;
       }
 
       // Handle different field types
-      if (mapping.type === 'checkbox') {
+      if (mapping.type === "radio") {
+        // Radio button field
+        const checkbox = form.getCheckBox(mapping.pdfField);
+
+        // Check if this is the selected radio option
+        if (mapping.value) {
+          // Only check if the answer matches the mapping's value
+          if (
+            value === mapping.value ||
+            value === mapping.value.toLowerCase()
+          ) {
+            checkbox.check();
+            filledFields.push(
+              `${mapping.pdfField} = checked (radio: ${mapping.value})`
+            );
+          } else {
+            checkbox.uncheck();
+          }
+        }
+      } else if (mapping.type === "checkbox") {
         // Checkbox field
         const checkbox = form.getCheckBox(mapping.pdfField);
 
-        // Check if this is a conditional checkbox (e.g., relationship type)
+        // Check if this is a conditional checkbox (e.g., multi-select)
         if (mapping.value) {
-          // Only check if the answer matches the mapping's value
-          if (value === mapping.value || value === mapping.value.toLowerCase()) {
+          // For multi-select checkboxes, value can be an array
+          let isChecked = false;
+
+          if (Array.isArray(value)) {
+            // Check if array contains the mapping value (case-insensitive)
+            isChecked = value.some(
+              (v) => String(v).toLowerCase() === mapping.value.toLowerCase()
+            );
+          } else {
+            // Single value comparison (case-insensitive)
+            isChecked =
+              String(value).toLowerCase() === mapping.value.toLowerCase();
+          }
+
+          if (isChecked) {
             checkbox.check();
-            filledFields.push(`${mapping.pdfField} = checked`);
+            filledFields.push(
+              `${mapping.pdfField} = checked (${mapping.value})`
+            );
+          } else {
+            checkbox.uncheck();
           }
         } else {
           // Simple boolean checkbox
-          if (value === true || value === 'yes' || value === 'Yes') {
+          if (value === true || value === "yes" || value === "Yes") {
             checkbox.check();
             filledFields.push(`${mapping.pdfField} = checked`);
           } else {
@@ -190,7 +263,7 @@ export async function fillPDF(
           const field = form.getField(mapping.pdfField);
           const fieldType = field.constructor.name;
 
-          if (fieldType === 'PDFDropdown') {
+          if (fieldType === "PDFDropdown") {
             const dropdown = form.getDropdown(mapping.pdfField);
             dropdown.select(String(value));
             filledFields.push(`${mapping.pdfField} = "${value}" (dropdown)`);
@@ -200,12 +273,40 @@ export async function fillPDF(
 
             // Format value based on question ID
             let formattedValue: string;
-            if (mapping.questionId.includes('ssn') || mapping.questionId.includes('SSN')) {
+            if (
+              mapping.questionId.includes("ssn") ||
+              mapping.questionId.includes("SSN")
+            ) {
               formattedValue = formatSSN(value);
-            } else if (mapping.questionId.includes('alienNumber') || mapping.questionId.includes('AlienNumber')) {
+            } else if (
+              mapping.questionId.includes("alienNumber") ||
+              mapping.questionId.includes("AlienNumber") ||
+              mapping.questionId.includes("aliennumber")
+            ) {
               formattedValue = formatAlienNumber(value);
-            } else if (mapping.questionId.includes('date') || mapping.questionId.includes('Date')) {
+            } else if (
+              mapping.questionId.includes("zipcode") ||
+              mapping.questionId.includes("ZipCode") ||
+              mapping.questionId.includes("zipCode")
+            ) {
+              formattedValue = formatZipCode(value);
+            } else if (
+              mapping.questionId.includes("date") ||
+              mapping.questionId.includes("Date")
+            ) {
               formattedValue = formatDate(value);
+            } else if (
+              mapping.questionId.includes("signature") ||
+              mapping.questionId.includes("Signature")
+            ) {
+              // For signature fields, check maxLength
+              const maxLen = textField.getMaxLength();
+              if (maxLen && maxLen === 1) {
+                // This is likely an initial field, use first character
+                formattedValue = String(value).charAt(0).toUpperCase();
+              } else {
+                formattedValue = String(value);
+              }
             } else {
               formattedValue = String(value);
             }
@@ -219,11 +320,20 @@ export async function fillPDF(
 
           // Format value based on question ID
           let formattedValue: string;
-          if (mapping.questionId.includes('ssn') || mapping.questionId.includes('SSN')) {
+          if (
+            mapping.questionId.includes("ssn") ||
+            mapping.questionId.includes("SSN")
+          ) {
             formattedValue = formatSSN(value);
-          } else if (mapping.questionId.includes('alienNumber') || mapping.questionId.includes('AlienNumber')) {
+          } else if (
+            mapping.questionId.includes("alienNumber") ||
+            mapping.questionId.includes("AlienNumber")
+          ) {
             formattedValue = formatAlienNumber(value);
-          } else if (mapping.questionId.includes('date') || mapping.questionId.includes('Date')) {
+          } else if (
+            mapping.questionId.includes("date") ||
+            mapping.questionId.includes("Date")
+          ) {
             formattedValue = formatDate(value);
           } else {
             formattedValue = String(value);
@@ -234,9 +344,11 @@ export async function fillPDF(
         }
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      failedFields.push({ field: mapping.pdfField, error: errorMessage });
-      console.warn(`Failed to fill field ${mapping.pdfField}:`, errorMessage);
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
+      const fieldName = mapping?.pdfField || "unknown field";
+      failedFields.push({ field: fieldName, error: errorMessage });
+      console.warn(`Failed to fill field ${fieldName}:`, errorMessage);
     }
   }
 
@@ -260,9 +372,13 @@ export async function fillPDF(
     return filledPdfBytes;
   } catch (error) {
     // If save fails due to rich text fields, try without updating field appearances
-    if (error instanceof Error && error.message.includes('rich text')) {
-      console.warn('⚠️  PDF contains rich text fields. Saving without appearance updates.');
-      const filledPdfBytes = await pdfDoc.save({ updateFieldAppearances: false });
+    if (error instanceof Error && error.message.includes("rich text")) {
+      console.warn(
+        "⚠️  PDF contains rich text fields. Saving without appearance updates."
+      );
+      const filledPdfBytes = await pdfDoc.save({
+        updateFieldAppearances: false,
+      });
       return filledPdfBytes;
     }
     throw error;
@@ -272,21 +388,21 @@ export async function fillPDF(
 /**
  * Fill PDF and return as a blob (for browser download)
  */
-export async function fillPDFAndDownload(
-  formId: string,
-  answers: Record<string, any>,
-  filename?: string
-): Promise<void> {
-  const pdfBytes = await fillPDF(formId, answers);
+// export async function fillPDFAndDownload(
+//   formId: string,
+//   answers: Record<string, any>,
+//   filename?: string
+// ): Promise<void> {
+//   const pdfBytes = await fillPDF(formId, answers);
 
-  // Create blob and download
-  const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = filename || `${formId.toUpperCase()}-filled.pdf`;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
-}
+//   // Create blob and download
+//   const blob = new Blob([pdfBytes], { type: "application/pdf" });
+//   const url = URL.createObjectURL(blob);
+//   const link = document.createElement("a");
+//   link.href = url;
+//   link.download = filename || `${formId.toUpperCase()}-filled.pdf`;
+//   document.body.appendChild(link);
+//   link.click();
+//   document.body.removeChild(link);
+//   URL.revokeObjectURL(url);
+// }

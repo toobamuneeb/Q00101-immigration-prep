@@ -40,7 +40,10 @@ export async function updateSession(request: NextRequest) {
 
   const pathname = request.nextUrl.pathname;
 
-  if (user && (pathname.startsWith("/auth") || pathname.startsWith("/(auth)"))) {
+  if (
+    user &&
+    (pathname.startsWith("/auth") || pathname.startsWith("/(auth)"))
+  ) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 

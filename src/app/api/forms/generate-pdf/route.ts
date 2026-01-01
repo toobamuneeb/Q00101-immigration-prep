@@ -1,19 +1,22 @@
 // @ts-nocheck
 
 import { NextRequest, NextResponse } from "next/server";
-import { PDFDocument, PDFTextField, PDFCheckBox } from "pdf-lib";
-import { readFile, writeFile } from "fs/promises";
-import { join } from "path";
+import { PDFDocument, PDFTextField, PDFCheckBox, StandardFonts } from "pdf-lib";
 import { FORM_REGISTRY } from "@/lib/constants/forms-registry";
 import { checkFormAccess } from "@/lib/access-control";
 import { createClient } from "@/lib/supabase/server";
 import PDFKit from "pdfkit";
 export const runtime = "nodejs";
+import { fillPDF } from "@/lib/pdf/fill-pdf";
+// Primary path uses field mappings to fill official templates;
+// Fallback generation uses pdf-lib simple text rendering to avoid font path issues
 
 export async function POST(request: NextRequest) {
+  let formId: string | undefined;
+  let answers: Record<string, any> | undefined;
   try {
     const body = await request.json();
-    const { formId, answers } = body;
+    ({ formId, answers } = body);
     console.log({ answers });
     if (!formId || !answers) {
       return NextResponse.json(
@@ -37,7 +40,10 @@ export async function POST(request: NextRequest) {
     const accessCheck = await checkFormAccess(formId);
     if (!accessCheck.hasAccess) {
       return NextResponse.json(
-        { error: "Purchase required to download this form", reason: accessCheck.reason },
+        {
+          error: "Purchase required to download this form",
+          reason: accessCheck.reason,
+        },
         { status: 403 }
       );
     }
@@ -47,95 +53,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Form not found" }, { status: 404 });
     }
 
-    // Get the PDF template path
-    const pdfTemplatePath = join(
-      process.cwd(),
-      "public",
-      "pdf-templates",
-      `${formId}.pdf`
-    );
+    // Use the robust fill engine with unlocked templates and field mappings
+    const filledPdfBytes = await fillPDF(formId, answers);
 
-    // Read the PDF template
-    const pdfBytes = await readFile(pdfTemplatePath);
-
-    // Load the PDF document
-    const pdfDoc = await PDFDocument.load(pdfBytes);
-    const form = pdfDoc.getForm();
-
-    // Get all form fields
-    const fields = form.getFields();
-
-    // Apply the field mappings from your form definition
-    if (
-      formDefinition.pdfFieldMappings &&
-      formDefinition.pdfFieldMappings.length > 0
-    ) {
-      for (const mapping of formDefinition.pdfFieldMappings) {
-        const answer = answers[mapping.questionId];
-        if (answer !== undefined && answer !== null && answer !== "") {
-          const field = form.getField(mapping.pdfFieldName);
-          if (field) {
-            if (field instanceof PDFTextField) {
-              field.setText(String(answer));
-            } else if (field instanceof PDFCheckBox) {
-              const value = mapping.transform
-                ? mapping.transform(String(answer))
-                : String(answer);
-              if (
-                value === "Yes" ||
-                value === "true" ||
-                value === "1" ||
-                value === true
-              ) {
-                field.check();
-              } else {
-                field.uncheck();
-              }
-            }
-          }
-        }
-      }
-    } else {
-      // Fallback: Try to map based on field names
-      for (const field of fields) {
-        const fieldName = field.getName();
-
-        // Try to find matching answer by question ID
-        let answer = null;
-        for (const [questionId, ansValue] of Object.entries(answers)) {
-          // Simple matching logic - can be improved
-          if (
-            fieldName
-              .toLowerCase()
-              .includes(questionId.toLowerCase().replace(/\./g, ""))
-          ) {
-            answer = ansValue;
-            break;
-          }
-        }
-
-        if (answer !== null && answer !== undefined && answer !== "") {
-          if (field instanceof PDFTextField) {
-            field.setText(String(answer));
-          } else if (field instanceof PDFCheckBox) {
-            const value = String(answer);
-            if (value === "Yes" || value === "true" || value === "1") {
-              field.check();
-            } else {
-              field.uncheck();
-            }
-          }
-        }
-      }
-    }
-
-    // Flatten the form (make it non-editable)
-    form.flatten();
-
-    // Save the PDF
-    const filledPdfBytes = await pdfDoc.save();
-
-    // Return as blob
     return new NextResponse(filledPdfBytes, {
       headers: {
         "Content-Type": "application/pdf",
@@ -144,9 +64,30 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error("PDF generation error:", error);
-
-    // Fallback: Generate a simple PDF with form data
-    return generateFallbackPDF(formId, answers);
+    try {
+      if (!formId || !answers) {
+        return NextResponse.json(
+          {
+            error: "Failed to generate PDF",
+            details: "Missing formId or answers in fallback",
+          },
+          { status: 500 }
+        );
+      }
+      return await generateFallbackPDF(formId, answers);
+    } catch (fallbackError) {
+      console.error("Fallback PDF generation error:", fallbackError);
+      return NextResponse.json(
+        {
+          error: "Failed to generate PDF",
+          details:
+            fallbackError instanceof Error
+              ? fallbackError.message
+              : "Unknown error",
+        },
+        { status: 500 }
+      );
+    }
   }
 }
 
@@ -155,41 +96,52 @@ async function generateFallbackPDF(
   answers: Record<string, any>
 ) {
   const formDefinition = FORM_REGISTRY[formId];
-  const chunks: Buffer[] = [];
+  const pdfDoc = await PDFDocument.create();
+  let page = pdfDoc.addPage();
+  const { width, height } = page.getSize();
+  const margin = 50;
+  const titleSize = 20;
+  const lineSize = 12;
+  let y = height - margin;
 
-  return new Promise<NextResponse>((resolve) => {
-    const doc = new PDFKit();
+  const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
-    doc.on("data", (chunk: Buffer) => chunks.push(chunk));
-    doc.on("end", () => {
-      const pdfBytes = Buffer.concat(chunks);
-      resolve(
-        new NextResponse(pdfBytes, {
-          headers: {
-            "Content-Type": "application/pdf",
-            "Content-Disposition": `attachment; filename="${formDefinition.code}-filled.pdf"`,
-          },
-        })
-      );
-    });
+  page.drawText(`${formDefinition.name} - Filled Form`, {
+    x: margin,
+    y,
+    size: titleSize,
+    font,
+  });
+  y -= 30;
 
-    doc
-      .fontSize(20)
-      .text(`${formDefinition.name} - Filled Form`, { align: "center" });
-    doc.moveDown();
-
-    for (const [questionId, answer] of Object.entries(answers)) {
-      if (answer !== undefined && answer !== null && answer !== "") {
-        const questionText = findQuestionText(questionId, formDefinition);
-        doc
-          .fontSize(12)
-          .text(`${questionText || questionId}:`, { continued: true });
-        doc.text(` ${String(answer)}`);
-        doc.moveDown(0.5);
+  for (const [questionId, answer] of Object.entries(answers)) {
+    if (answer !== undefined && answer !== null && answer !== "") {
+      const questionText =
+        findQuestionText(questionId, formDefinition) || questionId;
+      const text = `${questionText}: ${String(answer)}`;
+      const chunks = text.match(/.{1,90}(\s|$)/g) || [text];
+      for (const chunk of chunks) {
+        if (y < margin) {
+          page = pdfDoc.addPage();
+          y = page.getSize().height - margin;
+        }
+        page.drawText(chunk.trim(), {
+          x: margin,
+          y,
+          size: lineSize,
+          font,
+        });
+        y -= 16;
       }
     }
+  }
 
-    doc.end();
+  const pdfBytes = await pdfDoc.save();
+  return new NextResponse(pdfBytes, {
+    headers: {
+      "Content-Type": "application/pdf",
+      "Content-Disposition": `attachment; filename="${formDefinition.code}-filled.pdf"`,
+    },
   });
 }
 function findQuestionText(questionId: string, formDefinition: any): string {
