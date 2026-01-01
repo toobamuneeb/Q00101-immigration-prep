@@ -35,6 +35,14 @@ import { I_360_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-360-auto-ma
 import { I_600_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-600-auto-mappings";
 import { I_589_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-589-auto-mappings";
 import { I_90_AUTO_MAPPINGS } from "@/lib/constants/form-mappings/i-90-auto-mappings";
+import { I_131_FIELD_MAPPINGS } from "../constants/form-mappings/i-131-field-mappings";
+import { I_751_FIELD_MAPPINGS } from "../constants/form-mappings/i-751-field-mappings";
+import { I_765_FIELD_MAPPINGS } from "../constants/form-mappings/i-765-field-mappings";
+import { N_400_FIELD_MAPPINGS } from "../constants/form-mappings/n-400-field-mappings";
+import { I_212_FIELD_MAPPINGS } from "../constants/form-mappings/i-212-field-mappings";
+import { I_129F_FIELD_MAPPINGS } from "../constants/form-mappings/i-129f-field-mappings";
+import { I_485_FIELD_MAPPINGS } from "../constants/form-mappings/i-485-field-mappings";
+import { I_730_FIELD_MAPPINGS } from "../constants/form-mappings/i-730-field-mappings";
 
 /**
  * Get field mappings for a specific form
@@ -46,17 +54,17 @@ function getFormMappings(formId: string): FieldMapping[] {
     case "i-130":
       return I_130_FIELD_MAPPINGS;
     case "i-485":
-      return I_485_AUTO_MAPPINGS;
+      return I_485_FIELD_MAPPINGS;
     case "i-765":
-      return I_765_AUTO_MAPPINGS;
+      return I_765_FIELD_MAPPINGS;
     case "i-131":
-      return I_131_AUTO_MAPPINGS;
+      return I_131_FIELD_MAPPINGS;
     case "i-864":
       return I_864_AUTO_MAPPINGS;
     case "n-400":
-      return N_400_AUTO_MAPPINGS;
+      return N_400_FIELD_MAPPINGS;
     case "i-751":
-      return I_751_AUTO_MAPPINGS;
+      return I_751_FIELD_MAPPINGS;
     case "i-129":
       return I_129_AUTO_MAPPINGS;
     case "i-140":
@@ -70,7 +78,7 @@ function getFormMappings(formId: string): FieldMapping[] {
     case "i-821d":
       return I_821D_AUTO_MAPPINGS;
     case "i-212":
-      return I_212_AUTO_MAPPINGS;
+      return I_212_FIELD_MAPPINGS;
     case "i-290b":
       return I_290B_AUTO_MAPPINGS;
     case "i-601":
@@ -78,13 +86,15 @@ function getFormMappings(formId: string): FieldMapping[] {
     case "i-601a":
       return I_601A_AUTO_MAPPINGS;
     case "i-129f":
-      return I_129F_AUTO_MAPPINGS;
+      return I_129F_FIELD_MAPPINGS;
     case "i-360":
       return I_360_AUTO_MAPPINGS;
     case "i-600":
       return I_600_AUTO_MAPPINGS;
     case "i-589":
       return I_589_AUTO_MAPPINGS;
+    case "i-730":
+      return I_730_FIELD_MAPPINGS;
     default:
       throw new Error(`No mappings available for form: ${formId}`);
   }
@@ -175,6 +185,12 @@ export async function fillPDF(
   // Fill each field
   for (const mapping of mappings) {
     try {
+      // Skip if mapping is invalid
+      if (!mapping || !mapping.pdfField || !mapping.questionId) {
+        console.warn("Skipping invalid mapping:", mapping);
+        continue;
+      }
+
       const value = answers[mapping.questionId];
 
       // Skip if no value provided
@@ -210,15 +226,16 @@ export async function fillPDF(
         if (mapping.value) {
           // For multi-select checkboxes, value can be an array
           let isChecked = false;
-          
+
           if (Array.isArray(value)) {
             // Check if array contains the mapping value (case-insensitive)
-            isChecked = value.some(v => 
-              String(v).toLowerCase() === mapping.value.toLowerCase()
+            isChecked = value.some(
+              (v) => String(v).toLowerCase() === mapping.value.toLowerCase()
             );
           } else {
             // Single value comparison (case-insensitive)
-            isChecked = String(value).toLowerCase() === mapping.value.toLowerCase();
+            isChecked =
+              String(value).toLowerCase() === mapping.value.toLowerCase();
           }
 
           if (isChecked) {
@@ -278,6 +295,18 @@ export async function fillPDF(
               mapping.questionId.includes("Date")
             ) {
               formattedValue = formatDate(value);
+            } else if (
+              mapping.questionId.includes("signature") ||
+              mapping.questionId.includes("Signature")
+            ) {
+              // For signature fields, check maxLength
+              const maxLen = textField.getMaxLength();
+              if (maxLen && maxLen === 1) {
+                // This is likely an initial field, use first character
+                formattedValue = String(value).charAt(0).toUpperCase();
+              } else {
+                formattedValue = String(value);
+              }
             } else {
               formattedValue = String(value);
             }
@@ -317,8 +346,9 @@ export async function fillPDF(
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "Unknown error";
-      failedFields.push({ field: mapping.pdfField, error: errorMessage });
-      console.warn(`Failed to fill field ${mapping.pdfField}:`, errorMessage);
+      const fieldName = mapping?.pdfField || "unknown field";
+      failedFields.push({ field: fieldName, error: errorMessage });
+      console.warn(`Failed to fill field ${fieldName}:`, errorMessage);
     }
   }
 

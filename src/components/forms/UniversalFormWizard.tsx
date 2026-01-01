@@ -58,6 +58,18 @@ export function UniversalFormWizard({
   const isLastSection = currentSectionIndex === totalSections - 1;
   const progress = ((currentSectionIndex + 1) / totalSections) * 100;
 
+  // Safety check: if currentSection is undefined, reset to first section
+  if (!currentSection) {
+    console.error(
+      "Invalid section index:",
+      currentSectionIndex,
+      "Total sections:",
+      totalSections
+    );
+    setCurrentSectionIndex(0);
+    return null;
+  }
+
   // Validate a single field
   const validateField = (question: Question, value: any): string | null => {
     if (question.required) {
@@ -171,7 +183,7 @@ export function UniversalFormWizard({
     const conditionalShow = (question as any).conditionalShow;
     if (conditionalShow) {
       const dependentValue = answers[conditionalShow.questionId];
-      
+
       // Support both 'value' (single) and 'values' (array) formats
       if (conditionalShow.values && Array.isArray(conditionalShow.values)) {
         return conditionalShow.values.includes(dependentValue);
@@ -570,7 +582,7 @@ export function UniversalFormWizard({
 
         <CardContent className="space-y-6">
           {currentSection.questions
-            .filter((question) => shouldShowQuestion(question))
+            ?.filter((question) => shouldShowQuestion(question))
             .map((question) => renderQuestion(question))}
         </CardContent>
 

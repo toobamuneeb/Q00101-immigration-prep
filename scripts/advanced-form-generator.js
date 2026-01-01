@@ -132,7 +132,7 @@ function parseFieldName(pdfFieldName, altName) {
 function extractLabelFromAltName(altName, lineNum) {
   // Format examples:
   // "Part 2. Information About You. 1. Your Full Name. Enter Family Name (Last Name)."
-  // "1. Family Name (Last Name)"
+  // We want: "Family Name (Last Name)" NOT "1. Family Name (Last Name)"
   
   const parts = altName.split('.');
   
@@ -146,20 +146,20 @@ function extractLabelFromAltName(altName, lineNum) {
       
       // Check if this matches our line number
       if (num.toLowerCase() === lineNum.toLowerCase()) {
-        // Check if next part has more detail
+        // Check if next part has more detail (like "Enter Family Name (Last Name)")
         if (i + 1 < parts.length) {
           const nextPart = parts[i + 1].trim();
-          // Skip meta parts
-          if (nextPart && !nextPart.match(/^(Part|Item|Page|This is|Enter|Provide|Select)/i)) {
-            return `${num}. ${nextPart}`;
-          }
-          // If next part starts with "Enter" or "Provide", use it
+          // If next part starts with "Enter" or "Provide", extract the actual field name
           if (nextPart && nextPart.match(/^(Enter|Provide|Select)\s+(.+)/i)) {
             const actionMatch = nextPart.match(/^(Enter|Provide|Select)\s+(.+)/i);
-            return `${num}. ${actionMatch[2]}`;
+            return actionMatch[2]; // Return without "Enter/Provide/Select" and without line number
+          }
+          // Skip meta parts
+          if (nextPart && !nextPart.match(/^(Part|Item|Page|This is)/i)) {
+            return nextPart; // Return without line number
           }
         }
-        return `${num}. ${text}`;
+        return text; // Return without line number
       }
     }
   }
@@ -188,7 +188,7 @@ function generateDefaultLabel(lineNum, fieldName) {
   };
   
   const label = labelMap[fieldName] || fieldName.replace(/([A-Z])/g, ' $1').trim();
-  return `${lineNum}. ${label}`;
+  return label; // Return WITHOUT line number
 }
 
 // ============================================================================
