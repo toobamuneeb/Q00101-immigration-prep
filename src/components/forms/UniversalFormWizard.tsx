@@ -43,6 +43,7 @@ export function UniversalFormWizard({
 }: UniversalFormWizardProps) {
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, any>>(initialAnswers);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const { toast } = useToast();
@@ -59,6 +60,14 @@ export function UniversalFormWizard({
       ...prev,
       [questionId]: value,
     }));
+    // Clear error when user starts typing
+    if (errors[questionId]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[questionId];
+        return newErrors;
+      });
+    }
   };
 
   // Helper to safely handle text - only plain English text without translation
@@ -72,8 +81,12 @@ export function UniversalFormWizard({
   // Render a single question field
   const renderQuestion = (question: Question) => {
     const value = answers[question.id] || "";
+    const error = errors[question.id];
 
     const renderField = () => {
+      const hasError = !!error;
+      const errorClass = hasError ? "border-red-500 focus-visible:ring-red-500" : "";
+
       switch (question.type) {
         case "text":
         case "email":
@@ -83,6 +96,8 @@ export function UniversalFormWizard({
               value={value}
               onChange={(e) => updateAnswer(question.id, e.target.value)}
               placeholder={question.placeholder || ""}
+              className={errorClass}
+              aria-invalid={hasError}
             />
           );
 
@@ -94,6 +109,8 @@ export function UniversalFormWizard({
               value={value}
               onChange={(e) => updateAnswer(question.id, e.target.value)}
               placeholder={question.placeholder || ""}
+              className={errorClass}
+              aria-invalid={hasError}
             />
           );
 
@@ -103,6 +120,8 @@ export function UniversalFormWizard({
               type="date"
               value={value}
               onChange={(e) => updateAnswer(question.id, e.target.value)}
+              className={errorClass}
+              aria-invalid={hasError}
             />
           );
 
@@ -113,6 +132,8 @@ export function UniversalFormWizard({
               onChange={(e) => updateAnswer(question.id, e.target.value)}
               placeholder={question.placeholder || ""}
               rows={4}
+              className={errorClass}
+              aria-invalid={hasError}
             />
           );
 
@@ -122,7 +143,7 @@ export function UniversalFormWizard({
               value={value}
               onValueChange={(val) => updateAnswer(question.id, val)}
             >
-              <SelectTrigger>
+              <SelectTrigger className={errorClass}>
                 <SelectValue
                   placeholder={question.placeholder || "Select..."}
                 />
@@ -145,6 +166,7 @@ export function UniversalFormWizard({
             <RadioGroup
               value={value}
               onValueChange={(val) => updateAnswer(question.id, val)}
+              className={hasError ? "border border-red-500 rounded-md p-3" : ""}
             >
               {question.options?.map((option) => (
                 <div key={option.value} className="flex items-center space-x-2">
@@ -172,6 +194,7 @@ export function UniversalFormWizard({
                 onCheckedChange={(checked) =>
                   updateAnswer(question.id, checked)
                 }
+                className={hasError ? "border-red-500" : ""}
               />
               <Label
                 htmlFor={question.id}
@@ -187,6 +210,8 @@ export function UniversalFormWizard({
             <Input
               type="file"
               onChange={(e) => updateAnswer(question.id, e.target.files?.[0])}
+              className={errorClass}
+              aria-invalid={hasError}
             />
           );
 
@@ -196,6 +221,8 @@ export function UniversalFormWizard({
               value={value}
               onChange={(e) => updateAnswer(question.id, e.target.value)}
               placeholder={question.placeholder || ""}
+              className={errorClass}
+              aria-invalid={hasError}
             />
           );
       }
@@ -211,6 +238,14 @@ export function UniversalFormWizard({
             </p>
           )}
           {renderField()}
+          {error && (
+            <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-md">
+              <svg className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+              </svg>
+              <p className="text-sm text-red-600 font-medium">{error}</p>
+            </div>
+          )}
         </div>
       );
     }
@@ -229,27 +264,63 @@ export function UniversalFormWizard({
           </p>
         )}
         {renderField()}
+        {error && (
+          <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-md">
+            <svg className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+            </svg>
+            <p className="text-sm text-red-600 font-medium">{error}</p>
+          </div>
+        )}
       </div>
     );
   };
 
-  // Simple validation - just check if required fields have values
+  // Enhanced validation with error messages
   const validateCurrentSection = () => {
-    const requiredFields = currentSection.questions
-      .filter((q) => q.required)
-      .map((q) => q.id);
-
-    const missingFields = requiredFields.filter((fieldId) => {
-      const value = answers[fieldId];
-      return !value || value === "" || value === undefined || value === null;
+    const newErrors: Record<string, string> = {};
+    
+    currentSection.questions.forEach((question) => {
+      if (question.required) {
+        const value = answers[question.id];
+        
+        // Check if field is empty
+        if (!value || value === "" || value === undefined || value === null || value === false) {
+          newErrors[question.id] = `${question.label} is required`;
+        }
+        // Email validation
+        else if (question.type === "email" && typeof value === "string") {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(value)) {
+            newErrors[question.id] = "Please enter a valid email address";
+          }
+        }
+        // Phone validation
+        else if (question.type === "tel" && typeof value === "string") {
+          const phoneRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+          if (!phoneRegex.test(value.replace(/\s/g, ""))) {
+            newErrors[question.id] = "Please enter a valid phone number";
+          }
+        }
+      }
     });
 
-    if (missingFields.length > 0) {
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
       toast({
-        title: "Missing Required Fields",
-        description: "Please fill in all required fields before continuing.",
+        title: "Validation Error",
+        description: `Please fix ${Object.keys(newErrors).length} error${Object.keys(newErrors).length > 1 ? 's' : ''} before continuing.`,
         variant: "destructive",
       });
+      
+      // Scroll to first error
+      const firstErrorField = Object.keys(newErrors)[0];
+      const element = document.getElementById(firstErrorField);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+      
       return false;
     }
 

@@ -5,6 +5,8 @@ import { PDFDocument, PDFTextField, PDFCheckBox } from "pdf-lib";
 import { readFile, writeFile } from "fs/promises";
 import { join } from "path";
 import { FORM_REGISTRY } from "@/lib/constants/forms-registry";
+import { checkFormAccess } from "@/lib/access-control";
+import { createClient } from "@/lib/supabase/server";
 import PDFKit from "pdfkit";
 export const runtime = "nodejs";
 
@@ -17,6 +19,26 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: "Missing required parameters" },
         { status: 400 }
+      );
+    }
+
+    // Check authentication
+    const supabase = await createClient();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // Check if user has access to this form
+    const accessCheck = await checkFormAccess(formId);
+    if (!accessCheck.hasAccess) {
+      return NextResponse.json(
+        { error: "Purchase required to download this form", reason: accessCheck.reason },
+        { status: 403 }
       );
     }
 

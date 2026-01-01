@@ -317,7 +317,7 @@ export function DashboardClient({
                 ref={highlightForm === form.id ? highlightRef : null}
                 className={highlightForm === form.id ? "animate-pulse" : ""}
               >
-                {/* <IndividualFormCard form={form} /> */}
+                <IndividualFormCard form={form} />
               </div>
             ))}
           </div>

@@ -2,6 +2,7 @@
 
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
+import { AlertCircle } from 'lucide-react';
 
 interface TextInputProps {
   value: string;
@@ -63,24 +64,32 @@ export function TextInput({
     type === 'phone' || type === 'ssn' ? 'numeric' : type === 'email' ? 'email' : 'text';
 
   return (
-    <Input
-      type={inputType}
-      inputMode={inputMode}
-      value={value || ''}
-      onChange={handleChange}
-      placeholder={placeholder}
-      className={cn(error && 'border-destructive focus-visible:ring-destructive')}
-      aria-invalid={!!error}
-      aria-describedby={error ? 'error-message' : undefined}
-      autoComplete={
-        type === 'email'
-          ? 'email'
-          : type === 'phone'
-          ? 'tel'
-          : type === 'ssn'
-          ? 'off'
-          : undefined
-      }
-    />
+    <div className="space-y-2">
+      <Input
+        type={inputType}
+        inputMode={inputMode}
+        value={value || ''}
+        onChange={handleChange}
+        placeholder={placeholder}
+        className={cn(error && 'border-red-500 focus-visible:ring-red-500')}
+        aria-invalid={!!error}
+        aria-describedby={error ? 'error-message' : undefined}
+        autoComplete={
+          type === 'email'
+            ? 'email'
+            : type === 'phone'
+            ? 'tel'
+            : type === 'ssn'
+            ? 'off'
+            : undefined
+        }
+      />
+      {error && (
+        <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-md">
+          <AlertCircle className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" />
+          <p className="text-sm text-red-600 font-medium">{error}</p>
+        </div>
+      )}
+    </div>
   );
 }

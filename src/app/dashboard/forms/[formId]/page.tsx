@@ -34,10 +34,10 @@ export default async function FormPage({ params }: PageProps) {
 
   // Check if user has access to this form
   const accessCheck = await checkFormAccess(formId);
-  // if (!accessCheck.hasAccess) {
-  //   // Show purchase required page
-  //   return <PurchaseRequired formId={formId} reason={accessCheck.reason} />;
-  // }
+  if (!accessCheck.hasAccess) {
+    // Show purchase required page
+    return <PurchaseRequired formId={formId} reason={accessCheck.reason} />;
+  }
 
   // Find or create application for this form
   let { data: application, error: fetchError } = await supabase
