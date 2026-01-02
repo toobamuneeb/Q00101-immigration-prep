@@ -19,7 +19,16 @@ export async function GET(request: Request) {
   });
 
   try {
-    if (code) {
+    if (!code) {
+      console.log("⚠️ No code provided, redirecting to login");
+      return NextResponse.redirect(`${origin}/auth/login`);
+    }
+
+    const supabase = await createClient();
+    
+    // Check if this is a password recovery flow
+    if (type === "recovery" || intent === "recovery") {
+      console.log("🔑 Password recovery flow detected");
       const res = NextResponse.redirect(
         `${origin}/auth/reset-password?code=${code}`
       );
@@ -32,36 +41,26 @@ export async function GET(request: Request) {
       return res;
     }
 
-    if (code && intent != "recovery") {
-      const supabase = await createClient();
-      const { data, error } = await supabase.auth.exchangeCodeForSession(
-        code as any
+    // Normal signup/login flow - exchange code for session
+    console.log("📧 Email confirmation flow detected");
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+
+    if (error) {
+      console.error("❌ Error exchanging code for session:", error);
+      return NextResponse.redirect(
+        `${origin}/auth/login?error=auth_callback_failed`
       );
-
-      if (error) {
-        console.error("❌ Error exchanging code for session:", error);
-        if (type === "recovery" || intent === "recovery") {
-          return NextResponse.redirect(
-            `${origin}/auth/reset-password?error=recovery_exchange_failed`
-          );
-        }
-        return NextResponse.redirect(
-          `${origin}/auth/login?error=auth_callback_failed`
-        );
-      }
-
-      console.log("✅ Session exchange successful:", {
-        userId: data.user?.id,
-        email: data.user?.email,
-      });
-      console.log("🔄 Redirecting to dashboard");
-
-      return NextResponse.redirect(`${origin}/auth/login`);
     }
+
+    console.log("✅ Session exchange successful:", {
+      userId: data.user?.id,
+      email: data.user?.email,
+    });
+    console.log("🔄 Redirecting to dashboard");
+
+    return NextResponse.redirect(`${origin}/dashboard`);
   } catch (err) {
     console.error("💥 Unexpected error in callback:", err);
     return NextResponse.redirect(`${origin}/auth/login?error=unexpected_error`);
   }
-
-  // URL to redirect to after sign in process completes
 }
