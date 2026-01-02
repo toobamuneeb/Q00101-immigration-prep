@@ -40,6 +40,11 @@ export async function updateSession(request: NextRequest) {
 
   const pathname = request.nextUrl.pathname;
 
+  // Allow callback and reset password routes to process without redirect
+  if (pathname.startsWith("/auth/callback") || pathname.startsWith("/auth/reset-password")) {
+    return response;
+  }
+
   if (
     user &&
     (pathname.startsWith("/auth") || pathname.startsWith("/(auth)"))

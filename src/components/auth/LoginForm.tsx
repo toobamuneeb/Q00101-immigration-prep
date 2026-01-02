@@ -15,12 +15,20 @@ export function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // Check for error in URL params (from callback)
+  // Check for messages in URL params
   useEffect(() => {
     const urlError = searchParams.get('error');
-    if (urlError) {
+    const confirmed = searchParams.get('confirmed');
+    const reset = searchParams.get('reset');
+    
+    if (confirmed === 'true') {
+      setSuccess('Email confirmed! You can now sign in with your credentials.');
+    } else if (reset === 'success') {
+      setSuccess('Password updated successfully! Please sign in with your new password.');
+    } else if (urlError) {
       if (urlError === 'auth_callback_failed') {
         setError('Email verification failed. Please try logging in again or contact support.');
       } else if (urlError === 'unexpected_error') {
@@ -75,6 +83,15 @@ export function LoginForm() {
 
   return (
     <form onSubmit={handleLogin} className="space-y-4">
+      {success && (
+        <Alert>
+          <AlertTitle>Success</AlertTitle>
+          <AlertDescription>
+            <p className="text-sm">{success}</p>
+          </AlertDescription>
+        </Alert>
+      )}
+      
       {error && (
         <Alert variant="destructive">
           <AlertTitle>Error</AlertTitle>

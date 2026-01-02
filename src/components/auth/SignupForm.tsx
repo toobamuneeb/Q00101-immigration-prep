@@ -52,11 +52,22 @@ export function SignupForm() {
       }
 
       if (data.user) {
-        setSuccess(true);
         // Check if email confirmation is required
         if (data.user.identities && data.user.identities.length === 0) {
           setError('This email is already registered. Please log in instead.');
+          return;
         }
+        
+        // Check if user is confirmed (no email confirmation required)
+        if (data.session) {
+          // User is logged in immediately, redirect to dashboard
+          console.log('✅ User signed up and logged in immediately');
+          router.push('/dashboard');
+          return;
+        }
+        
+        // Email confirmation required
+        setSuccess(true);
       }
     } catch (err) {
       setError('An unexpected error occurred');
