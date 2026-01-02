@@ -80,16 +80,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check environment variables
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL;
-    if (!appUrl) {
-      console.error("❌ NEXT_PUBLIC_APP_URL is not set!");
-      return NextResponse.json(
-        { error: "Server configuration error: APP_URL not set" },
-        { status: 500 }
-      );
-    }
-
+    // Get origin from request
+    const appUrl = request.headers.get("origin") || request.nextUrl.origin;
     console.log("🔗 App URL:", appUrl);
 
     // Initialize Stripe
