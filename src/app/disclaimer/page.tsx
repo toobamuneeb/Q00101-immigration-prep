@@ -11,7 +11,7 @@ export default async function DisclaimerPage() {
   } = await supabase.auth.getUser();
 
   if (authError || !user) {
-    redirect('/login');
+    redirect('/auth/login');
   }
 
   return (

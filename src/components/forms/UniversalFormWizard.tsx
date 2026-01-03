@@ -299,14 +299,14 @@ export function UniversalFormWizard({
               onValueChange={(val) => updateAnswer(question.id, val)}
               className={hasError ? "border border-red-500 rounded-md p-3" : ""}
             >
-              {question.options?.map((option) => (
-                <div key={option.value} className="flex items-center space-x-2">
+              {question.options?.map((option, index) => (
+                <div key={`${question.id}-${option.value}-${index}`} className="flex items-center space-x-2">
                   <RadioGroupItem
                     value={option.value}
-                    id={`${question.id}-${option.value}`}
+                    id={`${question.id}-${option.value}-${index}`}
                   />
                   <Label
-                    htmlFor={`${question.id}-${option.value}`}
+                    htmlFor={`${question.id}-${option.value}-${index}`}
                     className="font-normal cursor-pointer"
                   >
                     {translateLabel(option.label)}

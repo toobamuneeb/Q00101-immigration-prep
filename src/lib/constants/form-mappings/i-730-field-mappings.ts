@@ -24,7 +24,7 @@ export const I_730_FIELD_MAPPINGS: FieldMapping[] = [
   {
     questionId: "numberOfRelativesTotal",
     pdfField: "F[0].P4[0].TextField1[2]",
-    type: "button",
+    type: "text",
   },
   {
     questionId: "myStatus",
@@ -153,7 +153,7 @@ export const I_730_FIELD_MAPPINGS: FieldMapping[] = [
   {
     questionId: "attorney.stateBarNumber",
     pdfField: "F[0].P4[0].AttorneyStateBarNumber[0]",
-    type: "button",
+    type: "text",
   },
   {
     questionId: "attorney.formG28Attached",
@@ -194,7 +194,7 @@ export const I_730_FIELD_MAPPINGS: FieldMapping[] = [
   {
     questionId: "part1.streetNumberAndName",
     pdfField: "F[0].#subform[1].P1_Line3_StreetNumberName[0]",
-    type: "button",
+    type: "text",
   },
   {
     questionId: "part1.unitType",
@@ -252,7 +252,7 @@ export const I_730_FIELD_MAPPINGS: FieldMapping[] = [
   {
     questionId: "part1.countryOfBirth",
     pdfField: "F[0].#subform[1].CountryofBirth[0]",
-    type: "button",
+    type: "text",
   },
   {
     questionId: "part1.sex",
@@ -504,30 +504,29 @@ export const I_730_FIELD_MAPPINGS: FieldMapping[] = [
   {
     questionId: "part2.residenceStreetName",
     pdfField: "F[0].#subform[3].P2_Line2_StreetName[0]",
-    type: "button",
+    type: "text",
   },
   {
     questionId: "part2.residenceUnit",
     pdfField: "F[0].#subform[3].P2_Line2_Unit[0]",
-    type: "button",
+    type: "radio",
     value: "STE",
   },
   {
     questionId: "part2.residenceUnit",
     pdfField: "F[0].#subform[3].P2_Line2_Unit[1]",
-    type: "text",
+    type: "radio",
     value: "FLR",
   },
   {
     questionId: "part2.residenceNumber",
     pdfField: "F[0].#subform[3].P2_Line2_Number[0]",
-    type: "button",
+    type: "text",
   },
   {
     questionId: "part2.residenceApartment",
     pdfField: "F[0].#subform[3].P2_Line2_Unit[2]",
     type: "text",
-    value: "APT",
   },
   {
     questionId: "part2.addressOfResidenceCountry",
@@ -557,7 +556,7 @@ export const I_730_FIELD_MAPPINGS: FieldMapping[] = [
   {
     questionId: "part2.countryOfBirth",
     pdfField: "F[0].#subform[3].CountryofBirth[1]",
-    type: "button",
+    type: "text",
   },
   {
     questionId: "part2.sex",
@@ -599,7 +598,7 @@ export const I_730_FIELD_MAPPINGS: FieldMapping[] = [
   {
     questionId: "part2.mailingAddressStreetNumberName",
     pdfField: "F[0].#subform[3].P2_Line3_StreetNumberName[0]",
-    type: "button",
+    type: "text",
   },
   {
     questionId: "part2.mailingAddressUnit",
@@ -777,12 +776,12 @@ export const I_730_FIELD_MAPPINGS: FieldMapping[] = [
   {
     questionId: "part2.datePriorMarriage2Ended",
     pdfField: "F[0].#subform[4].Part2_Line19_DateofPriorMarriage[0]",
-    type: "button",
+    type: "date",
   },
   {
     questionId: "part2.beneficiaryOutsideUS",
     pdfField: "F[0].#subform[4].Part2_Beneficiary[0]",
-    type: "button",
+    type: "radio",
     value: "B",
   },
   {
@@ -814,7 +813,7 @@ export const I_730_FIELD_MAPPINGS: FieldMapping[] = [
   {
     questionId: "part2.beneficiaryStreetNumberName",
     pdfField: "F[0].#subform[4].Part2_Line22_StreetNumberName[0]",
-    type: "button",
+    type: "text",
   },
   {
     questionId: "part2.beneficiaryUnitType",
@@ -877,7 +876,7 @@ export const I_730_FIELD_MAPPINGS: FieldMapping[] = [
   {
     questionId: "part2.placeOfMarriageCountry",
     pdfField: "F[0].#subform[4].Part2_Line14_Country[0]",
-    type: "button",
+    type: "text",
   },
   {
     questionId: "part2.beneficiaryStatusA",
@@ -1006,7 +1005,7 @@ export const I_730_FIELD_MAPPINGS: FieldMapping[] = [
   {
     questionId: "part2.secondPassportExpirationDate",
     pdfField: "F[0].#subform[5].Pt2_Line44_PassportExpiration[0]",
-    type: "button",
+    type: "date",
   },
   {
     questionId: "part3.twoYearFilingDeadline",
@@ -1043,7 +1042,7 @@ export const I_730_FIELD_MAPPINGS: FieldMapping[] = [
   {
     questionId: "part2.beneficiaryCountryOfIssuanceForPassport",
     pdfField: "F[0].#subform[6].Pt2_Line45_CountryIssuancePassport[0]",
-    type: "button",
+    type: "text",
   },
   {
     questionId: "part5.preparerStatement",
@@ -1059,7 +1058,7 @@ export const I_730_FIELD_MAPPINGS: FieldMapping[] = [
   {
     questionId: "part5.interpreterLanguage",
     pdfField: "F[0].#subform[7].P5_Line1b_NameofInterpreter[0]",
-    type: "button",
+    type: "text",
   },
   {
     questionId: "part5.interpreterStatement",
@@ -1112,7 +1111,7 @@ export const I_730_FIELD_MAPPINGS: FieldMapping[] = [
   {
     questionId: "part6.beneficiaryInterpreterLanguage",
     pdfField: "F[0].#subform[8].P6_Line1b_NameofInterpreter[0]",
-    type: "button",
+    type: "text",
   },
   {
     questionId: "part6.beneficiaryInterpreterStatement",
@@ -1189,7 +1188,7 @@ export const I_730_FIELD_MAPPINGS: FieldMapping[] = [
   {
     questionId: "part7.interpreterStreetName",
     pdfField: "F[0].#subform[9].P7_Line3_InterpretersStreetName[0]",
-    type: "button",
+    type: "text",
   },
   {
     questionId: "part7.interpreterUnit",
@@ -1206,7 +1205,7 @@ export const I_730_FIELD_MAPPINGS: FieldMapping[] = [
   {
     questionId: "part7.interpreterApartmentNumber",
     pdfField: "F[0].#subform[9].P7_Line3_Number[0]",
-    type: "button",
+    type: "text",
   },
   {
     questionId: "part7.interpreterUnit",
@@ -1277,7 +1276,7 @@ export const I_730_FIELD_MAPPINGS: FieldMapping[] = [
   {
     questionId: "part8.preparersStreetName",
     pdfField: "F[0].#subform[10].P8_Line3_PrepStreetName[0]",
-    type: "button",
+    type: "text",
   },
   {
     questionId: "part8.preparersUnit",
@@ -1294,7 +1293,7 @@ export const I_730_FIELD_MAPPINGS: FieldMapping[] = [
   {
     questionId: "part8.preparersApartmentNumber",
     pdfField: "F[0].#subform[10].P8_Line3_Number[0]",
-    type: "button",
+    type: "text",
   },
   {
     questionId: "part8.preparersUnit",
@@ -1325,30 +1324,30 @@ export const I_730_FIELD_MAPPINGS: FieldMapping[] = [
   {
     questionId: "part8.preparersMobileTelephone",
     pdfField: "F[0].#subform[10].P8_Line5_MobileTelephone[0]",
-    type: "button",
+    type: "text",
   },
   {
     questionId: "part8.preparersStatement",
     pdfField: "F[0].#subform[10].Pt8_Line7_chkbx[0]",
-    type: "button",
+    type: "radio",
     value: "A",
   },
   {
     questionId: "part8.preparersAttorneyStatement",
     pdfField: "F[0].#subform[10].Pt8_Line7_chkbx[1]",
-    type: "button",
+    type: "radio",
     value: "B",
   },
   {
     questionId: "part8.preparersRepresentationDoesNotExtend",
     pdfField: "F[0].#subform[10].Pt8_Line7b_DoesNotExtend[0]",
-    type: "button",
+    type: "radio",
     value: "N",
   },
   {
     questionId: "part8.preparersRepresentationExtends",
     pdfField: "F[0].#subform[10].Pt8_Line7b_Extend[0]",
-    type: "text",
+    type: "radio",
     value: "Y",
   },
   {

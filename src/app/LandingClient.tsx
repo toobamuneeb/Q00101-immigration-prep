@@ -184,7 +184,7 @@ export function LandingClient() {
                 {t("browseAllForms")}
               </Button>
             </Link>
-            <Link href="/signup">
+            <Link href="/auth/signup">
               <Button
                 size="lg"
                 variant="outline"

@@ -29,7 +29,7 @@ export default async function ReviewPage({ params, searchParams }: PageProps) {
   } = await supabase.auth.getUser();
 
   if (authError || !user) {
-    redirect('/login');
+    redirect('/auth/login');
   }
 
   // Get form definition from registry

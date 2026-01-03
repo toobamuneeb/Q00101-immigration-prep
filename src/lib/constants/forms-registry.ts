@@ -27,8 +27,7 @@ export type QuestionType =
   | "address"
   | "name"
   | "ssn"
-  | "file"
-
+  | "file";
 
 export interface QuestionOption {
   value: string;
@@ -2060,6 +2059,7 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part10.preparersStatement.extendsBeyondPreparation",
           type: "radio",
           label: "7.b. My representation extends beyond preparation",
+          conditional: { dependsOn: "part10.preparersStatement", value: "B" },
           options: [
             { value: "yes", label: "Yes" },
             { value: "no", label: "No" },
@@ -2536,7 +2536,7 @@ const I_485_DEFINITION: FormDefinition = {
         },
         {
           id: "part1.alienNumber",
-          type: "button",
+          type: "text",
           label: "Alien Registration Number (A-Number)",
           required: false,
           helpText: "Click to enter your Alien Registration Number.",
@@ -2570,7 +2570,7 @@ const I_485_DEFINITION: FormDefinition = {
         },
         {
           id: "part1.otherANumberButton",
-          type: "button",
+          type: "text",
           label: "Enter Other A-Number",
           required: false,
         },
@@ -3750,9 +3750,10 @@ const I_485_DEFINITION: FormDefinition = {
         },
         {
           id: "part4.employerAddress.state",
-          type: "text",
+          type: "select",
           label: "7.e. State",
           required: true,
+          options: US_STATES,
         },
         {
           id: "part4.employerAddress.zipCode",
@@ -7198,8 +7199,9 @@ const I_765_DEFINITION: FormDefinition = {
         },
         {
           id: "part2.placeOfBirth.stateProvinceOfBirth",
-          type: "text",
+          type: "select",
           label: "44.b. State or Province of Birth",
+          options: US_STATES,
         },
         {
           id: "part2.placeOfBirth.countryOfBirth",
@@ -8082,7 +8084,7 @@ const N_400_DEFINITION: FormDefinition = {
         },
         {
           id: "part4.weightPoundsThirdDigit",
-          type: "button",
+          type: "text",
           label: "4. Weight (Pounds) - Third Digit",
           required: true,
         },
@@ -8326,9 +8328,10 @@ const N_400_DEFINITION: FormDefinition = {
         },
         {
           id: "part3.currentMailingAddress.state",
-          type: "text",
+          type: "select",
           label: "20. State",
           required: true,
+          options: US_STATES,
         },
         {
           id: "part3.currentMailingAddress.zipCode",
@@ -12656,22 +12659,6 @@ const I_129F_DEFINITION: FormDefinition = {
           helpText:
             "Specify the language used by the interpreter to translate this form.",
         },
-        {
-          id: "part6.interpreterDateOfSignature",
-          type: "date",
-          label: "6.a. Date of Signature (mm/dd/yyyy)",
-          required: true,
-          placeholder: "MM/DD/YYYY",
-          helpText: "Enter the date when the interpreter signed this form.",
-        },
-        {
-          id: "part6.interpreterSignature",
-          type: "text",
-          label: "6.b. Interpreter's Signature",
-          required: true,
-          helpText:
-            "The interpreter must sign here to certify the accuracy of the translation.",
-        },
       ],
     },
 
@@ -12726,22 +12713,6 @@ const I_129F_DEFINITION: FormDefinition = {
           label: "5. Preparer's Email Address",
           placeholder: "example@email.com",
           helpText: "Provide an email address for the preparer.",
-        },
-        {
-          id: "part7.preparerSignature",
-          type: "text",
-          label: "6.a. Preparer's Signature",
-          required: true,
-          helpText:
-            "The preparer must sign here to confirm the information provided.",
-        },
-        {
-          id: "part7.dateOfSignature",
-          type: "date",
-          label: "6.b. Date of Signature (mm/dd/yyyy)",
-          required: true,
-          placeholder: "MM/DD/YYYY",
-          helpText: "Enter the date when the preparer signed this form.",
         },
       ],
     },
@@ -13037,9 +13008,10 @@ const I600_DEFINITION: FormDefinition = {
         },
         {
           id: "part1.10.state",
-          type: "text",
+          type: "select",
           label: "10. State",
           required: true,
+          options: US_STATES,
         },
         {
           id: "part1.11.zipCode",
@@ -13330,9 +13302,10 @@ const I600_DEFINITION: FormDefinition = {
         },
         {
           id: "part6.5.stateOfAdoption",
-          type: "text",
+          type: "select",
           label: "5. U.S. State Where Child Will Be Adopted",
           helpText: "If child will be adopted in the United States",
+          options: US_STATES,
         },
         {
           id: "part6.6.preAdoptionRequirements",
@@ -14056,7 +14029,7 @@ const I730_DEFINITION: FormDefinition = {
         },
         {
           id: "numberOfRelativesTotal",
-          type: "button",
+          type: "text",
           label: "3. Total Number of Relatives",
           required: true,
         },
@@ -15363,7 +15336,7 @@ const I730_DEFINITION: FormDefinition = {
         },
         {
           id: "part2.beneficiaryCountryOfIssuanceForPassport",
-          type: "button",
+          type: "text",
           label: "4. Country of Issuance for Passport",
           required: true,
         },
@@ -15391,7 +15364,7 @@ const I730_DEFINITION: FormDefinition = {
         },
         {
           id: "part5.interpreterLanguage",
-          type: "button",
+          type: "text",
           label: "3. Language Used by Interpreter",
           required: true,
         },
@@ -15666,7 +15639,7 @@ const I730_DEFINITION: FormDefinition = {
 
         {
           id: "part8.preparersApartmentNumber",
-          type: "button",
+          type: "text",
           label: "3.f. Apartment Number",
           required: false,
         },
@@ -15910,9 +15883,10 @@ const I9_DEFINITION: FormDefinition = {
         },
         {
           id: "section1.state",
-          type: "text",
+          type: "select",
           label: "State",
           required: true,
+          options: US_STATES,
         },
         {
           id: "section1.zipCode",
@@ -16035,75 +16009,99 @@ const I9_DEFINITION: FormDefinition = {
           id: "section2.listA.documentTitle",
           type: "text",
           label: "List A - Document Title",
-          dependsOn: { id: "section2.documentType", value: "listA" },
+          conditional: { dependsOn: "section2.documentType", value: "listA" },
         },
         {
           id: "section2.listA.issuingAuthority",
           type: "text",
           label: "List A - Issuing Authority",
-          dependsOn: { id: "section2.documentType", value: "listA" },
+          conditional: { dependsOn: "section2.documentType", value: "listA" },
         },
         {
           id: "section2.listA.documentNumber",
           type: "text",
           label: "List A - Document Number",
-          dependsOn: { id: "section2.documentType", value: "listA" },
+          conditional: { dependsOn: "section2.documentType", value: "listA" },
         },
         {
           id: "section2.listA.expirationDate",
           type: "date",
           label: "List A - Expiration Date (if any)",
-          dependsOn: { id: "section2.documentType", value: "listA" },
+          conditional: { dependsOn: "section2.documentType", value: "listA" },
         },
         // List B Document
         {
           id: "section2.listB.documentTitle",
           type: "text",
           label: "List B - Document Title",
-          dependsOn: { id: "section2.documentType", value: "listBAndC" },
+          conditional: {
+            dependsOn: "section2.documentType",
+            value: "listBAndC",
+          },
         },
         {
           id: "section2.listB.issuingAuthority",
           type: "text",
           label: "List B - Issuing Authority",
-          dependsOn: { id: "section2.documentType", value: "listBAndC" },
+          conditional: {
+            dependsOn: "section2.documentType",
+            value: "listBAndC",
+          },
         },
         {
           id: "section2.listB.documentNumber",
           type: "text",
           label: "List B - Document Number",
-          dependsOn: { id: "section2.documentType", value: "listBAndC" },
+          conditional: {
+            dependsOn: "section2.documentType",
+            value: "listBAndC",
+          },
         },
         {
           id: "section2.listB.expirationDate",
           type: "date",
           label: "List B - Expiration Date (if any)",
-          dependsOn: { id: "section2.documentType", value: "listBAndC" },
+          conditional: {
+            dependsOn: "section2.documentType",
+            value: "listBAndC",
+          },
         },
         // List C Document
         {
           id: "section2.listC.documentTitle",
           type: "text",
           label: "List C - Document Title",
-          dependsOn: { id: "section2.documentType", value: "listBAndC" },
+          conditional: {
+            dependsOn: "section2.documentType",
+            value: "listBAndC",
+          },
         },
         {
           id: "section2.listC.issuingAuthority",
           type: "text",
           label: "List C - Issuing Authority",
-          dependsOn: { id: "section2.documentType", value: "listBAndC" },
+          conditional: {
+            dependsOn: "section2.documentType",
+            value: "listBAndC",
+          },
         },
         {
           id: "section2.listC.documentNumber",
           type: "text",
           label: "List C - Document Number",
-          dependsOn: { id: "section2.documentType", value: "listBAndC" },
+          conditional: {
+            dependsOn: "section2.documentType",
+            value: "listBAndC",
+          },
         },
         {
           id: "section2.listC.expirationDate",
           type: "date",
           label: "List C - Expiration Date (if any)",
-          dependsOn: { id: "section2.documentType", value: "listBAndC" },
+          conditional: {
+            dependsOn: "section2.documentType",
+            value: "listBAndC",
+          },
         },
         {
           id: "section2.additionalInformation",
@@ -17671,6 +17669,27 @@ const I130_DEFINITION: FormDefinition = {
           label: "1.c. Middle Name",
           required: false,
         },
+
+        //
+
+        {
+          id: "part2.familyNameOther",
+          type: "text",
+          label: "1.a. Family Name (Last Name) Other",
+          required: true,
+        },
+        {
+          id: "part2.givenNameOther",
+          type: "text",
+          label: "1.b. Given Name (First Name) Other",
+          required: true,
+        },
+        {
+          id: "part2.middleNameOther",
+          type: "text",
+          label: "1.c. Middle Name Other",
+          required: false,
+        },
         {
           id: "part2.alienNumber",
           type: "text",
@@ -17699,10 +17718,13 @@ const I130_DEFINITION: FormDefinition = {
       questions: [
         {
           id: "attorney.g28Attached",
-          type: "checkbox",
+          type: "radio",
           label: "1. Form G-28 is attached",
           required: false,
-          options: [{ value: "1", label: "Yes" }],
+          options: [
+            { value: "1", label: "Yes" },
+            { value: "0", label: "No" },
+          ],
         },
         {
           id: "attorney.volagNumber",
@@ -18264,7 +18286,7 @@ const I130_DEFINITION: FormDefinition = {
           required: true,
           options: [
             { value: "N", label: "No" },
-            { value: "Off", label: "Off" },
+            { value: "Y", label: "Yes" },
           ],
         },
         {
@@ -18295,16 +18317,7 @@ const I130_DEFINITION: FormDefinition = {
             { value: "Off", label: "No" },
           ],
         },
-        {
-          id: "part2.certificateNotObtained",
-          type: "radio",
-          label: "Have you not obtained a certificate?",
-          required: false,
-          options: [
-            { value: "N", label: "No" },
-            { value: "Off", label: "Off" },
-          ],
-        },
+
         {
           id: "part2.dateOfIssuance",
           type: "date",
@@ -18633,13 +18646,13 @@ const I130_DEFINITION: FormDefinition = {
       questions: [
         {
           id: "part1.classofadmission",
-          type: "select",
-          label: "State of Admission",
+          type: "text",
+          label: "Class of admission",
           required: false,
         },
         {
           id: "part1.dateofadmission",
-          type: "select",
+          type: "date",
           label: "Date of Admission",
           required: false,
         },
@@ -18659,7 +18672,7 @@ const I130_DEFINITION: FormDefinition = {
         },
       ],
     },
-    // 18
+    // 18 Others
     {
       id: "part4-beneficiary-information",
       title: "Part 4: Beneficiary Information",
@@ -19387,6 +19400,8 @@ const I130_DEFINITION: FormDefinition = {
         },
       ],
     },
+
+    // ===KKK
     {
       id: "part4-employment",
       title: "Part 4: Employment Information",
@@ -20087,7 +20102,8 @@ const I130_DEFINITION: FormDefinition = {
           id: "part8.preparersMailingAddressState",
           type: "select",
           label: "3. State",
-          required: US_STATES,
+          required: false,
+          options: US_STATES,
         },
         {
           id: "part8.preparersMailingAddressCountry",
@@ -22123,192 +22139,102 @@ const I_129_DEFINITION: FormDefinition = {
           type: "text",
           label: "Middle Name",
           required: true,
-          helpText:
-            "Part 1. Petitioner Information. If you are an individual filing this petition, complete Item Number 1. If you are a company or an organization filing this petition, complete Item Number 2. 1. Legal Name of Individual Petitioner. Enter Middle Name.",
+          helpText: "Middle Name.",
         },
         {
           id: "subformGivenName",
           type: "text",
           label: "Given Name (First Name)",
           required: true,
-          helpText:
-            "Part 1. Petitioner Information. If you are an individual filing this petition, complete Item Number 1. If you are a company or an organization filing this petition, complete Item Number 2. 1. Legal Name of Individual Petitioner. Enter Given Name (First Name).",
+          helpText: "Given Name (First Name).",
         },
         {
           id: "subformFamilyName",
           type: "text",
           label: "Family Name (Last Name)",
           required: true,
-          helpText:
-            "Part 1. Petitioner Information. If you are an individual filing this petition, complete Item Number 1. If you are a company or an organization filing this petition, complete Item Number 2. 1. Legal Name of Individual Petitioner. Enter Family Name (Last Name).",
+          helpText: "Family Name (Last Name).",
         },
         {
           id: "subformCompanyorOrgName",
           type: "text",
           label: "Company or Organization Name",
           required: true,
-          helpText:
-            "Part 1. Petitioner Information. If you are an individual filing this petition, complete Item Number 1. If you are a company or an organization filing this petition, complete Item Number 2. 2. Enter Company or Organization Name.",
+          helpText: "Part 1. Company or Organization Name.",
         },
         {
           id: "subformLineCityTown",
           type: "text",
           label: "City or Town",
           required: true,
-          helpText:
-            "Part 1. Petitioner Information. 3. Mailing Address of Individual, Company or Organization. Enter City or Town.",
+          helpText: "City or Town.",
         },
         {
           id: "subformInCareofName",
           type: "text",
           label: "In Care of Name",
           required: true,
-          helpText:
-            "Part 1. Petitioner Information. 3. Mailing Address of Individual, Company or Organization. Enter In Care of Name.",
+          helpText: "In Care of Name.",
         },
         {
           id: "subformStreetNumberName",
-          type: "radio",
+          type: "text",
           label: "Street Number and Name",
           required: true,
-          helpText:
-            "Part 1. Petitioner Information. 3. Mailing Address of Individual, Company or Organization. Enter Street Number and Name.",
+          helpText: "Street Number and Name.",
         },
         {
           id: "subformUnit",
           type: "radio",
-          label: "Check Suite",
+          label: "Suite",
           required: true,
           options: [
-            { value: "", label: "None" },
-            { value: "ste", label: "Ste." },
-            { value: "off", label: "Off" },
+            { value: "APT", label: "Apt." },
+            { value: "STE", label: "Ste." },
+            { value: "FLR", label: "Flr." },
           ],
-          helpText:
-            "Part 1. Petitioner Information. 3. Mailing Address of Individual, Company or Organization. Check Suite.",
-        },
-        {
-          id: "subformUnit1",
-          type: "radio",
-          label: "Check Apartment",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "apt", label: "Apt." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "Part 1. Petitioner Information. 3. Mailing Address of Individual, Company or Organization. Check Apartment.",
-        },
-        {
-          id: "subformUnit2",
-          type: "radio",
-          label: "Check Floor",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "flr", label: "Flr." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "Part 1. Petitioner Information. 3. Mailing Address of Individual, Company or Organization. Check Floor.",
+          helpText: "Suite.",
         },
         {
           id: "subformAptSteFlrNumber",
           type: "text",
           label: "Apartment, Suite or Floor Number",
           required: true,
-          helpText:
-            "Part 1. Petitioner Information. 3. Mailing Address of Individual, Company or Organization. If Apartment, Suite or Floor is Checked, Enter Apartment, Suite or Floor Number.",
+          helpText: "Part 1. Unit Number.",
         },
         {
           id: "subformEmailAddress",
           type: "email",
-          label: "Email Address, if any",
+          label: "Email Address (optional)",
           required: true,
-          helpText:
-            "Part 1. Petitioner Information. 4. Contact Information. Enter Email Address, if any.",
+          helpText: "Part 1. Email Address (optional)",
         },
         {
           id: "subformTextField1",
           type: "text",
           label: "Federal Employer Identification Number (F E I N)",
           required: true,
-          helpText:
-            "Part 1. Petitioner Information. 5. Other Information. Enter Federal Employer Identification Number (F E I N).",
+          helpText: "Federal Employer Identification Number (F E I N).",
         },
         {
           id: "subform1continuation",
           type: "radio",
-          label:
-            "Continuation of previously approved employment without change with the same employer",
+          label: "Basis for Classification",
           required: true,
           options: [
-            { value: "1", label: "Option 1" },
-            { value: "Off", label: "Off" },
+            {
+              value: "0",
+              label:
+                "Continuation of previously approved employment without change with the same employer",
+            },
+            { value: "1", label: "New employment" },
+            { value: "2", label: "Change in previously approved employment" },
+            { value: "3", label: "New concurrent employment" },
+            { value: "1", label: "Change of employer" },
+            { value: "1", label: "Amended petition" },
           ],
           helpText:
-            "Part 2. Information About This Petition. 2. Basis for Classification (select only one box). Check B. Continuation of previously approved employment without change with the same employer.",
-        },
-        {
-          id: "subform1new",
-          type: "radio",
-          label: "New employment",
-          required: true,
-          options: [
-            { value: "1", label: "Option 1" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "Part 2. Information About This Petition. 2. Basis for Classification (select only one box). Check A. New employment.",
-        },
-        {
-          id: "subform1previouschange",
-          type: "radio",
-          label: "Change in previously approved employment",
-          required: true,
-          options: [
-            { value: "1", label: "Option 1" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "Part 2. Information About This Petition. 2. Basis for Classification (select only one box). Check C. Change in previously approved employment.",
-        },
-        {
-          id: "subform1concurrent",
-          type: "radio",
-          label: "New concurrent employment",
-          required: true,
-          options: [
-            { value: "1", label: "Option 1" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "Part 2. Information About This Petition. 2. Basis for Classification (select only one box). Check D. New concurrent employment.",
-        },
-        {
-          id: "subform1change",
-          type: "radio",
-          label: "Change of employer",
-          required: true,
-          options: [
-            { value: "1", label: "Option 1" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "Part 2. Information About This Petition. 2. Basis for Classification (select only one box). Check E. Change of employer.",
-        },
-        {
-          id: "subform1amended",
-          type: "radio",
-          label: "Amended petition",
-          required: true,
-          options: [
-            { value: "1", label: "Option 1" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "Part 2. Information About This Petition. 2. Basis for Classification (select only one box). Check F. Amended petition.",
+            "2. Basis for Classification (only one box). B. Continuation of previously approved employment without change with the same employer.",
         },
         {
           id: "subform1TtlNumbersofWorker",
@@ -22316,61 +22242,58 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Total Number of Workers",
           required: true,
           helpText:
-            "Part 2. Information About This Petition. 5. Total number of workers included in this petition. (See instructions relating to when more than one worker can be included.) Enter Total Number of Workers.",
+            "5. Total number of workers included in this petition. (See instructions relating to when more than one worker can be included.) Total Number of Workers.",
         },
         {
           id: "subform1ReceiptNumber",
-          type: "radio",
+          type: "text",
           label: "If none exists, &quot;None.&quot;",
-          required: true,
           helpText:
-            "Part 2. Information About This Petition. 3.    Enter the most recent U S C I S petition/application receipt number for the beneficiary. If none exists, indicate &quot;None.&quot;",
+            "3. most recent U S C I S petition/application receipt number for the beneficiary. If none exists, &quot;None.&quot;",
         },
         {
           id: "subform1SSN",
           type: "ssn",
-          label: "Social Security Number, if any",
+          label: "Social Security Number (optional)",
           required: true,
-          helpText:
-            "Part 1. Petitioner Information. 8. Other Information. Enter U. S. Social Security Number, if any.",
+          helpText: "U. S. Social Security Number (optional)",
         },
         {
           id: "subform1TaxNumber",
           type: "text",
           label: "Individual Internal Revenue Service (I R S) Tax Number",
           required: true,
-          helpText:
-            "Part 1. Petitioner Information. 7. Other Information. Enter Individual Internal Revenue Service (I  R  S)  Tax Number.",
+          helpText: "Individual Internal Revenue Service (I R S) Tax Number.",
         },
         {
           id: "subform2ExpDate",
           type: "date",
-          label: "Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "Date",
           required: true,
           helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 6. If the beneficiary is in the United States, complete the following: Date Passport or Travel Document Expires. Enter Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "6. If the beneficiary is in the United States, complete the following: Date Passport or Travel Document Expires. Date.",
         },
         {
           id: "subform2SEVIS",
           type: "text",
           label:
-            "Student and Exchange Visitor Information System (S E V I S) Number, if any",
+            "Student and Exchange Visitor Information System (S E V I S) Number (optional)",
           required: true,
           helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 6. If the beneficiary is in the United States, complete the following: Enter Student and Exchange Visitor Information System (S E V I S) Number, if any.",
+            "6. If the beneficiary is in the United States, complete the following: Student and Exchange Visitor Information System (S E V I S) Number (optional)",
         },
         {
           id: "subform2EAD",
           type: "text",
-          label: "Employment Authorization Document (E A D) Number, if any",
+          label: "Employment Authorization Document (E A D) Number (optional)",
           required: true,
           helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 6. If the beneficiary is in the United States, complete the following: Enter Employment Authorization Document (E A D) Number, if any.",
+            "6. If the beneficiary is in the United States, complete the following: Employment Authorization Document (E A D) Number (optional)",
         },
         {
           id: "subform2State",
           type: "select",
-          label: "Select State from a List of States",
+          label: "State",
           required: true,
           options: [
             { value: "", label: "" },
@@ -22438,7 +22361,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "WY", label: "Wyoming" },
           ],
           helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 7. Current Residential U. S. Address, if applicable. Do not list a P. O. Box. Select State from a List of States.",
+            "7. Current Residential U. S. Address, if applicable. State.",
         },
         {
           id: "subform2ZipCode",
@@ -22446,7 +22369,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "ZIP Code",
           required: true,
           helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 7. Current Residential U. S. Address, if applicable. Do not list a P. O. Box. Enter ZIP Code.",
+            "7. Current Residential U. S. Address, if applicable. ZIP Code.",
         },
         {
           id: "subform2CityTown",
@@ -22454,54 +22377,20 @@ const I_129_DEFINITION: FormDefinition = {
           label: "City or Town",
           required: true,
           helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 7. Current Residential U. S. Address, if applicable. Do not list a P. O. Box. Enter City or Town.",
+            "7. Current Residential U. S. Address, if applicable. City or Town.",
         },
         {
           id: "subform2Unit",
           type: "radio",
-          label: "Check Apartment",
+          label: "Apartment",
           required: true,
           options: [
-            { value: "", label: "None" },
-            { value: "apt", label: "Apt." },
-            { value: "off", label: "Off" },
+            { value: "APT", label: "Apt." },
+            { value: "STE", label: "Ste." },
+            { value: "FLR", label: "Flr." },
           ],
           helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 7. Current Residential U. S. Address, if applicable. Do not list a P. O. Box. Check Apartment.",
-        },
-        {
-          id: "subform2AptSteFlrNumber",
-          type: "radio",
-          label: "Apartment, Suite or Floor Number",
-          required: true,
-          helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 7. Current Residential U. S. Address, if applicable. Do not list a P. O. Box. If Apartment, Suite or Floor is Checked, Enter Apartment, Suite or Floor Number.",
-        },
-        {
-          id: "subform2Unit1",
-          type: "radio",
-          label: "Check Floor",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "flr", label: "Flr." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 6. Current Residential U. S. Address, if applicable. Do not list a P. O. Box. Check Floor.",
-        },
-        {
-          id: "subform2Unit2",
-          type: "radio",
-          label: "Check Suite",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "ste", label: "Ste." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 7. Current Residential U. S. Address, if applicable. Do not list a P. O. Box. Check Suite.",
+            "7. Current Residential U. S. Address, if applicable. Apartment.",
         },
         {
           id: "subform2StreetNumberName",
@@ -22509,13 +22398,13 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Street Number and Name",
           required: true,
           helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 7. Current Residential U. S. Address, if applicable. Do not list a P. O. Box. Enter Street Number and Name.",
+            "7. Current Residential U. S. Address, if applicable. Street Number and Name.",
         },
         {
           id: "subform2CurrentNon",
           type: "select",
           label:
-            "If the beneficiary is in the United States, complete the following: Current Nonimmigrant Status f...",
+            "If the beneficiary is in the United States, complete the following: Current Nonimmigrant Status f.",
           required: true,
           options: [
             { value: "", label: "" },
@@ -22671,15 +22560,15 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "WT", label: "WT" },
           ],
           helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 6. If the beneficiary is in the United States, complete the following: Select Current Nonimmigrant Status from list.",
+            "6. If the beneficiary is in the United States, complete the following: Current Nonimmigrant Status from list.",
         },
         {
           id: "subform2DateStatusExpires",
           type: "date",
-          label: "Expires as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "Expires",
           required: true,
           helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 6. If the beneficiary is in the United States, complete the following: Enter Date Status or D/S. Expires as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "6. If the beneficiary is in the United States, complete the following: Date Status or D/S. Expires.",
         },
         {
           id: "subform2ExpDate1",
@@ -22687,7 +22576,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Date as 2-digit Month, 2-digit Day, and 4 digit Year",
           required: true,
           helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 6. If the beneficiary is in the United States, complete the following: Date Passport or Travel Document was Issued. Enter Date as 2-digit Month, 2-digit Day, and 4 digit Year.",
+            "6. If the beneficiary is in the United States, complete the following: Date Passport or Travel Document was Issued. Date as 2-digit Month, 2-digit Day, and 4 digit Year.",
         },
         {
           id: "subform2LineCountryOfIssuance",
@@ -22695,7 +22584,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Passport or Travel Document Country of Issuance",
           required: true,
           helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 6. If the beneficiary is in the United States, complete the following: Enter Passport or Travel Document Country of Issuance.",
+            "6. If the beneficiary is in the United States, complete the following: Passport or Travel Document Country of Issuance.",
         },
         {
           id: "subform2OfficeAddressCity",
@@ -22703,67 +22592,41 @@ const I_129_DEFINITION: FormDefinition = {
           label: "City",
           required: true,
           helpText:
-            "Part 4. Processing Information. 1. If a beneficiary or beneficiaries named in Part 3. is/are outside the United States, or a requested extension of stay or change of status cannot be granted, state the U. S. Consulate or inspection facility you want notified if this petition is approved. B. Office Address. Enter City.",
+            "If a beneficiary or beneficiaries named in S. Consulate or inspection facility you want notified if this petition is approved. B. Office Address. City.",
         },
         {
           id: "subform2TypeofOffice",
-          type: "select",
-          label: "Check Consulate",
+          type: "radio",
+          label: "Consulate",
           required: true,
           options: [
-            { value: "CON", label: "CON" },
-            { value: "Off", label: "Off" },
+            { value: "CON", label: "Consulate" },
+            { value: "PFI", label: "Pre-flight inspection" },
+            { value: "POE", label: "Port of Entry" },
           ],
           helpText:
-            "Part 4. Processing Information. 1. If a beneficiary or beneficiaries named in Part 3. is/are outside the United States, or a requested extension of stay or change of status cannot be granted, state the U. S. Consulate or inspection facility you want notified if this petition is approved. A. Type of Office. Select only one box. Check Consulate.",
-        },
-        {
-          id: "subform2TypeofOffice1",
-          type: "select",
-          label: "Check Pre-flight inspection",
-          required: true,
-          options: [
-            { value: "PFI", label: "PFI" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "Part 4. Processing Information. 1. If a beneficiary or beneficiaries named in Part 3. is/are outside the United States, or a requested extension of stay or change of status cannot be granted, state the U. S. Consulate or inspection facility you want notified if this petition is approved. A. Type of Office. Select only one box. Check Pre-flight inspection.",
-        },
-        {
-          id: "subform2TypeofOffice2",
-          type: "select",
-          label: "Check Port of Entry",
-          required: true,
-          options: [
-            { value: "POE", label: "POE" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "Part 4. Processing Information. 1. If a beneficiary or beneficiaries named in Part 3. is/are outside the United States, or a requested extension of stay or change of status cannot be granted, state the U. S. Consulate or inspection facility you want notified if this petition is approved. A. Type of Office. Select only one box. Check Port of Entry.",
+            "If a beneficiary or beneficiaries named in S. Consulate or inspection facility you want notified if this petition is approved. A. Type of Office. Consulate.",
         },
         {
           id: "subform2AlienNumber",
           type: "text",
           label: "Alien Registration Number (A-Number)",
           required: true,
-          helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 5. Other Information. Enter Alien Registration Number (A-Number).",
+          helpText: "Part 3.Alien Registration Number (A-Number).",
         },
         {
           id: "subform2DateOfBirth",
           type: "date",
-          label: "Date of Birth as 2-digit Month, 2-digit Day and 4-digit Year",
+          label: "Date of Birth",
           required: true,
-          helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 5. Other Information. Enter Date of Birth as 2-digit Month, 2-digit Day and 4-digit Year.",
+          helpText: "Date of Birth.",
         },
         {
           id: "subform2SSN",
           type: "ssn",
-          label: "Social Security Number, If any",
-          required: true,
-          helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 5. Other Information. Enter U. S. Social Security Number, If any.",
+          label: "Social Security Number (optional)",
+          required: false,
+          helpText: "Part 3.U. S. Social Security Number (optional)",
         },
         {
           id: "subform2GivenName2",
@@ -22771,7 +22634,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Given Name (First Name)",
           required: true,
           helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 4. Provide all other names the beneficiary has used. Include nicknames, aliases, maiden name, and names from all previous marriages. Name 2. Enter Given Name (First Name).",
+            "4. all other names the beneficiary has used. Include nicknames, aliases, maiden name, and names from all previous marriages. Name 2. Given Name (First Name).",
         },
         {
           id: "subform2MiddleName2",
@@ -22779,7 +22642,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Middle Name",
           required: true,
           helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 4. Provide all other names the beneficiary has used. Include nicknames, aliases, maiden name, and names from all previous marriages. Name 2. Enter Middle Name.",
+            "4. all other names the beneficiary has used. Include nicknames, aliases, maiden name, and names from all previous marriages. Name 2. Middle Name.",
         },
         {
           id: "subform2FamilyName3",
@@ -22787,7 +22650,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Family Name (Last Name)",
           required: true,
           helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 4. Provide all other names the beneficiary has used. Include nicknames, aliases, maiden name, and names from all previous marriages. Name 3. Enter Family Name (Last Name).",
+            "4. all other names the beneficiary has used. Include nicknames, aliases, maiden name, and names from all previous marriages. Name 3. Family Name (Last Name).",
         },
         {
           id: "subform2GivenName3",
@@ -22795,7 +22658,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Given Name (First Name)",
           required: true,
           helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 4. Provide all other names the beneficiary has used. Include nicknames, aliases, maiden name, and names from all previous marriages. Name 3. Enter Given Name (First Name).",
+            "4. all other names the beneficiary has used. Include nicknames, aliases, maiden name, and names from all previous marriages. Name 3. Given Name (First Name).",
         },
         {
           id: "subform2MiddleName3",
@@ -22803,7 +22666,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Middle Name",
           required: true,
           helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 4. Provide all other names the beneficiary has used. Include nicknames, aliases, maiden name, and names from all previous marriages. Name 3. Enter Middle Name.",
+            "4. all other names the beneficiary has used. Include nicknames, aliases, maiden name, and names from all previous marriages. Name 3. Middle Name.",
         },
         {
           id: "subform2FamilyName2",
@@ -22811,7 +22674,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Family Name (Last Name)",
           required: true,
           helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 4. Provide all other names the beneficiary has used. Include nicknames, aliases, maiden name, and names from all previous marriages. Name 2. Enter Family Name (Last Name).",
+            "4. all other names the beneficiary has used. Include nicknames, aliases, maiden name, and names from all previous marriages. Name 2. Family Name (Last Name).",
         },
         {
           id: "subform2MiddleName1",
@@ -22819,7 +22682,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Middle Name",
           required: true,
           helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 4. Provide all other names the beneficiary has used. Include nicknames, aliases, maiden name, and names from all previous marriages. Name 1. Enter Middle Name.",
+            "4. all other names the beneficiary has used. Include nicknames, aliases, maiden name, and names from all previous marriages. Name 1. Middle Name.",
         },
         {
           id: "subform2GivenName1",
@@ -22827,7 +22690,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Given Name (First Name)",
           required: true,
           helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 4. Provide all other names the beneficiary has used. Include nicknames, aliases, maiden name, and names from all previous marriages. Name 1. Enter Given Name (First Name).",
+            "4. all other names the beneficiary has used. Include nicknames, aliases, maiden name, and names from all previous marriages. Name 1. Given Name (First Name).",
         },
         {
           id: "subform2FamilyName1",
@@ -22835,7 +22698,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Family Name (Last Name)",
           required: true,
           helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 4. Provide all other names the beneficiary has used. Include nicknames, aliases, maiden name, and names from all previous marriages. Name 1. Enter Family Name (Last Name).",
+            "4. all other names the beneficiary has used. Include nicknames, aliases, maiden name, and names from all previous marriages. Name 1. Family Name (Last Name).",
         },
         {
           id: "subform3CityTown",
@@ -22843,7 +22706,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "City or Town",
           required: true,
           helpText:
-            "Part 4. Processing Information. 1. If a beneficiary or beneficiaries named in Part 3. is/are outside the United States, or a requested extension of stay or change of status cannot be granted, state the U. S. Consulate or inspection facility you want notified if this petition is approved. D. Beneficiary&apos;s Foreign Address. Enter City or Town.",
+            "If a beneficiary or beneficiaries named in S. Consulate or inspection facility you want notified if this petition is approved. D. Beneficiary&apos;s Foreign Address. City or Town.",
         },
         {
           id: "subform3StreetNumberName",
@@ -22851,31 +22714,21 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Street Number and Name",
           required: true,
           helpText:
-            "Part 4. Processing Information. 1. If a beneficiary or beneficiaries named in Part 3. is/are outside the United States, or a requested extension of stay or change of status cannot be granted, state the U. S. Consulate or inspection facility you want notified if this petition is approved. D. Beneficiary&apos;s Foreign Address. Enter Street Number and Name.",
+            "If a beneficiary or beneficiaries named in S. Consulate or inspection facility you want notified if this petition is approved. D. Beneficiary&apos;s Foreign Address. Street Number and Name.",
         },
         {
           id: "subform32Unit",
           type: "select",
-          label: "Check Suite",
+          label: "Suite",
           required: true,
           options: [
             { value: "STE", label: "STE" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "Part 4. Processing Information. 1. If a beneficiary or beneficiaries named in Part 3. is/are outside the United States, or a requested extension of stay or change of status cannot be granted, state the U. S. Consulate or inspection facility you want notified if this petition is approved. D. Beneficiary&apos;s Foreign Address. Check Suite.",
-        },
-        {
-          id: "subform32Unit1",
-          type: "select",
-          label: "Check Floor",
-          required: true,
-          options: [
             { value: "FLR", label: "FLR" },
+            { value: "APT", label: "APT" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Part 4. Processing Information. 1. If a beneficiary or beneficiaries named in Part 3. is/are outside the United States, or a requested extension of stay or change of status cannot be granted, state the U. S. Consulate or inspection facility you want notified if this petition is approved. D. Beneficiary&apos;s Foreign Address. Check Floor.",
+            "If a beneficiary or beneficiaries named in S. Consulate or inspection facility you want notified if this petition is approved. D. Beneficiary&apos;s Foreign Address. Suite.",
         },
         {
           id: "subform32AptSteFlrNumber",
@@ -22883,19 +22736,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Apartment, Suite or Floor Number",
           required: true,
           helpText:
-            "Part 4. Processing Information. 1. If a beneficiary or beneficiaries named in Part 3. is/are outside the United States, or a requested extension of stay or change of status cannot be granted, state the U. S. Consulate or inspection facility you want notified if this petition is approved. D. Beneficiary&apos;s Foreign Address. If Apartment, Suite or Floor is Checked, Enter Apartment, Suite or Floor Number.",
-        },
-        {
-          id: "subform32Unit2",
-          type: "select",
-          label: "Check Apartment",
-          required: true,
-          options: [
-            { value: "APT", label: "APT" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "Part 4. Processing Information. 1. If a beneficiary or beneficiaries named in Part 3. is/are outside the United States, or a requested extension of stay or change of status cannot be granted, state the U. S. Consulate or inspection facility you want notified if this petition is approved. D. Beneficiary&apos;s Foreign Address. Check Apartment.",
+            "If a beneficiary or beneficiaries named in S. Consulate or inspection facility you want notified if this petition is approved. D. Beneficiary&apos;s Foreign Address. If Apartment, Suite or Floor is Checked, Apartment, Suite or Floor Number.",
         },
         {
           id: "subform32Province",
@@ -22903,7 +22744,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "State, if applicable",
           required: true,
           helpText:
-            "Part 4. Processing Information. 1. If a beneficiary or beneficiaries named in Part 3. is/are outside the United States, or a requested extension of stay or change of status cannot be granted, state the U. S. Consulate or inspection facility you want notified if this petition is approved. D. Beneficiary&apos;s Foreign Address. Enter State, if applicable.",
+            "If a beneficiary or beneficiaries named in S. Consulate or inspection facility you want notified if this petition is approved. D. Beneficiary&apos;s Foreign Address. State, if applicable.",
         },
         {
           id: "subform3PostalCode",
@@ -22911,7 +22752,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Postal Code",
           required: true,
           helpText:
-            "Part 4. Processing Information. 1. If a beneficiary or beneficiaries named in Part 3. is/are outside the United States, or a requested extension of stay or change of status cannot be granted, state the U. S. Consulate or inspection facility you want notified if this petition is approved. D. Beneficiary&apos;s Foreign Address. Enter Postal Code.",
+            "If a beneficiary or beneficiaries named in S. Consulate or inspection facility you want notified if this petition is approved. D. Beneficiary&apos;s Foreign Address. Postal Code.",
         },
         {
           id: "subform3LineCountry",
@@ -22919,23 +22760,21 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Country",
           required: true,
           helpText:
-            "Part 4. Processing Information. 1. If a beneficiary or beneficiaries named in Part 3. is/are outside the United States, or a requested extension of stay or change of status cannot be granted, state the U. S. Consulate or inspection facility you want notified if this petition is approved. D. Beneficiary&apos;s Foreign Address. Enter Country.",
+            "If a beneficiary or beneficiaries named in S. Consulate or inspection facility you want notified if this petition is approved. D. Beneficiary&apos;s Foreign Address. Country.",
         },
         {
           id: "subform32Province1",
-          type: "radio",
+          type: "text",
           label: "Province, if applicable",
-          required: true,
-          helpText:
-            "Part 4. Processing Information. 1. If a beneficiary or beneficiaries named in Part 3. is/are outside the United States, or a requested extension of stay or change of status cannot be granted, state the U. S. Consulate or inspection facility you want notified if this petition is approved. D. Beneficiary&apos;s Foreign Address. Enter Province, if applicable.",
+          required: false,
+          helpText: "Part 4. 1.Province, if applicable.",
         },
         {
           id: "subform4Explanation",
           type: "text",
           label: "Explanation",
-          required: true,
-          helpText:
-            "Part 5. Basic Information About the Proposed Employment and Employer. Attach the Form I-1 29 supplement relevant to the classification of the worker or workers you are requesting. 10. Other Compensation (Explain). Enter Explanation.",
+          required: false,
+          helpText: "Part 5.Other Compensation (Explain). Explanation.",
         },
         {
           id: "subform4Wages",
@@ -22944,31 +22783,28 @@ const I_129_DEFINITION: FormDefinition = {
             "Dollar Amount and specify per hour, week, month or year in the next field",
           required: true,
           helpText:
-            "Part 5. Basic Information About the Proposed Employment and Employer. Attach the Form I-1 29 supplement relevant to the classification of the worker or workers you are requesting. 9. Wages. Enter Dollar Amount and specify per hour, week, month or year in the next field.",
+            "Part 5.Dollar Amount and specify per hour, week, month or year in the next field.",
         },
         {
           id: "subform4Per",
           type: "text",
           label: "Hour, week, month or year",
           required: true,
-          helpText:
-            "Part 5. Basic Information About the Proposed Employment and Employer. Attach the Form I-1 29 supplement relevant to the classification of the worker or workers you are requesting. 9. Wages. Enter hour, week, month or year.",
+          helpText: "Part 5.hour, week, month or year.",
         },
         {
           id: "subform5GrossAnnualIncome",
           type: "text",
           label: "Gross Annual Income",
           required: true,
-          helpText:
-            "Part 5. Basic Information About the Proposed Employment and Employer. Attach the Form I-1 29 supplement relevant to the classification of the worker or workers you are requesting. 16. Enter Gross Annual Income.",
+          helpText: "Part 5.16. Gross Annual Income.",
         },
         {
           id: "subform5NetAnnualIncome",
           type: "radio",
           label: "Net Annual Income",
           required: true,
-          helpText:
-            "Part 5. Basic Information About the Proposed Employment and Employer. Attach the Form I-1 29 supplement relevant to the classification of the worker or workers you are requesting. 17. Enter Net Annual Income.",
+          helpText: "Part 5.17. Net Annual Income.",
         },
         {
           id: "subform5NoDeemed",
@@ -22977,24 +22813,24 @@ const I_129_DEFINITION: FormDefinition = {
             "Department of State to release such technology or technical data to the foreign person; or",
           required: true,
           options: [
-            { value: "1", label: "1" },
-            { value: "Off", label: "Off" },
+            { value: "Yes", label: "Yes" },
+            { value: "No", label: "No" },
           ],
           helpText:
-            "Part 6. Certification Regarding the Release of Controlled Technology or Technical Data to Foreign Persons in the United States. This section of the form is required only for H-1 B, H-1 B 1 Chile/Singapore, L-1, and O-1 A petitions. It is not required for any other classifications. Please review the Form I-1 29 General Filing Instructions before completing this section. Select Item Number 1. or Item Number 2. as appropriate. DO NOT select both boxes. With respect to the technology or technical data the petitioner will release or otherwise provide access to the beneficiary, the petitioner certifies that it has reviewed the Export Administration Regulations (E A R) and the International Traffic in Arms Regulations (I T A R) and has determined that: Check 1. A license is not required from either the U. S. Department of Commerce or the U. S. Department of State to release such technology or technical data to the foreign person; or",
+            "This section of the form is required only for H-1 B, H-1 B 1 Chile/Singapore, L-1, and O-1 A petitions. It is not required for any other classifications. Please review the Form I-1 29 General Filing Instructions before completing this section. or as appropriate. DO NOT both boxes. With respect to the technology or technical data the petitioner will release or otherwise access to the beneficiary, the petitioner certifies that it has reviewed the Export Administration Regulations (E A R) and the International Traffic in Arms Regulations (I T A R) and has determined that: 1. A license is not required from either the U. S. Department of Commerce or the U. S. Department of State to release such technology or technical data to the foreign person; or",
         },
         {
           id: "subform5Deemed",
           type: "select",
           label:
-            "Department of State to release such technology or technical data to the beneficiary and the petit...",
+            "Department of State to release such technology or technical data to the beneficiary and the petit.",
           required: true,
           options: [
-            { value: "1", label: "1" },
-            { value: "Off", label: "Off" },
+            { value: "Yes", label: "Yes" },
+            { value: "No", label: "No" },
           ],
           helpText:
-            "Part 6. Certification Regarding the Release of Controlled Technology or Technical Data to Foreign Persons in the United States. This section of the form is required only for H-1 B, H-1 B 1 Chile/Singapore, L-1, and O-1 A petitions. It is not required for any other classifications. Please review the Form I-1 29 General Filing Instructions before completing this section. Select Item Number 1. or Item Number 2. as appropriate. DO NOT select both boxes. With respect to the technology or technical data the petitioner will release or otherwise provide access to the beneficiary, the petitioner certifies that it has reviewed the Export Administration Regulations (E A R) and the International Traffic in Arms Regulations (I T A R) and has determined that: Check 2. A license is required from the U. S. Department of Commerce and/or the U. S. Department of State to release such technology or technical data to the beneficiary and the petitioner will prevent access to the controlled technology or technical data by the beneficiary until and unless the petitioner has received the required license or other authorization to release it to the beneficiary.",
+            "This section of the form is required only for H-1 B, H-1 B 1 Chile/Singapore, L-1, and O-1 A petitions. It is not required for any other classifications. Please review the Form I-1 29 General Filing Instructions before completing this section. or as appropriate. DO NOT both boxes. With respect to the technology or technical data the petitioner will release or otherwise access to the beneficiary, the petitioner certifies that it has reviewed the Export Administration Regulations (E A R) and the International Traffic in Arms Regulations (I T A R) and has determined that: 2. A license is required from the U. S. Department of Commerce and/or the U. S. Department of State to release such technology or technical data to the beneficiary and the petitioner will prevent access to the controlled technology or technical data by the beneficiary until and unless the petitioner has received the required license or other authorization to release it to the beneficiary.",
         },
         {
           id: "subform5PetitionerLastName",
@@ -23002,7 +22838,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Family Name (Last Name)",
           required: true,
           helpText:
-            "Part 7.  Declaration, Signature, and Contact Information of Petitioner or Authorized Signatory (Read the information on penalties in the instructions before completing this section.) Copies of any documents submitted are exact photocopies of unaltered, original documents, and I understand that, as the petitioner, I may be required to submit original documents to U. S. Citizenship and Immigration Services (U S C I S) at a later date. I authorize the release of any information from my records, or from the petitioning organization&apos;s records that U S C I S needs to determine eligibility for the immigration benefit sought.  I recognize the authority of U S C I S to conduct audits of this petition using publicly available open source information.  I also recognize that any supporting evidence submitted in support of this petition may be verified by U S C I S through any means determined appropriate by U S C I S, including but not limited to, on-site compliance reviews. If filing this petition on behalf of an organization, I certify that I am authorized to do so by the organization. I certify, under penalty of perjury, that I have reviewed this petition and that all of the information contained in the petition, including all responses to specific questions, and in the supporting documents, is complete, true, and correct. 1. Name and Title of Authorized Signatory. Enter Family Name (Last Name).",
+            "Part 7. Declaration, Signature, and Contact Information of Petitioner or Authorized Signatory (Read the information on penalties in the instructions before completing this section.) Copies of any documents submitted are exact photocopies of unaltered, original documents, and I understand that, as the petitioner, I may be required to submit original documents to U. S. Citizenship and Immigration Services (U S C I S) at a later date. I authorize the release of any information from my records, or from the petitioning organization&apos;s records that U S C I S needs to determine eligibility for the immigration benefit sought. I recognize the authority of U S C I S to conduct audits of this petition using publicly available open source information. I also recognize that any supporting evidence submitted in support of this petition may be verified by U S C I S through any means determined appropriate by U S C I S, including but not limited to, on-site compliance reviews. If filing this petition on behalf of an organization, I certify that I am authorized to do so by the organization. I certify, under penalty of perjury, that I have reviewed this petition and that all of the information contained in the petition, including all responses to specific questions, and in the supporting documents, is complete, true, and correct. 1. Name and Title of Authorized Signatory. Family Name (Last Name).",
         },
         {
           id: "subform5PetitionerLastName1",
@@ -23010,7 +22846,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Title",
           required: true,
           helpText:
-            "Part 7.  Declaration, Signature, and Contact Information of Petitioner or Authorized Signatory (Read the information on penalties in the instructions before completing this section.) Copies of any documents submitted are exact photocopies of unaltered, original documents, and I understand that, as the petitioner, I may be required to submit original documents to U. S. Citizenship and Immigration Services (U S C I S) at a later date. I authorize the release of any information from my records, or from the petitioning organization&apos;s records that U S C I S needs to determine eligibility for the immigration benefit sought.  I recognize the authority of U S C I S to conduct audits of this petition using publicly available open source information.  I also recognize that any supporting evidence submitted in support of this petition may be verified by U S C I S through any means determined appropriate by U S C I S, including but not limited to, on-site compliance reviews. If filing this petition on behalf of an organization, I certify that I am authorized to do so by the organization. I certify, under penalty of perjury, that I have reviewed this petition and that all of the information contained in the petition, including all responses to specific questions, and in the supporting documents, is complete, true, and correct. 1. Name and Title of Authorized Signatory. Enter Title.",
+            "Part 7. Declaration, Signature, and Contact Information of Petitioner or Authorized Signatory (Read the information on penalties in the instructions before completing this section.) Copies of any documents submitted are exact photocopies of unaltered, original documents, and I understand that, as the petitioner, I may be required to submit original documents to U. S. Citizenship and Immigration Services (U S C I S) at a later date. I authorize the release of any information from my records, or from the petitioning organization&apos;s records that U S C I S needs to determine eligibility for the immigration benefit sought. I recognize the authority of U S C I S to conduct audits of this petition using publicly available open source information. I also recognize that any supporting evidence submitted in support of this petition may be verified by U S C I S through any means determined appropriate by U S C I S, including but not limited to, on-site compliance reviews. If filing this petition on behalf of an organization, I certify that I am authorized to do so by the organization. I certify, under penalty of perjury, that I have reviewed this petition and that all of the information contained in the petition, including all responses to specific questions, and in the supporting documents, is complete, true, and correct. 1. Name and Title of Authorized Signatory. Title.",
         },
         {
           id: "subform5PetitionerFirstName",
@@ -23018,24 +22854,15 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Given Name (First Name)",
           required: true,
           helpText:
-            "Part 7.  Declaration, Signature, and Contact Information of Petitioner or Authorized Signatory (Read the information on penalties in the instructions before completing this section.) Copies of any documents submitted are exact photocopies of unaltered, original documents, and I understand that, as the petitioner, I may be required to submit original documents to U. S. Citizenship and Immigration Services (U S C I S) at a later date. I authorize the release of any information from my records, or from the petitioning organization&apos;s records that U S C I S needs to determine eligibility for the immigration benefit sought.  I recognize the authority of U S C I S to conduct audits of this petition using publicly available open source information.  I also recognize that any supporting evidence submitted in support of this petition may be verified by U S C I S through any means determined appropriate by U S C I S, including but not limited to, on-site compliance reviews. If filing this petition on behalf of an organization, I certify that I am authorized to do so by the organization. I certify, under penalty of perjury, that I have reviewed this petition and that all of the information contained in the petition, including all responses to specific questions, and in the supporting documents, is complete, true, and correct. 1. Name and Title of Authorized Signatory. Enter Given Name (First Name).",
-        },
-        {
-          id: "subform6DateofSignature",
-          type: "date",
-          label:
-            "Date of Signature as 2-digit Month, 2-digit Day, and 4-digit Year",
-          required: true,
-          helpText:
-            "Part 7.  Declaration, Signature, and Contact Information of Petitioner or Authorized Signatory (Read the information on penalties in the instructions before completing this section.) 2. Signature and Date. Date of Signature. Enter Date of Signature as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "Part 7. Declaration, Signature, and Contact Information of Petitioner or Authorized Signatory (Read the information on penalties in the instructions before completing this section.) Copies of any documents submitted are exact photocopies of unaltered, original documents, and I understand that, as the petitioner, I may be required to submit original documents to U. S. Citizenship and Immigration Services (U S C I S) at a later date. I authorize the release of any information from my records, or from the petitioning organization&apos;s records that U S C I S needs to determine eligibility for the immigration benefit sought. I recognize the authority of U S C I S to conduct audits of this petition using publicly available open source information. I also recognize that any supporting evidence submitted in support of this petition may be verified by U S C I S through any means determined appropriate by U S C I S, including but not limited to, on-site compliance reviews. If filing this petition on behalf of an organization, I certify that I am authorized to do so by the organization. I certify, under penalty of perjury, that I have reviewed this petition and that all of the information contained in the petition, including all responses to specific questions, and in the supporting documents, is complete, true, and correct. 1. Name and Title of Authorized Signatory. Given Name (First Name).",
         },
         {
           id: "subform6Pt7EmailAddress",
           type: "email",
-          label: "Email Address, if any",
+          label: "Email Address (optional)",
           required: true,
           helpText:
-            "Part 7.  Declaration, Signature, and Contact Information of Petitioner or Authorized Signatory (Read the information on penalties in the instructions before completing this section.) 3. Signatory&apos;s Contact Information. Enter Email Address, if any.",
+            "Part 7. Declaration, Signature, and Contact Information of Petitioner or Authorized Signatory (Read the information on penalties in the instructions before completing this section.) 3. Signatory&apos;s Contact Information. Email Address (optional)",
         },
         {
           id: "subform6Pt7DaytimePhoneNumber1",
@@ -23043,32 +22870,15 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Daytime Telephone Number",
           required: true,
           helpText:
-            "Part 7.  Declaration, Signature, and Contact Information of Petitioner or Authorized Signatory (Read the information on penalties in the instructions before completing this section.) 3. Signatory&apos;s Contact Information. Enter Daytime Telephone Number.",
-        },
-        {
-          id: "subform6LineSignature",
-          type: "date",
-          label: "Print and Sign completed form",
-          required: true,
-          helpText:
-            "Part 8. Declaration, Signature, and Contact Information of Person Preparing Form, If Other Than Above. Provide the following information concerning the preparer. Preparer&apos;s Declaration. By my signature, I certify, swear or affirm, under penalty of perjury, that I prepared this form on behalf of, at the request of, and with the express consent of, the petitioner. I completed the form based only on responses the petitioner provided to me. After completing the form, I reviewed it and all of the petitioner&apos;s responses with the petitioner, who agreed with every answer provided for every question on the form and, when required, supplied additional information to respond to a question on the form. 5. Signature and Date. Signature of Preparer. No Entry. Print and Sign completed form.",
-        },
-        {
-          id: "subform6LineDateofSignature",
-          type: "date",
-          label:
-            "Date of Signature as 2-digit Month, 2-digit Day, and 4-digit Year",
-          required: true,
-          helpText:
-            "Part 8. Declaration, Signature, and Contact Information of Person Preparing Form, If Other Than Above. Provide the following information concerning the preparer. Preparer&apos;s Declaration. By my signature, I certify, swear or affirm, under penalty of perjury, that I prepared this form on behalf of, at the request of, and with the express consent of, the petitioner. I completed the form based only on responses the petitioner provided to me. After completing the form, I reviewed it and all of the petitioner&apos;s responses with the petitioner, who agreed with every answer provided for every question on the form and, when required, supplied additional information to respond to a question on the form. 5. Signature and Date. Enter Date of Signature as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "Part 7. Declaration, Signature, and Contact Information of Petitioner or Authorized Signatory (Read the information on penalties in the instructions before completing this section.) 3. Signatory&apos;s Contact Information. Daytime Telephone Number.",
         },
         {
           id: "subform6EmailAddress",
           type: "email",
-          label: "E-mail Address, if any",
+          label: "E-mail Address (optional)",
           required: true,
           helpText:
-            "Part 8. Declaration, Signature, and Contact Information of Person Preparing Form, If Other Than Above. Provide the following information concerning the preparer. 4. Preparer&apos;s Contact Information. Enter E-mail Address, if any.",
+            "following information concerning the preparer. 4. Preparer&apos;s Contact Information. E-mail Address (optional)",
         },
         {
           id: "subform6Pt8DaytimePhoneNumber1",
@@ -23076,7 +22886,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Daytime Telephone Number",
           required: true,
           helpText:
-            "Part 8. Declaration, Signature, and Contact Information of Person Preparing Form, If Other Than Above. Provide the following information concerning the preparer. 4. Preparer&apos;s Contact Information. Enter Daytime Telephone Number.",
+            "following information concerning the preparer. 4. Preparer&apos;s Contact Information. Daytime Telephone Number.",
         },
         {
           id: "subform6Pt8DaytimePhoneNumber11",
@@ -23084,7 +22894,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Fax Number",
           required: true,
           helpText:
-            "Part 8. Declaration, Signature, and Contact Information of Person Preparing Form, If Other Than Above. Provide the following information concerning the preparer. 4. Preparer&apos;s Contact Information. Enter Fax Number.",
+            "following information concerning the preparer. 4. Preparer&apos;s Contact Information. Fax Number.",
         },
         {
           id: "subform6LinePreparerFamilyName",
@@ -23092,7 +22902,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Family Name (Last Name)",
           required: true,
           helpText:
-            "Part 8. Declaration, Signature, and Contact Information of Person Preparing Form, If Other Than Above. Provide the following information concerning the preparer. 1. Name of Preparer. Enter Family Name (Last Name).",
+            "following information concerning the preparer. 1. Name of Preparer. Family Name (Last Name).",
         },
         {
           id: "subform6LinePreparerGivenName",
@@ -23100,16 +22910,16 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Given Name (First Name)",
           required: true,
           helpText:
-            "Part 8. Declaration, Signature, and Contact Information of Person Preparing Form, If Other Than Above. Provide the following information concerning the preparer. 1. Name of Preparer. Enter Given Name (First Name).",
+            "following information concerning the preparer. 1. Name of Preparer. Given Name (First Name).",
         },
         {
           id: "subform6LineBusinessName",
           type: "ssn",
           label:
-            "If applicable, the name of your accredited organization recognized by the Board of Immigration Ap...",
+            "the name of your accredited organization recognized by the Board of Immigration Ap.",
           required: true,
           helpText:
-            "Part 8. Declaration, Signature, and Contact Information of Person Preparing Form, If Other Than Above. Provide the following information concerning the preparer. 2. Enter Preparer&apos;s Business or Organization Name. If applicable, provide the name of your accredited organization recognized by the Board of Immigration Appeals (B I A).",
+            "following information concerning the preparer. 2. Preparer&apos;s Business or Organization Name. name of your accredited organization recognized by the Board of Immigration Appeals (B I A).",
         },
         {
           id: "subform6LineCityTown1",
@@ -23117,7 +22927,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "City or Town",
           required: true,
           helpText:
-            "Part 8. Declaration, Signature, and Contact Information of Person Preparing Form, If Other Than Above. Provide the following information concerning the preparer. 3. Preparer&apos;s Mailing Address. Enter City or Town.",
+            "following information concerning the preparer. 3. Preparer&apos;s address. City or Town.",
         },
         {
           id: "subform6StreetNumberName1",
@@ -23125,7 +22935,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Street Number and Name",
           required: true,
           helpText:
-            "Part 8. Declaration, Signature, and Contact Information of Person Preparing Form, If Other Than Above. Provide the following information concerning the preparer. 3. Preparer&apos;s Mailing Address. Enter Street Number and Name.",
+            "following information concerning the preparer. 3. Preparer&apos;s address. Street Number and Name.",
         },
         {
           id: "subform7AdditionalInfo",
@@ -23133,7 +22943,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Additional Information here",
           required: true,
           helpText:
-            "Part 9. Additional Information About Your Petition For Nonimmigrant Worker. If you require more space to provide any additional information within this application, please use the space below. If you require more space than what is provided to complete this application, you may make a copy of Part 10 to complete and file with this application. In order to assist us in reviewing your response, you must identify the Page Number, Part Number and Item Number along with the additional information. 4. D. Enter Additional Information here.",
+            "If you require more space to any additional information within this application, please use the space below. If you require more space than what is provided to complete this application, you may make a copy of Part 10 to complete and file with this application. In order to assist us in reviewing your response, you must identify the Page Number, Part Number and Item Number along with the additional information. 4. D. Additional Information here.",
         },
         {
           id: "subform7areaAlienNumber",
@@ -23141,153 +22951,163 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Alien Registration Number (A-Number)",
           required: true,
           helpText:
-            "Part 10. Additional Information About Your Petition For Nonimmigrant Worker. If you require more space to provide any additional information within this application, please use the space below. If you require more space than what is provided to complete this application, you may make a copy of Part 10 to complete and file with this application. In order to assist us in reviewing your response, you must identify the Page Number, Part Number and Item Number along with the additional information. Enter Alien Registration Number (A-Number).",
+            "If you require more space to any additional information within this application, please use the space below. If you require more space than what is provided to complete this application, you may make a copy of Part 10 to complete and file with this application. In order to assist us in reviewing your response, you must identify the Page Number, Part Number and Item Number along with the additional information. Alien Registration Number (A-Number).",
         },
         {
           id: "subform7PageNumber",
           type: "text",
           label: "Page Number",
-          required: true,
+          required: false,
           helpText:
-            "Part 9. Additional Information About Your Petition For Nonimmigrant Worker. If you require more space to provide any additional information within this application, please use the space below. If you require more space than what is provided to complete this application, you may make a copy of Part 10 to complete and file with this application. In order to assist us in reviewing your response, you must identify the Page Number, Part Number and Item Number along with the additional information. 2. A. Enter Page Number.",
+            "If you require more space to any additional information within this application, please use the space below. If you require more space than what is provided to complete this application, you may make a copy of Part 10 to complete and file with this application. In order to assist us in reviewing your response, you must identify the Page Number, Part Number and Item Number along with the additional information. 2. A. Page Number.",
         },
         {
           id: "subform7PartNumber",
           type: "text",
           label: "Part Number",
-          required: true,
+          required: false,
           helpText:
-            "Part 9. Additional Information About Your Petition For Nonimmigrant Worker. If you require more space to provide any additional information within this application, please use the space below. If you require more space than what is provided to complete this application, you may make a copy of Part 10 to complete and file with this application. In order to assist us in reviewing your response, you must identify the Page Number, Part Number and Item Number along with the additional information. 2. B. Enter Part Number.",
+            "If you require more space to any additional information within this application, please use the space below. If you require more space than what is provided to complete this application, you may make a copy of Part 10 to complete and file with this application. In order to assist us in reviewing your response, you must identify the Page Number, Part Number and Item Number along with the additional information. 2. B. Part Number.",
         },
         {
           id: "subform7ItemNumber",
           type: "text",
           label: "Item Number",
-          required: true,
+          required: false,
           helpText:
-            "Part 9. Additional Information About Your Petition For Nonimmigrant Worker. If you require more space to provide any additional information within this application, please use the space below. If you require more space than what is provided to complete this application, you may make a copy of Part 10 to complete and file with this application. In order to assist us in reviewing your response, you must identify the Page Number, Part Number and Item Number along with the additional information. 2. C. Enter Item Number.",
+            "If you require more space to any additional information within this application, please use the space below. If you require more space than what is provided to complete this application, you may make a copy of Part 10 to complete and file with this application. In order to assist us in reviewing your response, you must identify the Page Number, Part Number and Item Number along with the additional information. 2. C. Item Number.",
         },
         {
           id: "subform7PageNumber1",
           type: "text",
           label: "Page Number",
-          required: true,
+          required: false,
           helpText:
-            "Part 9. Additional Information About Your Petition For Nonimmigrant Worker. If you require more space to provide any additional information within this application, please use the space below. If you require more space than what is provided to complete this application, you may make a copy of Part 10 to complete and file with this application. In order to assist us in reviewing your response, you must identify the Page Number, Part Number and Item Number along with the additional information. 3. A. Enter Page Number.",
+            "If you require more space to any additional information within this application, please use the space below. If you require more space than what is provided to complete this application, you may make a copy of Part 10 to complete and file with this application. In order to assist us in reviewing your response, you must identify the Page Number, Part Number and Item Number along with the additional information. 3. A. Page Number.",
         },
         {
           id: "subform7PartNumber1",
           type: "text",
           label: "Part Number",
-          required: true,
+          required: false,
           helpText:
-            "Part 9. Additional Information About Your Petition For Nonimmigrant Worker. If you require more space to provide any additional information within this application, please use the space below. If you require more space than what is provided to complete this application, you may make a copy of Part 10 to complete and file with this application. In order to assist us in reviewing your response, you must identify the Page Number, Part Number and Item Number along with the additional information. 3. B. Enter Part Number.",
+            "If you require more space to any additional information within this application, please use the space below. If you require more space than what is provided to complete this application, you may make a copy of Part 10 to complete and file with this application. In order to assist us in reviewing your response, you must identify the Page Number, Part Number and Item Number along with the additional information. 3. B. Part Number.",
         },
         {
           id: "subform7ItemNumber1",
           type: "text",
           label: "Item Number",
-          required: true,
+          required: false,
           helpText:
-            "Part 9. Additional Information About Your Petition For Nonimmigrant Worker. If you require more space to provide any additional information within this application, please use the space below. If you require more space than what is provided to complete this application, you may make a copy of Part 10 to complete and file with this application. In order to assist us in reviewing your response, you must identify the Page Number, Part Number and Item Number along with the additional information. 3. C. Enter Item Number.",
+            "If you require more space to any additional information within this application, please use the space below. If you require more space than what is provided to complete this application, you may make a copy of Part 10 to complete and file with this application. In order to assist us in reviewing your response, you must identify the Page Number, Part Number and Item Number along with the additional information. 3. C. Item Number.",
         },
         {
           id: "subform8FamilyName1",
           type: "text",
           label: "Family Name (Last Name)",
-          required: true,
+          required: false,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. 2. Name of the Beneficiary. Enter Family Name (Last Name).",
+            "E-1/E-2 Classification Supplement to Form I-1 29. 2. Name of the Beneficiary. Family Name (Last Name).",
         },
         {
           id: "subform8GivenName1",
           type: "text",
           label: "Given Name (First Name)",
-          required: true,
+          required: false,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. 2. Name of the Beneficiary. Enter Given Name (First Name).",
+            "E-1/E-2 Classification Supplement to Form I-1 29. 2. Name of the Beneficiary. Given Name (First Name).",
         },
         {
           id: "subform8MiddleName1",
           type: "radio",
           label: "Middle Name",
-          required: true,
+          required: false,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. 2. Name of the Beneficiary. Enter Middle Name.",
+            "E-1/E-2 Classification Supplement to Form I-1 29. 2. Name of the Beneficiary. Middle Name.",
         },
         {
-          id: "subform8E1TreatyTrader",
+          id: "subform8E1Treaty",
           type: "radio",
-          label: "Check E-1 Treaty Trader.",
+          label: "E-1 Treaty Trader.",
           required: true,
           options: [
             {
               value: "1",
               label:
-                "29. 3. Classification sought (select only one box). Check E-1 Treaty Trader.",
+                "29. 3. Classification sought (only one box). E-1 Treaty Trader.",
+            },
+            {
+              value: "1",
+              label:
+                "29. 3. Classification sought (only one box). E-2 Treaty Investor.",
+            },
+            {
+              value: "1",
+              label:
+                "29. 3. Classification sought (only one box). E-2 C N M I Investor.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. 3. Classification sought (select only one box). Check E-1 Treaty Trader.",
+            "E-1/E-2 Classification Supplement to Form I-1 29. 3. Classification sought (only one box). E-1 Treaty Trader.",
         },
         {
           id: "subform8E2TreatyInvestor",
           type: "radio",
-          label: "Check E-2 Treaty Investor.",
+          label: "E-2 Treaty Investor.",
           required: true,
           options: [
             {
               value: "1",
               label:
-                "29. 3. Classification sought (select only one box). Check E-2 Treaty Investor.",
+                "29. 3. Classification sought (only one box). E-2 Treaty Investor.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. 3. Classification sought (select only one box). Check E-2 Treaty Investor.",
+            "E-1/E-2 Classification Supplement to Form I-1 29. 3. Classification sought (only one box). E-2 Treaty Investor.",
         },
         {
           id: "subform8E2CNMI",
           type: "radio",
-          label: "Check E-2 C N M I Investor.",
+          label: "E-2 C N M I Investor.",
           required: true,
           options: [
             {
               value: "1",
               label:
-                "29. 3. Classification sought (select only one box). Check E-2 C N M I Investor.",
+                "29. 3. Classification sought (only one box). E-2 C N M I Investor.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. 3. Classification sought (select only one box). Check E-2 C N M I Investor.",
+            "E-1/E-2 Classification Supplement to Form I-1 29. 3. Classification sought (only one box). E-2 C N M I Investor.",
         },
         {
           id: "subform8SupEYes",
           type: "radio",
           label:
-            "Are you seeking advice from U S C I S to determine whether changes in the terms or conditions of ...",
+            "Are you seeking advice from U S C I S to determine whether changes in the terms or conditions of .",
           required: true,
           options: [
             { value: "Y", label: "Yes" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. 5. Are you seeking advice from U S C I S to determine whether changes in the terms or conditions of E status for one or more employees are substantive? Check Yes.",
+            "E-1/E-2 Classification Supplement to Form I-1 29. 5. Are you seeking advice from U S C I S to determine whether changes in the terms or conditions of E status for one or more employees are substantive? Yes.",
         },
         {
           id: "subform8SupENo",
           type: "radio",
           label:
-            "Are you seeking advice from U S C I S to determine whether changes in the terms or conditions of ...",
+            "Are you seeking advice from U S C I S to determine whether changes in the terms or conditions of .",
           required: true,
           options: [
             { value: "Y", label: "Yes" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. 5. Are you seeking advice from U S C I S to determine whether changes in the terms or conditions of E status for one or more employees are substantive? Check No.",
+            "E-1/E-2 Classification Supplement to Form I-1 29. 5. Are you seeking advice from U S C I S to determine whether changes in the terms or conditions of E status for one or more employees are substantive? No.",
         },
         {
           id: "subform8CompanyorOrgName1",
@@ -23295,7 +23115,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Employer&apos;s Name",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 1. Information About the Employer Outside the United States, if any. 1. Enter Employer&apos;s Name.",
+            "E-1/E-2 Classification Supplement to Form I-1 29. Section 1. Information About the Employer Outside the United States (optional) 1. Employer&apos;s Name.",
         },
         {
           id: "subform8LineCityTown2",
@@ -23303,7 +23123,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "City or Town",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 1. Information About the Employer Outside the United States, if any. 3. Employer&apos;s Address. Enter City or Town.",
+            "E-1/E-2 Classification Supplement to Form I-1 29. Section 1. Information About the Employer Outside the United States (optional) 3. Employer&apos;s Address. City or Town.",
         },
         {
           id: "subform8S1ZipCode",
@@ -23311,12 +23131,12 @@ const I_129_DEFINITION: FormDefinition = {
           label: "ZIP Code",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 1. Information About the Employer Outside the United States, if any. 3. Employer&apos;s Address. Enter ZIP Code.",
+            "E-1/E-2 Classification Supplement to Form I-1 29. Section 1. Information About the Employer Outside the United States (optional) 3. Employer&apos;s Address. ZIP Code.",
         },
         {
           id: "subform8S1State",
           type: "select",
-          label: "Select State from a List of States",
+          label: "State",
           required: true,
           options: [
             { value: "", label: "" },
@@ -23384,7 +23204,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "WY", label: "Wyoming" },
           ],
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 1. Information About the Employer Outside the United States, if any. 3. Employer&apos;s Address. Select State from a List of States.",
+            "E-1/E-2 Classification Supplement to Form I-1 29. Section 1. Information About the Employer Outside the United States (optional) 3. Employer&apos;s Address. State.",
         },
         {
           id: "subform8StreetNumberName2",
@@ -23392,67 +23212,40 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Street Number and Name",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 1. Information About the Employer Outside the United States, if any. 3. Employer&apos;s Address. Enter Street Number and Name.",
+            "E-1/E-2 Classification Supplement to Form I-1 29. Section 1. Information About the Employer Outside the United States (optional) 3. Employer&apos;s Address. Street Number and Name.",
         },
         {
           id: "subform8Sec1Unit",
           type: "select",
-          label: "Check Apartment",
+          label: "Apartment",
           required: true,
           options: [
             { value: "APT", label: "APT" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 1. Information About the Employer Outside the United States, if any. 3. Employer&apos;s Address. Check Apartment.",
-        },
-        {
-          id: "subform8Sec1Unit1",
-          type: "select",
-          label: "Check Suite",
-          required: true,
-          options: [
             { value: "STE", label: "STE" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 1. Information About the Employer Outside the United States, if any. 3. Employer&apos;s Address. Check Suite.",
-        },
-        {
-          id: "subform8Sec1Unit2",
-          type: "select",
-          label: "Check Floor",
-          required: true,
-          options: [
             { value: "FLR", label: "FLR" },
-            { value: "Off", label: "Off" },
           ],
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 1. Information About the Employer Outside the United States, if any. 3. Employer&apos;s Address. Check Floor.",
+          helpText: "E-1/E-2 Apartment.",
         },
         {
           id: "subform8Sec1AptSteFlrNumber",
           type: "text",
           label: "Apartment, Suite or Floor Number",
           required: true,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 1. Information About the Employer Outside the United States, if any. 3. Employer&apos;s Address. If Apartment, Suite or Floor is Checked, Enter Apartment, Suite or Floor Number.",
+          helpText: "Apartment, Suite or Floor Number.",
         },
         {
           id: "subform8TtlNumberofEmployees",
           type: "text",
           label: "Total Number of Employees",
           required: true,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 1. Information About the Employer Outside the United States, if any. 2. Enter Total Number of Employees.",
+          helpText: "E-1/E-2 Total Number of Employees.",
         },
         {
           id: "subform8Description",
           type: "text",
           label: "Description",
           required: true,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 1. Information About the Employer Outside the United States, if any. 4. Principal Product, Merchandise or Service. Enter Description.",
+          helpText: "Description.",
         },
         {
           id: "subform8SupENameofEmployer",
@@ -23460,7 +23253,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Name of the Petitioner",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. 1. Enter Name of the Petitioner.",
+            "E-1/E-2 Classification Supplement to Form I-1 29. 1. Name of the Petitioner.",
         },
         {
           id: "subform8S1Province",
@@ -23468,7 +23261,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Province, if applicable",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 1. Information About the Employer Outside the United States, if any. 3. Employer&apos;s Address. Enter Province, if applicable.",
+            "E-1/E-2 Classification Supplement to Form I-1 29. Section 1. Information About the Employer Outside the United States (optional) 3. Employer&apos;s Address. Province, if applicable.",
         },
         {
           id: "subform8S1PostalCode",
@@ -23476,7 +23269,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Postal Code, if applicable",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 1. Information About the Employer Outside the United States, if any. 3. Employer&apos;s Address. Enter Postal Code, if applicable.",
+            "E-1/E-2 Classification Supplement to Form I-1 29. Section 1. Information About the Employer Outside the United States (optional) 3. Employer&apos;s Address. Postal Code, if applicable.",
         },
         {
           id: "subform8S1Country",
@@ -23484,7 +23277,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Country",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 1. Information About the Employer Outside the United States, if any. 3. Employer&apos;s Address. Enter Country.",
+            "E-1/E-2 Classification Supplement to Form I-1 29. Section 1. Information About the Employer Outside the United States (optional) 3. Employer&apos;s Address. Country.",
         },
         {
           id: "subform8LineCountry1",
@@ -23492,95 +23285,95 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Name of country signatory to treaty with the United States",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. 4. Enter name of country signatory to treaty with the United States.",
+            "E-1/E-2 Classification Supplement to Form I-1 29. 4. name of country signatory to treaty with the United States.",
         },
         {
           id: "subform8EmployeePositionDescription",
-          type: "radio",
+          type: "text",
           label: "Title, duties and number of years employed",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 1. Information About the Employer Outside the United States, if any. 5. Employee&apos;s Position. Enter Title, duties and number of years employed.",
+            "E-1/E-2 Classification Supplement to Form I-1 29. Section 1. Information About the Employer Outside the United States (optional) 5. Employee&apos;s Position. Title, duties and number of years employed.",
         },
         {
           id: "subform9Sect2Parent",
           type: "radio",
-          label: "Check Parent",
+          label: "Parent",
           required: true,
           options: [
             {
               value: "1",
               label:
-                "29. Section 2. Additional Information About the U. S. Employer. 1. How is the U. S. company related to the company abroad? Select only one box. Check Parent.",
+                "29. Section 2. Additional Information About the U. S. Employer. 1. How is the U. S. company related to the company abroad? Parent.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 1. How is the U. S. company related to the company abroad? Select only one box. Check Parent.",
+            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 1. How is the U. S. company related to the company abroad? Parent.",
         },
         {
           id: "subform9Sect2Branch",
           type: "radio",
-          label: "Check Branch",
+          label: "Branch",
           required: true,
           options: [
             {
               value: "1",
               label:
-                "29. Section 2. Additional Information About the U. S. Employer. 1. How is the U. S. company related to the company abroad? Select only one box. Check Branch.",
+                "29. Section 2. Additional Information About the U. S. Employer. 1. How is the U. S. company related to the company abroad? Branch.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 1. How is the U. S. company related to the company abroad? Select only one box. Check Branch.",
+            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 1. How is the U. S. company related to the company abroad? Branch.",
         },
         {
           id: "subform9Sect2Subsidiary",
           type: "radio",
-          label: "Check Subsidiary",
+          label: "Subsidiary",
           required: true,
           options: [
             {
               value: "1",
               label:
-                "29. Section 2. Additional Information About the U. S. Employer. 1. How is the U. S. company related to the company abroad? Select only one box. Check Subsidiary.",
+                "29. Section 2. Additional Information About the U. S. Employer. 1. How is the U. S. company related to the company abroad? Subsidiary.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 1. How is the U. S. company related to the company abroad? Select only one box. Check Subsidiary.",
+            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 1. How is the U. S. company related to the company abroad? Subsidiary.",
         },
         {
           id: "subform9Sect2Affiliate",
           type: "radio",
-          label: "Check Affiliate",
+          label: "Affiliate",
           required: true,
           options: [
             {
               value: "1",
               label:
-                "29. Section 2. Additional Information About the U. S. Employer. 1. How is the U. S. company related to the company abroad? Select only one box. Check Affiliate.",
+                "29. Section 2. Additional Information About the U. S. Employer. 1. How is the U. S. company related to the company abroad? Affiliate.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 1. How is the U. S. company related to the company abroad? Select only one box. Check Affiliate.",
+            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 1. How is the U. S. company related to the company abroad? Affiliate.",
         },
         {
           id: "subform9Sect2JointVenture",
           type: "radio",
-          label: "Check Joint Venture",
+          label: "Joint Venture",
           required: true,
           options: [
             {
               value: "1",
               label:
-                "29. Section 2. Additional Information About the U. S. Employer. 1. How is the U. S. company related to the company abroad? Select only one box. Check Joint Venture.",
+                "29. Section 2. Additional Information About the U. S. Employer. 1. How is the U. S. company related to the company abroad? Joint Venture.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 1. How is the U. S. company related to the company abroad? Select only one box. Check Joint Venture.",
+            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 1. How is the U. S. company related to the company abroad? Joint Venture.",
         },
         {
           id: "subform9TypeofBusiness",
@@ -23588,16 +23381,14 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Place of Incorporation or Establishment in the United States",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 2. A. Enter Place of Incorporation or Establishment in the United States.",
+            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 2. A. Place of Incorporation or Establishment in the United States.",
         },
         {
           id: "subform9DateEstablished",
           type: "date",
-          label:
-            "Date of incorporation or establishment as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "Date of incorporation or establishment",
           required: true,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 2. B. Enter Date of incorporation or establishment as 2-digit Month, 2-digit Day, and 4-digit Year.",
+          helpText: "Date of incorporation or establishment.",
         },
         {
           id: "subform9Table1Row1NAME",
@@ -23605,7 +23396,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "First, Middle and Last Name",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 3. Nationality of Ownership (Individual or Corporate). Row 1. Enter First, Middle and Last Name.",
+            "E-1/E-2 Nationality of Ownership (Individual or Corporate). Row 1. First, Middle and Last Name.",
         },
         {
           id: "subform9Table1Row1Nationality",
@@ -23613,7 +23404,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Nationality",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 3. Nationality of Ownership (Individual or Corporate). Row 1. Enter Nationality.",
+            "E-1/E-2 Nationality of Ownership (Individual or Corporate). Row 1. Nationality.",
         },
         {
           id: "subform9Table1Row1ImmigrationStatus",
@@ -23621,7 +23412,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Immigration Status",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 3. Nationality of Ownership (Individual or Corporate). Row 1. Enter Immigration Status.",
+            "E-1/E-2 Nationality of Ownership (Individual or Corporate). Row 1. Immigration Status.",
         },
         {
           id: "subform9Table1Row1PercentOwnership",
@@ -23629,71 +23420,63 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Percent of Ownership",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 3. Nationality of Ownership (Individual or Corporate). Row 1. Enter Percent of Ownership.",
+            "E-1/E-2 Nationality of Ownership (Individual or Corporate). Row 1. Percent of Ownership.",
         },
         {
           id: "subform9Table1Row2NAME",
           type: "text",
           label: "First, Middle and Last Name",
           required: true,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 3. Nationality of Ownership (Individual or Corporate). Row 2. Enter First, Middle and Last Name.",
+          helpText: "E-1/E-2 Middle and Last Name.",
         },
         {
           id: "subform9Table1Row2Nationality",
           type: "text",
           label: "Nationality",
           required: true,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 3. Nationality of Ownership (Individual or Corporate). Row 2. Enter Nationality.",
+          helpText: "E-1/E-2 Nationality.",
         },
         {
           id: "subform9Table1Row2ImmigrationStatus",
           type: "text",
           label: "Immigration Status",
           required: true,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 3. Nationality of Ownership (Individual or Corporate). Row 2. Enter Immigration Status.",
+          helpText: "E-1/E-2 Immigration Status.",
         },
         {
           id: "subform9Table1Row2PercentOwnership",
           type: "text",
           label: "Percent of Ownership",
           required: true,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 3. Nationality of Ownership (Individual or Corporate). Row 2. Enter Percent of Ownership.",
+          helpText: "E-1/E-2 Percent of Ownership.",
         },
         {
           id: "subform9Table1Row3NAME",
           type: "text",
           label: "First, Middle and Last Name",
           required: true,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 3. Nationality of Ownership (Individual or Corporate). Row 3. Enter First, Middle and Last Name.",
+          helpText: "E-1/E-2 First, Middle and Last Name.",
         },
         {
           id: "subform9Table1Row3Nationality",
           type: "text",
           label: "Nationality",
           required: true,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 3. Nationality of Ownership (Individual or Corporate). Row 3. Enter Nationality.",
+          helpText: "E-1/E-2 Nationality.",
         },
         {
           id: "subform9Table1Row3ImmigrationStatus",
           type: "text",
           label: "Immigration Status",
           required: true,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 3. Nationality of Ownership (Individual or Corporate). Row 3. Enter Immigration Status.",
+          helpText: "E-1/E-2 Immigration Status.",
         },
         {
           id: "subform9Table1Row3PercentOwnership",
           type: "text",
           label: "Percent of Ownership",
           required: true,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 3. Nationality of Ownership (Individual or Corporate). Row 3. Enter Percent of Ownership.",
+          helpText: "E-1/E-2 Percent of Ownership.",
         },
         {
           id: "subform9Table1Row4NAME",
@@ -23701,7 +23484,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "First, Middle and Last Name",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 3. Nationality of Ownership (Individual or Corporate). Row 4. Enter First, Middle and Last Name.",
+            "E-1/E-2 Employer. 3. Nationality of Ownership (Individual or Corporate). Row 4. First, Middle and Last Name.",
         },
         {
           id: "subform9Table1Row4Nationality",
@@ -23709,7 +23492,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Nationality",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 3. Nationality of Ownership (Individual or Corporate). Row 4. Enter Nationality.",
+            "E-1/E-2 CEmployer. 3. Nationality of Ownership (Individual or Corporate). Row 4. Nationality.",
         },
         {
           id: "subform9Table1Row4ImmigrationStatus",
@@ -23717,7 +23500,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Immigration Status",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 3. Nationality of Ownership (Individual or Corporate). Row 4. Enter Immigration Status.",
+            "E-1/E-2 Employer. 3. Nationality of Ownership (Individual or Corporate). Row 4. Immigration Status.",
         },
         {
           id: "subform9Table1Row4PercentOwnership",
@@ -23725,7 +23508,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Percent of Ownership",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 3. Nationality of Ownership (Individual or Corporate). Row 4. Enter Percent of Ownership.",
+            "E-1/E-2 Employer. 3. Nationality of Ownership (Individual or Corporate). Row 4. Percent of Ownership.",
         },
         {
           id: "subform9Table1Row5NAME5",
@@ -23733,7 +23516,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "First, Middle and Last Name",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 3. Nationality of Ownership (Individual or Corporate). Row 5. Enter First, Middle and Last Name.",
+            "E-1/E-2 Employer. 3. Nationality of Ownership (Individual or Corporate). Row 5. First, Middle and Last Name.",
         },
         {
           id: "subform9Table1Row5Nationality",
@@ -23741,7 +23524,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Nationality",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 3. Nationality of Ownership (Individual or Corporate). Row 5. Enter Nationality.",
+            "E-1/E-2 Employer. 3. Nationality of Ownership (Individual or Corporate). Row 5. Nationality.",
         },
         {
           id: "subform9Table1Row5ImmigrationStatus",
@@ -23749,7 +23532,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Immigration Status",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 3. Nationality of Ownership (Individual or Corporate). Row 5. Enter Immigration Status.",
+            "E-1/E-2 Employer. 3. Nationality of Ownership (Individual or Corporate). Row 5. Immigration Status.",
         },
         {
           id: "subform9Table1Row5PercentOwnership",
@@ -23757,7 +23540,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Percent of Ownership",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 3. Nationality of Ownership (Individual or Corporate). Row 5. Enter Percent of Ownership.",
+            "E-1/E-2 Employer. 3. Nationality of Ownership (Individual or Corporate). Row 5. Percent of Ownership.",
         },
         {
           id: "subform9Table1Row51NAME",
@@ -23765,7 +23548,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "First, Middle and Last Name",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 3. Nationality of Ownership (Individual or Corporate). Row 6. Enter First, Middle and Last Name.",
+            "E-1/E-2 Employer. 3. Nationality of Ownership (Individual or Corporate). Row 6. First, Middle and Last Name.",
         },
         {
           id: "subform9Table1Row51Nationality",
@@ -23773,7 +23556,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Nationality",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 3. Nationality of Ownership (Individual or Corporate). Row 6. Enter Nationality.",
+            "E-1/E-2 Employer. 3. Nationality of Ownership (Individual or Corporate). Row 6. Nationality.",
         },
         {
           id: "subform9Table1Row51ImmigrationStatus",
@@ -23781,7 +23564,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Immigration Status",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 3. Nationality of Ownership (Individual or Corporate). Row 6. Enter Immigration Status.",
+            "E-1/E-2 Employer. 3. Nationality of Ownership (Individual or Corporate). Row 6. Immigration Status.",
         },
         {
           id: "subform9Table1Row51PercentOwnership",
@@ -23789,7 +23572,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Percent of Ownership",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 3. Nationality of Ownership (Individual or Corporate). Row 6. Enter Percent of Ownership.",
+            "E-1/E-2 Employer. 3. Nationality of Ownership (Individual or Corporate). Row 6. Percent of Ownership.",
         },
         {
           id: "subform9Table1Row52NAME",
@@ -23797,7 +23580,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "First, Middle and Last Name",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 3. Nationality of Ownership (Individual or Corporate). Row 7. Enter First, Middle and Last Name.",
+            "E-1/E-2 Employer. 3. Nationality of Ownership (Individual or Corporate). Row 7. First, Middle and Last Name.",
         },
         {
           id: "subform9Table1Row52Nationality",
@@ -23805,7 +23588,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Nationality",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 3. Nationality of Ownership (Individual or Corporate). Row 7. Enter Nationality.",
+            "E-1/E-2 Employer. 3. Nationality of Ownership (Individual or Corporate). Row 7. Nationality.",
         },
         {
           id: "subform9Table1Row52ImmigrationStatus",
@@ -23813,7 +23596,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Immigration Status",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 3. Nationality of Ownership (Individual or Corporate). Row 7. Enter Immigration Status.",
+            "E-1/E-2 Employer. 3. Nationality of Ownership (Individual or Corporate). Row 7. Immigration Status.",
         },
         {
           id: "subform9Table1Row52PercentOwnership",
@@ -23821,23 +23604,21 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Percent of Ownership",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 3. Nationality of Ownership (Individual or Corporate). Row 7. Enter Percent of Ownership.",
+            "E-1/E-2 Employer. 3. Nationality of Ownership (Individual or Corporate). Row 7. Percent of Ownership.",
         },
         {
           id: "subform9GrossAnnualIncome",
           type: "text",
           label: "Net Worth",
           required: true,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 5. Enter Net Worth.",
+          helpText: "E-1/E-2 Employer. 5. Net Worth.",
         },
         {
           id: "subform9NetAnnualIncome",
           type: "text",
           label: "Net Annual Income",
           required: true,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 6. Enter Net Annual Income.",
+          helpText: "E-1/E-2 Employer. 6. Net Annual Income.",
         },
         {
           id: "subform9SupEHowMany",
@@ -23845,24 +23626,21 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Number",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 7. Staff in the United States. A. How many executive and managerial employees does the petitioner have who are nationals of the treaty country in either E, L, or H nonimmigrant status? Enter Number.",
+            "E-1/E-2 Additional Information About the U. S. Employer. 7. Staff in the United States. A. How many executive and managerial employees does the petitioner have who are nationals of the treaty country in either E, L, or H nonimmigrant status? Number.",
         },
         {
           id: "subform9SupETotalNumber",
           type: "text",
           label: "Number",
           required: true,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 7. Staff in the United States. C. Provide the total number of employees in executive and managerial positions in the United States. Enter Number.",
+          helpText: "E-1/E-2 Number.",
         },
         {
           id: "subform9JobDescription",
           type: "text",
           label:
-            "An explanation for why the special qualifications are essential to the successful or efficient op...",
+            "An explanation for why the special qualifications are essential to the successful or efficient op.",
           required: true,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 8. If the petitioner is attempting to qualify the employee as an executive or manager, provide the total number of employees he or she will supervise. Or, if the petitioner is attempting to qualify the employee based on special qualifications, enter an explanation for why the special qualifications are essential to the successful or efficient operation of the treaty enterprise.",
         },
         {
           id: "subform9ESec3TtlAnnualGross",
@@ -23870,23 +23648,21 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Company",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 3. Complete If Filing for an E-1 Treaty Trader. 1. Enter Total Annual Gross Trade/Business of the U. S. company.",
+            "E-1/E-2 Total Annual Gross Trade/Business of the U. S. company.",
         },
         {
           id: "subform9ESec4Cash",
           type: "text",
           label: "Dollar Amount",
           required: true,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 4. Complete If Filing for an E-2 Treaty Investor. Total Investment: Cash. Enter Dollar Amount.",
+          helpText: "E-1/E-2 Total Investment: Cash. Dollar Amount.",
         },
         {
           id: "subform9ESec3YearEnding",
           type: "text",
           label: "For Year Ending as a 4-digit year",
           required: true,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 3. Complete If Filing for an E-1 Treaty Trader. 2. Enter For Year Ending as a 4-digit year.",
+          helpText: "E-1/E-2 For Year Ending as a 4-digit year.",
         },
         {
           id: "subform9ESec3PercentOfTtlGross",
@@ -23895,7 +23671,7 @@ const I_129_DEFINITION: FormDefinition = {
             "The Percent of total gross trade between the United States and the treaty trader country",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 3. Complete If Filing for an E-1 Treaty Trader. 3. Enter the Percent of total gross trade between the United States and the treaty trader country.",
+            "E-1/E-2 Percent of total gross trade between the United States and the treaty trader country.",
         },
         {
           id: "subform9ESec4Equipment",
@@ -23903,51 +23679,46 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Dollar Amount",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 4. Complete If Filing for an E-2 Treaty Investor. Total Investment: Equipment. Enter Dollar Amount.",
+            "E-1/E-2 Complete If Filing for an E-2 Treaty Investor. Total Investment: Equipment. Dollar Amount.",
         },
         {
           id: "subform9ESec4Premises",
           type: "text",
           label: "Dollar Amount",
           required: true,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 4. Complete If Filing for an E-2 Treaty Investor. Total Investment: Premises. Enter Dollar Amount.",
+          helpText: "E-1/E-2 Total Investment: Premises. Dollar Amount.",
         },
         {
           id: "subform9ESec4Inventory",
           type: "text",
           label: "Dollar Amount",
           required: true,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 4. Complete If Filing for an E-2 Treaty Investor. Total Investment: Inventory. Enter Dollar Amount.",
+          helpText: "E-1/E-2 Total Investment: Inventory. Dollar Amount.",
         },
         {
           id: "subform9ESec4Other",
           type: "text",
           label: "Dollar Amount",
           required: true,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 4. Complete If Filing for an E-2 Treaty Investor. Total Investment: Other. Enter Dollar Amount.",
+          helpText: "E-1/E-2 Total Investment: Other. Dollar Amount.",
         },
         {
           id: "subform9ESec4Totla",
           type: "radio",
           label: "Dollar Amount",
           required: true,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 4. Complete If Filing for an E-2 Treaty Investor. Total Investment: Total. Enter Dollar Amount.",
+          helpText: "E-1/E-2 Total Investment: Total. Dollar Amount.",
         },
         {
           id: "subform11employer",
           type: "radio",
-          label: "Employer is a (select only one box): Check Foreign Employer",
+          label: "Employer is a (only one box): Foreign Employer",
           required: true,
           options: [
             { value: "F", label: "Female" },
             { value: "Off", label: "Off" },
           ],
-          helpText:
-            "Trade Agreement Supplement to Form I-1 29. 3. Employer is a (select only one box): Check Foreign Employer.",
+          helpText: "Foreign Employer.",
         },
         {
           id: "subform11employer1",
@@ -23958,12 +23729,11 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "U",
               label:
-                "TradeAgreement Supplement to Form I-1 29. 3. Employer is a (select only one box): Check . S. Employer.",
+                "TradeAgreement Supplement to Form I-1 29. 3. Employer is a (only one box): . S. Employer.",
             },
             { value: "Off", label: "Off" },
           ],
-          helpText:
-            "Trade Agreement Supplement to Form I-1 29. 3. Employer is a (select only one box): Check U. S. Employer.",
+          helpText: "Employer is a (only one box): U. S. Employer.",
         },
         {
           id: "subform11aCanada",
@@ -23974,12 +23744,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "1",
               label:
-                "29. Section 1. Information About Requested Extension or Change. See instructions attached to this form. 1. This is a request for Free Trade status based on (select only one box): Check A. Free Trade",
+                "29. Section 1. Information About Requested Extension or Change. See instructions attached to this form. 1. This is a request for Free Trade status based on (only one box): A. Free Trade",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 1. Information About Requested Extension or Change. See instructions attached to this form. 1. This is a request for Free Trade status based on (select only one box): Check A. Free Trade, Canada (T N 1).",
+            "This is a request for Free Trade status based on (only one box): A. Free Trade, Canada (T N 1).",
         },
         {
           id: "subform11bMexico",
@@ -23990,12 +23760,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "1",
               label:
-                "29. Section 1. Information About Requested Extension or Change. See instructions attached to this form. 1. This is a request for Free Trade status based on (select only one box): Check B. Free Trade",
+                "29. Section 1. Information About Requested Extension or Change. See instructions attached to this form. 1. This is a request for Free Trade status based on (only one box): B. Free Trade",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 1. Information About Requested Extension or Change. See instructions attached to this form. 1. This is a request for Free Trade status based on (select only one box): Check B. Free Trade, Mexico (T N 2).",
+            "This is a request for Free Trade status based on (only one box): B. Free Trade, Mexico (T N 2).",
         },
         {
           id: "subform11cChile",
@@ -24006,12 +23776,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "1",
               label:
-                "29. Section 1. Information About Requested Extension or Change. See instructions attached to this form. 1. This is a request for Free Trade status based on (select only one box): Check C. Free Trade",
+                "29. Section 1. Information About Requested Extension or Change. See instructions attached to this form. 1. This is a request for Free Trade status based on (only one box): C. Free Trade",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 1. Information About Requested Extension or Change. See instructions attached to this form. 1. This is a request for Free Trade status based on (select only one box): Check C. Free Trade, Chile (H-1 B 1).",
+            "This is a request for Free Trade status based on (only one box): C. Free Trade, Chile (H-1 B 1).",
         },
         {
           id: "subform11eOther",
@@ -24022,12 +23792,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "1",
               label:
-                "29. Section 1. Information About Requested Extension or Change. See instructions attached to this form. 1. This is a request for Free Trade status based on (select only one box): Check E. Free Trade",
+                "29. Section 1. Information About Requested Extension or Change. See instructions attached to this form. 1. This is a request for Free Trade status based on (only one box): E. Free Trade",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 1. Information About Requested Extension or Change. See instructions attached to this form. 1. This is a request for Free Trade status based on (select only one box): Check E. Free Trade, Other.",
+            "This is a request for Free Trade status based on (only one box): E. Free Trade, Other.",
         },
         {
           id: "subform11dSingapore",
@@ -24038,12 +23808,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "1",
               label:
-                "29. Section 1. Information About Requested Extension or Change. See instructions attached to this form. 1. This is a request for Free Trade status based on (select only one box): Check D. Free Trade",
+                "29. Section 1. Information About Requested Extension or Change. See instructions attached to this form. 1. This is a request for Free Trade status based on (only one box): D. Free Trade",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 1. Information About Requested Extension or Change. See instructions attached to this form. 1. This is a request for Free Trade status based on (select only one box): Check D. Free Trade, Singapore (H-1 B 1).",
+            "This is a request for Free Trade status based on (only one box): D. Free Trade, Singapore (H-1 B 1).",
         },
         {
           id: "subform11fChileOrSingapore",
@@ -24055,12 +23825,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "1",
               label:
-                "29. Section 1. Information About Requested Extension or Change. See instructions attached to this form. 1. This is a request for Free Trade status based on (select only one box): Check F. A sixth consecutive request for Free Trade",
+                "29. Section 1. Information About Requested Extension or Change. See instructions attached to this form. 1. This is a request for Free Trade status based on (only one box): F. A sixth consecutive request for Free Trade",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 1. Information About Requested Extension or Change. See instructions attached to this form. 1. This is a request for Free Trade status based on (select only one box): Check F. A sixth consecutive request for Free Trade, Chile or Singapore (H-1 B 1).",
+            "This is a request for Free Trade status based on (only one box): F. A sixth consecutive request for Free Trade, Chile or Singapore (H-1 B 1).",
         },
         {
           id: "subform11TASupNameofPetitioner",
@@ -24068,24 +23838,15 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Name of Petitioner",
           required: true,
           helpText:
-            "Trade Agreement Supplement to Form I-1 29. 1. Enter Name of Petitioner.",
-        },
-        {
-          id: "subform11TASupDateofSignature",
-          type: "date",
-          label:
-            "Date of Signature as 2-digit Month, 2-digit Day, and 4-digit Year",
-          required: true,
-          helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 2. Petitioner&apos;s Signature and Contact Information. Read the information on penalties in the instructions before completing this section. I certify, under penalty of perjury, that this petition and the evidence submitted with it is all true and correct to the best of my knowledge. I authorize the release of any information from my records, or from the petitioning organization&apos;s records that U. S. Citizenship and Immigration Services (U S C I S) needs to determine eligibility for the benefit being sought. I recognize the authority of U S C I S to conduct audits of this petition using publicly available open source information. I also recognize that supporting evidence submitted may be verified by U S C I S through any means determined appropriate by U S C I S, including but not limited to, on-site compliance reviews. I am filing this petition on behalf of an organization and I certify that I am authorized to do so by the organization. 2. Signature and Date. Enter Date of Signature as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "Trade Agreement Supplement to Form I-1 29. 1. Name of Petitioner.",
         },
         {
           id: "subform11TASupEmail",
           type: "email",
-          label: "E-mail Address, if any",
+          label: "E-mail Address (optional)",
           required: true,
           helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 2. Petitioner&apos;s Signature and Contact Information. Read the information on penalties in the instructions before completing this section. 3. Petitioner&apos;s Contact Information. Enter E-mail Address, if any.",
+            "Trade Agreement Supplement to Form I-1 29. Section 2. Petitioner&apos;s Signature and Contact Information. Read the information on penalties in the instructions before completing this section. 3. Petitioner&apos;s Contact Information. E-mail Address (optional)",
         },
         {
           id: "subform11TASupPetitionerLastName",
@@ -24093,7 +23854,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Family Name (Last Name)",
           required: true,
           helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 2. Petitioner&apos;s Signature and Contact Information. Read the information on penalties in the instructions before completing this section. I certify, under penalty of perjury, that this petition and the evidence submitted with it is all true and correct to the best of my knowledge. I authorize the release of any information from my records, or from the petitioning organization&apos;s records that U. S. Citizenship and Immigration Services (U S C I S) needs to determine eligibility for the benefit being sought. I recognize the authority of U S C I S to conduct audits of this petition using publicly available open source information. I also recognize that supporting evidence submitted may be verified by U S C I S through any means determined appropriate by U S C I S, including but not limited to, on-site compliance reviews. I am filing this petition on behalf of an organization and I certify that I am authorized to do so by the organization. 1. Name of Petitioner. Enter Family Name (Last Name).",
+            "Trade Agreement Supplement to Form I-1 29. Section 2. Petitioner&apos;s Signature and Contact Information. Read the information on penalties in the instructions before completing this section. I certify, under penalty of perjury, that this petition and the evidence submitted with it is all true and correct to the best of my knowledge. I authorize the release of any information from my records, or from the petitioning organization&apos;s records that U. S. Citizenship and Immigration Services (U S C I S) needs to determine eligibility for the benefit being sought. I recognize the authority of U S C I S to conduct audits of this petition using publicly available open source information. I also recognize that supporting evidence submitted may be verified by U S C I S through any means determined appropriate by U S C I S, including but not limited to, on-site compliance reviews. I am filing this petition on behalf of an organization and I certify that I am authorized to do so by the organization. 1. Name of Petitioner. Family Name (Last Name).",
         },
         {
           id: "subform11TASupPetitionerFirstName",
@@ -24101,7 +23862,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Given Name (First Name)",
           required: true,
           helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 2. Petitioner&apos;s Signature and Contact Information. Read the information on penalties in the instructions before completing this section. I certify, under penalty of perjury, that this petition and the evidence submitted with it is all true and correct to the best of my knowledge. I authorize the release of any information from my records, or from the petitioning organization&apos;s records that U. S. Citizenship and Immigration Services (U S C I S) needs to determine eligibility for the benefit being sought. I recognize the authority of U S C I S to conduct audits of this petition using publicly available open source information. I also recognize that supporting evidence submitted may be verified by U S C I S through any means determined appropriate by U S C I S, including but not limited to, on-site compliance reviews. I am filing this petition on behalf of an organization and I certify that I am authorized to do so by the organization. 1. Name of Petitioner. Enter Given Name (First Name).",
+            "Trade Agreement Supplement to Form I-1 29. Section 2. Petitioner&apos;s Signature and Contact Information. Read the information on penalties in the instructions before completing this section. I certify, under penalty of perjury, that this petition and the evidence submitted with it is all true and correct to the best of my knowledge. I authorize the release of any information from my records, or from the petitioning organization&apos;s records that U. S. Citizenship and Immigration Services (U S C I S) needs to determine eligibility for the benefit being sought. I recognize the authority of U S C I S to conduct audits of this petition using publicly available open source information. I also recognize that supporting evidence submitted may be verified by U S C I S through any means determined appropriate by U S C I S, including but not limited to, on-site compliance reviews. I am filing this petition on behalf of an organization and I certify that I am authorized to do so by the organization. 1. Name of Petitioner. Given Name (First Name).",
         },
         {
           id: "subform11Country",
@@ -24109,7 +23870,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Country",
           required: true,
           helpText:
-            "Trade Agreement Supplement to Form I-1 29. 4. If Foreign Employer, Name the Foreign Country. Enter Country.",
+            "Trade Agreement Supplement to Form I-1 29. 4. If Foreign Employer, Name the Foreign Country. Country.",
         },
         {
           id: "subform11TASupNameofBeneficiary",
@@ -24117,44 +23878,40 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Name of the Beneficiary",
           required: true,
           helpText:
-            "Trade Agreement Supplement to Form I-1 29. 2. Enter Name of the Beneficiary.",
+            "Trade Agreement Supplement to Form I-1 29. 2. Name of the Beneficiary.",
         },
         {
           id: "subform11TASupDaytimePhoneNumber1",
           type: "tel",
           label: "Digit Area Code",
           required: true,
-          helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 2. Petitioner&apos;s Signature and Contact Information. Read the information on penalties in the instructions before completing this section. 3. Petitioner&apos;s Contact Information. Daytime Telephone Number. Enter 3-digit Area Code.",
+          helpText: "3-digit Area Code.",
         },
         {
           id: "subform11TASupMobilePhoneNumber1",
           type: "tel",
           label: "Digit Area Code",
           required: true,
-          helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 2. Petitioner&apos;s Signature and Contact Information. Read the information on penalties in the instructions before completing this section. 3. Petitioner&apos;s Contact Information. Mobile Telephone Number. Enter 3-digit Area Code.",
+          helpText: "3-digit Area Code.",
         },
         {
           id: "subform12LineCityTown3",
           type: "text",
           label: "City or Town",
           required: true,
-          helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 3. Declaration, Signature and Contact Information of Person Preparing Form, If Other Than Above. NOTE: If you are an attorney or accredited representative, DO NOT complete this section. Complete the Preparer&apos;s Declaration below. Provide the following information concerning the preparer: 3. Preparer&apos;s Mailing Address. Enter City or Town.",
+          helpText: "City or Town.",
         },
         {
           id: "subform12S3ZipCode",
           type: "text",
           label: "ZIP Code",
           required: true,
-          helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 3. Declaration, Signature and Contact Information of Person Preparing Form, If Other Than Above. NOTE: If you are an attorney or accredited representative, DO NOT complete this section. Complete the Preparer&apos;s Declaration below. Provide the following information concerning the preparer: 3. Preparer&apos;s Mailing Address. Enter ZIP Code.",
+          helpText: "ZIP Code.",
         },
         {
           id: "subform12S3State",
           type: "select",
-          label: "Select State from a List of States",
+          label: "State",
           required: true,
           options: [
             { value: "", label: "" },
@@ -24222,7 +23979,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "WY", label: "Wyoming" },
           ],
           helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 3. Declaration, Signature and Contact Information of Person Preparing Form, If Other Than Above. NOTE: If you are an attorney or accredited representative, DO NOT complete this section. Complete the Preparer&apos;s Declaration below. Provide the following information concerning the preparer: 3. Preparer&apos;s Mailing Address. Select State from a List of States.",
+            "Trade Agreement Supplement to Form I-1 29. Section 3. Declaration, Signature and Contact Information of Person Preparing Form, If Other Than Above. NOTE: If you are an attorney or accredited representative, DO NOT complete this section. Complete the Preparer&apos;s Declaration below. following information concerning the preparer: 3. Preparer&apos;s address. State.",
         },
         {
           id: "subform12StreetNumberName3",
@@ -24230,144 +23987,84 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Street Number and Name",
           required: true,
           helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 3. Declaration, Signature and Contact Information of Person Preparing Form, If Other Than Above. NOTE: If you are an attorney or accredited representative, DO NOT complete this section. Complete the Preparer&apos;s Declaration below. Provide the following information concerning the preparer: 3. Preparer&apos;s Mailing Address. Enter Street Number and Name.",
+            "Trade Agreement Supplement to Form I-1 29. Section 3. Declaration, Signature and Contact Information of Person Preparing Form, If Other Than Above. NOTE: If you are an attorney or accredited representative, DO NOT complete this section. Complete the Preparer&apos;s Declaration below. following information concerning the preparer: 3. Preparer&apos;s address. Street Number and Name.",
         },
         {
           id: "subform12Sec3Unit",
           type: "radio",
-          label: "Check Apartment",
+          label: "Apartment",
           required: true,
           options: [
-            { value: "", label: "None" },
-            { value: "apt", label: "Apt." },
-            { value: "off", label: "Off" },
+            { value: "APT", label: "Apt." },
+            { value: "STE", label: "Ste." },
+            { value: "FLR", label: "Flr." },
           ],
           helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 3. Declaration, Signature and Contact Information of Person Preparing Form, If Other Than Above. NOTE: If you are an attorney or accredited representative, DO NOT complete this section. Complete the Preparer&apos;s Declaration below. Provide the following information concerning the preparer: 3. Preparer&apos;s Mailing Address. Check Apartment.",
-        },
-        {
-          id: "subform12Sec3Unit1",
-          type: "radio",
-          label: "Check Suite",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "ste", label: "Ste." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 3. Declaration, Signature and Contact Information of Person Preparing Form, If Other Than Above. NOTE: If you are an attorney or accredited representative, DO NOT complete this section. Complete the Preparer&apos;s Declaration below. Provide the following information concerning the preparer: 3. Preparer&apos;s Mailing Address. Check Suite.",
-        },
-        {
-          id: "subform12Sec3Unit2",
-          type: "radio",
-          label: "Check Floor",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "flr", label: "Flr." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 3. Declaration, Signature and Contact Information of Person Preparing Form, If Other Than Above. NOTE: If you are an attorney or accredited representative, DO NOT complete this section. Complete the Preparer&apos;s Declaration below. Provide the following information concerning the preparer: 3. Preparer&apos;s Mailing Address. Check Floor.",
+            "Trade Agreement Supplement to Form I-1 29. Section 3. Declaration, Signature and Contact Information of Person Preparing Form, If Other Than Above. NOTE: If you are an attorney or accredited representative, DO NOT complete this section. Complete the Preparer&apos;s Declaration below. following information concerning the preparer: 3. Preparer&apos;s address. Apartment.",
         },
         {
           id: "subform12Sec3AptSteFlrNumber",
           type: "text",
           label: "Apartment, Suite or Floor Number",
           required: true,
-          helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 3. Declaration, Signature and Contact Information of Person Preparing Form, If Other Than Above. NOTE: If you are an attorney or accredited representative, DO NOT complete this section. Complete the Preparer&apos;s Declaration below. Provide the following information concerning the preparer: 3. Preparer&apos;s Mailing Address. If Apartment, Suite or Floor is Checked, Enter Apartment, Suite or Floor Number.",
-        },
-        {
-          id: "subform12LineSignature1",
-          type: "date",
-          label: "Print and Sign completed form",
-          required: true,
-          helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 3. Declaration, Signature and Contact Information of Person Preparing Form, If Other Than Above. Preparer&apos;s Declaration. By my signature, I certify, swear or affirm, under penalty of perjury, that I prepared this form on behalf of, at the request of, and with the express consent of, the petitioner.  I completed the form based only on responses the petitioner provided to me. After completing the form, I reviewed it and all of the petitioner&apos;s responses with the petitioner, who agreed with every answer provided for every question on the form and, when required, supplied additional information to respond to a question on the form. 5. Signature and Date. Signature of Preparer. No Entry. Print and Sign completed form.",
-        },
-        {
-          id: "subform12LineDateofSignature1",
-          type: "date",
-          label:
-            "Date of Signature as 2-digit Month, 2-digit Day, and 4-digit Year",
-          required: true,
-          helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 3. Declaration, Signature and Contact Information of Person Preparing Form, If Other Than Above. Preparer&apos;s Declaration. By my signature, I certify, swear or affirm, under penalty of perjury, that I prepared this form on behalf of, at the request of, and with the express consent of, the petitioner.  I completed the form based only on responses the petitioner provided to me. After completing the form, I reviewed it and all of the petitioner&apos;s responses with the petitioner, who agreed with every answer provided for every question on the form and, when required, supplied additional information to respond to a question on the form. 5. Signature and Date. Enter Date of Signature as 2-digit Month, 2-digit Day, and 4-digit Year.",
+          helpText: "Apartment, Suite or Floor Number.",
         },
         {
           id: "subform12TASupEmail1",
           type: "email",
-          label: "Email Address, if any",
+          label: "Email Address (optional)",
           required: true,
-          helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 3. Declaration, Signature and Contact Information of Person Preparing Form, If Other Than Above. NOTE: If you are an attorney or accredited representative, DO NOT complete this section. Complete the Preparer&apos;s Declaration below. Provide the following information concerning the preparer: 4. Preparer&apos;s Contact Information. Enter Email Address, if any.",
+          helpText: "Email Address (optional)",
         },
         {
           id: "subform12S3Province",
           type: "text",
           label: "Province, if applicable",
           required: true,
-          helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 3. Declaration, Signature and Contact Information of Person Preparing Form, If Other Than Above. NOTE: If you are an attorney or accredited representative, DO NOT complete this section. Complete the Preparer&apos;s Declaration below. Provide the following information concerning the preparer: 3. Preparer&apos;s Mailing Address. Enter Province, if applicable.",
+          helpText: "address. Province, if applicable.",
         },
         {
           id: "subform12LineBusinessName1",
           type: "ssn",
           label:
-            "If applicable, the name of your accredited organization recognized by the Board of Immigration Ap...",
+            "the name of your accredited organization recognized by the Board of Immigration Ap.",
           required: true,
-          helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 3. Declaration, Signature and Contact Information of Person Preparing Form, If Other Than Above. NOTE: If you are an attorney or accredited representative, DO NOT complete this section. Complete the Preparer&apos;s Declaration below. Provide the following information concerning the preparer: 2. Enter Preparer&apos;s Business or Organization Name. If applicable, provide the name of your accredited organization recognized by the Board of Immigration Appeals (B I A).",
         },
         {
           id: "subform12LinePreparerFamilyName1",
           type: "text",
           label: "Family Name (Last Name)",
           required: true,
-          helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 3. Declaration, Signature and Contact Information of Person Preparing Form, If Other Than Above. NOTE: If you are an attorney or accredited representative, DO NOT complete this section. Complete the Preparer&apos;s Declaration below. Provide the following information concerning the preparer: 1. Name of Preparer. Enter Family Name (Last Name).",
         },
         {
           id: "subform12LinePreparerGivenName1",
           type: "text",
           label: "Given Name (First Name)",
           required: true,
-          helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 3. Declaration, Signature and Contact Information of Person Preparing Form, If Other Than Above. NOTE: If you are an attorney or accredited representative, DO NOT complete this section. Complete the Preparer&apos;s Declaration below. Provide the following information concerning the preparer: 1. Name of Preparer. Enter Given Name (First Name).",
         },
         {
           id: "subform12S3PostalCode",
           type: "text",
           label: "Postal Code, if applicable",
           required: true,
-          helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 3. Declaration, Signature and Contact Information of Person Preparing Form, If Other Than Above. NOTE: If you are an attorney or accredited representative, DO NOT complete this section. Complete the Preparer&apos;s Declaration below. Provide the following information concerning the preparer: 3. Preparer&apos;s Mailing Address. Enter Postal Code, if applicable.",
         },
         {
           id: "subform12S3Country",
           type: "text",
           label: "Country",
           required: true,
-          helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 3. Declaration, Signature and Contact Information of Person Preparing Form, If Other Than Above. NOTE: If you are an attorney or accredited representative, DO NOT complete this section. Complete the Preparer&apos;s Declaration below. Provide the following information concerning the preparer: 3. Preparer&apos;s Mailing Address. Enter Country.",
         },
         {
           id: "subform12TASupDaytimePhoneNumber11",
           type: "tel",
           label: "Daytime Telephone Number",
           required: true,
-          helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 3. Declaration, Signature and Contact Information of Person Preparing Form, If Other Than Above. NOTE: If you are an attorney or accredited representative, DO NOT complete this section. Complete the Preparer&apos;s Declaration below. Provide the following information concerning the preparer: 4. Preparer&apos;s Contact Information. Enter Daytime Telephone Number.",
         },
         {
           id: "subform12Pt8DaytimePhoneNumber12",
           type: "tel",
           label: "Fax Number",
           required: true,
-          helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 3. Declaration, Signature and Contact Information of Person Preparing Form, If Other Than Above. NOTE: If you are an attorney or accredited representative, DO NOT complete this section. Complete the Preparer&apos;s Declaration below. Provide the following information concerning the preparer: 4. Preparer&apos;s Contact Information. Enter Fax Number.",
         },
         {
           id: "subform13PetitionerName",
@@ -24375,7 +24072,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Name of the Petitioner",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. 1. Enter Name of the Petitioner.",
+            "H Classification Supplement to Form I-1 29. 1. Name of the Petitioner.",
         },
         {
           id: "subform13BeneficiaryName",
@@ -24383,15 +24080,14 @@ const I_129_DEFINITION: FormDefinition = {
           label: "H Classification Supplement to Form I-1 29",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Name of the beneficiary or if this petition includes multiple beneficiaries, the total number of beneficiaries. 2 A. Enter Name of the Beneficiary, or enter the total number of beneficiaries in 2. B.",
+            "H Classification Supplement to Form I-1 29. Name of the beneficiary or if this petition includes multiple beneficiaries, the total number of beneficiaries. 2 A. Name of the Beneficiary, or total number of beneficiaries in 2. B.",
         },
         {
           id: "subform13TtlNumberofBeneficiaries",
           type: "text",
           label: "The total number of beneficiaries",
           required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Name of the beneficiary or if this petition includes multiple beneficiaries, the total number of beneficiaries. 2. B. Enter the total number of beneficiaries.",
+          helpText: "total number of beneficiaries.",
         },
         {
           id: "subform13Table11Row2Name",
@@ -24399,23 +24095,22 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Subject&apos;s Name",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 1. Enter Subject&apos;s Name.",
+            ". 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 1. Subject&apos;s Name.",
         },
         {
           id: "subform13Table11Row2DateFrom",
           type: "date",
-          label: "From Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "From Date",
           required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 1. Period of Stay Enter From Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+          helpText: "Period of Stay From Date.",
         },
         {
           id: "subform13Table11Row2DateTo",
           type: "date",
-          label: "To Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "To Date",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 1. Period of Stay Enter To Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 1. Period of Stay To Date.",
         },
         {
           id: "subform13Table11Row3Name",
@@ -24423,23 +24118,23 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Subject&apos;s Name",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 2. Enter Subject&apos;s Name.",
+            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 2. Subject&apos;s Name.",
         },
         {
           id: "subform13Table11Row3DateFrom",
           type: "date",
-          label: "From Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "From Date",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 2. Period of Stay Enter From Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 2. Period of Stay From Date.",
         },
         {
           id: "subform13Table11Row3DateTo",
           type: "date",
-          label: "To Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "To Date",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 2. Period of Stay Enter To Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 2. Period of Stay To Date.",
         },
         {
           id: "subform13Table11Row4Name",
@@ -24447,23 +24142,23 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Subject&apos;s Name",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 3. Enter Subject&apos;s Name.",
+            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 3. Subject&apos;s Name.",
         },
         {
           id: "subform13Table11Row4DateFrom",
           type: "date",
-          label: "From Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "From Date",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 3. Period of Stay Enter From Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 3. Period of Stay From Date.",
         },
         {
           id: "subform13Table11Row4DateTo",
           type: "date",
-          label: "To Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "To Date",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 3. Period of Stay Enter To Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 3. Period of Stay To Date.",
         },
         {
           id: "subform13Table11Row5Name",
@@ -24471,23 +24166,23 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Subject&apos;s Name",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 4. Enter Subject&apos;s Name.",
+            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 4. Subject&apos;s Name.",
         },
         {
           id: "subform13Table11Row5DateFrom",
           type: "date",
-          label: "From Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "From Date",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 4. Period of Stay Enter From Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 4. Period of Stay From Date.",
         },
         {
           id: "subform13Table11Row5DateTo",
           type: "date",
-          label: "To Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "To Date",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 4. Period of Stay Enter To Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 4. Period of Stay To Date.",
         },
         {
           id: "subform13Table11Row6Name",
@@ -24495,23 +24190,23 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Subject&apos;s Name",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 5. Enter Subject&apos;s Name.",
+            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 5. Subject&apos;s Name.",
         },
         {
           id: "subform13Table11Row6DateFrom",
           type: "date",
-          label: "From Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "From Date",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 5. Period of Stay Enter From Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 5. Period of Stay From Date.",
         },
         {
           id: "subform13Table11Row6DateTo",
           type: "date",
-          label: "To Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "To Date",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 5. Period of Stay Enter To Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 5. Period of Stay To Date.",
         },
         {
           id: "subform13Table11Row61Name",
@@ -24519,23 +24214,23 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Subject&apos;s Name",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 6. Enter Subject&apos;s Name.",
+            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 6. Subject&apos;s Name.",
         },
         {
           id: "subform13Table11Row61DateFrom",
           type: "date",
-          label: "From Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "From Date",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 6. Period of Stay Enter From Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 6. Period of Stay From Date.",
         },
         {
           id: "subform13Table11Row61DateTo",
           type: "date",
-          label: "To Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "To Date",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 6. Period of Stay Enter To Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 6. Period of Stay To Date.",
         },
         {
           id: "subform13SubHclass",
@@ -24546,12 +24241,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "A",
               label:
-                "HClassification Supplement to Form I-1 29. 4. Classification sought (select only one box). Check . H-1 B Specialty Occupation.",
+                "HClassification Supplement to Form I-1 29. 4. Classification sought (only one box). . H-1 B Specialty Occupation.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. 4. Classification sought (select only one box). Check A. H-1 B Specialty Occupation.",
+            "H Classification Supplement to Form I-1 29. 4. Classification sought (only one box). A. H-1 B Specialty Occupation.",
         },
         {
           id: "subform13SubHclass1",
@@ -24563,7 +24258,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. 4. Classification sought (select only one box). Check B. H-1 B 1 Chile and Singapore.",
+            "H Classification Supplement to Form I-1 29. 4. Classification sought (only one box). B. H-1 B 1 Chile and Singapore.",
         },
         {
           id: "subform13SubHclass2",
@@ -24574,12 +24269,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "C",
               label:
-                "Hlassification Supplement to Form I-1 29. 4. Classification sought (select only one box). Check C. H-1 B 2 Exceptional services relating to a cooperative research and development project administered by the U. S. Department of Defense (D O D).",
+                "Hlassification Supplement to Form I-1 29. 4. Classification sought (only one box). C. H-1 B 2 Exceptional services relating to a cooperative research and development project administered by the U. S. Department of Defense (D O D).",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. 4. Classification sought (select only one box). Check C. H-1 B 2 Exceptional services relating to a cooperative research and development project administered by the U. S. Department of Defense (D O D).",
+            "H Classification Supplement to Form I-1 29. 4. Classification sought (only one box). C. H-1 B 2 Exceptional services relating to a cooperative research and development project administered by the U. S. Department of Defense (D O D).",
         },
         {
           id: "subform13SubHclass3",
@@ -24591,7 +24286,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. 4. Classification sought (select only one box). Check D. H-1 B 3 Fashion model of distinguished merit and ability.",
+            "H Classification Supplement to Form I-1 29. 4. Classification sought (only one box). D. H-1 B 3 Fashion model of distinguished merit and ability.",
         },
         {
           id: "subform13SubHclass4",
@@ -24599,11 +24294,11 @@ const I_129_DEFINITION: FormDefinition = {
           label: "H-2 A Agricultural worker",
           required: true,
           options: [
-            { value: "E", label: "box). Check E. H-2 A Agricultural worker." },
+            { value: "E", label: "box). E. H-2 A Agricultural worker." },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. 4. Classification sought (select only one box). Check E. H-2 A Agricultural worker.",
+            "H Classification Supplement to Form I-1 29. 4. Classification sought (only one box). E. H-2 A Agricultural worker.",
         },
         {
           id: "subform13SubHclass5",
@@ -24614,12 +24309,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "G",
               label:
-                "HClassification Supplement to Form I-1 29. 4. Classification sought (select only one box). Check . H-3 Trainee.",
+                "HClassification Supplement to Form I-1 29. 4. Classification sought (only one box). . H-3 Trainee.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. 4. Classification sought (select only one box). Check G. H-3 Trainee.",
+            "H Classification Supplement to Form I-1 29. 4. Classification sought (only one box). G. H-3 Trainee.",
         },
         {
           id: "subform13SubHclass6",
@@ -24630,12 +24325,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "H",
               label:
-                "Classification Supplement to Form I-1 29. 4. Classification sought (select only one box). Check H. H-3 Special education exchange visitor program.",
+                "Classification Supplement to Form I-1 29. 4. Classification sought (only one box). H. H-3 Special education exchange visitor program.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. 4. Classification sought (select only one box). Check H. H-3 Special education exchange visitor program.",
+            "H Classification Supplement to Form I-1 29. 4. Classification sought (only one box). H. H-3 Special education exchange visitor program.",
         },
         {
           id: "subform13SubHclass7",
@@ -24647,7 +24342,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. 4. Classification sought (select only one box). Check F. H-2 B  Non-agricultural worker.",
+            "H Classification Supplement to Form I-1 29. 4. Classification sought (only one box). F. H-2 B Non-agricultural worker.",
         },
         {
           id: "subform13SubHConfirmationNum",
@@ -24656,7 +24351,7 @@ const I_129_DEFINITION: FormDefinition = {
             "Beneficiary Confirmation Number from the H- 1B Registration Notice",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. 5. If you selected a. or d. in Item Number 4., and are filing an H-1B cap petition (including a petition under the U.S. advanced degree exemption), provide the Beneficiary Confirmation Number from the H-1B Registration Selection Notice for the beneficiary named in this petition (if applicable). Enter Beneficiary Confirmation Number from the H- 1B Registration Notice.",
+            "H Classification Supplement to Form I-1 29. 5. If you selected a. or d. in , and are filing an H-1B cap petition (including a petition under the U.S. advanced degree exemption), Beneficiary Confirmation Number from the H-1B Registration Selection Notice for the beneficiary named in this petition (optional). Beneficiary Confirmation Number from the H- 1B Registration Notice.",
         },
         {
           id: "subform15ClassHExpDate",
@@ -24680,14 +24375,14 @@ const I_129_DEFINITION: FormDefinition = {
           id: "subform15Check",
           type: "radio",
           label:
-            "Does any beneficiary in this petition have a controlling interest in the petitioning organization...",
+            "Does any beneficiary in this petition have a controlling interest in the petitioning organization.",
           required: true,
           options: [
             { value: "N", label: "No" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. 8. A. Does any beneficiary in this petition have a controlling interest in the petitioning organization, meaning the beneficiary owns more than 50 percent of the petitioner or has majority voting rights in the petitioner? Check No.",
+            "H Classification Supplement to Form I-1 29. 8. A. Does any beneficiary in this petition have a controlling interest in the petitioning organization, meaning the beneficiary owns more than 50 percent of the petitioner or has majority voting rights in the petitioner? No.",
         },
         {
           id: "subform15Check1",
@@ -24699,7 +24394,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. 8. A. Does any beneficiary in this petition have a controlling interest in the petitioning organization, meaning the beneficiary owns more than 50 percent of the petitioner or has majority voting rights in the petitioner ? Check Yes. If yes, please explain in Item Number 8. B.",
+            "H Classification Supplement to Form I-1 29. 8. A. Does any beneficiary in this petition have a controlling interest in the petitioning organization, meaning the beneficiary owns more than 50 percent of the petitioner or has majority voting rights in the petitioner ? Yes. If yes, please explain in B.",
         },
         {
           id: "subform15SummaryofWorkExperience",
@@ -24707,7 +24402,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Description and Summary",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing for H-1 B Classification. 2. Describe the beneficiary&apos;s present occupation and summary of prior work experience. Enter Description and Summary.",
+            "H Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing for H-1 B Classification. 2. Describe the beneficiary&apos;s present occupation and summary of prior work experience. Description and Summary.",
         },
         {
           id: "subform15Duties",
@@ -24715,7 +24410,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Description",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing for H-1 B Classification. 1. Describe the proposed duties. Enter Description.",
+            "H Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing for H-1 B Classification. 1. Describe the proposed duties. Description.",
         },
         {
           id: "subform15Explain",
@@ -24724,68 +24419,67 @@ const I_129_DEFINITION: FormDefinition = {
             "Explanation of beneficiary ownership interest in the petitioning organization",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. 8. B. If 8. A. is Yes, Enter Explanation of beneficiary ownership interest in the petitioning organization.",
+            "H Classification Supplement to Form I-1 29. 8. B. If 8. A. is Yes, Explanation of beneficiary ownership interest in the petitioning organization.",
         },
         {
           id: "subform15SupHNo",
           type: "radio",
           label:
-            "Are you requesting a change of employer and was the beneficiary previously subject to the Guam-Co...",
+            "Are you requesting a change of employer and was the beneficiary previously subject to the Guam-Co.",
           required: true,
           options: [
             { value: "Y", label: "Yes" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. 7. Are you requesting a change of employer and was the beneficiary previously subject to the Guam-Commonwealth of the Northern Mariana Islands (C N M I) cap exemption under Public Law 1 10 through 2 29? Check No.",
+            "H Classification Supplement to Form I-1 29. 7. Are you requesting a change of employer and was the beneficiary previously subject to the Guam-Commonwealth of the Northern Mariana Islands (C N M I) cap exemption under Public Law 1 10 through 2 29? No.",
         },
         {
           id: "subform15SupHYes",
           type: "radio",
           label:
-            "Are you requesting a change of employer and was the beneficiary previously subject to the Guam-Co...",
+            "Are you requesting a change of employer and was the beneficiary previously subject to the Guam-Co.",
           required: true,
           options: [
             { value: "Y", label: "Yes" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. 7. Are you requesting a change of employer and was the beneficiary previously subject to the Guam-Commonwealth of the Northern Mariana Islands (C N M I) cap exemption under Public Law 1 10 through 2 29? Check Yes.",
+            "H Classification Supplement to Form I-1 29. 7. Are you requesting a change of employer and was the beneficiary previously subject to the Guam-Commonwealth of the Northern Mariana Islands (C N M I) cap exemption under Public Law 1 10 through 2 29? Yes.",
         },
         {
           id: "subform15SupHYes1",
           type: "radio",
           label:
-            "Are you filing this petition on behalf of a beneficiary subject to the Guam-Commonwealth of the N...",
+            "Are you filing this petition on behalf of a beneficiary subject to the Guam-Commonwealth of the N.",
           required: true,
           options: [
             { value: "Y", label: "Yes" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. 6. Are you filing this petition on behalf of a beneficiary subject to the Guam-Commonwealth of the Northern Mariana Islands (C N M I) cap exemption under Public Law 1 10 through 2 29? Check Yes.",
+            "H Classification Supplement to Form I-1 29. 6. Are you filing this petition on behalf of a beneficiary subject to the Guam-Commonwealth of the Northern Mariana Islands (C N M I) cap exemption under Public Law 1 10 through 2 29? Yes.",
         },
         {
           id: "subform15SupHNo1",
           type: "radio",
           label:
-            "Are you filing this petition on behalf of a beneficiary subject to the Guam-Commonwealth of the N...",
+            "Are you filing this petition on behalf of a beneficiary subject to the Guam-Commonwealth of the N.",
           required: true,
           options: [
             { value: "Y", label: "Yes" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. 6. Are you filing this petition on behalf of a beneficiary subject to the Guam-Commonwealth of the Northern Mariana Islands (C N M I) cap exemption under Public Law 1 10 through 2 29? Check No.",
+            "H Classification Supplement to Form I-1 29. 6. Are you filing this petition on behalf of a beneficiary subject to the Guam-Commonwealth of the Northern Mariana Islands (C N M I) cap exemption under Public Law 1 10 through 2 29? No.",
         },
         {
           id: "subform15Sect1DateSignedByPetitioner",
           type: "date",
-          label:
-            "Date of Signature as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "Date of Signature",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing for H-1 B Classification. Statement for H-1 B Specialty Occupations and H-1 B 1 Chile and Singapore. By filing this petition, I agree to, and will abide by, the terms of the labor condition application (L C A) for the duration of the beneficiary&apos;s authorized period of stay for H-1 B employment. I certify that I will maintain a valid employer-employee relationship with the beneficiary at all times. If the beneficiary is assigned to a position in a new location, I will obtain and post a labor condition application (L C A) for that site prior to reassignment. I further understand that I cannot charge the beneficiary the American Competitiveness and Workforce Improvement Act (A C W I A) fee, and that any other required reimbursement will be considered an offset against wages and benefits paid relative to the labor condition application (L C A). Enter Date of Signature as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "H Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing for H-1 B Classification. Statement for H-1 B Specialty Occupations and H-1 B 1 Chile and Singapore. By filing this petition, I agree to, and will abide by, the terms of the labor condition application (L C A) for the duration of the beneficiary&apos;s authorized period of stay for H-1 B employment. I certify that I will maintain a valid employer-employee relationship with the beneficiary at all times. If the beneficiary is assigned to a position in a new location, I will obtain and post a labor condition application (L C A) for that site prior to reassignment. I further understand that I cannot charge the beneficiary the American Competitiveness and Workforce Improvement Act (A C W I A) fee, and that any other required reimbursement will be considered an offset against wages and benefits paid relative to the labor condition application (L C A). Date of Signature.",
         },
         {
           id: "subform15Sect1PetitionerPrintedName",
@@ -24793,24 +24487,15 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Name of Petitioner",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing for H-1 B Classification. Statement for H-1 B Specialty Occupations and H-1 B 1 Chile and Singapore. By filing this petition, I agree to, and will abide by, the terms of the labor condition application (L C A) for the duration of the beneficiary&apos;s authorized period of stay for H-1 B employment. I certify that I will maintain a valid employer-employee relationship with the beneficiary at all times. If the beneficiary is assigned to a position in a new location, I will obtain and post a labor condition application (L C A) for that site prior to reassignment. I further understand that I cannot charge the beneficiary the American Competitiveness and Workforce Improvement Act (A C W I A) fee, and that any other required reimbursement will be considered an offset against wages and benefits paid relative to the labor condition application (L C A). Enter Name of Petitioner.",
+            "H Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing for H-1 B Classification. Statement for H-1 B Specialty Occupations and H-1 B 1 Chile and Singapore. By filing this petition, I agree to, and will abide by, the terms of the labor condition application (L C A) for the duration of the beneficiary&apos;s authorized period of stay for H-1 B employment. I certify that I will maintain a valid employer-employee relationship with the beneficiary at all times. If the beneficiary is assigned to a position in a new location, I will obtain and post a labor condition application (L C A) for that site prior to reassignment. I further understand that I cannot charge the beneficiary the American Competitiveness and Workforce Improvement Act (A C W I A) fee, and that any other required reimbursement will be considered an offset against wages and benefits paid relative to the labor condition application (L C A). Name of Petitioner.",
         },
         {
           id: "subform16Sect1DateSignedByDODPM",
           type: "date",
-          label:
-            "Date of Signature as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "Date of Signature",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing for H-1 B Classification. Statement for H-1 B U. S. Department of Defense Projects Only. I certify that the beneficiary will be working on a cooperative research and development project or a co-production project under a reciprocal government-to-government agreement administered by the U. S. Department of Defense (D O D). Enter Date of Signature as 2-digit Month, 2-digit Day, and 4-digit Year.",
-        },
-        {
-          id: "subform16Sect1DODPMSignature",
-          type: "text",
-          label: "Print and Sign completed form",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing for H-1 B Classification. Statement for H-1 B U. S. Department of Defense Projects Only. I certify that the beneficiary will be working on a cooperative research and development project or a co-production project under a reciprocal government-to-government agreement administered by the U. S. Department of Defense (D O D). Signature of D O D Project Manager. No Entry. Print and Sign completed form.",
+            "H Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing for H-1 B Classification. Statement for H-1 B U. S. Department of Defense Projects Only. I certify that the beneficiary will be working on a cooperative research and development project or a co-production project under a reciprocal government-to-government agreement administered by the U. S. Department of Defense (D O D). Date of Signature.",
         },
         {
           id: "subform16Sect1DODPMName",
@@ -24818,7 +24503,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Name of DOD Project Manager",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing for H-1 B Classification. Statement for H-1 B U. S. Department of Defense Projects Only. I certify that the beneficiary will be working on a cooperative research and development project or a co-production project under a reciprocal government-to-government agreement administered by the U. S. Department of Defense (D O D). Enter Name of DOD Project Manager.",
+            "H Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing for H-1 B Classification. Statement for H-1 B U. S. Department of Defense Projects Only. I certify that the beneficiary will be working on a cooperative research and development project or a co-production project under a reciprocal government-to-government agreement administered by the U. S. Department of Defense (D O D). Name of DOD Project Manager.",
         },
         {
           id: "subform16aseasonal",
@@ -24829,12 +24514,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "1",
               label:
-                "29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 1. Employment is: (select only one box). Check A. Seasonal.",
+                "29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 1. Employment is: (only one box). A. Seasonal.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 1. Employment is: (select only one box). Check A. Seasonal.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 1. Employment is: (only one box). A. Seasonal.",
         },
         {
           id: "subform16bpeakload",
@@ -24845,12 +24530,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "1",
               label:
-                "29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 1. Employment is: (select only one box). Check B. Peak load.",
+                "29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 1. Employment is: (only one box). B. Peak load.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 1. Employment is: (select only one box). Check B. Peak load.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 1. Employment is: (only one box). B. Peak load.",
         },
         {
           id: "subform16donetime",
@@ -24861,12 +24546,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "1",
               label:
-                "29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 1. Employment is: (select only one box). Check D. One-time occurrence",
+                "29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 1. Employment is: (only one box). D. One-time occurrence",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 1. Employment is: (select only one box). Check D. One-time occurrence",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 1. Employment is: (only one box). D. One-time occurrence",
         },
         {
           id: "subform16crecurrent",
@@ -24877,12 +24562,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "1",
               label:
-                "29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 2. Temporary need is: (select only one box). Check C. Recurrent annually.",
+                "29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 2. Temporary need is: (only one box). C. Recurrent annually.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 2. Temporary need is: (select only one box). Check C. Recurrent annually.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 2. Temporary need is: (only one box). C. Recurrent annually.",
         },
         {
           id: "subform16aunpredictable",
@@ -24893,12 +24578,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "1",
               label:
-                "29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 2. Temporary need is: (select only one box). Check A. Unpredictable.",
+                "29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 2. Temporary need is: (only one box). A. Unpredictable.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 2. Temporary need is: (select only one box). Check A. Unpredictable.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 2. Temporary need is: (only one box). A. Unpredictable.",
         },
         {
           id: "subform16bperiodic",
@@ -24909,12 +24594,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "1",
               label:
-                "29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 2. Temporary need is: (select only one box). Check B. Periodic.",
+                "29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 2. Temporary need is: (only one box). B. Periodic.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 2. Temporary need is: (select only one box). Check B. Periodic.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 2. Temporary need is: (only one box). B. Periodic.",
         },
         {
           id: "subform16cintermittent",
@@ -24925,12 +24610,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "1",
               label:
-                "29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 1. Employment is: (select only one box). Check C. Intermittent.",
+                "29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 1. Employment is: (only one box). C. Intermittent.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 1. Employment is: (select only one box). Check C. Intermittent.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 1. Employment is: (only one box). C. Intermittent.",
         },
         {
           id: "subform16Explanation",
@@ -24938,7 +24623,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Explanation",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 3. Explain your temporary need for the workers&apos; services (Attach a separate sheet if additional space is needed). Enter Explanation.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 3. Explain your temporary need for the workers&apos; services (Attach a separate sheet if additional space is needed). Explanation.",
         },
         {
           id: "subform16SupH",
@@ -24951,7 +24636,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 5. Are you requesting a restarting of the 3-year maximum period of stay limit in H-2A/H-2B status for any of your named beneficiaries because they were absent from the United States for an uninterrupted period of at least 60 days?  (See form Instructions for more information on &#8220;Period of Absence.&#8221;) Select Yes. If you answered &#8220;Yes&#8221; to Item Number 5., you must document the beneficiaries&apos; periods of stay for the last 3 years in Item Number 3. on the table on the first page of this supplement.  You must also submit evidence of each entry and each exit to establish each period of absence.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 5. Are you requesting a restarting of the 3-year maximum period of stay limit in H-2A/H-2B status for any of your named beneficiaries because they were absent from the United States for an uninterrupted period of at least 60 days? (See form Instructions for more information on &#8220;Period of Absence.&#8221;) Yes. If you answered &#8220;Yes&#8221; to , you must document the beneficiaries&apos; periods of stay for the last 3 years in on the table on the first page of this supplement. You must also submit evidence of each entry and each exit to establish each period of absence.",
         },
         {
           id: "subform16SupH1",
@@ -24964,24 +24649,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 5. Are you requesting a restarting of the 3-year maximum period of stay limit in H-2A/H-2B status for any of your named beneficiaries because they were absent from the United States for an uninterrupted period of at least 60 days?  (See form Instructions for more information on &#8220;Period of Absence.&#8221;) Select No.",
-        },
-        {
-          id: "subform16Sect1AuthorizedOfficialSignature",
-          type: "text",
-          label: "Print and Sign completed form",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing for H-1 B Classification. Statement for H-1 B Specialty Occupations and U. S. Department of Defense (D O D) Projects. As an authorized official of the employer, I certify that the employer will be liable for the reasonable costs of return transportation of the alien abroad if the beneficiary is dismissed from employment by the employer before the end of the period of authorized stay. Signature of Authorized Official of Employer. No Entry. Print and Sign completed form.",
-        },
-        {
-          id: "subform16Sect1DateSignedByAuthorizedOfficial",
-          type: "date",
-          label:
-            "Date of Signature as 2-digit Month, 2-digit Day, and 4-digit Year",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing for H-1 B Classification. Statement for H-1 B Specialty Occupations and U. S. Department of Defense (D O D) Projects. As an authorized official of the employer, I certify that the employer will be liable for the reasonable costs of return transportation of the alien abroad if the beneficiary is dismissed from employment by the employer before the end of the period of authorized stay. Enter Date of Signature as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 5. Are you requesting a restarting of the 3-year maximum period of stay limit in H-2A/H-2B status for any of your named beneficiaries because they were absent from the United States for an uninterrupted period of at least 60 days? (See form Instructions for more information on &#8220;Period of Absence.&#8221;) No.",
         },
         {
           id: "subform16Sect1AuthorizedOfficialName",
@@ -24989,7 +24657,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Name of Authorized Official of Employer",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing for H-1 B Classification. Statement for H-1 B Specialty Occupations and U. S. Department of Defense (D O D) Projects. As an authorized official of the employer, I certify that the employer will be liable for the reasonable costs of return transportation of the alien abroad if the beneficiary is dismissed from employment by the employer before the end of the period of authorized stay. Enter Name of Authorized Official of Employer.",
+            "H Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing for H-1 B Classification. Statement for H-1 B Specialty Occupations and U. S. Department of Defense (D O D) Projects. As an authorized official of the employer, I certify that the employer will be liable for the reasonable costs of return transportation of the alien abroad if the beneficiary is dismissed from employment by the employer before the end of the period of authorized stay. Name of Authorized Official of Employer.",
         },
         {
           id: "subform17SupH",
@@ -25001,7 +24669,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Prohibited H-2A and H-2B Fees. 11. If you answered &#8220;Yes&#8221; to Item Number 8., are you requesting an exception to the mandatory denial or revocation for prohibited fees (see form Instructions for information about exceptions)? Select Yes. If you answered &#8220;Yes&#8221; to Item Number 11., submit evidence supporting your request for an exception, as described in the form Instructions.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Prohibited H-2A and H-2B Fees. 11. If you answered &#8220;Yes&#8221; to , are you requesting an exception to the mandatory denial or revocation for prohibited fees (see form Instructions for information about exceptions)? Yes. If you answered &#8220;Yes&#8221; to , submit evidence supporting your request for an exception, as described in the form Instructions.",
         },
         {
           id: "subform17SupH1",
@@ -25013,7 +24681,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Prohibited H-2A and H-2B Fees. 11. If you answered &#8220;Yes&#8221; to Item Number 8., are you requesting an exception to the mandatory denial or revocation for prohibited fees (see form Instructions for information about exceptions)? Select No.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Prohibited H-2A and H-2B Fees. 11. If you answered &#8220;Yes&#8221; to , are you requesting an exception to the mandatory denial or revocation for prohibited fees (see form Instructions for information about exceptions)? No.",
         },
         {
           id: "subform17SupH1Types",
@@ -25021,7 +24689,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "List type of and amounts of fees",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Prohibited H-2A and H-2B Fees. 9. If you answered &#8220;Yes&#8221; to Item Number 8., list the types and amounts of fees that the worker(s) paid or will pay.  List type of and amounts of fees.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Prohibited H-2A and H-2B Fees. 9. If you answered &#8220;Yes&#8221; to , list the types and amounts of fees that the worker(s) paid or will pay. List type of and amounts of fees.",
         },
         {
           id: "subform17Sec2CityTown",
@@ -25029,7 +24697,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "City or Town",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to Item Number 6., list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity.  If you need to include the name and address of more than one person or entity, use the space provided in Part 9. Additional Information.  Address of Agent, Facilitator, Recruiter, or Similar Employment Service. Enter City or Town.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to , list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity. If you need to include the name and address of more than one person or entity, use the space provided in City or Town.",
         },
         {
           id: "subform17Sec2ZipCode",
@@ -25037,12 +24705,12 @@ const I_129_DEFINITION: FormDefinition = {
           label: "ZIP Code",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to Item Number 6., list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity.  If you need to include the name and address of more than one person or entity, use the space provided in Part 9. Additional Information.  Address of Agent, Facilitator, Recruiter, or Similar Employment Service. Enter ZIP Code.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to , list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity. If you need to include the name and address of more than one person or entity, use the space provided in ZIP Code.",
         },
         {
           id: "subform17Sec2State",
           type: "select",
-          label: "Select State from a List of States",
+          label: "State",
           required: true,
           options: [
             { value: "", label: "" },
@@ -25110,7 +24778,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "WY", label: "Wyoming" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to Item Number 6., list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity.  If you need to include the name and address of more than one person or entity, use the space provided in Part 9. Additional Information.  Address of Agent, Facilitator, Recruiter, or Similar Employment Service. Select State from a List of States.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to , list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity. If you need to include the name and address of more than one person or entity, use the space provided in State.",
         },
         {
           id: "subform17Sec2StreetNumberName",
@@ -25118,43 +24786,43 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Street Number and Name",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to Item Number 6., list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity.  If you need to include the name and address of more than one person or entity, use the space provided in Part 9. Additional Information.  Address of Agent, Facilitator, Recruiter, or Similar Employment Service. Enter Street Number and Name.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to , list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity. If you need to include the name and address of more than one person or entity, use the space provided in Street Number and Name.",
         },
         {
           id: "subform17Sec2Unit",
           type: "select",
-          label: "Check Suite",
+          label: "Suite",
           required: true,
           options: [
             { value: "STE", label: "STE" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to Item Number 6., list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity.  If you need to include the name and address of more than one person or entity, use the space provided in Part 9. Additional Information.  Address of Agent, Facilitator, Recruiter, or Similar Employment Service. Check Suite.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to , list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity. If you need to include the name and address of more than one person or entity, use the space provided in Suite.",
         },
         {
           id: "subform17Sec2Unit1",
           type: "select",
-          label: "Check Apartment",
+          label: "Apartment",
           required: true,
           options: [
             { value: "APT", label: "APT" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to Item Number 6., list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity.  If you need to include the name and address of more than one person or entity, use the space provided in Part 9. Additional Information.  Address of Agent, Facilitator, Recruiter, or Similar Employment Service. Check Apartment.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to , list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity. If you need to include the name and address of more than one person or entity, use the space provided in Apartment.",
         },
         {
           id: "subform17Sec2Unit2",
           type: "select",
-          label: "Check Floor",
+          label: "Floor",
           required: true,
           options: [
             { value: "FLR", label: "FLR" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to Item Number 6., list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity.  If you need to include the name and address of more than one person or entity, use the space provided in Part 9. Additional Information.  Address of Agent, Facilitator, Recruiter, or Similar Employment Service. Check Floor.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to , list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity. If you need to include the name and address of more than one person or entity, use the space provided in Floor.",
         },
         {
           id: "subform17Sec2AptSteFlrNumber",
@@ -25162,16 +24830,16 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Apartment, Suite or Floor Number",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to Item Number 6., list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity.  If you need to include the name and address of more than one person or entity, use the space provided in Part 9. Additional Information.  Address of Agent, Facilitator, Recruiter, or Similar Employment Service. If Apartment, Suite or Floor is Checked, Enter Apartment, Suite or Floor Number.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to , list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity. If you need to include the name and address of more than one person or entity, use the space provided in If Apartment, Suite or Floor is Checked, Apartment, Suite or Floor Number.",
         },
         {
           id: "subform17RecruitOrganization",
           type: "text",
           label:
-            "Name of Recruiting Organization or Similar Employment Service (if applicable)",
+            "Name of Recruiting Organization or Similar Employment Service (optional)",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to Item Number 6., list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity.  If you need to include the name and address of more than one person or entity, use the space provided in Part 9. Additional Information. Name of Recruiter, Agent, or Facilitator. Enter Name of Recruiting Organization or Similar Employment Service (if applicable).",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to , list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity. If you need to include the name and address of more than one person or entity, use the space provided in Name of Recruiting Organization or Similar Employment Service (optional).",
         },
         {
           id: "subform17MiddleName",
@@ -25179,7 +24847,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Middle Name",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to Item Number 6., list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity.  If you need to include the name and address of more than one person or entity, use the space provided in Part 9. Additional Information. Name of Recruiter, Agent, or Facilitator. Enter Middle Name.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to , list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity. If you need to include the name and address of more than one person or entity, use the space provided in Middle Name.",
         },
         {
           id: "subform17GivenName",
@@ -25187,7 +24855,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Given Name (First Name)",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to Item Number 6., list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity.  If you need to include the name and address of more than one person or entity, use the space provided in Part 9. Additional Information. Name of Recruiter, Agent, or Facilitator. Enter Given Name (First Name).",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to , list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity. If you need to include the name and address of more than one person or entity, use the space provided in Given Name (First Name).",
         },
         {
           id: "subform17FamilyName",
@@ -25195,7 +24863,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Family Name (Last Name)",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to Item Number 6., list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity.  If you need to include the name and address of more than one person or entity, use the space provided in Part 9. Additional Information. Name of Recruiter, Agent, or Facilitator. Enter Family Name (Last Name).",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to , list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity. If you need to include the name and address of more than one person or entity, use the space provided in Family Name (Last Name).",
         },
         {
           id: "subform18SupH",
@@ -25207,29 +24875,19 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Other Violations. 14. Are you currently subject to any debarment order by the U.S. Department of Labor (or, if applicable, the Governor of Guam)? Select Yes. If you answered &#8220;Yes&#8221; to Item Number 14., you must submit a complete copy of the final notice of debarment or administrative determination(s).",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Other Violations. 14. Are you currently subject to any debarment order by the U.S. Department of Labor (or, the Governor of Guam)? Yes. If you answered &#8220;Yes&#8221; to , you must submit a complete copy of the final notice of debarment or administrative determination(s).",
         },
         {
           id: "subform18SupH1",
           type: "radio",
-          label:
-            "Department of Labor (or, if applicable, the Governor of Guam)? No",
+          label: "Department of Labor (or, the Governor of Guam)? No",
           required: true,
           options: [
             { value: "N", label: "No" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Other Violations. 14. Are you currently subject to any debarment order by the U.S. Department of Labor (or, if applicable, the Governor of Guam)? Select No.",
-        },
-        {
-          id: "subform19Sect3PartADateSignedByPetitioner",
-          type: "date",
-          label:
-            "Date of Signature as 2-digit Month, 2-digit Day, and 4-digit Year",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part A. Petitioner. By filing this petition, I agree to the conditions of H-2 A/H-2 B employment and agree to the notification requirements. For H-2 A petitioners: I also agree to the liquidated damages requirements defined in 8 Code of Federal Regulations 2 14.2(h)(5)(vi)(B)(3). Enter Date of Signature as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Other Violations. 14. Are you currently subject to any debarment order by the U.S. Department of Labor (or, the Governor of Guam)? No.",
         },
         {
           id: "subform19Sect3PartAPetitionerName",
@@ -25237,24 +24895,15 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Name of Petitioner",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part A. Petitioner. By filing this petition, I agree to the conditions of H-2 A/H-2 B employment and agree to the notification requirements. For H-2 A petitioners: I also agree to the liquidated damages requirements defined in 8 Code of Federal Regulations 2 14.2(h)(5)(vi)(B)(3). Enter Name of Petitioner.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part A. Petitioner. By filing this petition, I agree to the conditions of H-2 A/H-2 B employment and agree to the notification requirements. For H-2 A petitioners: I also agree to the liquidated damages requirements defined in 8 Code of Federal Regulations 2 14.2(h)(5)(vi)(B)(3). Name of Petitioner.",
         },
         {
           id: "subform19Date",
           type: "date",
-          label:
-            "Date of Signature as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "Date of Signature",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part B. Employer who is not the Petitioner. I certify that I have authorized the party filing this petition to act as my agent in this regard. I assume full responsibility for all representations made by this agent on my behalf and agree to the conditions of H-2 A/H-2 B eligibility. Enter Date of Signature as 2-digit Month, 2-digit Day, and 4-digit Year.",
-        },
-        {
-          id: "subform19Sect3PartBEmployerSignature",
-          type: "text",
-          label: "Print and Sign completed form",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part B. Employer who is not the Petitioner. I certify that I have authorized the party filing this petition to act as my agent in this regard. I assume full responsibility for all representations made by this agent on my behalf and agree to the conditions of H-2 A/H-2 B eligibility. Signature of Employer. No Entry. Print and Sign completed form.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part B. Employer who is not the Petitioner. I certify that I have authorized the party filing this petition to act as my agent in this regard. I assume full responsibility for all representations made by this agent on my behalf and agree to the conditions of H-2 A/H-2 B eligibility. Date of Signature.",
         },
         {
           id: "subform19TextField5",
@@ -25262,31 +24911,31 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Name of Employer",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part B. Employer who is not the Petitioner. I certify that I have authorized the party filing this petition to act as my agent in this regard. I assume full responsibility for all representations made by this agent on my behalf and agree to the conditions of H-2 A/H-2 B eligibility. Enter Name of Employer.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part B. Employer who is not the Petitioner. I certify that I have authorized the party filing this petition to act as my agent in this regard. I assume full responsibility for all representations made by this agent on my behalf and agree to the conditions of H-2 A/H-2 B eligibility. Name of Employer.",
         },
         {
           id: "subform19SupH",
           type: "select",
-          label: "Select Yes",
+          label: "Yes",
           required: true,
           options: [
             { value: "Y", label: "Y" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. H-2A and H-2B Petitioner and Employer Obligations. 21. The petitioner agrees to notify DHS beginning on a date and in a manner specified in a notice published in the Federal Register within 2 workdays if: an H-2A/H-2B worker does not report for work within 5 workdays after the employment start date stated on the petition or, applicable to H-2A petitioners only, within 5 workdays of the start date established by the petitioner, whichever is later; the agricultural labor or services for which H-2A/H-2B workers were hired is completed more than 30 days early; or the H-2A/H-2B worker does not report for work for a period of 5 consecutive workdays without the consent of the employer or is terminated prior to the completion of agricultural labor or services for which he or she was hired.  Select Yes.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. H-2A and H-2B Petitioner and Employer Obligations. 21. The petitioner agrees to notify DHS beginning on a date and in a manner specified in a notice published in the Federal Register within 2 workdays if: an H-2A/H-2B worker does not report for work within 5 workdays after the employment start date stated on the petition or, applicable to H-2A petitioners only, within 5 workdays of the start date established by the petitioner, whichever is later; the agricultural labor or services for which H-2A/H-2B workers were hired is completed more than 30 days early; or the H-2A/H-2B worker does not report for work for a period of 5 consecutive workdays without the consent of the employer or is terminated prior to the completion of agricultural labor or services for which he or she was hired. Yes.",
         },
         {
           id: "subform19SupH1",
           type: "select",
-          label: "Select No",
+          label: "No",
           required: true,
           options: [
             { value: "N", label: "N" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. H-2A and H-2B Petitioner and Employer Obligations. 21. The petitioner agrees to notify DHS beginning on a date and in a manner specified in a notice published in the Federal Register within 2 workdays if: an H-2A/H-2B worker does not report for work within 5 workdays after the employment start date stated on the petition or, applicable to H-2A petitioners only, within 5 workdays of the start date established by the petitioner, whichever is later; the agricultural labor or services for which H-2A/H-2B workers were hired is completed more than 30 days early; or the H-2A/H-2B worker does not report for work for a period of 5 consecutive workdays without the consent of the employer or is terminated prior to the completion of agricultural labor or services for which he or she was hired.  Select No.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. H-2A and H-2B Petitioner and Employer Obligations. 21. The petitioner agrees to notify DHS beginning on a date and in a manner specified in a notice published in the Federal Register within 2 workdays if: an H-2A/H-2B worker does not report for work within 5 workdays after the employment start date stated on the petition or, applicable to H-2A petitioners only, within 5 workdays of the start date established by the petitioner, whichever is later; the agricultural labor or services for which H-2A/H-2B workers were hired is completed more than 30 days early; or the H-2A/H-2B worker does not report for work for a period of 5 consecutive workdays without the consent of the employer or is terminated prior to the completion of agricultural labor or services for which he or she was hired. No.",
         },
         {
           id: "subform19FamilyName",
@@ -25294,7 +24943,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Family Name (Last Name)",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C.  Joint Employers. 24. For H-2A petitioners only:  A separate Part C. must be submitted for each Joint Employer. Legal Name of Individual Joint Employer. Enter Family Name (Last Name).",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C. Joint Employers. 24. For H-2A petitioners only: A separate Part C. must be submitted for each Joint Employer. Legal Name of Individual Joint Employer. Family Name (Last Name).",
         },
         {
           id: "subform19GivenName",
@@ -25302,7 +24951,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Given Name (First Name)",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C.  Joint Employers. 24. For H-2A petitioners only:  A separate Part C. must be submitted for each Joint Employer. Legal Name of Individual Joint Employer. Enter Given Name (First Name).",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C. Joint Employers. 24. For H-2A petitioners only: A separate Part C. must be submitted for each Joint Employer. Legal Name of Individual Joint Employer. Given Name (First Name).",
         },
         {
           id: "subform19MiddleName",
@@ -25310,7 +24959,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Middle Name",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C.  Joint Employers. 24. For H-2A petitioners only:  A separate Part C. must be submitted for each Joint Employer. Legal Name of Individual Joint Employer. Enter Middle Name.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C. Joint Employers. 24. For H-2A petitioners only: A separate Part C. must be submitted for each Joint Employer. Legal Name of Individual Joint Employer. Middle Name.",
         },
         {
           id: "subform19PetitionerName",
@@ -25318,16 +24967,15 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Joint Employer Company or Organization Name",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C.  Joint Employers. 24. For H-2A petitioners only:  A separate Part C. must be submitted for each Joint Employer. Legal Name of Individual Joint Employer. Enter Joint Employer Company or Organization Name.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C. Joint Employers. 24. For H-2A petitioners only: A separate Part C. must be submitted for each Joint Employer. Legal Name of Individual Joint Employer. Joint Employer Company or Organization Name.",
         },
         {
           id: "subform20Sect3PartCDateSigned1",
           type: "date",
-          label:
-            "Date of Signature as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "Date of Signature",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Joint Employer&apos;s Certification. 28. Enter Date of Signature as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Joint Employer&apos;s Certification. 28. Date of Signature.",
         },
         {
           id: "subform20CityTown",
@@ -25335,7 +24983,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "City or Town",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C.  Joint Employers. 24. For H-2A petitioners only:  A separate Part C. must be submitted for each Joint Employer. Mailing Address of Joint Employer. Enter City or Town.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C. Joint Employers. 24. For H-2A petitioners only: A separate Part C. must be submitted for each Joint Employer. address of Joint Employer. City or Town.",
         },
         {
           id: "subform20ZipCode",
@@ -25343,12 +24991,12 @@ const I_129_DEFINITION: FormDefinition = {
           label: "ZIP Code",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C.  Joint Employers. 24. For H-2A petitioners only:  A separate Part C. must be submitted for each Joint Employer. Mailing Address of Joint Employer. Enter ZIP Code.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C. Joint Employers. 24. For H-2A petitioners only: A separate Part C. must be submitted for each Joint Employer. address of Joint Employer. ZIP Code.",
         },
         {
           id: "subform20State",
           type: "select",
-          label: "Select State from the List of States",
+          label: "State from the List of States",
           required: true,
           options: [
             { value: "", label: "" },
@@ -25416,7 +25064,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "WY", label: "Wyoming" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C.  Joint Employers. 24. For H-2A petitioners only:  A separate Part C. must be submitted for each Joint Employer. Mailing Address of Joint Employer. Select State from the List of States.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C. Joint Employers. 24. For H-2A petitioners only: A separate Part C. must be submitted for each Joint Employer. address of Joint Employer. State from the List of States.",
         },
         {
           id: "subform20InCareofName",
@@ -25424,7 +25072,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "In Care Of Name (if any)",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C.  Joint Employers. 24. For H-2A petitioners only:  A separate Part C. must be submitted for each Joint Employer. Mailing Address of Joint Employer. Enter In Care Of Name (if any).",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C. Joint Employers. 24. For H-2A petitioners only: A separate Part C. must be submitted for each Joint Employer. address of Joint Employer. In Care Of Name (if any).",
         },
         {
           id: "subform20StreetNumberName",
@@ -25432,12 +25080,12 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Street Number and Name",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C.  Joint Employers. 24. For H-2A petitioners only:  A separate Part C. must be submitted for each Joint Employer. Mailing Address of Joint Employer. Enter Street Number and Name.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C. Joint Employers. 24. For H-2A petitioners only: A separate Part C. must be submitted for each Joint Employer. address of Joint Employer. Street Number and Name.",
         },
         {
           id: "subform20Unit",
           type: "radio",
-          label: "Check Suite",
+          label: "Suite",
           required: true,
           options: [
             { value: "", label: "None" },
@@ -25445,12 +25093,12 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C.  Joint Employers. 24. For H-2A petitioners only:  A separate Part C. must be submitted for each Joint Employer. Mailing Address of Joint Employer. Check Suite.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C. Joint Employers. 24. For H-2A petitioners only: A separate Part C. must be submitted for each Joint Employer. address of Joint Employer. Suite.",
         },
         {
           id: "subform20Unit1",
           type: "radio",
-          label: "Check Apartment",
+          label: "Apartment",
           required: true,
           options: [
             { value: "", label: "None" },
@@ -25458,12 +25106,12 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C.  Joint Employers. 24. For H-2A petitioners only:  A separate Part C. must be submitted for each Joint Employer. Mailing Address of Joint Employer. Check Apartment.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C. Joint Employers. 24. For H-2A petitioners only: A separate Part C. must be submitted for each Joint Employer. address of Joint Employer. Apartment.",
         },
         {
           id: "subform20Unit2",
           type: "radio",
-          label: "Check Floor",
+          label: "Floor",
           required: true,
           options: [
             { value: "", label: "None" },
@@ -25471,7 +25119,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C.  Joint Employers. 24. For H-2A petitioners only:  A separate Part C. must be submitted for each Joint Employer. Mailing Address of Joint Employer. Check Floor.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C. Joint Employers. 24. For H-2A petitioners only: A separate Part C. must be submitted for each Joint Employer. address of Joint Employer. Floor.",
         },
         {
           id: "subform20AptSteFlrNumber",
@@ -25479,7 +25127,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Apartment, Suite or Floor Number",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C.  Joint Employers. 24. For H-2A petitioners only:  A separate Part C. must be submitted for each Joint Employer. Mailing Address of Joint Employer. If Apartment, Suite or Floor is Checked, Enter Apartment, Suite or Floor Number.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C. Joint Employers. 24. For H-2A petitioners only: A separate Part C. must be submitted for each Joint Employer. address of Joint Employer. If Apartment, Suite or Floor is Checked, Apartment, Suite or Floor Number.",
         },
         {
           id: "subform20PostalCode",
@@ -25487,7 +25135,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Postal Code",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C.  Joint Employers. 24. For H-2A petitioners only:  A separate Part C. must be submitted for each Joint Employer. Mailing Address of Joint Employer. Enter Postal Code.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C. Joint Employers. 24. For H-2A petitioners only: A separate Part C. must be submitted for each Joint Employer. address of Joint Employer. Postal Code.",
         },
         {
           id: "subform20Province",
@@ -25495,7 +25143,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Province",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C.  Joint Employers. 24. For H-2A petitioners only:  A separate Part C. must be submitted for each Joint Employer. Mailing Address of Joint Employer. Enter Province.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C. Joint Employers. 24. For H-2A petitioners only: A separate Part C. must be submitted for each Joint Employer. address of Joint Employer. Province.",
         },
         {
           id: "subform20Country",
@@ -25503,7 +25151,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Country",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C.  Joint Employers. 24. For H-2A petitioners only:  A separate Part C. must be submitted for each Joint Employer. Mailing Address of Joint Employer. Enter Country.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C. Joint Employers. 24. For H-2A petitioners only: A separate Part C. must be submitted for each Joint Employer. address of Joint Employer. Country.",
         },
         {
           id: "subform20EmailAddress",
@@ -25511,7 +25159,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Email Address (if any)",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. H-2A and H-2B.  Part C.  Joint Employers. Contact Information. Enter Email Address (if any).",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. H-2A and H-2B. Part C. Joint Employers. Contact Information. Email Address (if any).",
         },
         {
           id: "subform20DaytimePhoneNumber1",
@@ -25519,7 +25167,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Daytime Telephone Number",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. H-2A and H-2B.  Part C.  Joint Employers. Contact Information. Enter Daytime Telephone Number.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. H-2A and H-2B. Part C. Joint Employers. Contact Information. Daytime Telephone Number.",
         },
         {
           id: "subform20MobilePhoneNumber1",
@@ -25527,7 +25175,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Mobile Telephone Number",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. H-2A and H-2B.  Part C.  Joint Employers. Contact Information. Enter Mobile Telephone Number.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. H-2A and H-2B. Part C. Joint Employers. Contact Information. Mobile Telephone Number.",
         },
         {
           id: "subform20EIN",
@@ -25535,7 +25183,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Employer Identification Number (EIN)",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Taxpayer Identification Numbers. 25.  Provide the following information, as applicable. Enter Employer Identification Number (EIN).",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Taxpayer Identification Numbers. 25. following information, as applicable. Employer Identification Number (EIN).",
         },
         {
           id: "subform20SSN",
@@ -25543,7 +25191,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Social Security Number (SSN)",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Taxpayer Identification Numbers. 25.  Provide the following information, as applicable. Enter U.S. Social Security Number (SSN).",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Taxpayer Identification Numbers. 25. following information, as applicable. U.S. Social Security Number (SSN).",
         },
         {
           id: "subform20TaxNumber",
@@ -25551,7 +25199,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Individual Taxpayer Identification Number (ITIN)",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Taxpayer Identification Numbers. 25.  Provide the following information, as applicable. Enter Individual Taxpayer Identification Number (ITIN).",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Taxpayer Identification Numbers. 25. following information, as applicable. Individual Taxpayer Identification Number (ITIN).",
         },
         {
           id: "subform20TypeofBusiness",
@@ -25559,7 +25207,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Type of Business Activity(ies)",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Other Information. 26. Enter Type of Business Activity(ies).",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Other Information. 26. Type of Business Activity(ies).",
         },
         {
           id: "subform20YearEstablished",
@@ -25567,7 +25215,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Year Established",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Other Information. 26. Enter Year Established.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Other Information. 26. Year Established.",
         },
         {
           id: "subform20NumberofEmployees",
@@ -25575,7 +25223,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Current Number of Employees in the United States",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Other Information. 26. Enter Current Number of Employees in the United States.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Other Information. 26. Current Number of Employees in the United States.",
         },
         {
           id: "subform20GrossAnnualIncome",
@@ -25583,7 +25231,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Gross Annual Income",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Other Information. 26. Enter Gross Annual Income.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Other Information. 26. Gross Annual Income.",
         },
         {
           id: "subform20NetAnnualIncome",
@@ -25591,7 +25239,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Net Annual Income",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Other Information. 26. Enter Net Annual Income.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Other Information. 26. Net Annual Income.",
         },
         {
           id: "subform20Title",
@@ -25599,7 +25247,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Title of Authorized Signatory",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Joint Employer&apos;s Certification. 27. Enter Title of Authorized Signatory.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Joint Employer&apos;s Certification. 27. Title of Authorized Signatory.",
         },
         {
           id: "subform20GivenName",
@@ -25607,7 +25255,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Given Name (First Name) of Authorized Signatory",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Joint Employer&apos;s Certification. 27. Enter Given Name (First Name) of Authorized Signatory.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Joint Employer&apos;s Certification. 27. Given Name (First Name) of Authorized Signatory.",
         },
         {
           id: "subform20FamilyName",
@@ -25615,15 +25263,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Family Name (Last Name) of Authorized Signatory",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Joint Employer&apos;s Certification. 27. Enter Family Name (Last Name) of Authorized Signatory.",
-        },
-        {
-          id: "subform20Sect3PartCSignature1",
-          type: "radio",
-          label: "Print and Sign completed form",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Joint Employer&apos;s Certification. 28. Enter Signature of Authorized Signatory. No Entry. Print and Sign completed form.",
+            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Joint Employer&apos;s Certification. 27. Family Name (Last Name) of Authorized Signatory.",
         },
         {
           id: "subform21HSec3Yes",
@@ -25636,46 +25276,46 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 3. Complete This Section If Filing for H-3 Classification. If you answer yes to any of the following questions, attach a full explanation. 1. Is the training you intend to provide, or similar training, available in the beneficiary&apos;s country? Check Yes.",
+            "H Classification Supplement to Form I-1 29. Section 3. Complete This Section If Filing for H-3 Classification. If you answer yes to any of the following questions, attach a full explanation. 1. Is the training you intend to provide, or similar training, available in the beneficiary&apos;s country? Yes.",
         },
         {
           id: "subform21HSec3No",
           type: "radio",
           label:
-            "Will the training benefit the beneficiary in pursuing a career abroad? Check Yes",
+            "Will the training benefit the beneficiary in pursuing a career abroad? Yes",
           required: true,
           options: [
             { value: "Y", label: "Yes" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 3. Complete This Section If Filing for H-3 Classification. If you answer yes to any of the following questions, attach a full explanation. 2. Will the training benefit the beneficiary in pursuing a career abroad? Check Yes.",
+            "H Classification Supplement to Form I-1 29. Section 3. Complete This Section If Filing for H-3 Classification. If you answer yes to any of the following questions, attach a full explanation. 2. Will the training benefit the beneficiary in pursuing a career abroad? Yes.",
         },
         {
           id: "subform21HSec3Check",
           type: "radio",
           label:
-            "Do you intend to employ the beneficiary abroad at the end of this training? Check No",
+            "Do you intend to employ the beneficiary abroad at the end of this training? No",
           required: true,
           options: [
             { value: "N", label: "No" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 3. Complete This Section If Filing for H-3 Classification. If you answer yes to any of the following questions, attach a full explanation. 6. Do you intend to employ the beneficiary abroad at the end of this training? Check No.",
+            "H Classification Supplement to Form I-1 29. Section 3. Complete This Section If Filing for H-3 Classification. If you answer yes to any of the following questions, attach a full explanation. 6. Do you intend to employ the beneficiary abroad at the end of this training? No.",
         },
         {
           id: "subform21HSec3Check1",
           type: "radio",
           label:
-            "Do you intend to employ the beneficiary abroad at the end of this training? Check Yes",
+            "Do you intend to employ the beneficiary abroad at the end of this training? Yes",
           required: true,
           options: [
             { value: "Y", label: "Yes" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 3. Complete This Section If Filing for H-3 Classification. If you answer yes to any of the following questions, attach a full explanation. 6. Do you intend to employ the beneficiary abroad at the end of this training? Check Yes.",
+            "H Classification Supplement to Form I-1 29. Section 3. Complete This Section If Filing for H-3 Classification. If you answer yes to any of the following questions, attach a full explanation. 6. Do you intend to employ the beneficiary abroad at the end of this training? Yes.",
         },
         {
           id: "subform21Explanation",
@@ -25683,7 +25323,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Explanation",
           required: true,
           helpText:
-            "H Classification Supplement to Form I-1 29. Section 3. Complete This Section If Filing for H-3 Classification. If you answer yes to any of the following questions, attach a full explanation. 7. If you do not intend to employ the beneficiary abroad at the end of this training, enter an explanation as to why you wish to incur the cost of providing this training and your expected return from this training. Enter Explanation.",
+            "H Classification Supplement to Form I-1 29. Section 3. Complete This Section If Filing for H-3 Classification. If you answer yes to any of the following questions, attach a full explanation. 7. If you do not intend to employ the beneficiary abroad at the end of this training, explanation as to why you wish to incur the cost of providing this training and your expected return from this training. Explanation.",
         },
         {
           id: "subform22FamilyName2",
@@ -25691,7 +25331,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Name of the Beneficiary",
           required: true,
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. 2. Enter Name of the Beneficiary.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. 2. Name of the Beneficiary.",
         },
         {
           id: "subform22FamilyName3",
@@ -25699,7 +25339,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Name of the Petitioner",
           required: true,
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. 1. Enter Name of the Petitioner.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. 1. Name of the Petitioner.",
         },
         {
           id: "subform22anodiploma",
@@ -25715,13 +25355,13 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos;s Highest Level of Education, select only one box. Check A. No Diploma.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos;s Highest Level of Education, A. No Diploma.",
         },
         {
           id: "subform22bHSDiploma",
           type: "radio",
           label:
-            "High School Graduate Diploma or the equivalent (for example: General Educational Development (G E...",
+            "High School Graduate Diploma or the equivalent (for example: General Educational Development (G E.",
           required: true,
           options: [
             {
@@ -25732,7 +25372,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos;s Highest Level of Education, select only one box. Check B. High School Graduate Diploma or the equivalent (for example: General Educational Development (G E D)).",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos;s Highest Level of Education, B. High School Graduate Diploma or the equivalent (for example: General Educational Development (G E D)).",
         },
         {
           id: "subform22csomecollege",
@@ -25748,7 +25388,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos;s Highest Level of Education, select only one box. Check C. Some college credit, but less than 1 year.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos;s Highest Level of Education, C. Some college credit, but less than 1 year.",
         },
         {
           id: "subform22dcollegeplus",
@@ -25764,7 +25404,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos;s Highest Level of Education, select only one box. Check D. One or more years of college, no degree.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos;s Highest Level of Education, D. One or more years of college, no degree.",
         },
         {
           id: "subform22eAssociateDegree",
@@ -25781,7 +25421,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos;s Highest Level of Education, select only one box. Check E. Associate&apos;s degree (for example: Associate in Arts (A A), Associate in Science (A S)).",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos;s Highest Level of Education, E. Associate&apos;s degree (for example: Associate in Arts (A A), Associate in Science (A S)).",
         },
         {
           id: "subform22gMasterDegree",
@@ -25797,13 +25437,13 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos;s Highest Level of Education, select only one box. Check G. Master&apos;s degree (for Example: Master of Arts (M A), Master of Science (M S), Master of Engineering (M E N G), Master of Education (M E D), Master of Social Work (M S W), Master of Business Administration (M B A)).",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos;s Highest Level of Education, G. Master&apos;s degree (for Example: Master of Arts (M A), Master of Science (M S), Master of Engineering (M E N G), Master of Education (M E D), Master of Social Work (M S W), Master of Business Administration (M B A)).",
         },
         {
           id: "subform22hProfessionalDegree",
           type: "radio",
           label:
-            "Professional degree (for example: Doctor of Medicine (M D), Doctor of Dental Surgery (D D S), Doc...",
+            "Professional degree (for example: Doctor of Medicine (M D), Doctor of Dental Surgery (D D S), Doc.",
           required: true,
           options: [
             {
@@ -25814,7 +25454,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos;s Highest Level of Education, select only one box. Check H. Professional degree (for example: Doctor of Medicine (M D), Doctor of Dental Surgery (D D S), Doctor of Veterinary Medicine (D V M), Bachelor of Laws (L L B), Juris Doctor (J D)).",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos;s Highest Level of Education, H. Professional degree (for example: Doctor of Medicine (M D), Doctor of Dental Surgery (D D S), Doctor of Veterinary Medicine (D V M), Bachelor of Laws (L L B), Juris Doctor (J D)).",
         },
         {
           id: "subform22fBachelorDegree",
@@ -25831,7 +25471,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos;s Highest Level of Education, select only one box. Check F. Bachelor&apos;s degree (for Example: Bachelor of Arts (B A or A B), Bachelor f Science (B S)).",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos;s Highest Level of Education, F. Bachelor&apos;s degree (for Example: Bachelor of Arts (B A or A B), Bachelor f Science (B S)).",
         },
         {
           id: "subform22iDoctorateDegree",
@@ -25848,32 +25488,32 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos;s Highest Level of Education, select only one box. Check I. Doctorate degree (for example: Doctor of Philosophy (P H D), Doctor of Education (E D D)).",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos;s Highest Level of Education, I. Doctorate degree (for example: Doctor of Philosophy (P H D), Doctor of Education (E D D)).",
         },
         {
           id: "subform22H1BSecANo",
           type: "radio",
-          label: "Is the petitioner an H-1B dependent employer? Check No",
+          label: "Is the petitioner an H-1B dependent employer? No",
           required: true,
           options: [
             { value: "N", label: "No" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 1 Employer Information. Select All Items That Apply. A. Is the petitioner an H-1B dependent employer? Check No.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 1 Employer Information. All Items That Apply. A. Is the petitioner an H-1B dependent employer? No.",
         },
         {
           id: "subform22H1BSecAYes",
           type: "radio",
           label:
-            "Has the petitioner ever been found to be a willful violator? Check Yes",
+            "Has the petitioner ever been found to be a willful violator? Yes",
           required: true,
           options: [
             { value: "Y", label: "Yes" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 1 Employer Information. Select All Items That Apply. B. Has the petitioner ever been found to be a willful violator? Check Yes.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 1 Employer Information. All Items That Apply. B. Has the petitioner ever been found to be a willful violator? Yes.",
         },
         {
           id: "subform22H1BSecA1Yes",
@@ -25885,7 +25525,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 1 Employer Information. Select All Items That Apply. C. 1. If yes, is it because the beneficiary&apos;s annual rate of pay is equal to at least 60,000 dollars? Check Yes.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 1 Employer Information. All Items That Apply. C. 1. If yes, is it because the beneficiary&apos;s annual rate of pay is equal to at least 60,000 dollars? Yes.",
         },
         {
           id: "subform22H1BSecA2No",
@@ -25897,20 +25537,20 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 1 Employer Information. Select All Items That Apply. C. 2. Or is it because the beneficiary has a master&apos;s degree or higher degree in a specialty related to the employment? Check No.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 1 Employer Information. All Items That Apply. C. 2. Or is it because the beneficiary has a master&apos;s degree or higher degree in a specialty related to the employment? No.",
         },
         {
           id: "subform22H1BSecA1No",
           type: "radio",
           label:
-            "If yes, are more than 50 percent of those employees in H-1B or L-1A or L-1B nonimmigrant status? ...",
+            "If yes, are more than 50 percent of those employees in H-1B or L-1A or L-1B nonimmigrant status? .",
           required: true,
           options: [
             { value: "N", label: "No" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 1 Employer Information. Select All Items That Apply. D. 1. If yes, are more than 50 percent of those employees in H-1B or L-1A or L-1B nonimmigrant status? Check No.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 1 Employer Information. All Items That Apply. D. 1. If yes, are more than 50 percent of those employees in H-1B or L-1A or L-1B nonimmigrant status? No.",
         },
         {
           id: "subform22H1BSecA2Yes",
@@ -25922,7 +25562,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 1 Employer Information. Select All Items That Apply. C. 2. Or is it because the beneficiary has a master&apos;s degree or higher degree in a specialty related to the employment? Check Yes.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 1 Employer Information. All Items That Apply. C. 2. Or is it because the beneficiary has a master&apos;s degree or higher degree in a specialty related to the employment? Yes.",
         },
         {
           id: "subform22PartAq3FieldofStudy",
@@ -25930,7 +25570,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Major/Primary Field of Study",
           required: true,
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. Enter Major/Primary Field of Study.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. Major/Primary Field of Study.",
         },
         {
           id: "subform22Line6NAICSCode",
@@ -25939,7 +25579,7 @@ const I_129_DEFINITION: FormDefinition = {
             "North American Industry Classification System (N A I C S) Code",
           required: true,
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. Enter North American Industry Classification System (N A I C S) Code.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. North American Industry Classification System (N A I C S) Code.",
         },
         {
           id: "subform221Line5DOTCode",
@@ -25947,7 +25587,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Dictionary of Occupational Titles (D O T) Code",
           required: true,
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 5. Enter Dictionary of Occupational Titles (D O T) Code.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 5. Dictionary of Occupational Titles (D O T) Code.",
         },
         {
           id: "subform22RateofPayPerYear",
@@ -25955,33 +25595,33 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Dollar Amount",
           required: true,
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 4. Rate of Pay Per Year. Enter Dollar Amount.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 4. Rate of Pay Per Year. Dollar Amount.",
         },
         {
           id: "subform22H1BSec2Yes",
           type: "select",
           label:
-            "Are you an institution of higher education as defined in section 1 0 1(A) of the Higher Education...",
+            "Are you an institution of higher education as defined in section 1 0 1(A) of the Higher Education.",
           required: true,
           options: [
             { value: "Y", label: "Y" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 2. Fee Exemption and/or Determination. In order for U S C I S to determine if you must pay the additional 1,500 dollar or 750 dollar American Competitiveness and Workforce Improvement Act (A C W I A) fee, answer all of the following questions. 1. Are you an institution of higher education as defined in section 1 0 1(A) of the Higher Education Act of 1965, 20 United States Code 10 0 1(A)? Check Yes.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 2. Fee Exemption and/or Determination. In order for U S C I S to determine if you must pay the additional 1,500 dollar or 750 dollar American Competitiveness and Workforce Improvement Act (A C W I A) fee, answer all of the following questions. 1. Are you an institution of higher education as defined in section 1 0 1(A) of the Higher Education Act of 1965, 20 United States Code 10 0 1(A)? Yes.",
         },
         {
           id: "subform22H1BSec2No",
           type: "select",
           label:
-            "Are you an institution of higher education as defined in section 1 0 1(A) of the Higher Education...",
+            "Are you an institution of higher education as defined in section 1 0 1(A) of the Higher Education.",
           required: true,
           options: [
             { value: "Y", label: "Y" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 2. Fee Exemption and/or Determination. In order for U S C I S to determine if you must pay the additional 1,500 dollar or 750 dollar American Competitiveness and Workforce Improvement Act (A C W I A) fee, answer all of the following questions. 1. Are you an institution of higher education as defined in section 1 0 1(A) of the Higher Education Act of 1965, 20 United States Code 10 0 1(A)? Check No.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 2. Fee Exemption and/or Determination. In order for U S C I S to determine if you must pay the additional 1,500 dollar or 750 dollar American Competitiveness and Workforce Improvement Act (A C W I A) fee, answer all of the following questions. 1. Are you an institution of higher education as defined in section 1 0 1(A) of the Higher Education Act of 1965, 20 United States Code 10 0 1(A)? No.",
         },
         {
           id: "subform23H1BSec2No",
@@ -25994,20 +25634,20 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 2. Fee Exemption and/or Determination. In order for U S C I S to determine if you must pay the additional 1,500 dollar or 750 dollar American Competitiveness and Workforce Improvement Act (A C W I A) fee, answer all of the following questions. 3. Are you a nonprofit research organization or a governmental research organization, as defined in 8 Code of Federal Regulations 2 14.2(H)(19)(I I I)(C)? Check No.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 2. Fee Exemption and/or Determination. In order for U S C I S to determine if you must pay the additional 1,500 dollar or 750 dollar American Competitiveness and Workforce Improvement Act (A C W I A) fee, answer all of the following questions. 3. Are you a nonprofit research organization or a governmental research organization, as defined in 8 Code of Federal Regulations 2 14.2(H)(19)(I I I)(C)? No.",
         },
         {
           id: "subform23H1BSec2Yes",
           type: "radio",
           label:
-            "Is this the second or subsequent request for an extension of stay that this petitioner has filed ...",
+            "Is this the second or subsequent request for an extension of stay that this petitioner has filed .",
           required: true,
           options: [
             { value: "Y", label: "Yes" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 2. Fee Exemption and/or Determination. In order for U S C I S to determine if you must pay the additional 1,500 dollar or 750 dollar American Competitiveness and Workforce Improvement Act (A C W I A) fee, answer all of the following questions. 4. Is this the second or subsequent request for an extension of stay that this petitioner has filed for this alien? Check Yes.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 2. Fee Exemption and/or Determination. In order for U S C I S to determine if you must pay the additional 1,500 dollar or 750 dollar American Competitiveness and Workforce Improvement Act (A C W I A) fee, answer all of the following questions. 4. Is this the second or subsequent request for an extension of stay that this petitioner has filed for this alien? Yes.",
         },
         {
           id: "subform23Cap",
@@ -26018,12 +25658,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "A",
               label:
-                "Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 1. Specify the type of H-1B petition you are filing. Select only one box. Check A. Cap H-1B Bachelor&apos",
+                "Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 1. Specify the type of H-1B petition you are filing. A. Cap H-1B Bachelor&apos",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 1. Specify the type of H-1B petition you are filing. Select only one box. Check A. Cap H-1B Bachelor&apos;s Degree.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 1. Specify the type of H-1B petition you are filing. A. Cap H-1B Bachelor&apos;s Degree.",
         },
         {
           id: "subform23Cap1",
@@ -26034,12 +25674,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "B",
               label:
-                "and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 1. Specify the type of H-1 B petition you are filing. Select only one box. Check B. Cap H-1 B U. S. Master&apos",
+                "and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 1. Specify the type of H-1 B petition you are filing. B. Cap H-1 B U. S. Master&apos",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 1. Specify the type of H-1 B petition you are filing. Select only one box. Check B. Cap H-1 B U. S. Master&apos;s Degree or Higher.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 1. Specify the type of H-1 B petition you are filing. B. Cap H-1 B U. S. Master&apos;s Degree or Higher.",
         },
         {
           id: "subform23Cap2",
@@ -26050,12 +25690,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "C",
               label:
-                "H1B and H-1B1 Data ollection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 1. Specify the type of H-1 B petition you are filing. Select only one box. Check C. Cap H-1B1 Chile/Singapore.",
+                "H1B and H-1B1 Data ollection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 1. Specify the type of H-1 B petition you are filing. C. Cap H-1B1 Chile/Singapore.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 1. Specify the type of H-1 B petition you are filing. Select only one box. Check C. Cap H-1B1 Chile/Singapore.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 1. Specify the type of H-1 B petition you are filing. C. Cap H-1B1 Chile/Singapore.",
         },
         {
           id: "subform23Cap3",
@@ -26066,12 +25706,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "D",
               label:
-                "H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 1. Specify the type of H-1B petition you are filing. Select only one box. Check D. Cap Exempt.",
+                "H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 1. Specify the type of H-1B petition you are filing. D. Cap Exempt.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 1. Specify the type of H-1B petition you are filing. Select only one box. Check D. Cap Exempt.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 1. Specify the type of H-1B petition you are filing. D. Cap Exempt.",
         },
         {
           id: "subform23H1bSec3TypeofDegree",
@@ -26079,16 +25719,15 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Type of United States Degree",
           required: true,
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 2. If you answered Item Number 1. B. &quot;CAP H-1B U. S. Master&apos;s Degree or Higher,&quot; provide the following information regarding the master&apos;s or higher degree the beneficiary has earned from a U. S. institution as defined in 20 United States Code 10 0 1(A): C. Enter Type of United States Degree.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 2. If you answered B. &quot;CAP H-1B U. S. Master&apos;s Degree or Higher,&quot; following information regarding the master&apos;s or higher degree the beneficiary has earned from a U. S. institution as defined in 20 United States Code 10 0 1(A): C. Type of United States Degree.",
         },
         {
           id: "subform23H1bSec3DateDegreeAwarded",
           type: "date",
-          label:
-            "Date Degree Awarded as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "Date Degree Awarded",
           required: true,
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 2. If you answered Item Number 1. B. &quot;CAP H-1B U. S. Master&apos;s Degree or Higher,&quot; provide the following information regarding the master&apos;s or higher degree the beneficiary has earned from a U. S. institution as defined in 20 United States Code 10 0 1(A): B. Enter Date Degree Awarded as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 2. If you answered B. &quot;CAP H-1B U. S. Master&apos;s Degree or Higher,&quot; following information regarding the master&apos;s or higher degree the beneficiary has earned from a U. S. institution as defined in 20 United States Code 10 0 1(A): B. Date Degree Awarded.",
         },
         {
           id: "subform23H1bSec3Name",
@@ -26097,7 +25736,7 @@ const I_129_DEFINITION: FormDefinition = {
             "The Name of the United States institution of higher education",
           required: true,
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 2. If you answered Item Number 1. B. &quot;CAP H-1B U. S. Master&apos;s Degree or Higher,&quot; provide the following information regarding the master&apos;s or higher degree the beneficiary has earned from a U. S. institution as defined in 20 United States Code 10 0 1(A): A. Enter the Name of the United States institution of higher education.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 2. If you answered B. &quot;CAP H-1B U. S. Master&apos;s Degree or Higher,&quot; following information regarding the master&apos;s or higher degree the beneficiary has earned from a U. S. institution as defined in 20 United States Code 10 0 1(A): A. Name of the United States institution of higher education.",
         },
         {
           id: "subform23H1bSec3StreetName",
@@ -26105,7 +25744,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Street Number and Name",
           required: true,
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 2. If you answered Item Number 1. B. &quot;CAP H-1B U. S. Master&apos;s Degree or Higher,&quot; provide the following information regarding the master&apos;s or higher degree the beneficiary has earned from a U. S. institution as defined in 20 United States Code 10 0 1(A): D. Address of the United States institution of higher education. Enter Street Number and Name.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 2. If you answered B. &quot;CAP H-1B U. S. Master&apos;s Degree or Higher,&quot; following information regarding the master&apos;s or higher degree the beneficiary has earned from a U. S. institution as defined in 20 United States Code 10 0 1(A): D. Address of the United States institution of higher education. Street Number and Name.",
         },
         {
           id: "subform23Sec3AptSteFlrNumber",
@@ -26113,56 +25752,56 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Apartment, Suite or Floor Number",
           required: true,
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 2. If you answered Item Number 1. B. &quot;CAP H-1B U. S. Master&apos;s Degree or Higher,&quot; provide the following information regarding the master&apos;s or higher degree the beneficiary has earned from a U. S. institution as defined in 20 United States Code 10 0 1(A): D. Address of the United States institution of higher education. If Apartment, Suite or Floor is Checked, Enter Apartment, Suite or Floor Number.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 2. If you answered B. &quot;CAP H-1B U. S. Master&apos;s Degree or Higher,&quot; following information regarding the master&apos;s or higher degree the beneficiary has earned from a U. S. institution as defined in 20 United States Code 10 0 1(A): D. Address of the United States institution of higher education. If Apartment, Suite or Floor is Checked, Apartment, Suite or Floor Number.",
         },
         {
           id: "subform23LinebUnit",
           type: "select",
-          label: "Check Floor",
+          label: "Floor",
           required: true,
           options: [
             { value: "FLR", label: "FLR" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 2. If you answered Item Number 1. B. &quot;CAP H-1B U. S. Master&apos;s Degree or Higher,&quot; provide the following information regarding the master&apos;s or higher degree the beneficiary has earned from a U. S. institution as defined in 20 United States Code 10 0 1(A): D. Address of the United States institution of higher education. Check Floor.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 2. If you answered B. &quot;CAP H-1B U. S. Master&apos;s Degree or Higher,&quot; following information regarding the master&apos;s or higher degree the beneficiary has earned from a U. S. institution as defined in 20 United States Code 10 0 1(A): D. Address of the United States institution of higher education. Floor.",
         },
         {
           id: "subform23LinebUnit1",
           type: "select",
-          label: "Check Suite",
+          label: "Suite",
           required: true,
           options: [
             { value: "STE", label: "STE" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 2. If you answered Item Number 1. B. &quot;CAP H-1B U. S. Master&apos;s Degree or Higher,&quot; provide the following information regarding the master&apos;s or higher degree the beneficiary has earned from a U. S. institution as defined in 20 United States Code 10 0 1(A): D. Address of the United States institution of higher education. Check Suite.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 2. If you answered B. &quot;CAP H-1B U. S. Master&apos;s Degree or Higher,&quot; following information regarding the master&apos;s or higher degree the beneficiary has earned from a U. S. institution as defined in 20 United States Code 10 0 1(A): D. Address of the United States institution of higher education. Suite.",
         },
         {
           id: "subform23LinebUnit2",
           type: "select",
-          label: "Check Apartment",
+          label: "Apartment",
           required: true,
           options: [
             { value: "APT", label: "APT" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 2. If you answered Item Number 1. B. &quot;CAP H-1B U. S. Master&apos;s Degree or Higher,&quot; provide the following information regarding the master&apos;s or higher degree the beneficiary has earned from a U. S. institution as defined in 20 United States Code 10 0 1(A): D. Address of the United States institution of higher education. Check Apartment.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 2. If you answered B. &quot;CAP H-1B U. S. Master&apos;s Degree or Higher,&quot; following information regarding the master&apos;s or higher degree the beneficiary has earned from a U. S. institution as defined in 20 United States Code 10 0 1(A): D. Address of the United States institution of higher education. Apartment.",
         },
         {
           id: "subform24PartC3aCheckbox",
           type: "select",
           label:
-            "The petitioner is an institution of higher education as defined in section 1 0 1(A) of the Higher...",
+            "The petitioner is an institution of higher education as defined in section 1 0 1(A) of the Higher.",
           required: true,
           options: [
-            { value: "1", label: "1" },
-            { value: "Off", label: "Off" },
+            { value: "Yes", label: "Yes" },
+            { value: "No", label: "No" },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered Item Number 1. D. &quot;CAP Exempt,&quot; you must specify the reason or reasons this petition is exempt from the numerical limitation for H-1B classification. Check A. The petitioner is an institution of higher education as defined in section 1 0 1(A) of the Higher Education Act, of 1965, 20 United States Code 10 0 1(A).",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered D. &quot;CAP Exempt,&quot; you must specify the reason or reasons this petition is exempt from the numerical limitation for H-1B classification. A. The petitioner is an institution of higher education as defined in section 1 0 1(A) of the Higher Education Act, of 1965, 20 United States Code 10 0 1(A).",
         },
         {
           id: "subform24PartC3cCheckbox",
@@ -26171,28 +25810,24 @@ const I_129_DEFINITION: FormDefinition = {
             "The petitioner is a nonprofit research organization or a governmental research organization as defined in 8 Code of Federal Regulations 2 14",
           required: true,
           options: [
-            {
-              value: "1",
-              label:
-                "Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered Item Number 1. D. &quot",
-            },
-            { value: "Off", label: "Off" },
+            { value: "Yes", label: "Yes" },
+            { value: "No", label: "No" },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered Item Number 1. D. &quot;CAP Exempt,&quot; you must specify the reason or reasons this petition is exempt from the numerical limitation for H-1B classification. Check C. The petitioner is a nonprofit research organization or a governmental research organization as defined in 8 Code of Federal Regulations 2 14.2(H)(19)(III)(C).",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered D. &quot;CAP Exempt,&quot; you must specify the reason or reasons this petition is exempt from the numerical limitation for H-1B classification. C. The petitioner is a nonprofit research organization or a governmental research organization as defined in 8 Code of Federal Regulations 2 14.2(H)(19)(III)(C).",
         },
         {
           id: "subform24PartC3bCheckbox",
           type: "select",
           label:
-            "The petitioner is a nonprofit entity related to or affiliated with an institution of higher educa...",
+            "The petitioner is a nonprofit entity related to or affiliated with an institution of higher educa.",
           required: true,
           options: [
-            { value: "1", label: "1" },
-            { value: "Off", label: "Off" },
+            { value: "Yes", label: "Yes" },
+            { value: "No", label: "No" },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered Item Number 1. D. &quot;CAP Exempt,&quot; you must specify the reason or reasons this petition is exempt from the numerical limitation for H-1B classification. Check  B. The petitioner is a nonprofit entity related to or affiliated with an institution of higher education as defined in section 1 0 1(A) of the Higher Education Act of 1965, 20 United States Code 10 0 1(A).",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered D. &quot;CAP Exempt,&quot; you must specify the reason or reasons this petition is exempt from the numerical limitation for H-1B classification. B. The petitioner is a nonprofit entity related to or affiliated with an institution of higher education as defined in section 1 0 1(A) of the Higher Education Act of 1965, 20 United States Code 10 0 1(A).",
         },
         {
           id: "subform24PartC3eCheckbox",
@@ -26204,96 +25839,96 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "1",
               label:
-                "Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered Item Number 1. D. &quot",
+                "Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered D. &quot",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered Item Number 1. D. &quot;CAP Exempt,&quot; you must specify the reason or reasons this petition is exempt from the numerical limitation for H-1B classification. Check E. The petitioner is requesting an amendment to or extension of stay for the beneficiary&apos;s current H-1B classification.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered D. &quot;CAP Exempt,&quot; you must specify the reason or reasons this petition is exempt from the numerical limitation for H-1B classification. E. The petitioner is requesting an amendment to or extension of stay for the beneficiary&apos;s current H-1B classification.",
         },
         {
           id: "subform24PartC3fCheckbox",
           type: "radio",
           label:
-            "The beneficiary of this petition is a J-1 nonimmigrant physician who has received a waiver based ...",
+            "The beneficiary of this petition is a J-1 nonimmigrant physician who has received a waiver based .",
           required: true,
           options: [
             {
               value: "1",
               label:
-                "Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered Item Number 1. D. &quot",
+                "Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered D. &quot",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered Item Number 1. D. &quot;CAP Exempt,&quot; you must specify the reason or reasons this petition is exempt from the numerical limitation for H-1B classification. Check F. The beneficiary of this petition is a J-1 nonimmigrant physician who has received a waiver based on section 2 14(l) of the Act.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered D. &quot;CAP Exempt,&quot; you must specify the reason or reasons this petition is exempt from the numerical limitation for H-1B classification. F. The beneficiary of this petition is a J-1 nonimmigrant physician who has received a waiver based on section 2 14(l) of the Act.",
         },
         {
           id: "subform24PartC3dCheckbox",
           type: "radio",
           label:
-            "That directly and predominately furthers the normal, primary, or essential purpose, mission, obje...",
+            "That directly and predominately furthers the normal, primary, or essential purpose, mission, obje.",
           required: true,
           options: [
             {
               value: "1",
               label:
-                "Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered Item Number 1. D. &quot",
+                "Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered D. &quot",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered Item Number 1. D. &quot;CAP Exempt,&quot; you must specify the reason or reasons this petition is exempt from the numerical limitation for H-1B classification. Check D. The petitioner will employ the beneficiary to perform job duties at a qualifying institution, see Item Numbers 3. A. through 3. C. above. That directly and predominately furthers the normal, primary, or essential purpose, mission, objectives, or function of the qualifying institution, namely higher education or nonprofit or government research.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered D. &quot;CAP Exempt,&quot; you must specify the reason or reasons this petition is exempt from the numerical limitation for H-1B classification. D. The petitioner will employ the beneficiary to perform job duties at a qualifying institution, see Item Numbers 3. A. through 3. C. above. That directly and predominately furthers the normal, primary, or essential purpose, mission, objectives, or function of the qualifying institution, namely higher education or nonprofit or government research.",
         },
         {
           id: "subform24PartC3gCheckbox",
           type: "radio",
           label:
-            "The beneficiary of this petition has been counted against the cap and: (1) was previously granted...",
+            "The beneficiary of this petition has been counted against the cap and: (1) was previously granted.",
           required: true,
           options: [
             {
               value: "1",
               label:
-                "Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered Item Number 1. D. &quot",
+                "Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered D. &quot",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered Item Number 1. D. &quot;CAP Exempt,&quot; you must specify the reason or reasons this petition is exempt from the numerical limitation for H-1B classification. Check G. The beneficiary of this petition has been counted against the cap and: (1) was previously granted status as an H-1B nonimmigrant in the past 6 years, (2) is applying from abroad to reclaim the remaining portion of the 6 years, or (3) is seeking an extension beyond the 6-year limitation based upon sections 1 04(c) or 1 06(A) of the American Competitiveness in the Twenty-First Century Act (A C 21).",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered D. &quot;CAP Exempt,&quot; you must specify the reason or reasons this petition is exempt from the numerical limitation for H-1B classification. G. The beneficiary of this petition has been counted against the cap and: (1) was previously granted status as an H-1B nonimmigrant in the past 6 years, (2) is applying from abroad to reclaim the remaining portion of the 6 years, or (3) is seeking an extension beyond the 6-year limitation based upon sections 1 04(c) or 1 06(A) of the American Competitiveness in the Twenty-First Century Act (A C 21).",
         },
         {
           id: "subform24PartC3hCheckbox",
           type: "radio",
           label:
-            "The petitioner is an employer subject to the Guam-Commonwealth of the Northern Mariana Islands (C...",
+            "The petitioner is an employer subject to the Guam-Commonwealth of the Northern Mariana Islands (C.",
           required: true,
           options: [
             {
               value: "1",
               label:
-                "Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered Item Number 1. D. &quot",
+                "Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered D. &quot",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered Item Number 1. D. &quot;CAP Exempt,&quot; you must specify the reason or reasons this petition is exempt from the numerical limitation for H-1B classification. Check H. The petitioner is an employer subject to the Guam-Commonwealth of the Northern Mariana Islands (C N M I) cap exemption pursuant to Public Law 1 10-2 29.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered D. &quot;CAP Exempt,&quot; you must specify the reason or reasons this petition is exempt from the numerical limitation for H-1B classification. H. The petitioner is an employer subject to the Guam-Commonwealth of the Northern Mariana Islands (C N M I) cap exemption pursuant to Public Law 1 10-2 29.",
         },
         {
           id: "subform24H1BSec4Yes",
           type: "radio",
-          label: "Check Yes",
+          label: "Yes",
           required: true,
           options: [
             { value: "Y", label: "Yes" },
             {
               value: "Off",
               label:
-                "Site Assignment of H-1B Beneficiaries. 1. The beneficiary of this petition will be assigned to work at an off-site location for all or part of the period for which H-1B classification sought. Check Yes.",
+                "Site Assignment of H-1B Beneficiaries. 1. The beneficiary of this petition will be assigned to work at an off-site location for all or part of the period for which H-1B classification sought. Yes.",
             },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 4. Off-Site Assignment of H-1B Beneficiaries. 1. The beneficiary of this petition will be assigned to work at an off-site location for all or part of the period for which H-1B classification sought. Check Yes.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 4. Off-Site Assignment of H-1B Beneficiaries. 1. The beneficiary of this petition will be assigned to work at an off-site location for all or part of the period for which H-1B classification sought. Yes.",
         },
         {
           id: "subform24H1BSec4No",
@@ -26305,11 +25940,11 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "Off",
               label:
-                "Site Assignment of H-1B Beneficiaries. 1. The beneficiary of this petition will be assigned to work at an off-site location for all or part of the period for which H-1B classification sought. Check No. If no",
+                "Site Assignment of H-1B Beneficiaries. 1. The beneficiary of this petition will be assigned to work at an off-site location for all or part of the period for which H-1B classification sought. No. If no",
             },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 4. Off-Site Assignment of H-1B Beneficiaries. 1. The beneficiary of this petition will be assigned to work at an off-site location for all or part of the period for which H-1B classification sought. Check No. If no, do not complete Item Numbers 2. and 3.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 4. Off-Site Assignment of H-1B Beneficiaries. 1. The beneficiary of this petition will be assigned to work at an off-site location for all or part of the period for which H-1B classification sought. No. If no, do not complete Item Numbers 2. and 3.",
         },
         {
           id: "subform25FamilyName4",
@@ -26317,7 +25952,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Name of the Petitioner",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. 1. Enter Name of the Petitioner.",
+            "L Classification Supplement to Form I-1 29. 1. Name of the Petitioner.",
         },
         {
           id: "subform25HSupFamilyName",
@@ -26325,7 +25960,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Name of the Beneficiary",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. 2. Enter Name of the Beneficiary.",
+            "L Classification Supplement to Form I-1 29. 2. Name of the Beneficiary.",
         },
         {
           id: "subform25aindividual",
@@ -26336,12 +25971,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "1",
               label:
-                "29. 3. This petition is (select only one box): Check A. An individual petition.",
+                "29. 3. This petition is (only one box): A. An individual petition.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "L Classification Supplement to Form I-1 29. 3. This petition is (select only one box): Check A. An individual petition.",
+            "L Classification Supplement to Form I-1 29. 3. This petition is (only one box): A. An individual petition.",
         },
         {
           id: "subform25bblanket",
@@ -26352,62 +25987,62 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "1",
               label:
-                "29. 3. This petition is (select only one box): Check B. A blanket petition.",
+                "29. 3. This petition is (only one box): B. A blanket petition.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "L Classification Supplement to Form I-1 29. 3. This petition is (select only one box): Check B. A blanket petition.",
+            "L Classification Supplement to Form I-1 29. 3. This petition is (only one box): B. A blanket petition.",
         },
         {
           id: "subform25LSupp",
           type: "radio",
-          label: "S.? Check No.",
+          label: "S.? No.",
           required: true,
           options: [
             { value: "N", label: "No" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "L Classification Supplement to Form I-1 29. 4. A. Does the petitioner employ 50 or more individuals in the U. S.? Check No.",
+            "L Classification Supplement to Form I-1 29. 4. A. Does the petitioner employ 50 or more individuals in the U. S.? No.",
         },
         {
           id: "subform25LSuppYes",
           type: "radio",
           label:
-            "If yes, are more than 50 percent of those employee in H-1B, L-1A or L-1B nonimmigrant status? Che...",
+            "If yes, are more than 50 percent of those employee in H-1B, L-1A or L-1B nonimmigrant status? Che.",
           required: true,
           options: [
             { value: "Y", label: "Yes" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "L Classification Supplement to Form I-1 29. 4. B. If yes, are more than 50 percent of those employee in H-1B, L-1A or L-1B nonimmigrant status? Check Yes.",
+            "L Classification Supplement to Form I-1 29. 4. B. If yes, are more than 50 percent of those employee in H-1B, L-1A or L-1B nonimmigrant status? Yes.",
         },
         {
           id: "subform25LSuppNo",
           type: "radio",
           label:
-            "If yes, are more than 50 percent of those employee in H-1B, L-1A or L-1B nonimmigrant status? Che...",
+            "If yes, are more than 50 percent of those employee in H-1B, L-1A or L-1B nonimmigrant status? Che.",
           required: true,
           options: [
             { value: "Y", label: "Yes" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "L Classification Supplement to Form I-1 29. 4. B. If yes, are more than 50 percent of those employee in H-1B, L-1A or L-1B nonimmigrant status? Check No.",
+            "L Classification Supplement to Form I-1 29. 4. B. If yes, are more than 50 percent of those employee in H-1B, L-1A or L-1B nonimmigrant status? No.",
         },
         {
           id: "subform25LSupp1",
           type: "radio",
-          label: "S.? Check Yes.",
+          label: "S.? Yes.",
           required: true,
           options: [
             { value: "Y", label: "Yes" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "L Classification Supplement to Form I-1 29. 4. A. Does the petitioner employ 50 or more individuals in the U. S.? Check Yes.",
+            "L Classification Supplement to Form I-1 29. 4. A. Does the petitioner employ 50 or more individuals in the U. S.? Yes.",
         },
         {
           id: "subform25Table2Row1Sect1Name",
@@ -26415,23 +26050,23 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Subject&apos;s Name",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to Part 9. of Form I-1 29. NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 1. Enter Subject&apos;s Name.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 1. Subject&apos;s Name.",
         },
         {
           id: "subform25Table2Row1DateFrom",
           type: "date",
-          label: "From Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "From Date",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to Part 9. of Form I-1 29. NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 1. Period of Stay. Enter From Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 1. Period of Stay. From Date.",
         },
         {
           id: "subform25Table2Row1DateTo",
           type: "date",
-          label: "To Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "To Date",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to Part 9. of Form I-1 29. NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 1. Period of Stay. Enter To Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 1. Period of Stay. To Date.",
         },
         {
           id: "subform25Table2Row2Sect1Name",
@@ -26439,23 +26074,23 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Subject&apos;s Name",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to Part 9. of Form I-1 29. NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 2. Enter Subject&apos;s Name.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 2. Subject&apos;s Name.",
         },
         {
           id: "subform25Table2Row2DateFrom",
           type: "date",
-          label: "From Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "From Date",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to Part 9. of Form I-1 29. NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 2. Period of Stay. Enter From Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 2. Period of Stay. From Date.",
         },
         {
           id: "subform25Table2Row2DateTo",
           type: "date",
-          label: "To Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "To Date",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to Part 9. of Form I-1 29. NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 2. Period of Stay. Enter To Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 2. Period of Stay. To Date.",
         },
         {
           id: "subform25Table2Row3Sect1Name",
@@ -26463,23 +26098,23 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Subject&apos;s Name",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to Part 9. of Form I-1 29. NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 3. Enter Subject&apos;s Name.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 3. Subject&apos;s Name.",
         },
         {
           id: "subform25Table2Row3DateFrom",
           type: "date",
-          label: "From Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "From Date",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to Part 9. of Form I-1 29. NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 3. Period of Stay. Enter From Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 3. Period of Stay. From Date.",
         },
         {
           id: "subform25Table2Row3DateTo",
           type: "date",
-          label: "To Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "To Date",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to Part 9. of Form I-1 29. NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 3. Period of Stay. Enter To Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 3. Period of Stay. To Date.",
         },
         {
           id: "subform25Table2Row4Sect1Name",
@@ -26487,23 +26122,23 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Subject&apos;s Name",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to Part 9. of Form I-1 29. NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 4. Enter Subject&apos;s Name.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 4. Subject&apos;s Name.",
         },
         {
           id: "subform25Table2Row4DateFrom",
           type: "date",
-          label: "From Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "From Date",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to Part 9. of Form I-1 29. NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 4. Period of Stay. Enter From Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 4. Period of Stay. From Date.",
         },
         {
           id: "subform25Table2Row4DateTo",
           type: "date",
-          label: "To Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "To Date",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to Part 9. of Form I-1 29. NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 4. Period of Stay. Enter To Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 4. Period of Stay. To Date.",
         },
         {
           id: "subform25Table2Row41Sect1Name",
@@ -26511,23 +26146,23 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Subject&apos;s Name",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to Part 9. of Form I-1 29. NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 5. Enter Subject&apos;s Name.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 5. Subject&apos;s Name.",
         },
         {
           id: "subform25Table2Row41DateFrom",
           type: "date",
-          label: "From Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "From Date",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to Part 9. of Form I-1 29. NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 5. Period of Stay. Enter From Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 5. Period of Stay. From Date.",
         },
         {
           id: "subform25Table2Row41DateTo",
           type: "date",
-          label: "To Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "To Date",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to Part 9. of Form I-1 29. NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 5. Period of Stay. Enter To Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 5. Period of Stay. To Date.",
         },
         {
           id: "subform25Table2Row42Sect1Name",
@@ -26535,23 +26170,23 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Subject&apos;s Name",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to Part 9. of Form I-1 29. NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 6. Enter Subject&apos;s Name.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 6. Subject&apos;s Name.",
         },
         {
           id: "subform25Table2Row42DateFrom",
           type: "date",
-          label: "From Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "From Date",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to Part 9. of Form I-1 29. NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 6. Period of Stay. Enter From Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 6. Period of Stay. From Date.",
         },
         {
           id: "subform25Table2Row42DateTo",
           type: "date",
-          label: "To Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "To Date",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to Part 9. of Form I-1 29. NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 6. Period of Stay. Enter To Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 6. Period of Stay. To Date.",
         },
         {
           id: "subform25Table2Row43Sect1Name",
@@ -26559,23 +26194,23 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Subject&apos;s Name",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to Part 9. of Form I-1 29. NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 7. Enter Subject&apos;s Name.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 7. Subject&apos;s Name.",
         },
         {
           id: "subform25Table2Row43DateFrom",
           type: "date",
-          label: "From Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "From Date",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to Part 9. of Form I-1 29. NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 7. Period of Stay. Enter From Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 7. Period of Stay. From Date.",
         },
         {
           id: "subform25Table2Row43DateTo",
           type: "date",
-          label: "To Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "To Date",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to Part 9. of Form I-1 29. NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 7. Period of Stay. Enter To Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 7. Period of Stay. To Date.",
         },
         {
           id: "subform25aL1A",
@@ -26586,12 +26221,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "1",
               label:
-                "29. Section 1. Complete This Section If Filing For An Individual Petition. 1. Classification sought (select only one box): Check A. L-1A manager or executive.",
+                "29. Section 1. Complete This Section If Filing For An Individual Petition. 1. Classification sought (only one box): A. L-1A manager or executive.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 1. Classification sought (select only one box): Check A. L-1A manager or executive.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 1. Classification sought (only one box): A. L-1A manager or executive.",
         },
         {
           id: "subform25bL1B",
@@ -26602,12 +26237,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "1",
               label:
-                "29. Section 1. Complete This Section If Filing For An Individual Petition. 1. Classification sought (select only one box): Check B. L-1B specialized knowledge.",
+                "29. Section 1. Complete This Section If Filing For An Individual Petition. 1. Classification sought (only one box): B. L-1B specialized knowledge.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 1. Classification sought (select only one box): Check B. L-1B specialized knowledge.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 1. Classification sought (only one box): B. L-1B specialized knowledge.",
         },
         {
           id: "subform25AptSteFlrNumber",
@@ -26615,12 +26250,12 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Apartment, Suite or Floor Number",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 4 Address of employer abroad. If Apartment, Suite or Floor is Checked, Enter Apartment, Suite or Floor Number.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 4 Address of employer abroad. If Apartment, Suite or Floor is Checked, Apartment, Suite or Floor Number.",
         },
         {
           id: "subform25LClassUnit",
           type: "radio",
-          label: "Check Floor",
+          label: "Floor",
           required: true,
           options: [
             { value: "", label: "None" },
@@ -26628,12 +26263,12 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "off", label: "Off" },
           ],
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 4 Address of employer abroad. Check Floor.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 4 Address of employer abroad. Floor.",
         },
         {
           id: "subform25LClassUnit1",
           type: "radio",
-          label: "Check Suite",
+          label: "Suite",
           required: true,
           options: [
             { value: "", label: "None" },
@@ -26641,12 +26276,12 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "off", label: "Off" },
           ],
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 4 Address of employer abroad. Check Suite.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 4 Address of employer abroad. Suite.",
         },
         {
           id: "subform25LClassUnit2",
           type: "radio",
-          label: "Check Apartment",
+          label: "Apartment",
           required: true,
           options: [
             { value: "", label: "None" },
@@ -26654,7 +26289,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "off", label: "Off" },
           ],
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 4 Address of employer abroad. Check Apartment.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 4 Address of employer abroad. Apartment.",
         },
         {
           id: "subform25LSuppNameofEmployerAbroad",
@@ -26662,7 +26297,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Name of employer abroad",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 3. Enter Name of employer abroad.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 3. Name of employer abroad.",
         },
         {
           id: "subform27JobDescription1",
@@ -26670,7 +26305,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Description",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 7. Describe the beneficiary&apos;s proposed duties in the United States. Enter Description.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 7. Describe the beneficiary&apos;s proposed duties in the United States. Description.",
         },
         {
           id: "subform27JobDescription2",
@@ -26678,23 +26313,23 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Summary",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 8. Summarize the beneficiary&apos;s education and work experience. Enter Summary.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 8. Summarize the beneficiary&apos;s education and work experience. Summary.",
         },
         {
           id: "subform27Table3Row1q5DateFrom",
           type: "date",
-          label: "From Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "From Date",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 1. Dates of Employment. Enter From Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 1. Dates of Employment. From Date.",
         },
         {
           id: "subform27Table3Row1q5DateTo",
           type: "date",
-          label: "To Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "To Date",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 1. Dates of Employment. Enter To Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 1. Dates of Employment. To Date.",
         },
         {
           id: "subform27Table3Row1q5Explanation",
@@ -26702,23 +26337,23 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Explanation of Interruptions",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 1. Enter Explanation of Interruptions.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 1. Explanation of Interruptions.",
         },
         {
           id: "subform27Table3Row2q5DateFrom",
           type: "date",
-          label: "From Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "From Date",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 2. Dates of Employment. Enter From Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 2. Dates of Employment. From Date.",
         },
         {
           id: "subform27Table3Row2q5DateTo",
           type: "date",
-          label: "To Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "To Date",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 2. Dates of Employment. Enter To Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 2. Dates of Employment. To Date.",
         },
         {
           id: "subform27Table3Row2q5Explanation",
@@ -26726,23 +26361,23 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Explanation of Interruptions",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 2. Enter Explanation of Interruptions.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 2. Explanation of Interruptions.",
         },
         {
           id: "subform27Table3Row3q5DateFrom",
           type: "date",
-          label: "From Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "From Date",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 3. Dates of Employment. Enter From Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 3. Dates of Employment. From Date.",
         },
         {
           id: "subform27Table3Row3q5DateTo",
           type: "date",
-          label: "To Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "To Date",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 3. Dates of Employment. Enter To Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 3. Dates of Employment. To Date.",
         },
         {
           id: "subform27Table3Row3q5Explanation",
@@ -26750,23 +26385,23 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Explanation of Interruptions",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 3. Enter Explanation of Interruptions.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 3. Explanation of Interruptions.",
         },
         {
           id: "subform27Table3Row4q5DateFrom",
           type: "date",
-          label: "From Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "From Date",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 4. Dates of Employment. Enter From Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 4. Dates of Employment. From Date.",
         },
         {
           id: "subform27Table3Row4q5DateTo",
           type: "date",
-          label: "To Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "To Date",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 4. Dates of Employment. Enter To Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 4. Dates of Employment. To Date.",
         },
         {
           id: "subform27Table3Row4q5Explanation",
@@ -26774,23 +26409,23 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Explanation of Interruptions",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 4. Enter Explanation of Interruptions.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 4. Explanation of Interruptions.",
         },
         {
           id: "subform27Table3Row41q5DateFrom",
           type: "date",
-          label: "From Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "From Date",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 5. Dates of Employment. Enter From Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 5. Dates of Employment. From Date.",
         },
         {
           id: "subform27Table3Row41q5DateTo",
           type: "date",
-          label: "To Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "To Date",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 5. Dates of Employment. Enter To Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 5. Dates of Employment. To Date.",
         },
         {
           id: "subform27Table3Row41q5Explanation",
@@ -26798,23 +26433,23 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Explanation of Interruptions",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 5. Enter Explanation of Interruptions.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 5. Explanation of Interruptions.",
         },
         {
           id: "subform27Table3Row42q5DateFrom",
           type: "date",
-          label: "From Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "From Date",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 6. Dates of Employment. Enter From Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 6. Dates of Employment. From Date.",
         },
         {
           id: "subform27Table3Row42q5DateTo",
           type: "date",
-          label: "To Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "To Date",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 6. Dates of Employment. Enter To Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 6. Dates of Employment. To Date.",
         },
         {
           id: "subform27Table3Row42q5Explanation",
@@ -26822,7 +26457,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Explanation of Interruptions",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 6. Enter Explanation of Interruptions.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 6. Explanation of Interruptions.",
         },
         {
           id: "subform27JobDescription3",
@@ -26830,7 +26465,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Description",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 6. Describe the beneficiary&apos;s duties abroad for the 3 years preceding the filing of the petition. (If the beneficiary is currently inside the United States, describe the beneficiary&apos;s duties abroad for the 3 years preceding the beneficiary&apos;s admission to the United States.) Enter Description.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 6. Describe the beneficiary&apos;s duties abroad for the 3 years preceding the filing of the petition. (If the beneficiary is currently inside the United States, describe the beneficiary&apos;s duties abroad for the 3 years preceding the beneficiary&apos;s admission to the United States.) Description.",
         },
         {
           id: "subform27aParent",
@@ -26841,12 +26476,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "1",
               label:
-                "29. Section 1. Complete This Section If Filing For An Individual Petition. 9. How is the U. S. company related to the company abroad? (select only one box). Check A. Parent.",
+                "29. Section 1. Complete This Section If Filing For An Individual Petition. 9. How is the U. S. company related to the company abroad? (only one box). A. Parent.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 9. How is the U. S. company related to the company abroad? (select only one box). Check A. Parent.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 9. How is the U. S. company related to the company abroad? (only one box). A. Parent.",
         },
         {
           id: "subform27bBranch",
@@ -26857,12 +26492,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "1",
               label:
-                "29. Section 1. Complete This Section If Filing For An Individual Petition. 9. How is the U. S. company related to the company abroad? (select only one box). Check B. Branch.",
+                "29. Section 1. Complete This Section If Filing For An Individual Petition. 9. How is the U. S. company related to the company abroad? (only one box). B. Branch.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 9. How is the U. S. company related to the company abroad? (select only one box). Check B. Branch.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 9. How is the U. S. company related to the company abroad? (only one box). B. Branch.",
         },
         {
           id: "subform27cSubsidiary",
@@ -26873,12 +26508,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "1",
               label:
-                "29. Section 1. Complete This Section If Filing For An Individual Petition. 9. How is the U. S. company related to the company abroad? (select only one box). Check C. Subsidiary.",
+                "29. Section 1. Complete This Section If Filing For An Individual Petition. 9. How is the U. S. company related to the company abroad? (only one box). C. Subsidiary.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 9. How is the U. S. company related to the company abroad? (select only one box). Check C. Subsidiary.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 9. How is the U. S. company related to the company abroad? (only one box). C. Subsidiary.",
         },
         {
           id: "subform27dAffiliate",
@@ -26889,12 +26524,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "1",
               label:
-                "29. Section 1. Complete This Section If Filing For An Individual Petition. 9. How is the U. S. company related to the company abroad? (select only one box). Check D. Affiliate.",
+                "29. Section 1. Complete This Section If Filing For An Individual Petition. 9. How is the U. S. company related to the company abroad? (only one box). D. Affiliate.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 9. How is the U. S. company related to the company abroad? (select only one box). Check D. Affiliate.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 9. How is the U. S. company related to the company abroad? (only one box). D. Affiliate.",
         },
         {
           id: "subform27eJointVenture",
@@ -26905,12 +26540,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "1",
               label:
-                "29. Section 1. Complete This Section If Filing For An Individual Petition. 9. How is the U. S. company related to the company abroad? (select only one box). Check E. Joint Venture.",
+                "29. Section 1. Complete This Section If Filing For An Individual Petition. 9. How is the U. S. company related to the company abroad? (only one box). E. Joint Venture.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 9. How is the U. S. company related to the company abroad? (select only one box). Check E. Joint Venture.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 9. How is the U. S. company related to the company abroad? (only one box). E. Joint Venture.",
         },
         {
           id: "subform29JobDescription4",
@@ -26918,16 +26553,16 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Description",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. If you are seeking L-1B specialized knowledge status for an individual, answer the following question: 13. C. If you answered yes to the preceding question, describe the reasons why placement at another worksite outside the petitioner, subsidiary, affiliate, or parent is needed. Include a description of how the beneficiary&apos;s duties at another worksite relate to the need for the specialized knowledge he or she possesses. If you need additional space to respond to this question, proceed to Part 10. of the Form I-1 29, and type or print your explanation. Enter Description.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. If you are seeking L-1B specialized knowledge status for an individual, answer the following question: 13. C. If you answered yes to the preceding question, describe the reasons why placement at another worksite outside the petitioner, subsidiary, affiliate, or parent is needed. Include a description of how the beneficiary&apos;s duties at another worksite relate to the need for the specialized knowledge he or she possesses. If you need additional space to respond to this question, proceed to Description.",
         },
         {
           id: "subform29Table4Row1",
           type: "text",
           label:
-            "Percentage of company stock ownership and managerial control of each company that has a qualifyin...",
+            "Percentage of company stock ownership and managerial control of each company that has a qualifyin.",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 10. Describe the percentage of stock ownership and managerial control of each company that has a qualifying relationship. Provide the Federal Employer Identification Number for each U. S. company that has a qualifying relationship. Row 1. Enter Percentage of company stock ownership and managerial control of each company that has a qualifying relationship.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 10. Describe the percentage of stock ownership and managerial control of each company that has a qualifying relationship. Federal Employer Identification Number for each U. S. company that has a qualifying relationship. Row 1. Percentage of company stock ownership and managerial control of each company that has a qualifying relationship.",
         },
         {
           id: "subform29Table4Row1FEIN",
@@ -26935,16 +26570,16 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Company that has a qualifying relationship",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 10. Describe the percentage of stock ownership and managerial control of each company that has a qualifying relationship. Provide the Federal Employer Identification Number for each U. S. company that has a qualifying relationship. Row 1. Enter Federal Employer Identification Number for each U. S. company that has a qualifying relationship.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 10. Describe the percentage of stock ownership and managerial control of each company that has a qualifying relationship. Federal Employer Identification Number for each U. S. company that has a qualifying relationship. Row 1. Federal Employer Identification Number for each U. S. company that has a qualifying relationship.",
         },
         {
           id: "subform29Table4Row2",
           type: "text",
           label:
-            "Percentage of company stock ownership and managerial control of each company that has a qualifyin...",
+            "Percentage of company stock ownership and managerial control of each company that has a qualifyin.",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 10. Describe the percentage of stock ownership and managerial control of each company that has a qualifying relationship. Provide the Federal Employer Identification Number for each U. S. company that has a qualifying relationship. Row 2. Enter Percentage of company stock ownership and managerial control of each company that has a qualifying relationship.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 10. Describe the percentage of stock ownership and managerial control of each company that has a qualifying relationship. Federal Employer Identification Number for each U. S. company that has a qualifying relationship. Row 2. Percentage of company stock ownership and managerial control of each company that has a qualifying relationship.",
         },
         {
           id: "subform29Table4Row2FEIN",
@@ -26952,16 +26587,16 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Company that has a qualifying relationship",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 10. Describe the percentage of stock ownership and managerial control of each company that has a qualifying relationship. Provide the Federal Employer Identification Number for each U. S. company that has a qualifying relationship. Row 2. Enter Federal Employer Identification Number for each U. S. company that has a qualifying relationship.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 10. Describe the percentage of stock ownership and managerial control of each company that has a qualifying relationship. Federal Employer Identification Number for each U. S. company that has a qualifying relationship. Row 2. Federal Employer Identification Number for each U. S. company that has a qualifying relationship.",
         },
         {
           id: "subform29Table4Row3",
           type: "text",
           label:
-            "Percentage of company stock ownership and managerial control of each company that has a qualifyin...",
+            "Percentage of company stock ownership and managerial control of each company that has a qualifyin.",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 10. Describe the percentage of stock ownership and managerial control of each company that has a qualifying relationship. Provide the Federal Employer Identification Number for each U. S. company that has a qualifying relationship. Row 3. Enter Percentage of company stock ownership and managerial control of each company that has a qualifying relationship.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 10. Describe the percentage of stock ownership and managerial control of each company that has a qualifying relationship. Federal Employer Identification Number for each U. S. company that has a qualifying relationship. Row 3. Percentage of company stock ownership and managerial control of each company that has a qualifying relationship.",
         },
         {
           id: "subform29Table4Row3FEIN",
@@ -26969,16 +26604,16 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Company that has a qualifying relationship",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 10. Describe the percentage of stock ownership and managerial control of each company that has a qualifying relationship. Provide the Federal Employer Identification Number for each U. S. company that has a qualifying relationship. Row 3. Enter Federal Employer Identification Number for each U. S. company that has a qualifying relationship.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 10. Describe the percentage of stock ownership and managerial control of each company that has a qualifying relationship. Federal Employer Identification Number for each U. S. company that has a qualifying relationship. Row 3. Federal Employer Identification Number for each U. S. company that has a qualifying relationship.",
         },
         {
           id: "subform29Table4Row4",
           type: "text",
           label:
-            "Percentage of company stock ownership and managerial control of each company that has a qualifyin...",
+            "Percentage of company stock ownership and managerial control of each company that has a qualifyin.",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 10. Describe the percentage of stock ownership and managerial control of each company that has a qualifying relationship. Provide the Federal Employer Identification Number for each U. S. company that has a qualifying relationship. Row 4. Enter Percentage of company stock ownership and managerial control of each company that has a qualifying relationship.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 10. Describe the percentage of stock ownership and managerial control of each company that has a qualifying relationship. Federal Employer Identification Number for each U. S. company that has a qualifying relationship. Row 4. Percentage of company stock ownership and managerial control of each company that has a qualifying relationship.",
         },
         {
           id: "subform29Table4Row4FEIN",
@@ -26986,16 +26621,16 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Company that has a qualifying relationship",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 10. Describe the percentage of stock ownership and managerial control of each company that has a qualifying relationship. Provide the Federal Employer Identification Number for each U. S. company that has a qualifying relationship. Row 4. Enter Federal Employer Identification Number for each U. S. company that has a qualifying relationship.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 10. Describe the percentage of stock ownership and managerial control of each company that has a qualifying relationship. Federal Employer Identification Number for each U. S. company that has a qualifying relationship. Row 4. Federal Employer Identification Number for each U. S. company that has a qualifying relationship.",
         },
         {
           id: "subform29Table4Row41",
           type: "text",
           label:
-            "Percentage of company stock ownership and managerial control of each company that has a qualifyin...",
+            "Percentage of company stock ownership and managerial control of each company that has a qualifyin.",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 10. Describe the percentage of stock ownership and managerial control of each company that has a qualifying relationship. Provide the Federal Employer Identification Number for each U. S. company that has a qualifying relationship. Row 5. Enter Percentage of company stock ownership and managerial control of each company that has a qualifying relationship.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 10. Describe the percentage of stock ownership and managerial control of each company that has a qualifying relationship. Federal Employer Identification Number for each U. S. company that has a qualifying relationship. Row 5. Percentage of company stock ownership and managerial control of each company that has a qualifying relationship.",
         },
         {
           id: "subform29Table4Row41FEIN",
@@ -27003,59 +26638,59 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Company that has a qualifying relationship",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 10. Describe the percentage of stock ownership and managerial control of each company that has a qualifying relationship. Provide the Federal Employer Identification Number for each U. S. company that has a qualifying relationship. Row 5. Enter Federal Employer Identification Number for each U. S. company that has a qualifying relationship.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 10. Describe the percentage of stock ownership and managerial control of each company that has a qualifying relationship. Federal Employer Identification Number for each U. S. company that has a qualifying relationship. Row 5. Federal Employer Identification Number for each U. S. company that has a qualifying relationship.",
         },
         {
           id: "subform29LSec1No",
           type: "radio",
           label:
-            "Company has and will have a qualifying relationship with another foreign entity during the full p...",
+            "Company has and will have a qualifying relationship with another foreign entity during the full p.",
           required: true,
           options: [
             { value: "Y", label: "Yes" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 11. Do the companies currently have the same qualifying relationship as they did during the 1-year period of the alien&apos;s employment with the company abroad? Check No. If no, provide an explanation in Part 9. of Form I-1 29 that the U. S. company has and will have a qualifying relationship with another foreign entity during the full period of the requested period of stay.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 11. Do the companies currently have the same qualifying relationship as they did during the 1-year period of the alien&apos;s employment with the company abroad? No. If no, explanation in S. company has and will have a qualifying relationship with another foreign entity during the full period of the requested period of stay.",
         },
         {
           id: "subform29LSec1Yes",
           type: "select",
           label:
-            "Is the beneficiary coming to the United States to open a new office? Check Yes",
+            "Is the beneficiary coming to the United States to open a new office? Yes",
           required: true,
           options: [
             { value: "Y", label: "Y" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 12. Is the beneficiary coming to the United States to open a new office? Check Yes.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 12. Is the beneficiary coming to the United States to open a new office? Yes.",
         },
         {
           id: "subform29LSec1",
           type: "radio",
           label:
-            "Will the beneficiary be stationed primarily offsite (at the worksite of an employer other than th...",
+            "Will the beneficiary be stationed primarily offsite (at the worksite of an employer other than th.",
           required: true,
           options: [
             { value: "N", label: "No" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. If you are seeking L-1B specialized knowledge status for an individual, answer the following question: 13. A. Will the beneficiary be stationed primarily offsite (at the worksite of an employer other than the petitioner or its affiliate, subsidiary, or parent)? Check No.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. If you are seeking L-1B specialized knowledge status for an individual, answer the following question: 13. A. Will the beneficiary be stationed primarily offsite (at the worksite of an employer other than the petitioner or its affiliate, subsidiary, or parent)? No.",
         },
         {
           id: "subform29LSec11",
           type: "radio",
           label:
-            "Will the beneficiary be stationed primarily offsite (at the worksite of an employer other than th...",
+            "Will the beneficiary be stationed primarily offsite (at the worksite of an employer other than th.",
           required: true,
           options: [
             { value: "Y", label: "Yes" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. If you are seeking L-1B specialized knowledge status for an individual, answer the following question: 13. A. Will the beneficiary be stationed primarily offsite (at the worksite of an employer other than the petitioner or its affiliate, subsidiary, or parent)? Check Yes.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. If you are seeking L-1B specialized knowledge status for an individual, answer the following question: 13. A. Will the beneficiary be stationed primarily offsite (at the worksite of an employer other than the petitioner or its affiliate, subsidiary, or parent)? Yes.",
         },
         {
           id: "subform29JobDescription5",
@@ -27063,7 +26698,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Description",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. If you are seeking L-1B specialized knowledge status for an individual, answer the following question: 13. B. If you answered yes to the preceding question, describe how and by whom the beneficiary&apos;s work will be controlled and supervised. Include a description of the amount of time each supervisor is expected to control and supervise the work. If you need additional space to respond to this question, proceed to Part 10. of the Form I-1 29, and type or print your explanation. Enter Description.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. If you are seeking L-1B specialized knowledge status for an individual, answer the following question: 13. B. If you answered yes to the preceding question, describe how and by whom the beneficiary&apos;s work will be controlled and supervised. Include a description of the amount of time each supervisor is expected to control and supervise the work. If you need additional space to respond to this question, proceed to Description.",
         },
         {
           id: "subform31Table5Row1Cell1",
@@ -27071,7 +26706,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Name and Address",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 1. Enter Name and Address.",
+            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 1. Name and Address.",
         },
         {
           id: "subform31Table5Row1Cell2",
@@ -27079,7 +26714,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Relationship",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 1. Enter Relationship.",
+            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 1. Relationship.",
         },
         {
           id: "subform31Table5Row2Cell1",
@@ -27087,7 +26722,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Name and Address",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 2. Enter Name and Address.",
+            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 2. Name and Address.",
         },
         {
           id: "subform31Table5Row2Cell2",
@@ -27095,7 +26730,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Relationship",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 2. Enter Relationship.",
+            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 2. Relationship.",
         },
         {
           id: "subform31Table5Row3Cell1",
@@ -27103,7 +26738,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Name and Address",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 3. Enter Name and Address.",
+            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 3. Name and Address.",
         },
         {
           id: "subform31Table5Row3Cell2",
@@ -27111,7 +26746,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Relationship",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 3. Enter Relationship.",
+            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 3. Relationship.",
         },
         {
           id: "subform31Table5Row4Cell1",
@@ -27119,7 +26754,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Name and Address",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 4. Enter Name and Address.",
+            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 4. Name and Address.",
         },
         {
           id: "subform31Table5Row4Cell2",
@@ -27127,7 +26762,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Relationship",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 4. Enter Relationship.",
+            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 4. Relationship.",
         },
         {
           id: "subform31Table5Row41Cell1",
@@ -27135,7 +26770,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Name and Address",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 5. Enter Name and Address.",
+            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 5. Name and Address.",
         },
         {
           id: "subform31Table5Row41Cell2",
@@ -27143,7 +26778,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Relationship",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 5. Enter Relationship.",
+            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 5. Relationship.",
         },
         {
           id: "subform31Table5Row42Cell1",
@@ -27151,7 +26786,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Name and Address",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 6. Enter Name and Address.",
+            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 6. Name and Address.",
         },
         {
           id: "subform31Table5Row42Cell2",
@@ -27159,7 +26794,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Relationship",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 6. Enter Relationship.",
+            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 6. Relationship.",
         },
         {
           id: "subform31Table5Row43Cell1",
@@ -27167,7 +26802,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Name and Address",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 7. Enter Name and Address.",
+            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 7. Name and Address.",
         },
         {
           id: "subform31Table5Row43Cell2",
@@ -27175,7 +26810,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Relationship",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 7. Enter Relationship.",
+            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 7. Relationship.",
         },
         {
           id: "subform31Table5Row44Cell1",
@@ -27183,7 +26818,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Name and Address",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 8. Enter Name and Address.",
+            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 8. Name and Address.",
         },
         {
           id: "subform31Table5Row44Cell2",
@@ -27191,7 +26826,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Relationship",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 8. Enter Relationship.",
+            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 8. Relationship.",
         },
         {
           id: "subform33FamilyName5",
@@ -27199,41 +26834,41 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Name of the Petitioner",
           required: true,
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 1. Enter Name of the Petitioner.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 1. Name of the Petitioner.",
         },
         {
           id: "subform33bO1B",
           type: "radio",
           label:
-            "O-1B Alien of extraordinary ability in the arts or extraordinary achievement in the motion pictur...",
+            "O-1B Alien of extraordinary ability in the arts or extraordinary achievement in the motion pictur.",
           required: true,
           options: [
             {
               value: "1",
               label:
-                "29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (select only one box). Check B. O-1B Alien of extraordinary ability in the arts or extraordinary achievement in the motion picture or television industry.",
+                "29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). B. O-1B Alien of extraordinary ability in the arts or extraordinary achievement in the motion picture or television industry.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (select only one box). Check B. O-1B Alien of extraordinary ability in the arts or extraordinary achievement in the motion picture or television industry.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). B. O-1B Alien of extraordinary ability in the arts or extraordinary achievement in the motion picture or television industry.",
         },
         {
           id: "subform33aO1A",
           type: "radio",
           label:
-            "O-1A Alien of extraordinary ability in sciences, education, business or athletics, not including ...",
+            "O-1A Alien of extraordinary ability in sciences, education, business or athletics, not including .",
           required: true,
           options: [
             {
               value: "1",
               label:
-                "29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (select only one box). Check A. O-1A  Alien of extraordinary ability in sciences",
+                "29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). A. O-1A Alien of extraordinary ability in sciences",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (select only one box). Check A. O-1A  Alien of extraordinary ability in sciences, education, business or athletics, not including the arts, motion picture or television industry.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). A. O-1A Alien of extraordinary ability in sciences, education, business or athletics, not including the arts, motion picture or television industry.",
         },
         {
           id: "subform33cO2",
@@ -27242,11 +26877,11 @@ const I_129_DEFINITION: FormDefinition = {
             "O-2 Accompanying alien who is coming to the United States to assist in the performance of the O-1",
           required: true,
           options: [
-            { value: "1", label: "1" },
-            { value: "Off", label: "Off" },
+            { value: "Yes", label: "Yes" },
+            { value: "No", label: "No" },
           ],
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (select only one box). Check C. O-2 Accompanying alien who is coming to the United States to assist in the performance of the O-1.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). C. O-2 Accompanying alien who is coming to the United States to assist in the performance of the O-1.",
         },
         {
           id: "subform33HSupFamilyName1",
@@ -27254,7 +26889,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Below)",
           required: true,
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. Name of the Beneficiary or if this petition includes multiple beneficiaries, the total number of beneficiaries included. 2. A. Enter Name of the Beneficiary. (Or provide the total number of beneficiaries in item 2. B. below).",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. Name of the Beneficiary or if this petition includes multiple beneficiaries, the total number of beneficiaries included. 2. A. Name of the Beneficiary. (Or total number of beneficiaries in item 2. B. below).",
         },
         {
           id: "subform33TtlNumberofBeneficiaries1",
@@ -27262,7 +26897,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Number of Beneficiaries",
           required: true,
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. Name of the Beneficiary or if this petition includes multiple beneficiaries, the total number of beneficiaries included. 2. B. Provide the total number of beneficiaries. Enter Number of Beneficiaries.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. Name of the Beneficiary or if this petition includes multiple beneficiaries, the total number of beneficiaries included. 2. B. total number of beneficiaries. Number of Beneficiaries.",
         },
         {
           id: "subform33JobDescription6",
@@ -27270,7 +26905,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "List",
           required: true,
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 6. If filing for an O-2 or P support classification, list dates of the beneficiary&apos;s prior work experience under the principal O-1 or P alien. Enter List.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 6. If filing for an O-2 or P support classification, list dates of the beneficiary&apos;s prior work experience under the principal O-1 or P alien. List.",
         },
         {
           id: "subform33JobDescription7",
@@ -27278,7 +26913,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Description",
           required: true,
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 5. Describe the duties to be preformed. Enter Description.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 5. Describe the duties to be preformed. Description.",
         },
         {
           id: "subform33JobDescription8",
@@ -27286,7 +26921,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Explanation",
           required: true,
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 4. Explain the nature of the event. Enter Explanation.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 4. Explain the nature of the event. Explanation.",
         },
         {
           id: "subform33OandPSupp",
@@ -27298,20 +26933,20 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 7. A. Does any beneficiary in this petition have ownership interest in the petitioning organization? Check Yes. If yes, please explain in Item Number 7. B.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 7. A. Does any beneficiary in this petition have ownership interest in the petitioning organization? Yes. If yes, please explain in B.",
         },
         {
           id: "subform33OandPSupp1",
           type: "radio",
           label:
-            "Does any beneficiary in this petition have ownership interest in the petitioning organization? Ch...",
+            "Does any beneficiary in this petition have ownership interest in the petitioning organization? Ch.",
           required: true,
           options: [
             { value: "N", label: "No" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 7. A. Does any beneficiary in this petition have ownership interest in the petitioning organization? Check No.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 7. A. Does any beneficiary in this petition have ownership interest in the petitioning organization? No.",
         },
         {
           id: "subform34AptSteFlrNumber",
@@ -27319,12 +26954,12 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Apartment, Suite or Floor Number",
           required: true,
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary Ability. 10. B. Physical Address. If Apartment, Suite or Floor is Checked, Enter Apartment, Suite or Floor Number.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary Ability. 10. B. address. If Apartment, Suite or Floor is Checked, Apartment, Suite or Floor Number.",
         },
         {
           id: "subform34Unit",
           type: "radio",
-          label: "Check Floor",
+          label: "Floor",
           required: true,
           options: [
             { value: "", label: "None" },
@@ -27332,12 +26967,12 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "off", label: "Off" },
           ],
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary Ability. 10. B. Physical Address. Check Floor.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary Ability. 10. B. address. Floor.",
         },
         {
           id: "subform34Unit1",
           type: "radio",
-          label: "Check Suite",
+          label: "Suite",
           required: true,
           options: [
             { value: "", label: "None" },
@@ -27345,12 +26980,12 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "off", label: "Off" },
           ],
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary Ability. 10. B. Physical Address. Check Suite.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary Ability. 10. B. address. Suite.",
         },
         {
           id: "subform34Unit2",
           type: "radio",
-          label: "Check Apartment",
+          label: "Apartment",
           required: true,
           options: [
             { value: "", label: "None" },
@@ -27358,7 +26993,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "off", label: "Off" },
           ],
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary Ability. 10. B. Physical Address. Check Apartment.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary Ability. 10. B. address. Apartment.",
         },
         {
           id: "subform34LSuppNameofPeer",
@@ -27366,63 +27001,63 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Name of Recognized Peer/Peer Group or Labor Organization",
           required: true,
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary Ability. 10. A. Enter Name of Recognized Peer/Peer Group or Labor Organization.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary Ability. 10. A. Name of Recognized Peer/Peer Group or Labor Organization.",
         },
         {
           id: "subform34OandPSuppYes",
           type: "radio",
           label:
-            "Does an appropriate labor organization exist for the petition? Check Yes",
+            "Does an appropriate labor organization exist for the petition? Yes",
           required: true,
           options: [
             { value: "Y", label: "Yes" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 8. Does an appropriate labor organization exist for the petition? Check Yes.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 8. Does an appropriate labor organization exist for the petition? Yes.",
         },
         {
           id: "subform34OandPSupp",
           type: "radio",
           label:
-            "If no, the following information about the organization or organizations to which you have sent a...",
+            "If no, the following information about the organization or organizations to which you have sent a.",
           required: true,
           options: [
             { value: "N", label: "No" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 9. Is the required consultation or written advisory opinion being submitted with this petition? Check No - Copy of request attached. If no, provide the following information about the organization or organizations to which you have sent a duplicate of this petition.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 9. Is the required consultation or written advisory opinion being submitted with this petition? No - Copy of request attached. If no, following information about the organization or organizations to which you have sent a duplicate of this petition.",
         },
         {
           id: "subform34OandPSupp1",
           type: "radio",
           label:
-            "Is the required consultation or written advisory opinion being submitted with this petition? Chec...",
+            "Is the required consultation or written advisory opinion being submitted with this petition? Chec.",
           required: true,
           options: [
             { value: "Y", label: "Yes" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 9. Is the required consultation or written advisory opinion being submitted with this petition? Check Yes.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 9. Is the required consultation or written advisory opinion being submitted with this petition? Yes.",
         },
         {
           id: "subform34OandPSupp2",
           type: "radio",
           label:
-            "Is the required consultation or written advisory opinion being submitted with this petition? Chec...",
+            "Is the required consultation or written advisory opinion being submitted with this petition? Chec.",
           required: true,
           options: [
             {
               value: "A",
               label:
-                "Oand P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 9. Is the required consultation or written advisory opinion being submitted with this petition? Check N/",
+                "Oand P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 9. Is the required consultation or written advisory opinion being submitted with this petition? N/",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 9. Is the required consultation or written advisory opinion being submitted with this petition? Check N/A, Not Applicable.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 9. Is the required consultation or written advisory opinion being submitted with this petition? N/A, Not Applicable.",
         },
         {
           id: "subform34OandPSuppNo",
@@ -27434,7 +27069,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 8. Does an appropriate labor organization exist for the petition? Check No. If no, proceed to Part 9. and type or print your explanation.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 8. Does an appropriate labor organization exist for the petition? No. If no, proceed to Part 9. and type or print your explanation.",
         },
         {
           id: "subform34Duties1",
@@ -27442,7 +27077,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Explanation",
           required: true,
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 7. B. If you answered Yes to Item Number 7. A. Enter Explanation.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 7. B. If you answered Yes to A. Explanation.",
         },
         {
           id: "subform34PreparerDaytimePhoneNumber110d",
@@ -27450,7 +27085,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Daytime Telephone Number",
           required: true,
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary Ability. 10. D. Enter Daytime Telephone Number.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary Ability. 10. D. Daytime Telephone Number.",
         },
         {
           id: "subform34PreparerDaytimePhoneNumber111d",
@@ -27458,7 +27093,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Daytime Telephone Number",
           required: true,
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary achievement in motion pictures or television. 11. D. Enter Daytime Telephone Number.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary achievement in motion pictures or television. 11. D. Daytime Telephone Number.",
         },
         {
           id: "subform34PreparerDaytimePhoneNumber112d",
@@ -27466,7 +27101,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Daytime Telephone Number",
           required: true,
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary achievement in motion pictures or television. 12. D. Enter Daytime Telephone Number.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary achievement in motion pictures or television. 12. D. Daytime Telephone Number.",
         },
         {
           id: "subform35AptSteFlrNumber",
@@ -27474,12 +27109,12 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Apartment, Suite or Floor Number",
           required: true,
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-2 or P alien. 13. B. Complete Address. If Apartment, Suite or Floor is Checked, Enter Apartment, Suite or Floor Number.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-2 or P alien. 13. B. Complete Address. If Apartment, Suite or Floor is Checked, Apartment, Suite or Floor Number.",
         },
         {
           id: "subform35Unit",
           type: "radio",
-          label: "Check Floor",
+          label: "Floor",
           required: true,
           options: [
             { value: "", label: "None" },
@@ -27487,12 +27122,12 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "off", label: "Off" },
           ],
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-2 or P alien. 13. B. Complete Address. Check Floor.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-2 or P alien. 13. B. Complete Address. Floor.",
         },
         {
           id: "subform35Unit1",
           type: "radio",
-          label: "Check Suite",
+          label: "Suite",
           required: true,
           options: [
             { value: "", label: "None" },
@@ -27500,12 +27135,12 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "off", label: "Off" },
           ],
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-2 or P alien. 13. B. Complete Address. Check Suite.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-2 or P alien. 13. B. Complete Address. Suite.",
         },
         {
           id: "subform35Unit2",
           type: "radio",
-          label: "Check Apartment",
+          label: "Apartment",
           required: true,
           options: [
             { value: "", label: "None" },
@@ -27513,7 +27148,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "off", label: "Off" },
           ],
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-2 or P alien. 13. B. Complete Address. Check Apartment.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-2 or P alien. 13. B. Complete Address. Apartment.",
         },
         {
           id: "subform35LSuppNameofPeer",
@@ -27521,7 +27156,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Name of Labor Organization",
           required: true,
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-2 or P alien. 13. A. Enter Name of Labor Organization.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-2 or P alien. 13. A. Name of Labor Organization.",
         },
         {
           id: "subform35FamilyName6",
@@ -27529,7 +27164,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Family Name (Last Name)",
           required: true,
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 2. Statement by the Petitioner. I certify that I, the petitioner, and the employer whose offer of employment formed the basis of status (if different from the petitioner) will be jointly and severally liable for the reasonable costs of return transportation of the beneficiary abroad if the beneficiary is dismissed from employment by the employer before the end of the period of authorized stay. 1. Name of Petitioner. Enter Family Name (Last Name).",
+            "O and P Classifications Supplement to Form I-1 29. Section 2. Statement by the Petitioner. I certify that I, the petitioner, and the employer whose offer of employment formed the basis of status (if different from the petitioner) will be jointly and severally liable for the reasonable costs of return transportation of the beneficiary abroad if the beneficiary is dismissed from employment by the employer before the end of the period of authorized stay. 1. Name of Petitioner. Family Name (Last Name).",
         },
         {
           id: "subform35GivenName2",
@@ -27537,7 +27172,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Given Name (First Name)",
           required: true,
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 2. Statement by the Petitioner. I certify that I, the petitioner, and the employer whose offer of employment formed the basis of status (if different from the petitioner) will be jointly and severally liable for the reasonable costs of return transportation of the beneficiary abroad if the beneficiary is dismissed from employment by the employer before the end of the period of authorized stay. 1. Name of Petitioner. Enter Given Name (First Name).",
+            "O and P Classifications Supplement to Form I-1 29. Section 2. Statement by the Petitioner. I certify that I, the petitioner, and the employer whose offer of employment formed the basis of status (if different from the petitioner) will be jointly and severally liable for the reasonable costs of return transportation of the beneficiary abroad if the beneficiary is dismissed from employment by the employer before the end of the period of authorized stay. 1. Name of Petitioner. Given Name (First Name).",
         },
         {
           id: "subform35MiddleName2",
@@ -27545,24 +27180,23 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Middle Name",
           required: true,
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 2. Statement by the Petitioner. I certify that I, the petitioner, and the employer whose offer of employment formed the basis of status (if different from the petitioner) will be jointly and severally liable for the reasonable costs of return transportation of the beneficiary abroad if the beneficiary is dismissed from employment by the employer before the end of the period of authorized stay. 1. Name of Petitioner. Enter Middle Name.",
+            "O and P Classifications Supplement to Form I-1 29. Section 2. Statement by the Petitioner. I certify that I, the petitioner, and the employer whose offer of employment formed the basis of status (if different from the petitioner) will be jointly and severally liable for the reasonable costs of return transportation of the beneficiary abroad if the beneficiary is dismissed from employment by the employer before the end of the period of authorized stay. 1. Name of Petitioner. Middle Name.",
         },
         {
           id: "subform35DateofSignature1",
           type: "date",
-          label:
-            "Date of Signature as 2-digit Month, 2-digit Day and 4-digit Year",
+          label: "Date of Signature",
           required: true,
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 2. Statement by the Petitioner. I certify that I, the petitioner, and the employer whose offer of employment formed the basis of status (if different from the petitioner) will be jointly and severally liable for the reasonable costs of return transportation of the beneficiary abroad if the beneficiary is dismissed from employment by the employer before the end of the period of authorized stay. 2. Signature and Date. Enter Date of Signature as 2-digit Month, 2-digit Day and 4-digit Year.",
+            "O and P Classifications Supplement to Form I-1 29. Section 2. Statement by the Petitioner. I certify that I, the petitioner, and the employer whose offer of employment formed the basis of status (if different from the petitioner) will be jointly and severally liable for the reasonable costs of return transportation of the beneficiary abroad if the beneficiary is dismissed from employment by the employer before the end of the period of authorized stay. 2. Signature and Date. Date of Signature.",
         },
         {
           id: "subform35Pt7EmailAddress1",
           type: "email",
-          label: "Email Address, if any",
+          label: "Email Address (optional)",
           required: true,
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 2. Statement by the Petitioner. 3. Petitioner&apos;s Contact Information. Enter Email Address, if any.",
+            "O and P Classifications Supplement to Form I-1 29. Section 2. Statement by the Petitioner. 3. Petitioner&apos;s Contact Information. Email Address (optional)",
         },
         {
           id: "subform35PreparerDaytimePhoneNumber113d",
@@ -27570,7 +27204,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Daytime Telephone Number",
           required: true,
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-2 or P alien. 13. D. Enter Daytime Telephone Number.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-2 or P alien. 13. D. Daytime Telephone Number.",
         },
         {
           id: "subform35Pt7DaytimePhoneNumber11",
@@ -27578,7 +27212,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Daytime Telephone Number",
           required: true,
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 2. Statement by the Petitioner. 3. Petitioner&apos;s Contact Information. Enter Daytime Telephone Number.",
+            "O and P Classifications Supplement to Form I-1 29. Section 2. Statement by the Petitioner. 3. Petitioner&apos;s Contact Information. Daytime Telephone Number.",
         },
         {
           id: "subform36FamilyName7",
@@ -27586,7 +27220,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Name of the Petitioner",
           required: true,
           helpText:
-            "Q-1 Classification Supplement to Form I-1 29. 1. Enter Name of the Petitioner.",
+            "Q-1 Classification Supplement to Form I-1 29. 1. Name of the Petitioner.",
         },
         {
           id: "subform36HSupFamilyName2",
@@ -27594,7 +27228,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Name of the Beneficiary",
           required: true,
           helpText:
-            "Q-1 Classification Supplement to Form I-1 29. 2. Enter Name of the Beneficiary.",
+            "Q-1 Classification Supplement to Form I-1 29. 2. Name of the Beneficiary.",
         },
         {
           id: "subform36GivenName3",
@@ -27602,7 +27236,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Given Name (First Name)",
           required: true,
           helpText:
-            "Q-1 Classification Supplement to Form I-1 29. Section 1. Complete if you are filing for a Q-1 International Cultural Exchange Alien. I hereby certify that the participant or participants in the international cultural exchange program: A. Is at least 18 years of age, B. Is qualified to perform the service or labor or receive the type of training stated in the petition, C. Has the ability to communicate effectively about the cultural attributes of his or her country of nationality to the American public, and D. Has resided and been physically present outside the United States for the immediate prior year. Applies only if the participant was previously admitted as a Q-1. I also certify that I will offer the alien or aliens the same wages and working conditions comparable to those accorded local domestic workers similarly employed. 1. Name of Petitioner. Enter Given Name (First Name).",
+            "Q-1 Classification Supplement to Form I-1 29. Section 1. Complete if you are filing for a Q-1 International Cultural Exchange Alien. I hereby certify that the participant or participants in the international cultural exchange program: A. Is at least 18 years of age, B. Is qualified to perform the service or labor or receive the type of training stated in the petition, C. Has the ability to communicate effectively about the cultural attributes of his or her country of nationality to the American public, and D. Has resided and been physically present outside the United States for the immediate prior year. Applies only if the participant was previously admitted as a Q-1. I also certify that I will offer the alien or aliens the same wages and working conditions comparable to those accorded local domestic workers similarly employed. 1. Name of Petitioner. Given Name (First Name).",
         },
         {
           id: "subform36MiddleName3",
@@ -27610,24 +27244,23 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Middle Name",
           required: true,
           helpText:
-            "Q-1 Classification Supplement to Form I-1 29. Section 1. Complete if you are filing for a Q-1 International Cultural Exchange Alien. I hereby certify that the participant or participants in the international cultural exchange program: A. Is at least 18 years of age, B. Is qualified to perform the service or labor or receive the type of training stated in the petition, C. Has the ability to communicate effectively about the cultural attributes of his or her country of nationality to the American public, and D. Has resided and been physically present outside the United States for the immediate prior year. Applies only if the participant was previously admitted as a Q-1. I also certify that I will offer the alien or aliens the same wages and working conditions comparable to those accorded local domestic workers similarly employed. 1. Name of Petitioner. Enter Middle Name.",
+            "Q-1 Classification Supplement to Form I-1 29. Section 1. Complete if you are filing for a Q-1 International Cultural Exchange Alien. I hereby certify that the participant or participants in the international cultural exchange program: A. Is at least 18 years of age, B. Is qualified to perform the service or labor or receive the type of training stated in the petition, C. Has the ability to communicate effectively about the cultural attributes of his or her country of nationality to the American public, and D. Has resided and been physically present outside the United States for the immediate prior year. Applies only if the participant was previously admitted as a Q-1. I also certify that I will offer the alien or aliens the same wages and working conditions comparable to those accorded local domestic workers similarly employed. 1. Name of Petitioner. Middle Name.",
         },
         {
           id: "subform36DateofSignature2",
           type: "date",
-          label:
-            "Date of Signature as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "Date of Signature",
           required: true,
           helpText:
-            "Q-1 Classification Supplement to Form I-1 29. Section 1. Complete if you are filing for a Q-1 International Cultural Exchange Alien. I hereby certify that the participant or participants in the international cultural exchange program: A. Is at least 18 years of age, B. Is qualified to perform the service or labor or receive the type of training stated in the petition, C. Has the ability to communicate effectively about the cultural attributes of his or her country of nationality to the American public, and D. Has resided and been physically present outside the United States for the immediate prior year. Applies only if the participant was previously admitted as a Q-1. I also certify that I will offer the alien or aliens the same wages and working conditions comparable to those accorded local domestic workers similarly employed. 2. Signature and Date. Enter Date of Signature as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "Q-1 Classification Supplement to Form I-1 29. Section 1. Complete if you are filing for a Q-1 International Cultural Exchange Alien. I hereby certify that the participant or participants in the international cultural exchange program: A. Is at least 18 years of age, B. Is qualified to perform the service or labor or receive the type of training stated in the petition, C. Has the ability to communicate effectively about the cultural attributes of his or her country of nationality to the American public, and D. Has resided and been physically present outside the United States for the immediate prior year. Applies only if the participant was previously admitted as a Q-1. I also certify that I will offer the alien or aliens the same wages and working conditions comparable to those accorded local domestic workers similarly employed. 2. Signature and Date. Date of Signature.",
         },
         {
           id: "subform36Pt7EmailAddress2",
           type: "email",
-          label: "E-mail Address, if any",
+          label: "E-mail Address (optional)",
           required: true,
           helpText:
-            "Q-1 Classification Supplement to Form I-1 29. Section 1. Complete if you are filing for a Q-1 International Cultural Exchange Alien. 3. Petitioner&apos;s Contact Information. Enter E-mail Address, if any.",
+            "Q-1 Classification Supplement to Form I-1 29. Section 1. Complete if you are filing for a Q-1 International Cultural Exchange Alien. 3. Petitioner&apos;s Contact Information. E-mail Address (optional)",
         },
         {
           id: "subform36Pt7DaytimePhoneNumber12",
@@ -27635,7 +27268,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Daytime Telephone Number",
           required: true,
           helpText:
-            "Q-1 Classification Supplement to Form I-1 29. Section 1. Complete if you are filing for a Q-1 International Cultural Exchange Alien. 3. Petitioner&apos;s Contact Information. Enter Daytime Telephone Number.",
+            "Q-1 Classification Supplement to Form I-1 29. Section 1. Complete if you are filing for a Q-1 International Cultural Exchange Alien. 3. Petitioner&apos;s Contact Information. Daytime Telephone Number.",
         },
         {
           id: "subform36FamilyName8",
@@ -27643,7 +27276,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Family Name (Last Name)",
           required: true,
           helpText:
-            "Q-1 Classification Supplement to Form I-1 29. Section 1. Complete if you are filing for a Q-1 International Cultural Exchange Alien. I hereby certify that the participant or participants in the international cultural exchange program: A. Is at least 18 years of age, B. Is qualified to perform the service or labor or receive the type of training stated in the petition, C. Has the ability to communicate effectively about the cultural attributes of his or her country of nationality to the American public, and D. Has resided and been physically present outside the United States for the immediate prior year. Applies only if the participant was previously admitted as a Q-1. I also certify that I will offer the alien or aliens the same wages and working conditions comparable to those accorded local domestic workers similarly employed. 1. Name of Petitioner. Enter Family Name (Last Name).",
+            "Q-1 Classification Supplement to Form I-1 29. Section 1. Complete if you are filing for a Q-1 International Cultural Exchange Alien. I hereby certify that the participant or participants in the international cultural exchange program: A. Is at least 18 years of age, B. Is qualified to perform the service or labor or receive the type of training stated in the petition, C. Has the ability to communicate effectively about the cultural attributes of his or her country of nationality to the American public, and D. Has resided and been physically present outside the United States for the immediate prior year. Applies only if the participant was previously admitted as a Q-1. I also certify that I will offer the alien or aliens the same wages and working conditions comparable to those accorded local domestic workers similarly employed. 1. Name of Petitioner. Family Name (Last Name).",
         },
         {
           id: "subform37TtlNumbersofWorker1",
@@ -27652,7 +27285,7 @@ const I_129_DEFINITION: FormDefinition = {
             "Number of members of the petitioner&apos;s religious organization",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 1. A. Enter Number of members of the petitioner&apos;s religious organization.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 1. A. Number of members of the petitioner&apos;s religious organization.",
         },
         {
           id: "subform37TtlNumbersofWorker2",
@@ -27661,25 +27294,25 @@ const I_129_DEFINITION: FormDefinition = {
             "Number of employees working at the same location where the beneficiary will be employed",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 1. B. Enter Number of employees working at the same location where the beneficiary will be employed.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 1. B. Number of employees working at the same location where the beneficiary will be employed.",
         },
         {
           id: "subform37TtlNumbersofWorker3",
           type: "text",
           label:
-            "Number of aliens holding special immigrant or nonimmigrant religious worker status currently empl...",
+            "Number of aliens holding special immigrant or nonimmigrant religious worker status currently empl.",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 1. C. Enter Number of aliens holding special immigrant or nonimmigrant religious worker status currently employed or employed within the past 5 years.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 1. C. Number of aliens holding special immigrant or nonimmigrant religious worker status currently employed or employed within the past 5 years.",
         },
         {
           id: "subform37TtlNumbersofWorker4",
           type: "radio",
           label:
-            "Number of special immigrant religious worker petition or petitions, I-3 60, and nonimmigrant reli...",
+            "Number of special immigrant religious worker petition or petitions, I-3 60, and nonimmigrant reli.",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 1. D. Enter Number of special immigrant religious worker petition or petitions, I-3 60, and nonimmigrant religious worker petition or petitions, I-1 29, filed by the petitioner within the past 5 years.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 1. D. Number of special immigrant religious worker petition or petitions, I-3 60, and nonimmigrant religious worker petition or petitions, I-1 29, filed by the petitioner within the past 5 years.",
         },
         {
           id: "subform37R1Sec1",
@@ -27691,20 +27324,20 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 2. Has the beneficiary or any of the beneficiary&apos;s dependent family members previously been admitted to the United States for a period of stay in the R visa classification in the last 5 years? Check No.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. Has the beneficiary or any of the beneficiary&apos;s dependent family members previously been admitted to the United States for a period of stay in the R visa classification in the last 5 years? No.",
         },
         {
           id: "subform37R1Sec11",
           type: "select",
           label:
-            "Please be sure to list only those periods in which the beneficiary and/or family members were act...",
+            "Please be sure to list only those periods in which the beneficiary and/or family members were act.",
           required: true,
           options: [
             { value: "Y", label: "Y" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 2. Has the beneficiary or any of the beneficiary&apos;s dependent family members previously been admitted to the United States for a period of stay in the R visa classification in the last 5 years? Check Yes. If yes, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. Has the beneficiary or any of the beneficiary&apos;s dependent family members previously been admitted to the United States for a period of stay in the R visa classification in the last 5 years? Yes. If yes, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification.",
         },
         {
           id: "subform37Table21Row1FamilyMemberName",
@@ -27712,23 +27345,23 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Alien or Dependent Family Member&apos;s Name",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification.                     NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, provide the information in Part 9. of Form I-1 29. Row 1. Enter Alien or Dependent Family Member&apos;s Name.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 1. Alien or Dependent Family Member&apos;s Name.",
         },
         {
           id: "subform37Table21Row1FromDate1",
           type: "date",
-          label: "From Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "From Date",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, provide the information in Part 9. of Form I-1 29. Row 1. Period of Stay. Enter From Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 1. Period of Stay. From Date.",
         },
         {
           id: "subform37Table21Row1ToDate1",
           type: "date",
-          label: "To Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "To Date",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, provide the information in Part 9. of Form I-1 29. Row 1. Period of Stay. Enter To Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 1. Period of Stay. To Date.",
         },
         {
           id: "subform37Table21Row2FamilyMemberName2",
@@ -27736,23 +27369,23 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Alien or Dependent Family Member&apos;s Name",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, provide the information in Part 9. of Form I-1 29. Row 2. Enter Alien or Dependent Family Member&apos;s Name.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 2. Alien or Dependent Family Member&apos;s Name.",
         },
         {
           id: "subform37Table21Row2FromDate2",
           type: "date",
-          label: "From Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "From Date",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, provide the information in Part 9. of Form I-1 29. Row 2. Period of Stay. Enter From Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 2. Period of Stay. From Date.",
         },
         {
           id: "subform37Table21Row2ToDate2",
           type: "date",
-          label: "To Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "To Date",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, provide the information in Part 9. of Form I-1 29. Row 2. Period of Stay. Enter To Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 2. Period of Stay. To Date.",
         },
         {
           id: "subform37Table21Row3FamilyMemberName3",
@@ -27760,23 +27393,23 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Alien or Dependent Family Member&apos;s Name",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, provide the information in Part 9. of Form I-1 29. Row 3. Enter Alien or Dependent Family Member&apos;s Name.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 3. Alien or Dependent Family Member&apos;s Name.",
         },
         {
           id: "subform37Table21Row3FromDate3",
           type: "date",
-          label: "From Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "From Date",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, provide the information in Part 9. of Form I-1 29. Row 3. Period of Stay. Enter From Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 3. Period of Stay. From Date.",
         },
         {
           id: "subform37Table21Row3ToDate3",
           type: "date",
-          label: "To Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "To Date",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, provide the information in Part 9. of Form I-1 29. Row 3. Period of Stay. Enter To Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 3. Period of Stay. To Date.",
         },
         {
           id: "subform37Table21Row31FamilyMemberName4",
@@ -27784,23 +27417,23 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Alien or Dependent Family Member&apos;s Name",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, provide the information in Part 9. of Form I-1 29. Row 4. Enter Alien or Dependent Family Member&apos;s Name.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 4. Alien or Dependent Family Member&apos;s Name.",
         },
         {
           id: "subform37Table21Row31FromDate4",
           type: "date",
-          label: "From Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "From Date",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, provide the information in Part 9. of Form I-1 29. Row 4. Period of Stay. Enter From Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 4. Period of Stay. From Date.",
         },
         {
           id: "subform37Table21Row31ToDate4",
           type: "date",
-          label: "To Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "To Date",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, provide the information in Part 9. of Form I-1 29. Row 4. Period of Stay. Enter To Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 4. Period of Stay. To Date.",
         },
         {
           id: "subform37Table21Row32FamilyMemberName5",
@@ -27808,23 +27441,23 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Alien or Dependent Family Member&apos;s Name",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, provide the information in Part 9. of Form I-1 29. Row 5. Enter Alien or Dependent Family Member&apos;s Name.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 5. Alien or Dependent Family Member&apos;s Name.",
         },
         {
           id: "subform37Table21Row32FromDate5",
           type: "date",
-          label: "From Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "From Date",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, provide the information in Part 9. of Form I-1 29. Row 5. Period of Stay. Enter From Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 5. Period of Stay. From Date.",
         },
         {
           id: "subform37Table21Row32ToDate5",
           type: "date",
-          label: "To Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "To Date",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, provide the information in Part 9. of Form I-1 29. Row 5. Period of Stay. Enter To Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 5. Period of Stay. To Date.",
         },
         {
           id: "subform37Table21Row33FamilyMemberName6",
@@ -27832,23 +27465,23 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Alien or Dependent Family Member&apos;s Name",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, provide the information in Part 9. of Form I-1 29. Row 6. Enter Alien or Dependent Family Member&apos;s Name.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 6. Alien or Dependent Family Member&apos;s Name.",
         },
         {
           id: "subform37Table21Row33FromDate6",
           type: "date",
-          label: "From Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "From Date",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, provide the information in Part 9. of Form I-1 29. Row 6. Period of Stay. Enter From Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 6. Period of Stay. From Date.",
         },
         {
           id: "subform37Table21Row33ToDate6",
           type: "date",
-          label: "To Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "To Date",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, provide the information in Part 9. of Form I-1 29. Row 6. Period of Stay. Enter To Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 6. Period of Stay. To Date.",
         },
         {
           id: "subform37Table21Row34FamilyMemberName7",
@@ -27856,23 +27489,23 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Alien or Dependent Family Member&apos;s Name",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, provide the information in Part 9. of Form I-1 29. Row 7. Enter Alien or Dependent Family Member&apos;s Name.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 7. Alien or Dependent Family Member&apos;s Name.",
         },
         {
           id: "subform37Table21Row34FromDate7",
           type: "date",
-          label: "From Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "From Date",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, provide the information in Part 9. of Form I-1 29. Row 7. Period of Stay. Enter From Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 7. Period of Stay. From Date.",
         },
         {
           id: "subform37Table21Row34ToDate7",
           type: "date",
-          label: "To Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "To Date",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, provide the information in Part 9. of Form I-1 29. Row 7. Period of Stay. Enter To Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 7. Period of Stay. To Date.",
         },
         {
           id: "subform37PetitionerName1",
@@ -27880,7 +27513,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Name of the Petitioner",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. 1. Enter Name of the Petitioner.",
+            "R-1 Classification Supplement to Form I-1 29. 1. Name of the Petitioner.",
         },
         {
           id: "subform37BeneficiaryName1",
@@ -27888,7 +27521,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Name of the Beneficiary",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. 2. Enter Name of the Beneficiary.",
+            "R-1 Classification Supplement to Form I-1 29. 2. Name of the Beneficiary.",
         },
         {
           id: "subform39JobDescription9",
@@ -27896,7 +27529,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Description",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 4. Describe the relationship, if any, between the religious organization in the United States and the organization abroad of which the beneficiary is a member. Enter Description.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 4. Describe the relationship (optional), between the religious organization in the United States and the organization abroad of which the beneficiary is a member. Description.",
         },
         {
           id: "subform39JobDescription10",
@@ -27905,7 +27538,7 @@ const I_129_DEFINITION: FormDefinition = {
             "A Detailed description of the beneficiary&apos;s proposed daily duties",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the prospective employment: 5. B. Enter a Detailed description of the beneficiary&apos;s proposed daily duties.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the prospective employment: 5. B. Detailed description of the beneficiary&apos;s proposed daily duties.",
         },
         {
           id: "subform39JobDescription11",
@@ -27914,7 +27547,7 @@ const I_129_DEFINITION: FormDefinition = {
             "A Description of the beneficiary&apos;s qualifications for position offered",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: Provide the following information about the prospective employment: 5. C. Enter a Description of the beneficiary&apos;s qualifications for position offered.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: following information about the prospective employment: 5. C. Description of the beneficiary&apos;s qualifications for position offered.",
         },
         {
           id: "subform39Table31Row1Position1",
@@ -27922,7 +27555,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Position",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 3. Provide a summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, provide the information on additional sheet or sheets of paper. Row 1. Enter Position.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 3. summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, information on additional sheet or sheets of paper. Row 1. Position.",
         },
         {
           id: "subform39Table31Row1Summary1",
@@ -27930,7 +27563,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Summary of the Type of Responsibilities for That Position",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 3. Provide a summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, provide the information on additional sheet or sheets of paper. Row 1. Enter Summary of the Type of Responsibilities for That Position.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 3. summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, information on additional sheet or sheets of paper. Row 1. Summary of the Type of Responsibilities for That Position.",
         },
         {
           id: "subform39Table31Row2Position2",
@@ -27938,7 +27571,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Position",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 3. Provide a summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, provide the information on additional sheet or sheets of paper. Row 2. Enter Position.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 3. summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, information on additional sheet or sheets of paper. Row 2. Position.",
         },
         {
           id: "subform39Table31Row2Summary2",
@@ -27946,7 +27579,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Summary of the Type of Responsibilities for That Position",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 3. Provide a summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, provide the information on additional sheet or sheets of paper. Row 2. Enter Summary of the Type of Responsibilities for That Position.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 3. summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, information on additional sheet or sheets of paper. Row 2. Summary of the Type of Responsibilities for That Position.",
         },
         {
           id: "subform39Table31Row21Position3",
@@ -27954,7 +27587,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Position",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 3. Provide a summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, provide the information on additional sheet or sheets of paper. Row 3. Enter Position.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 3. summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, information on additional sheet or sheets of paper. Row 3. Position.",
         },
         {
           id: "subform39Table31Row21Summary3",
@@ -27962,7 +27595,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Summary of the Type of Responsibilities for That Position",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 3. Provide a summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, provide the information on additional sheet or sheets of paper. Row 3. Enter Summary of the Type of Responsibilities for That Position.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 3. summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, information on additional sheet or sheets of paper. Row 3. Summary of the Type of Responsibilities for That Position.",
         },
         {
           id: "subform39Table31Row22Position4",
@@ -27970,7 +27603,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Position",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 3. Provide a summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, provide the information on additional sheet or sheets of paper. Row 4. Enter Position.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 3. summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, information on additional sheet or sheets of paper. Row 4. Position.",
         },
         {
           id: "subform39Table31Row22Summary4",
@@ -27978,7 +27611,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Summary of the Type of Responsibilities for That Position",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 3. Provide a summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, provide the information on additional sheet or sheets of paper. Row 4. Enter Summary of the Type of Responsibilities for That Position.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 3. summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, information on additional sheet or sheets of paper. Row 4. Summary of the Type of Responsibilities for That Position.",
         },
         {
           id: "subform39Table31Row23Position5",
@@ -27986,7 +27619,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Position",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 3. Provide a summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, provide the information on additional sheet or sheets of paper. Row 5. Enter Position.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 3. summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, information on additional sheet or sheets of paper. Row 5. Position.",
         },
         {
           id: "subform39Table31Row23Summary5",
@@ -27994,7 +27627,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Summary of the Type of Responsibilities for That Position",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 3. Provide a summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, provide the information on additional sheet or sheets of paper. Row 5. Enter Summary of the Type of Responsibilities for That Position.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 3. summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, information on additional sheet or sheets of paper. Row 5. Summary of the Type of Responsibilities for That Position.",
         },
         {
           id: "subform39Table31Row24Position6",
@@ -28002,7 +27635,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Position",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 3. Provide a summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, provide the information on additional sheet or sheets of paper. Row 6. Enter Position.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 3. summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, information on additional sheet or sheets of paper. Row 6. Position.",
         },
         {
           id: "subform39Table31Row24Summary6",
@@ -28010,7 +27643,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Summary of the Type of Responsibilities for That Position",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the petitioner: 3. Provide a summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, provide the information on additional sheet or sheets of paper. Row 6. Enter Summary of the Type of Responsibilities for That Position.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 3. summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, information on additional sheet or sheets of paper. Row 6. Summary of the Type of Responsibilities for That Position.",
         },
         {
           id: "subform39JobDescription12",
@@ -28018,16 +27651,16 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Title of Position Offered",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the prospective employment: 5. A. Enter Title of Position Offered.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the prospective employment: 5. A. Title of Position Offered.",
         },
         {
           id: "subform39JobDescription13",
           type: "text",
           label:
-            "If the beneficiary will be self-supporting, the petitioner must submit documentation establishing...",
+            "If the beneficiary will be self-supporting, the petitioner must submit documentation establishing.",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the prospective employment: 5. D. Enter a Description of the proposed salaried compensation or non-salaried compensation. If the beneficiary will be self-supporting, the petitioner must submit documentation establishing that the position the beneficiary will hold is part of an established program for temporary, uncompensated missionary work, which is part of a broader international program of missionary work sponsored by the denomination.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the prospective employment: 5. D. Description of the proposed salaried compensation or non-salaried compensation. If the beneficiary will be self-supporting, the petitioner must submit documentation establishing that the position the beneficiary will hold is part of an established program for temporary, uncompensated missionary work, which is part of a broader international program of missionary work sponsored by the denomination.",
         },
         {
           id: "subform41R1Sec11Explanation",
@@ -28040,14 +27673,14 @@ const I_129_DEFINITION: FormDefinition = {
         {
           id: "subform41R1Sec1",
           type: "radio",
-          label: "Check Yes",
+          label: "Yes",
           required: true,
           options: [
             { value: "Y", label: "Yes" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Does the petitioner attest to all of the requirements described in Item Numbers 6. through 12. below? 7. The petitioner is willing and able to provide salaried or non-salaried compensation to the beneficiary. If the beneficiary will be self-supporting, the petitioner must submit documentation establishing that the position the beneficiary will hold is part of an established program for temporary, uncompensated missionary work, which is part of a broader international program of missionary work sponsored by the denomination. Check Yes.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Does the petitioner attest to all of the requirements described in Item Numbers 6. through 12. below? 7. The petitioner is willing and able to salaried or non-salaried compensation to the beneficiary. If the beneficiary will be self-supporting, the petitioner must submit documentation establishing that the position the beneficiary will hold is part of an established program for temporary, uncompensated missionary work, which is part of a broader international program of missionary work sponsored by the denomination. Yes.",
         },
         {
           id: "subform41R1Sec11",
@@ -28059,7 +27692,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Does the petitioner attest to all of the requirements described in Item Numbers 6. through 12. below? 7. The petitioner is willing and able to provide salaried or non-salaried compensation to the beneficiary. If the beneficiary will be self-supporting, the petitioner must submit documentation establishing that the position the beneficiary will hold is part of an established program for temporary, uncompensated missionary work, which is part of a broader international program of missionary work sponsored by the denomination. Check No. If no, type or print your explanation below and if needed, go to Part 9. of Form I-1 29.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Does the petitioner attest to all of the requirements described in Item Numbers 6. through 12. below? 7. The petitioner is willing and able to salaried or non-salaried compensation to the beneficiary. If the beneficiary will be self-supporting, the petitioner must submit documentation establishing that the position the beneficiary will hold is part of an established program for temporary, uncompensated missionary work, which is part of a broader international program of missionary work sponsored by the denomination. No. If no, type or print your explanation below and if needed, go to Part 9. of Form I-1 29.",
         },
         {
           id: "subform41JobDescription14",
@@ -28068,7 +27701,7 @@ const I_129_DEFINITION: FormDefinition = {
             "A List of the address or addresses or location or locations where the beneficiary will be working",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. Provide the following information about the prospective employment: 5. E. Enter a List of the address or addresses or location or locations where the beneficiary will be working.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the prospective employment: 5. E. List of the address or addresses or location or locations where the beneficiary will be working.",
         },
         {
           id: "subform42R1Sec11Explanation",
@@ -28081,14 +27714,14 @@ const I_129_DEFINITION: FormDefinition = {
         {
           id: "subform42R1Sec1",
           type: "radio",
-          label: "Check Yes",
+          label: "Yes",
           required: true,
           options: [
             { value: "Y", label: "Yes" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Does the petitioner attest to all of the requirements described in Item Numbers 6. through 12. below? 10. The offered position requires at least 20 hours of work per week. If the offered position at the petitioning organization requires fewer than 20 hours per week, the compensated service for another religious organization and the compensated service at the petitioning organization will total 20 hours per week. If the beneficiary will be self-supporting, the petitioner must submit documentation establishing that the position the beneficiary will hold is part of an established program for temporary, uncompensated missionary work, which is part of a broader international program of missionary work sponsored by the denomination. Check Yes.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Does the petitioner attest to all of the requirements described in Item Numbers 6. through 12. below? 10. The offered position requires at least 20 hours of work per week. If the offered position at the petitioning organization requires fewer than 20 hours per week, the compensated service for another religious organization and the compensated service at the petitioning organization will total 20 hours per week. If the beneficiary will be self-supporting, the petitioner must submit documentation establishing that the position the beneficiary will hold is part of an established program for temporary, uncompensated missionary work, which is part of a broader international program of missionary work sponsored by the denomination. Yes.",
         },
         {
           id: "subform42R1Sec11",
@@ -28100,19 +27733,19 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Does the petitioner attest to all of the requirements described in Item Numbers 6. through 12. below? 10. The offered position requires at least 20 hours of work per week. If the offered position at the petitioning organization requires fewer than 20 hours per week, the compensated service for another religious organization and the compensated service at the petitioning organization will total 20 hours per week. If the beneficiary will be self-supporting, the petitioner must submit documentation establishing that the position the beneficiary will hold is part of an established program for temporary, uncompensated missionary work, which is part of a broader international program of missionary work sponsored by the denomination. Check No. If no, type or print your explanation below and if needed, go to Part 9. of Form I-1 29.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Does the petitioner attest to all of the requirements described in Item Numbers 6. through 12. below? 10. The offered position requires at least 20 hours of work per week. If the offered position at the petitioning organization requires fewer than 20 hours per week, the compensated service for another religious organization and the compensated service at the petitioning organization will total 20 hours per week. If the beneficiary will be self-supporting, the petitioner must submit documentation establishing that the position the beneficiary will hold is part of an established program for temporary, uncompensated missionary work, which is part of a broader international program of missionary work sponsored by the denomination. No. If no, type or print your explanation below and if needed, go to Part 9. of Form I-1 29.",
         },
         {
           id: "subform42R1Sec1Yes",
           type: "radio",
-          label: "Check Yes",
+          label: "Yes",
           required: true,
           options: [
             { value: "Y", label: "Yes" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Does the petitioner attest to all of the requirements described in Item Numbers 6. through 12. below? 11. The beneficiary has been a member of the petitioner&apos;s denomination for at least 2 years immediately before Form I-1 29 was filed and is otherwise qualified to perform the duties of the offered position. Check Yes.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Does the petitioner attest to all of the requirements described in Item Numbers 6. through 12. below? 11. The beneficiary has been a member of the petitioner&apos;s denomination for at least 2 years immediately before Form I-1 29 was filed and is otherwise qualified to perform the duties of the offered position. Yes.",
         },
         {
           id: "subform42R1Sec1No",
@@ -28124,7 +27757,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Does the petitioner attest to all of the requirements described in Item Numbers 6. through 12. below? 11. The beneficiary has been a member of the petitioner&apos;s denomination for at least 2 years immediately before Form I-1 29 was filed and is otherwise qualified to perform the duties of the offered position. Check No. If no, type or print your explanation below and if needed, go to Part 9. of Form I-1 29.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Does the petitioner attest to all of the requirements described in Item Numbers 6. through 12. below? 11. The beneficiary has been a member of the petitioner&apos;s denomination for at least 2 years immediately before Form I-1 29 was filed and is otherwise qualified to perform the duties of the offered position. No. If no, type or print your explanation below and if needed, go to Part 9. of Form I-1 29.",
         },
         {
           id: "subform42JobTitle",
@@ -28132,12 +27765,12 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Title",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Attestation. I certify, under penalty of perjury, that the contents of this attestation and the evidence submitted with it are true and correct. Enter Title.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Attestation. I certify, under penalty of perjury, that the contents of this attestation and the evidence submitted with it are true and correct. Title.",
         },
         {
           id: "subform43State",
           type: "select",
-          label: "Select State from a List of States.",
+          label: "State.",
           required: true,
           options: [
             { value: "", label: "" },
@@ -28205,7 +27838,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "WY", label: "Wyoming" },
           ],
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Employer or Organization Address (do not use a post office or private mail box). Select State from a List of States.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Employer or Organization Address . State.",
         },
         {
           id: "subform43Sec1AptSteFlrNumber",
@@ -28213,12 +27846,12 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Apartment, Suite or Floor Number",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Employer or Organization Address (do not use a post office or private mail box). If Apartment, Suite or Floor is Checked, Enter Apartment, Suite or Floor Number.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Employer or Organization Address . If Apartment, Suite or Floor is Checked, Apartment, Suite or Floor Number.",
         },
         {
           id: "subform43Sec1Unit",
           type: "radio",
-          label: "Check Floor.",
+          label: "Floor.",
           required: true,
           options: [
             { value: "", label: "None" },
@@ -28226,12 +27859,12 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "off", label: "Off" },
           ],
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Employer or Organization Address (do not use a post office or private mail box). Check Floor.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Employer or Organization Address . Floor.",
         },
         {
           id: "subform43Sec1Unit1",
           type: "radio",
-          label: "Check Suite.",
+          label: "Suite.",
           required: true,
           options: [
             { value: "", label: "None" },
@@ -28239,12 +27872,12 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "off", label: "Off" },
           ],
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Employer or Organization Address (do not use a post office or private mail box). Check Suite.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Employer or Organization Address . Suite.",
         },
         {
           id: "subform43Sec1Unit2",
           type: "radio",
-          label: "Check Apartment.",
+          label: "Apartment.",
           required: true,
           options: [
             { value: "", label: "None" },
@@ -28252,7 +27885,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "off", label: "Off" },
           ],
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Employer or Organization Address (do not use a post office or private mail box). Check Apartment.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Employer or Organization Address . Apartment.",
         },
         {
           id: "subform43EmployingOrgName",
@@ -28260,7 +27893,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Name of Employing Organization",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. I certify, under penalty of perjury, that: Enter Name of Employing Organization.",
+            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. I certify, under penalty of perjury, that: Name of Employing Organization.",
         },
         {
           id: "subform43NameOfReligiousDenomination",
@@ -28268,20 +27901,12 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Name of Religious Denomination",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. I certify, under penalty of perjury, that the Employing Organization named above is affiliated with: Enter Name of Religious Denomination.",
-        },
-        {
-          id: "subform43PreparerSignature",
-          type: "text",
-          label: "Print and Sign completed form",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. I certify, under penalty of perjury, that the Employing Organization named above is affiliated with the Religious Denomination named above and that the attesting organization within the religious denomination is tax-exempt as described in section 5 0 1(C)(3) of the Internal Revenue Code of 19 86 (codified at 26 United States Code 5 01(C)(3)), any subsequent amendment or amendments, subsequent amendment, or equivalent sections of prior enactments of the Internal Revenue Code. The contents of this certification are true and correct to the best of my knowledge. Signature of Name of Authorized Representative of Attesting Organization. No Entry. Print and Sign completed form.",
+            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. I certify, under penalty of perjury, that the Employing Organization named above is affiliated with: Name of Religious Denomination.",
         },
         {
           id: "subform43State1",
           type: "select",
-          label: "Select State from a List of States.",
+          label: "State.",
           required: true,
           options: [
             { value: "", label: "" },
@@ -28349,7 +27974,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "WY", label: "Wyoming" },
           ],
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization Name and Address (do not use a post office or private mail box). Select State from a List of States.",
+            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization Name and Address . State.",
         },
         {
           id: "subform43AttestAptSteFlrNumber",
@@ -28357,12 +27982,12 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Apartment, Suite or Floor Number",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization Name and Address (do not use a post office or private mail box). If Apartment, Suite or Floor is Checked, Enter Apartment, Suite or Floor Number.",
+            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization Name and Address . If Apartment, Suite or Floor is Checked, Apartment, Suite or Floor Number.",
         },
         {
           id: "subform43AttestUnit",
           type: "radio",
-          label: "Check Floor.",
+          label: "Floor.",
           required: true,
           options: [
             { value: "", label: "None" },
@@ -28370,12 +27995,12 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "off", label: "Off" },
           ],
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization Name and Address (do not use a post office or private mail box). Check Floor.",
+            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization Name and Address . Floor.",
         },
         {
           id: "subform43AttestUnit1",
           type: "radio",
-          label: "Check Suite.",
+          label: "Suite.",
           required: true,
           options: [
             { value: "", label: "None" },
@@ -28383,12 +28008,12 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "off", label: "Off" },
           ],
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization Name and Address (do not use a post office or private mail box). Check Suite.",
+            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization Name and Address . Suite.",
         },
         {
           id: "subform43AttestUnit2",
           type: "radio",
-          label: "Check Apartment.",
+          label: "Apartment.",
           required: true,
           options: [
             { value: "", label: "None" },
@@ -28396,7 +28021,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "off", label: "Off" },
           ],
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization Name and Address (do not use a post office or private mail box). Check Apartment.",
+            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization Name and Address . Apartment.",
         },
         {
           id: "subform43JobTitle1",
@@ -28404,7 +28029,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Title",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. I certify, under penalty of perjury, that the Employing Organization named above is affiliated with the Religious Denomination named above and that the attesting organization within the religious denomination is tax-exempt as described in section 5 0 1(C)(3) of the Internal Revenue Code of 19 86 (codified at 26 United States Code 5 01(C)(3)), any subsequent amendment or amendments, subsequent amendment, or equivalent sections of prior enactments of the Internal Revenue Code. The contents of this certification are true and correct to the best of my knowledge. Enter Title.",
+            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. I certify, under penalty of perjury, that the Employing Organization named above is affiliated with the Religious Denomination named above and that the attesting organization within the religious denomination is tax-exempt as described in section 5 0 1(C)(3) of the Internal Revenue Code of 19 86 (codified at 26 United States Code 5 01(C)(3)), any subsequent amendment or amendments, subsequent amendment, or equivalent sections of prior enactments of the Internal Revenue Code. The contents of this certification are true and correct to the best of my knowledge. Title.",
         },
         {
           id: "subform43PreparerDaytimePhoneNumber1",
@@ -28412,7 +28037,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Daytime Telephone Number",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Employer or Organization&apos;s Contact Information. Enter Daytime Telephone Number.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Employer or Organization&apos;s Contact Information. Daytime Telephone Number.",
         },
         {
           id: "subform43PreparersFaxPhoneNumber1",
@@ -28420,7 +28045,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Fax Number",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Employer or Organization&apos;s Contact Information. Enter Fax Number.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Employer or Organization&apos;s Contact Information. Fax Number.",
         },
         {
           id: "subform43PreparersFaxPhoneNumber11",
@@ -28428,7 +28053,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Fax Number",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization&apos;s Contact Information. Enter Fax Number.",
+            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization&apos;s Contact Information. Fax Number.",
         },
         {
           id: "subform43PreparerDaytimePhoneNumber11",
@@ -28436,7 +28061,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Daytime Telephone Number",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization&apos;s Contact Information. Enter Daytime Telephone Number.",
+            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization&apos;s Contact Information. Daytime Telephone Number.",
         },
         {
           id: "subform44MiddleName11",
@@ -28444,7 +28069,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Middle Name",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Enter Middle Name.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Middle Name.",
         },
         {
           id: "subform44GivenName11",
@@ -28452,7 +28077,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Given Name (First Name)",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Enter Given Name (First Name).",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Given Name (First Name).",
         },
         {
           id: "subform44FamilyName11",
@@ -28460,56 +28085,55 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Family Name (Last Name)",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Enter Family Name (Last Name).",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Family Name (Last Name).",
         },
         {
           id: "subform44Gender",
           type: "radio",
-          label: "Check Male",
+          label: "Male",
           required: true,
           options: [
             { value: "M", label: "Male" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Sex. Check Male.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Sex. Male.",
         },
         {
           id: "subform44Gender1",
           type: "radio",
-          label: "Check Female",
+          label: "Female",
           required: true,
           options: [
             { value: "F", label: "Female" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Sex. Check Female.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Sex. Female.",
         },
         {
           id: "subform44SSN1",
           type: "ssn",
-          label: "Social Security Number, if any",
+          label: "Social Security Number (optional)",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Enter U. S. Social Security Number, if any.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) U. S. Social Security Number (optional)",
         },
         {
           id: "subform44DateOfBirth1",
           type: "date",
-          label:
-            "Date of Birth as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "Date of Birth",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Enter Date of Birth as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Date of Birth.",
         },
         {
           id: "subform44AlienNumber1",
           type: "text",
-          label: "Alien Registration Number (A-Number), if any",
+          label: "Alien Registration Number (A-Number) (optional)",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Enter Alien Registration Number (A-Number), if any.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Alien Registration Number (A-Number) (optional)",
         },
         {
           id: "subform44MiddleName12",
@@ -28517,7 +28141,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Middle Name",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) All Other Names Used (include aliases, maiden name and names from previous Marriages). Enter Middle Name.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) All Other Names Used (include aliases, maiden name and names from previous Marriages). Middle Name.",
         },
         {
           id: "subform44GivenName12",
@@ -28525,7 +28149,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Given Name (First Name)",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) All Other Names Used (include aliases, maiden name and names from previous Marriages). Enter Given Name (First Name).",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) All Other Names Used (include aliases, maiden name and names from previous Marriages). Given Name (First Name).",
         },
         {
           id: "subform44FamilyName12",
@@ -28533,7 +28157,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Family Name (Last Name)",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) All Other Names Used (include aliases, maiden name and names from previous Marriages). Enter Family Name (Last Name).",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) All Other Names Used (include aliases, maiden name and names from previous Marriages). Family Name (Last Name).",
         },
         {
           id: "subform44Att1AptSteFlrNumber",
@@ -28541,43 +28165,43 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Apartment, Suite or Floor Number",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). If Apartment, Suite or Floor is Checked, Enter Apartment, Suite or Floor Number.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). If Apartment, Suite or Floor is Checked, Apartment, Suite or Floor Number.",
         },
         {
           id: "subform44Att1Unit",
           type: "select",
-          label: "Check Floor.",
+          label: "Floor.",
           required: true,
           options: [
             { value: "FLR", label: "FLR" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). Check Floor.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). Floor.",
         },
         {
           id: "subform44Att1Unit1",
           type: "select",
-          label: "Check Suite.",
+          label: "Suite.",
           required: true,
           options: [
             { value: "STE", label: "STE" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). Check Suite.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). Suite.",
         },
         {
           id: "subform44Att1Unit2",
           type: "select",
-          label: "Check Apartment.",
+          label: "Apartment.",
           required: true,
           options: [
             { value: "APT", label: "APT" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). Check Apartment.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). Apartment.",
         },
         {
           id: "subform44LineCityTown4",
@@ -28585,7 +28209,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "City or Town",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Enter City or Town.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). City or Town.",
         },
         {
           id: "subform44A1ZipCode",
@@ -28593,12 +28217,12 @@ const I_129_DEFINITION: FormDefinition = {
           label: "ZIP Code",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Enter ZIP Code.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). ZIP Code.",
         },
         {
           id: "subform44A1State",
           type: "select",
-          label: "Select State from a List of States.",
+          label: "State.",
           required: true,
           options: [
             { value: "", label: "" },
@@ -28666,7 +28290,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "WY", label: "Wyoming" },
           ],
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Select State from a List of States.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). State.",
         },
         {
           id: "subform44StreetNumberName4",
@@ -28674,12 +28298,12 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Street Number and Name",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Enter Street Number and Name.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Street Number and Name.",
         },
         {
           id: "subform44ForUnit",
           type: "radio",
-          label: "Check Suite.",
+          label: "Suite.",
           required: true,
           options: [
             { value: "", label: "None" },
@@ -28687,12 +28311,12 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "off", label: "Off" },
           ],
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Check Suite.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Suite.",
         },
         {
           id: "subform44ForUnit1",
           type: "radio",
-          label: "Check Apartment.",
+          label: "Apartment.",
           required: true,
           options: [
             { value: "", label: "None" },
@@ -28700,12 +28324,12 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "off", label: "Off" },
           ],
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Check Apartment.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Apartment.",
         },
         {
           id: "subform44ForUnit2",
           type: "radio",
-          label: "Check Floor.",
+          label: "Floor.",
           required: true,
           options: [
             { value: "", label: "None" },
@@ -28713,7 +28337,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "off", label: "Off" },
           ],
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Check Floor.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Floor.",
         },
         {
           id: "subform44ForAptSteFlrNumber",
@@ -28721,7 +28345,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Apartment, Suite or Floor Number",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). If Apartment, Suite or Floor is Checked, Enter Apartment, Suite or Floor Number.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). If Apartment, Suite or Floor is Checked, Apartment, Suite or Floor Number.",
         },
         {
           id: "subform44A1Province",
@@ -28729,7 +28353,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Province, if applicable",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Enter Province, if applicable.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Province, if applicable.",
         },
         {
           id: "subform44A1PostalCode",
@@ -28737,7 +28361,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Postal Code, if applicable",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Enter Postal Code, if applicable.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Postal Code, if applicable.",
         },
         {
           id: "subform44A1Country",
@@ -28745,7 +28369,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Country",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Enter Country.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Country.",
         },
         {
           id: "subform44LineCountry2",
@@ -28753,7 +28377,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Country of Birth",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Enter Country of Birth.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Country of Birth.",
         },
         {
           id: "subform44LineCountry3",
@@ -28766,11 +28390,10 @@ const I_129_DEFINITION: FormDefinition = {
         {
           id: "subform44ExpDate",
           type: "date",
-          label:
-            "Date the Passport or Travel Document expires as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "Date the Passport or Travel Document expires",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Enter Date the Passport or Travel Document expires as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Date the Passport or Travel Document expires.",
         },
         {
           id: "subform44ArrivalDeparture",
@@ -28778,7 +28401,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "I-94 Arrival-Departure Record Number",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Enter I-94 Arrival-Departure Record Number.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: I-94 Arrival-Departure Record Number.",
         },
         {
           id: "subform44CurrentNon",
@@ -28939,51 +28562,48 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "WT", label: "WT" },
           ],
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Select Current Nonimmigrant Status from list.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Current Nonimmigrant Status from list.",
         },
         {
           id: "subform44DateStatusExpires",
           type: "date",
-          label:
-            "Date the Status Expires as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "Date the Status Expires",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Enter Date the Status Expires as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Date the Status Expires.",
         },
         {
           id: "subform44ExpDate1",
           type: "date",
-          label:
-            "Date the Passport or Travel Document was Issued as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "Date the Passport or Travel Document was Issued",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Enter Date the Passport or Travel Document was Issued as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Date the Passport or Travel Document was Issued.",
         },
         {
           id: "subform44DateofArrival",
           type: "date",
-          label:
-            "Date of Last Arrival as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "Date of Last Arrival",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Enter Date of Last Arrival as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Date of Last Arrival.",
         },
         {
           id: "subform44Passport",
           type: "text",
           label:
-            "Student and Exchange Visitor Information System (S E V I S) Number, if any",
+            "Student and Exchange Visitor Information System (S E V I S) Number (optional)",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Enter Student and Exchange Visitor Information System (S E V I S) Number, if any.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Student and Exchange Visitor Information System (S E V I S) Number (optional)",
         },
         {
           id: "subform44Passport1",
           type: "text",
-          label: "Employment Authorization Document (E A D) Number, if any",
+          label: "Employment Authorization Document (E A D) Number (optional)",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Enter Employment Authorization Document (E A D) Number, if any.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Employment Authorization Document (E A D) Number (optional)",
         },
         {
           id: "subform44Passport2",
@@ -28991,7 +28611,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Passport or Travel Document Number",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Enter Passport or Travel Document Number.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Passport or Travel Document Number.",
         },
         {
           id: "subform44LineCountry4",
@@ -28999,7 +28619,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Country of Issuance for Passport or Travel Document",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Enter Country of Issuance for Passport or Travel Document.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Country of Issuance for Passport or Travel Document.",
         },
         {
           id: "subform45MiddleName13",
@@ -29007,7 +28627,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Middle Name",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Enter Middle Name.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Middle Name.",
         },
         {
           id: "subform45GivenName13",
@@ -29015,7 +28635,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Given Name (First Name)",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Enter Given Name (First Name).",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Given Name (First Name).",
         },
         {
           id: "subform45FamilyName13",
@@ -29023,56 +28643,55 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Family Name (Last Name)",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Enter Family Name (Last Name).",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Family Name (Last Name).",
         },
         {
           id: "subform45Gender",
           type: "radio",
-          label: "Check Male",
+          label: "Male",
           required: true,
           options: [
             { value: "M", label: "Male" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Sex. Check Male.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Sex. Male.",
         },
         {
           id: "subform45Gender1",
           type: "radio",
-          label: "Check Female",
+          label: "Female",
           required: true,
           options: [
             { value: "F", label: "Female" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Sex. Check Female.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Sex. Female.",
         },
         {
           id: "subform45SSN2",
           type: "ssn",
-          label: "Social Security Number, if any",
+          label: "Social Security Number (optional)",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Enter U. S. Social Security Number, if any.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) U. S. Social Security Number (optional)",
         },
         {
           id: "subform45DateOfBirth2",
           type: "date",
-          label:
-            "Date of Birth as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "Date of Birth",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Enter Date of Birth as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Date of Birth.",
         },
         {
           id: "subform45AlienNumber2",
           type: "text",
-          label: "Alien Registration Number (A-Number), if any",
+          label: "Alien Registration Number (A-Number) (optional)",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Enter Alien Registration Number (A-Number), if any.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Alien Registration Number (A-Number) (optional)",
         },
         {
           id: "subform45MiddleName14",
@@ -29080,7 +28699,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Middle Name",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) All Other Names Used (include aliases, maiden name and names from previous Marriages). Enter Middle Name.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) All Other Names Used (include aliases, maiden name and names from previous Marriages). Middle Name.",
         },
         {
           id: "subform45GivenName14",
@@ -29088,7 +28707,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Given Name (First Name)",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) All Other Names Used (include aliases, maiden name and names from previous Marriages). Enter Given Name (First Name).",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) All Other Names Used (include aliases, maiden name and names from previous Marriages). Given Name (First Name).",
         },
         {
           id: "subform45FamilyName14",
@@ -29096,7 +28715,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Family Name (Last Name)",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) All Other Names Used (include aliases, maiden name and names from previous Marriages). Enter Family Name (Last Name).",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) All Other Names Used (include aliases, maiden name and names from previous Marriages). Family Name (Last Name).",
         },
         {
           id: "subform45Att2AptSteFlrNumber",
@@ -29104,43 +28723,43 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Apartment, Suite or Floor Number",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). If Apartment, Suite or Floor is Checked, Enter Apartment, Suite or Floor Number.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). If Apartment, Suite or Floor is Checked, Apartment, Suite or Floor Number.",
         },
         {
           id: "subform45Att2Unit",
           type: "select",
-          label: "Check Floor.",
+          label: "Floor.",
           required: true,
           options: [
             { value: "FLR", label: "FLR" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). Check Floor.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). Floor.",
         },
         {
           id: "subform45Att2Unit1",
           type: "select",
-          label: "Check Suite.",
+          label: "Suite.",
           required: true,
           options: [
             { value: "STE", label: "STE" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). Check Suite.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). Suite.",
         },
         {
           id: "subform45Att2Unit2",
           type: "select",
-          label: "Check Apartment.",
+          label: "Apartment.",
           required: true,
           options: [
             { value: "APT", label: "APT" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). Check Apartment.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). Apartment.",
         },
         {
           id: "subform45LineCityTown5",
@@ -29148,7 +28767,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "City or Town",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Enter City or Town.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). City or Town.",
         },
         {
           id: "subform45FRZipCode",
@@ -29156,12 +28775,12 @@ const I_129_DEFINITION: FormDefinition = {
           label: "ZIP Code",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Enter ZIP Code.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). ZIP Code.",
         },
         {
           id: "subform45FRState",
           type: "select",
-          label: "Select State from a List of States.",
+          label: "State.",
           required: true,
           options: [
             { value: "", label: "" },
@@ -29229,7 +28848,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "WY", label: "Wyoming" },
           ],
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.)  Foreign Address (Complete Address). Select State from a List of States.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). State.",
         },
         {
           id: "subform45StreetNumberName5",
@@ -29237,12 +28856,12 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Street Number and Name",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Enter Street Number and Name.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Street Number and Name.",
         },
         {
           id: "subform45For2Unit",
           type: "radio",
-          label: "Check Suite.",
+          label: "Suite.",
           required: true,
           options: [
             { value: "", label: "None" },
@@ -29250,12 +28869,12 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "off", label: "Off" },
           ],
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Check Suite.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Suite.",
         },
         {
           id: "subform45For2Unit1",
           type: "radio",
-          label: "Check Apartment.",
+          label: "Apartment.",
           required: true,
           options: [
             { value: "", label: "None" },
@@ -29263,12 +28882,12 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "off", label: "Off" },
           ],
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Check Apartment.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Apartment.",
         },
         {
           id: "subform45For2Unit2",
           type: "radio",
-          label: "Check Floor.",
+          label: "Floor.",
           required: true,
           options: [
             { value: "", label: "None" },
@@ -29276,7 +28895,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "off", label: "Off" },
           ],
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Check Floor.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Floor.",
         },
         {
           id: "subform45For2AptSteFlrNumber",
@@ -29284,7 +28903,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Apartment, Suite or Floor Number",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). If Apartment, Suite or Floor is Checked, Enter Apartment, Suite or Floor Number.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). If Apartment, Suite or Floor is Checked, Apartment, Suite or Floor Number.",
         },
         {
           id: "subform45FRProvince",
@@ -29292,7 +28911,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Province, if applicable",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Enter Province, if applicable.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Province, if applicable.",
         },
         {
           id: "subform45FRPostalCode",
@@ -29300,7 +28919,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Postal Code, if applicable",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Enter Postal Code, if applicable.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Postal Code, if applicable.",
         },
         {
           id: "subform45FRCountry",
@@ -29308,7 +28927,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Country",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Enter Country.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Country.",
         },
         {
           id: "subform45LineCountry5",
@@ -29316,7 +28935,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Country of Birth",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Enter Country of Birth.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Country of Birth.",
         },
         {
           id: "subform45LineCountry6",
@@ -29329,11 +28948,10 @@ const I_129_DEFINITION: FormDefinition = {
         {
           id: "subform45ExpDate2",
           type: "date",
-          label:
-            "Date the Passport or Travel Document expires as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "Date the Passport or Travel Document expires",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Enter Date the Passport or Travel Document expires as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Date the Passport or Travel Document expires.",
         },
         {
           id: "subform45ArrivalDeparture1",
@@ -29341,7 +28959,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "I-94 Arrival-Departure Record Number",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Enter I-94 Arrival-Departure Record Number.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: I-94 Arrival-Departure Record Number.",
         },
         {
           id: "subform45CurrentNon1",
@@ -29502,51 +29120,48 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "WT", label: "WT" },
           ],
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Select Current Nonimmigrant Status from list.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Current Nonimmigrant Status from list.",
         },
         {
           id: "subform45DateStatusExpires1",
           type: "date",
-          label:
-            "Date the Status Expires as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "Date the Status Expires",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Enter Date the Status Expires as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Date the Status Expires.",
         },
         {
           id: "subform45ExpDate3",
           type: "date",
-          label:
-            "Date the Passport or Travel Document was Issued as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "Date the Passport or Travel Document was Issued",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Enter Date the Passport or Travel Document was Issued as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Date the Passport or Travel Document was Issued.",
         },
         {
           id: "subform45DateofArrival1",
           type: "date",
-          label:
-            "Date of Last Arrival as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "Date of Last Arrival",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Enter Date of Last Arrival as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Date of Last Arrival.",
         },
         {
           id: "subform45SEVIS",
           type: "text",
           label:
-            "Student and Exchange Visitor Information System (S E V I S) Number, if any",
+            "Student and Exchange Visitor Information System (S E V I S) Number (optional)",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Enter Student and Exchange Visitor Information System (S E V I S) Number, if any.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Student and Exchange Visitor Information System (S E V I S) Number (optional)",
         },
         {
           id: "subform45EAD",
           type: "text",
-          label: "Employment Authorization Document (E A D) Number, if any",
+          label: "Employment Authorization Document (E A D) Number (optional)",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Enter Employment Authorization Document (E A D) Number, if any.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Employment Authorization Document (E A D) Number (optional)",
         },
         {
           id: "subform45Passport3",
@@ -29554,7 +29169,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Passport or Travel Document Number",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Enter Passport or Travel Document Number.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Passport or Travel Document Number.",
         },
         {
           id: "subform45LineCountry7",
@@ -29562,7 +29177,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Country of Issuance for Passport or Travel Document",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Enter Country of Issuance for Passport or Travel Document.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Country of Issuance for Passport or Travel Document.",
         },
       ],
     },
@@ -29575,13 +29190,12 @@ const I_129_DEFINITION: FormDefinition = {
           type: "text",
           label: "ZIP Code",
           required: true,
-          helpText:
-            "Part 1. Petitioner Information. 3. Mailing Address of Individual, Company or Organization. Enter ZIP Code.",
+          helpText: "ZIP Code.",
         },
         {
           id: "part1.subformState",
           type: "select",
-          label: "Select State from a List of States",
+          label: "State",
           required: true,
           options: [
             { value: "", label: "" },
@@ -29648,58 +29262,54 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "WV", label: "West Virginia" },
             { value: "WY", label: "Wyoming" },
           ],
-          helpText:
-            "Part 1. Petitioner Information. 3. Mailing Address of Individual, Company or Organization. Select State from a List of States.",
+          helpText: "State.",
         },
         {
           id: "part1.subformPostalCode",
           type: "text",
           label: "Postal Code, if applicable",
           required: true,
-          helpText:
-            "Part 1. Petitioner Information. 3. Mailing Address of Individual, Company or Organization. Enter Postal Code, if applicable.",
+          helpText: "Postal Code, if applicable.",
         },
         {
           id: "part1.subformProvince",
           type: "text",
           label: "Province, if applicable",
           required: true,
-          helpText:
-            "Part 1. Petitioner Information. 3. Mailing Address of Individual, Company or Organization. Enter Province, if applicable.",
+          helpText: "Province, if applicable.",
         },
         {
           id: "part1.subformCountry",
           type: "text",
           label: "Country",
           required: true,
-          helpText:
-            "Part 1. Petitioner Information. 3. Mailing Address of Individual, Company or Organization. Enter Country.",
+          helpText: "Country.",
         },
         {
           id: "part1.subformNo",
           type: "radio",
           label:
-            "Are you a nonprofit organized as tax exempt or a governmental research organization? Check No",
+            "Are you a nonprofit organized as tax exempt or a governmental research organization? No",
           required: true,
           options: [
             { value: "Y", label: "Yes" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Part 1. Petitioner Information. Other Information. 6. Are you a nonprofit organized as tax exempt or a governmental research organization? Check No.",
+            "6. Are you a nonprofit organized as tax exempt or a governmental research organization? No.",
         },
         {
           id: "part1.subformYes",
           type: "radio",
           label:
-            "Are you a nonprofit organized as tax exempt or a governmental research organization? Check Yes",
+            "Are you a nonprofit organized as tax exempt or a governmental research organization? Yes",
           required: true,
           options: [
             { value: "Y", label: "Yes" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Part 1. Petitioner Information. Other Information. 6. Are you a nonprofit organized as tax exempt or a governmental research organization? Check Yes.",
+            "6. Are you a nonprofit organized as tax exempt or a governmental research organization? Yes.",
         },
         {
           id: "part1.subform33dmajorleague",
@@ -29710,29 +29320,29 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "1",
               label:
-                "29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (select only one box). Check D. P-1 Major League Sports.",
+                "29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). D. P-1 Major League Sports.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (select only one box). Check D. P-1 Major League Sports.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). D. P-1 Major League Sports.",
         },
         {
           id: "part1.subform33e",
           type: "radio",
           label:
-            "P-1 Athlete or Athletic/Entertainment Group (includes minor league sports not affiliated with Maj...",
+            "P-1 Athlete or Athletic/Entertainment Group (includes minor league sports not affiliated with Maj.",
           required: true,
           options: [
             {
               value: "1",
               label:
-                "29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (select only one box). Check E. P-1 Athlete or Athletic/Entertainment Group (includes minor league sports not affiliated with Major League Sports).",
+                "29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). E. P-1 Athlete or Athletic/Entertainment Group (includes minor league sports not affiliated with Major League Sports).",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (select only one box). Check E. P-1 Athlete or Athletic/Entertainment Group (includes minor league sports not affiliated with Major League Sports).",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). E. P-1 Athlete or Athletic/Entertainment Group (includes minor league sports not affiliated with Major League Sports).",
         },
         {
           id: "part1.subform33fS",
@@ -29743,12 +29353,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "1",
               label:
-                "29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (select only one box). Check F. P-1 S  Essential Support Personnel for P-1.",
+                "29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). F. P-1 S Essential Support Personnel for P-1.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (select only one box). Check F. P-1 S  Essential Support Personnel for P-1.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). F. P-1 S Essential Support Personnel for P-1.",
         },
       ],
     },
@@ -29763,13 +29373,13 @@ const I_129_DEFINITION: FormDefinition = {
             "Requested Nonimmigrant Classification (Write classification symbol)",
           required: true,
           helpText:
-            "Part 2. Information About This Petition. 1. Enter Requested Nonimmigrant Classification (Write classification symbol).",
+            "1. Requested Nonimmigrant Classification (Write classification symbol).",
         },
         {
           id: "part2.subform1Checkbox4",
           type: "radio",
           label:
-            "NOTE: A petition is not required for E-1, E-2, E-3, H-1 B 1 Chile/Singapore, or T N visa benefici...",
+            "NOTE: A petition is not required for E-1, E-2, E-3, H-1 B 1 Chile/Singapore, or T N visa benefici.",
           required: true,
           options: [
             {
@@ -29780,54 +29390,54 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Part 2. Information About This Petition. 4. Requested Action (select only one box). Check A. Notify the office in Part 4 so each beneficiary can obtain a visa or be admitted. NOTE: A petition is not required for E-1, E-2, E-3, H-1 B 1 Chile/Singapore, or T N visa beneficiaries.",
+            "4. Requested Action (only one box). A. Notify the office in Part 4 so each beneficiary can obtain a visa or be admitted. NOTE: A petition is not required for E-1, E-2, E-3, H-1 B 1 Chile/Singapore, or T N visa beneficiaries.",
         },
         {
           id: "part2.subform1Checkbox41",
           type: "select",
           label:
-            "This is available only when you check &quot;New Employment&quot; in Item Number 2., above.",
+            "This is available only when you &quot;New Employment&quot; in , above.",
           required: true,
           options: [
             { value: "B", label: "B" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Part 2. Information About This Petition. 4. Requested Action (select only one box). Check B. Change the status and extend the stay of each beneficiary because the beneficiary or beneficiaries is/are now in the United States in another status. see instructions for limitations. This is available only when you check &quot;New Employment&quot; in Item Number 2., above.",
+            "4. Requested Action (only one box). B. Change the status and extend the stay of each beneficiary because the beneficiary or beneficiaries is/are now in the United States in another status. see instructions for limitations. This is available only when you &quot;New Employment&quot; in , above.",
         },
         {
           id: "part2.subform1Checkbox42",
           type: "radio",
           label:
-            "Extend the stay of each beneficiary because the beneficiary or beneficiaries now hold or holds th...",
+            "Extend the stay of each beneficiary because the beneficiary or beneficiaries now hold or holds th.",
           required: true,
           options: [
             {
               value: "C",
               label:
-                "Part2. Information About This Petition. 4. Requested Action (select only one box). heck C. Extend the stay of each beneficiary because the beneficiary or beneficiaries now hold or holds this status.",
+                "Part2. Information About This Petition. 4. Requested Action (only one box). heck C. Extend the stay of each beneficiary because the beneficiary or beneficiaries now hold or holds this status.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Part 2. Information About This Petition. 4. Requested Action (select only one box). Check C. Extend the stay of each beneficiary because the beneficiary or beneficiaries now hold or holds this status.",
+            "4. Requested Action (only one box). C. Extend the stay of each beneficiary because the beneficiary or beneficiaries now hold or holds this status.",
         },
         {
           id: "part2.subform1Checkbox43",
           type: "radio",
           label:
-            "Amend the stay of each beneficiary because the beneficiary(ies) now hold(s) this status and is/ar...",
+            "Amend the stay of each beneficiary because the beneficiary(ies) now hold(s) this status and is/ar.",
           required: true,
           options: [
             {
               value: "D",
               label:
-                "Action (select only one box). Check D. Amend the stay of each beneficiary because the beneficiary(ies) now hold(s) this status and is/are not seeking additional time from the current authorized period of stay.",
+                "Action (only one box). D. Amend the stay of each beneficiary because the beneficiary(ies) now hold(s) this status and is/are not seeking additional time from the current authorized period of stay.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Part 2. Information About This Petition. 4. Requested Action (select only one box). Check D. Amend the stay of each beneficiary because the beneficiary(ies) now hold(s) this status and is/are not seeking additional time from the current authorized period of stay.",
+            "4. Requested Action (only one box). D. Amend the stay of each beneficiary because the beneficiary(ies) now hold(s) this status and is/are not seeking additional time from the current authorized period of stay.",
         },
         {
           id: "part2.subform1Checkbox44",
@@ -29839,12 +29449,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "E",
               label:
-                "box). Check E. Extend the status of a nonimmigrant classification based on a free trade agreement. See Trade Agreement Supplement to Form I-1 29 for T N and H-1 B 1.",
+                "box). E. Extend the status of a nonimmigrant classification based on a free trade agreement. See Trade Agreement Supplement to Form I-1 29 for T N and H-1 B 1.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Part 2. Information About This Petition. 4. Requested Action (select only one box). Check E. Extend the status of a nonimmigrant classification based on a free trade agreement. See Trade Agreement Supplement to Form I-1 29 for T N and H-1 B 1.",
+            "4. Requested Action (only one box). E. Extend the status of a nonimmigrant classification based on a free trade agreement. See Trade Agreement Supplement to Form I-1 29 for T N and H-1 B 1.",
         },
         {
           id: "part2.subform1Checkbox45",
@@ -29857,7 +29467,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Part 2. Information About This Petition. 4. Requested Action (select only one box). Check F. Change status to a nonimmigrant classification based on a free trade agreement. See Trade Agreement Supplement to Form I-1 29 for T N and H-1 B 1.",
+            "4. Requested Action (only one box). F. Change status to a nonimmigrant classification based on a free trade agreement. See Trade Agreement Supplement to Form I-1 29 for T N and H-1 B 1.",
         },
         {
           id: "part2.subform33g",
@@ -29868,12 +29478,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "1",
               label:
-                "29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (select only one box). Check G. P-2 Artist or entertainer for reciprocal exchange program.",
+                "29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). G. P-2 Artist or entertainer for reciprocal exchange program.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (select only one box). Check G. P-2 Artist or entertainer for reciprocal exchange program.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). G. P-2 Artist or entertainer for reciprocal exchange program.",
         },
         {
           id: "part2.subform33hS",
@@ -29884,12 +29494,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "1",
               label:
-                "29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (select only one box). Check H. P-2 S Essential Support Personnel for P-2.",
+                "29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). H. P-2 S Essential Support Personnel for P-2.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (select only one box). Check H. P-2 S Essential Support Personnel for P-2.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). H. P-2 S Essential Support Personnel for P-2.",
         },
       ],
     },
@@ -29902,57 +29512,53 @@ const I_129_DEFINITION: FormDefinition = {
           type: "text",
           label: "Middle Name",
           required: true,
-          helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 3. Provide Name of Beneficiary. Enter Middle Name.",
+          helpText: "3. Name of Beneficiary. Middle Name.",
         },
         {
           id: "part3.subform1GivenName",
           type: "text",
           label: "Given Name (First Name)",
           required: true,
-          helpText:
-            "Part 3. Beneficiary Information . Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 3. Provide Name of Beneficiary. Enter Given Name (First Name).",
+          helpText: "3. Name of Beneficiary. Given Name (First Name).",
         },
         {
           id: "part3.subform1FamilyName",
           type: "text",
           label: "Family Name (Last Name)",
           required: true,
-          helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 3. Provide Name of Beneficiary. Enter Family Name (Last Name).",
+          helpText: "3. Name of Beneficiary. Family Name (Last Name).",
         },
         {
           id: "part3.subform1Checkbox",
           type: "radio",
-          label: "Check Unnamed (for H-2 A or H-2 B petitions only).",
+          label: "Unnamed (for H-2 A or H-2 B petitions only).",
           required: true,
           options: [
             { value: "N", label: "No" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Part 3.  Beneficiary Information  (Information about the beneficiary/beneficiaries you are filing for.  Complete the blocks below.  Use the Attachment-1 sheet to name each beneficiary included in this petition.) 1. Type of Beneficiaries Requested (select only one box). Check Unnamed (for H-2 A or H-2 B petitions only).",
+            "Use the Attachment-1 sheet to name each beneficiary included in this petition.) 1. Type of Beneficiaries Requested (only one box). Unnamed (for H-2 A or H-2 B petitions only).",
         },
         {
           id: "part3.subform1Checkbox1",
           type: "radio",
-          label: "Check Named.",
+          label: "Named.",
           required: true,
           options: [
             { value: "Y", label: "Yes" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Part 3.  Beneficiary Information  (Information about the beneficiary/beneficiaries you are filing for.  Complete the blocks below.  Use the Attachment-1 sheet to name each beneficiary included in this petition.) 1. Type of Beneficiaries Requested (select only one box). Check Named.",
+            "Use the Attachment-1 sheet to name each beneficiary included in this petition.) 1. Type of Beneficiaries Requested (only one box). Named.",
         },
         {
           id: "part3.subform2DateofArrival",
           type: "date",
-          label:
-            "Date of Last Arrival as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "Date of Last Arrival",
           required: true,
           helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 6. If the beneficiary is in the United States, complete the following: Enter Date of Last Arrival as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "6. If the beneficiary is in the United States, complete the following: Date of Last Arrival.",
         },
         {
           id: "part3.subform2PassportorTravDoc",
@@ -29960,15 +29566,14 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Passport or Travel Document Number",
           required: true,
           helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 6. If the beneficiary is in the United States, complete the following: Enter Passport or Travel Document Number.",
+            "6. If the beneficiary is in the United States, complete the following: Passport or Travel Document Number.",
         },
         {
           id: "part3.subform2CountryOfBirth",
           type: "text",
           label: "Country of Birth",
           required: true,
-          helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 5. Other Information. Enter Country of Birth.",
+          helpText: "5. Other Information. Country of Birth.",
         },
         {
           id: "part3.subform2CountryOfCitizenship",
@@ -29976,7 +29581,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Country of Citizenship or Nationality",
           required: true,
           helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 5. Other Information. Enter Country of Citizenship or Nationality.",
+            "5. Other Information. Country of Citizenship or Nationality.",
         },
         {
           id: "part3.subform2ArrivalDeparture",
@@ -29984,31 +29589,29 @@ const I_129_DEFINITION: FormDefinition = {
           label: "I-94 Arrival-Departure Record Number",
           required: true,
           helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 6. If the beneficiary is in the United States, complete the following: Enter I-94 Arrival-Departure Record Number.",
+            "6. If the beneficiary is in the United States, complete the following: I-94 Arrival-Departure Record Number.",
         },
         {
           id: "part3.subform2Gender",
           type: "radio",
-          label: "Check Male",
+          label: "Male",
           required: true,
           options: [
             { value: "M", label: "Male" },
             { value: "Off", label: "Off" },
           ],
-          helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 5. Other Information. Sex. Check Male.",
+          helpText: "5. Other Information. Sex. Male.",
         },
         {
           id: "part3.subform2Gender1",
           type: "radio",
-          label: "Check Female",
+          label: "Female",
           required: true,
           options: [
             { value: "F", label: "Female" },
             { value: "Off", label: "Off" },
           ],
-          helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 5. Other Information. Sex. Check Female.",
+          helpText: "5. Other Information. Sex. Female.",
         },
         {
           id: "part3.subform25City",
@@ -30016,12 +29619,12 @@ const I_129_DEFINITION: FormDefinition = {
           label: "City or Town",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 4 Address of employer abroad. Enter City or Town.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 4 Address of employer abroad. City or Town.",
         },
         {
           id: "part3.subform25State",
           type: "select",
-          label: "Select State from a List of States",
+          label: "State",
           required: true,
           options: [
             { value: "", label: "" },
@@ -30089,7 +29692,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "WY", label: "Wyoming" },
           ],
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 4 Address of employer abroad. Select State from a List of States.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 4 Address of employer abroad. State.",
         },
         {
           id: "part3.subform25ZipCode",
@@ -30097,7 +29700,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "ZIP Code",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 4 Address of employer abroad. Enter ZIP Code.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 4 Address of employer abroad. ZIP Code.",
         },
         {
           id: "part3.subform25StreetName",
@@ -30105,7 +29708,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Street Number and Name",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 4 Address of employer abroad. Enter Street Number and Name.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 4 Address of employer abroad. Street Number and Name.",
         },
         {
           id: "part3.subform25Province",
@@ -30113,7 +29716,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Province, if applicable",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 4 Address of employer abroad. Enter Province, if applicable.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 4 Address of employer abroad. Province, if applicable.",
         },
         {
           id: "part3.subform25Country",
@@ -30121,7 +29724,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Country",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 4 Address of employer abroad. Enter Country.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 4 Address of employer abroad. Country.",
         },
         {
           id: "part3.subform25PostalCode",
@@ -30129,20 +29732,20 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Postal Code, if applicable",
           required: true,
           helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 4 Address of employer abroad. Enter Postal Code, if applicable.",
+            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 4 Address of employer abroad. Postal Code, if applicable.",
         },
         {
           id: "part3.subform33i",
           type: "select",
           label:
-            "P-3 Artist/Entertainer coming to the United States to perform, teach, or coach under a program th...",
+            "P-3 Artist/Entertainer coming to the United States to perform, teach, or coach under a program th.",
           required: true,
           options: [
-            { value: "1", label: "1" },
-            { value: "Off", label: "Off" },
+            { value: "Yes", label: "Yes" },
+            { value: "No", label: "No" },
           ],
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (select only one box). Check I. P-3 Artist/Entertainer coming to the United States to perform, teach, or coach under a program that is culturally unique.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). I. P-3 Artist/Entertainer coming to the United States to perform, teach, or coach under a program that is culturally unique.",
         },
         {
           id: "part3.subform33jS",
@@ -30153,12 +29756,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "1",
               label:
-                "29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (select only one box). Check J. P-3 S Essential Support Personnel for P-3.",
+                "29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). J. P-3 S Essential Support Personnel for P-3.",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (select only one box). Check J. P-3 S Essential Support Personnel for P-3.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). J. P-3 S Essential Support Personnel for P-3.",
         },
       ],
     },
@@ -30171,8 +29774,7 @@ const I_129_DEFINITION: FormDefinition = {
           type: "text",
           label: "Province of Birth",
           required: true,
-          helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 5. Other Information. Enter Province of Birth.",
+          helpText: "5. Other Information. Province of Birth.",
         },
         {
           id: "part4.subform21cStateorCountry",
@@ -30180,7 +29782,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "State or Foreign Country",
           required: true,
           helpText:
-            "Part 4. Processing Information. 1. If a beneficiary or beneficiaries named in Part 3. is/are outside the United States, or a requested extension of stay or change of status cannot be granted, state the U. S. Consulate or inspection facility you want notified if this petition is approved. C. Enter U. S. State or Foreign Country.",
+            "If a beneficiary or beneficiaries named in S. Consulate or inspection facility you want notified if this petition is approved. C. U. S. State or Foreign Country.",
         },
         {
           id: "part4.subform3HowMany",
@@ -30188,20 +29790,20 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Number of Additional Applications",
           required: true,
           helpText:
-            "Part 4. Processing Information. 4. Are you filing any applications for replacement/initial I-94, Arrival-Departure Records with this petition?  Note that if the beneficiary was issued an electronic Form I-94 by U. S. Customs and Border Protection (C B P) when he/she was admitted to the United States at an air or sea port, he/she may be able to obtain the Form I-94 from the U. S. Customs and Border Protection (C B P) Web site at www.c b p/i94 instead of filing an application for a replacement/initial I-94. If Yes is Checked, Enter Number of Additional Applications.",
+            "Are you filing any applications for replacement/initial I-94, Arrival-Departure Records with this petition? Note that if the beneficiary was issued an electronic Form I-94 by U. S. Customs and Border Protection (C B P) when he/she was admitted to the United States at an air or sea port, he/she may be able to obtain the Form I-94 from the U. S. Customs and Border Protection (C B P) Web site at www.c b p/i94 instead of filing an application for a replacement/initial I-94. If Yes is Checked, Number of Additional Applications.",
         },
         {
           id: "part4.subform3No",
           type: "radio",
           label:
-            "Are you filing any applications for dependents with this petition? Check No",
+            "Are you filing any applications for dependents with this petition? No",
           required: true,
           options: [
             { value: "Y", label: "Yes" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Part 4. Processing Information. 5. Are you filing any applications for dependents with this petition? Check No.",
+            "Are you filing any applications for dependents with this petition? No.",
         },
         {
           id: "part4.subform3Yes",
@@ -30213,7 +29815,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Part 4. Processing Information. 11. A.  Has any beneficiary in this petition ever been a J-1 exchange visitor or J-2 dependent of a J-1 exchange visitor? Check Yes. If yes, proceed to Item Number 11. B.",
+            "A. Has any beneficiary in this petition ever been a J-1 exchange visitor or J-2 dependent of a J-1 exchange visitor? Yes. If yes, proceed to B.",
         },
         {
           id: "part4.subform3HowMany1",
@@ -30221,7 +29823,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Number of Applications",
           required: true,
           helpText:
-            "Part 4. Processing Information. 7. Have you ever filed an immigrant petition for any beneficiary in this petition? If Yes is Checked, Enter Number of Applications.",
+            "Have you ever filed an immigrant petition for any beneficiary in this petition? If Yes is Checked, Number of Applications.",
         },
         {
           id: "part4.subform3",
@@ -30233,19 +29835,19 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Part 4. Processing Information. 8. Did you indicate you were filing a new petition in Part 2.? Check Yes. If yes, answer the questions below.",
+            "Did you you were filing a new petition in Part 2.? Yes. If yes, answer the questions below.",
         },
         {
           id: "part4.subform31",
           type: "radio",
-          label: "If no, proceed to Item Number 9",
+          label: "If no, proceed to ",
           required: true,
           options: [
             { value: "N", label: "No" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Part 4. Processing Information. 8. Did you indicate you were filing a new petition in Part 2.? Check No. If no, proceed to Item Number 9.",
+            "Did you you were filing a new petition in Part 2.? No. If no, proceed to",
         },
         {
           id: "part4.subform3Checkbox",
@@ -30257,20 +29859,19 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Part 4. Processing Information. 2. Does each person in this petition have a valid passport? Check No. If No, go to Part 9 and type or print your explanation.",
+            "Does each person in this petition have a valid passport? No. If No, go to Part 9 and type or print your explanation.",
         },
         {
           id: "part4.subform3Checkbox1",
           type: "radio",
-          label:
-            "Does each person in this petition have a valid passport? Check Yes",
+          label: "Does each person in this petition have a valid passport? Yes",
           required: true,
           options: [
             { value: "Y", label: "Yes" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Part 4. Processing Information. 2. Does each person in this petition have a valid passport? Check Yes.",
+            "Does each person in this petition have a valid passport? Yes.",
         },
       ],
     },
@@ -30292,7 +29893,7 @@ const I_129_DEFINITION: FormDefinition = {
             },
           ],
           helpText:
-            "Part 5. Basic Information About the Proposed Employment and Employer. Attach the Form I-1 29 supplement relevant to the classification of the worker or workers you are requesting. 5. Will the beneficiary or beneficiaries work for you off-site at another company or organization&apos;s location? Check Yes.",
+            "Attach the Form I-1 29 supplement relevant to the classification of the worker or workers you are requesting. 5. Will the beneficiary or beneficiaries work for you off-site at another company or organization&apos;s location? Yes.",
         },
         {
           id: "part5.subform4No",
@@ -30308,25 +29909,23 @@ const I_129_DEFINITION: FormDefinition = {
             },
           ],
           helpText:
-            "Part 5. Basic Information About the Proposed Employment and Employer. Attach the Form I-1 29 supplement relevant to the classification of the worker or workers you are requesting. 5. Will the beneficiary or beneficiaries work for you off-site at another company or organization&apos;s location? Check No.",
+            "Attach the Form I-1 29 supplement relevant to the classification of the worker or workers you are requesting. 5. Will the beneficiary or beneficiaries work for you off-site at another company or organization&apos;s location? No.",
         },
         {
           id: "part5.subform4Q10DateFrom",
           type: "date",
-          label:
-            "Employed From Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "Employed From Date",
           required: true,
           helpText:
-            "Part 5. Basic Information About the Proposed Employment and Employer. Attach the Form I-1 29 supplement relevant to the classification of the worker or workers you are requesting.  11. Dates of intended employment. Enter Employed From Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "Attach the Form I-1 29 supplement relevant to the classification of the worker or workers you are requesting. 11. Dates of intended employment. Employed From Date.",
         },
         {
           id: "part5.subform4Q10DateTo",
           type: "date",
-          label:
-            "Employed To Date as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "Employed To Date",
           required: true,
           helpText:
-            "Part 5. Basic Information About the Proposed Employment and Employer. Attach the Form I-1 29 supplement relevant to the classification of the worker or workers you are requesting.  11. Dates of intended employment. Enter Employed To Date as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "Attach the Form I-1 29 supplement relevant to the classification of the worker or workers you are requesting. 11. Dates of intended employment. Employed To Date.",
         },
         {
           id: "part5.subform4Hours",
@@ -30334,12 +29933,12 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Number of Hours",
           required: true,
           helpText:
-            "Part 5. Basic Information About the Proposed Employment and Employer. Attach the Form I-1 29 supplement relevant to the classification of the worker or workers you are requesting. 8. If the answer to Item Number 7. is no, how many hours per week for the position? Enter Number of Hours.",
+            "Attach the Form I-1 29 supplement relevant to the classification of the worker or workers you are requesting. 8. If the answer to is no, how many hours per week for the position? Number of Hours.",
         },
         {
           id: "part5.subform4State",
           type: "select",
-          label: "Select State from a List of States",
+          label: "State",
           required: true,
           options: [
             { value: "", label: "" },
@@ -30407,7 +30006,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "WY", label: "Wyoming" },
           ],
           helpText:
-            "Part 5.  Basic Information About the Proposed Employment and Employer. 3. Address(es) where the beneficiary(ies) will work if different from address in Part 1.  If you need to provide more than two additional addresses, use Part 9. Additional Information. Address 1. Select State from a List of States.",
+            "3. Address(es) where the beneficiary(ies) will work if different from address in Address 1. State.",
         },
         {
           id: "part5.subform4ZipCode",
@@ -30415,12 +30014,12 @@ const I_129_DEFINITION: FormDefinition = {
           label: "ZIP Code",
           required: true,
           helpText:
-            "Part 5.  Basic Information About the Proposed Employment and Employer. 3. Address(es) where the beneficiary(ies) will work if different from address in Part 1.  If you need to provide more than two additional addresses, use Part 9. Additional Information. Address 1. Enter ZIP Code.",
+            "3. Address(es) where the beneficiary(ies) will work if different from address in Address 1. ZIP Code.",
         },
         {
           id: "part5.subform4Unit",
           type: "radio",
-          label: "Check Apartment",
+          label: "Apartment",
           required: true,
           options: [
             { value: "", label: "None" },
@@ -30428,7 +30027,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "off", label: "Off" },
           ],
           helpText:
-            "Part 5.  Basic Information About the Proposed Employment and Employer. 3. Address(es) where the beneficiary(ies) will work if different from address in Part 1.  If you need to provide more than two additional addresses, use Part 9. Additional Information. Address 1. Check Apartment.",
+            "3. Address(es) where the beneficiary(ies) will work if different from address in Address 1. Apartment.",
         },
         {
           id: "part5.subform4AptSteFlrNumber",
@@ -30436,12 +30035,12 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Apartment, Suite or Floor Number",
           required: true,
           helpText:
-            "Part 5.  Basic Information About the Proposed Employment and Employer. 3. Address(es) where the beneficiary(ies) will work if different from address in Part 1.  If you need to provide more than two additional addresses, use Part 9. Additional Information. Address 1. If Apartment, Suite or Floor is Checked, Enter Apartment, Suite or Floor Number.",
+            "3. Address(es) where the beneficiary(ies) will work if different from address in Address 1. If Apartment, Suite or Floor is Checked, Apartment, Suite or Floor Number.",
         },
         {
           id: "part5.subform4Unit1",
           type: "radio",
-          label: "Check Floor",
+          label: "Floor",
           required: true,
           options: [
             { value: "", label: "None" },
@@ -30449,12 +30048,12 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "off", label: "Off" },
           ],
           helpText:
-            "Part 5.  Basic Information About the Proposed Employment and Employer. 3. Address(es) where the beneficiary(ies) will work if different from address in Part 1.  If you need to provide more than two additional addresses, use Part 9. Additional Information. Address 1. Check Floor.",
+            "3. Address(es) where the beneficiary(ies) will work if different from address in Address 1. Floor.",
         },
         {
           id: "part5.subform4Unit2",
           type: "radio",
-          label: "Check Suite",
+          label: "Suite",
           required: true,
           options: [
             { value: "", label: "None" },
@@ -30462,7 +30061,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "off", label: "Off" },
           ],
           helpText:
-            "Part 5.  Basic Information About the Proposed Employment and Employer. 3. Address(es) where the beneficiary(ies) will work if different from address in Part 1.  If you need to provide more than two additional addresses, use Part 9. Additional Information. Address 1. Check Suite.",
+            "3. Address(es) where the beneficiary(ies) will work if different from address in Address 1. Suite.",
         },
         {
           id: "part5.subform4StreetNumberName",
@@ -30470,7 +30069,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Street Number and Name",
           required: true,
           helpText:
-            "Part 5.  Basic Information About the Proposed Employment and Employer. 3. Address(es) where the beneficiary(ies) will work if different from address in Part 1.  If you need to provide more than two additional addresses, use Part 9. Additional Information. Address 1. Enter Street Number and Name.",
+            "3. Address(es) where the beneficiary(ies) will work if different from address in Address 1. Street Number and Name.",
         },
         {
           id: "part5.subform4CityTown",
@@ -30478,7 +30077,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "City or Town",
           required: true,
           helpText:
-            "Part 5.  Basic Information About the Proposed Employment and Employer. 3. Address(es) where the beneficiary(ies) will work if different from address in Part 1.  If you need to provide more than two additional addresses, use Part 9. Additional Information. Address 1. City or Town.",
+            "3. Address(es) where the beneficiary(ies) will work if different from address in Address 1. City or Town.",
         },
         {
           id: "part5.subform4Q2LCAorETA",
@@ -30487,7 +30086,7 @@ const I_129_DEFINITION: FormDefinition = {
             "Labor Condition Application (L C A) or Employment and Training Administration (E T A) Case Number",
           required: true,
           helpText:
-            "Part 5. Basic Information About the Proposed Employment and Employer. Attach the Form I-1 29 supplement relevant to the classification of the worker or workers you are requesting. 2. Enter Labor Condition Application (L C A) or Employment and Training Administration (E T A) Case Number.",
+            "Attach the Form I-1 29 supplement relevant to the classification of the worker or workers you are requesting. 2. Labor Condition Application (L C A) or Employment and Training Administration (E T A) Case Number.",
         },
         {
           id: "part5.subform4Q1JobTitle",
@@ -30495,7 +30094,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Job Title",
           required: true,
           helpText:
-            "Part 5. Basic Information About the Proposed Employment and Employer. Attach the Form I-1 29 supplement relevant to the classification of the worker or workers you are requesting. 1. Enter Job Title.",
+            "Attach the Form I-1 29 supplement relevant to the classification of the worker or workers you are requesting. 1. Job Title.",
         },
         {
           id: "part5.subform4",
@@ -30507,7 +30106,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Part 5.  Basic Information About the Proposed Employment and Employer. 3. Address(es) where the beneficiary(ies) will work if different from address in Part 1.  If you need to provide more than two additional addresses, use Part 9. Is this a third-party location?  Select No.",
+            "3. Address(es) where the beneficiary(ies) will work if different from address in Is this a third-party location? No.",
         },
         {
           id: "part5.subform41",
@@ -30518,12 +30117,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "1",
               label:
-                "Part5.  Basic Information About the Proposed Employment and Employer. 3. Address(es) where the beneficiary(ies) will work if different from address in Part .  If you need to provide more than two additional addresses",
+                "Part5. Basic Information About the Proposed Employment and Employer. 3. Address(es) where the beneficiary(ies) will work if different from address in Part . If you need to more than two additional addresses",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Part 5.  Basic Information About the Proposed Employment and Employer. 3. Address(es) where the beneficiary(ies) will work if different from address in Part 1.  If you need to provide more than two additional addresses, use Part 9. Is this a third-party location?  Select Yes.",
+            "3. Address(es) where the beneficiary(ies) will work if different from address in Is this a third-party location? Yes.",
         },
         {
           id: "part5.subform4ThirdpartyOrganization",
@@ -30531,12 +30130,12 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Name",
           required: true,
           helpText:
-            "Part 5.  Basic Information About the Proposed Employment and Employer. 3. Address(es) where the beneficiary(ies) will work if different from address in Part 1.  If you need to provide more than two additional addresses, use Part 9. Is this a third-party location?  If you answered &quot;Yes,&quot; provide the name of the third-party organization. Enter name.",
+            "3. Address(es) where the beneficiary(ies) will work if different from address in Is this a third-party location? If you answered &quot;Yes,&quot; name of the third-party organization. name.",
         },
         {
           id: "part5.subform4State2",
           type: "select",
-          label: "Select State from a List of States",
+          label: "State",
           required: true,
           options: [
             { value: "", label: "" },
@@ -30604,7 +30203,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "WY", label: "Wyoming" },
           ],
           helpText:
-            "Part 5.  Basic Information About the Proposed Employment and Employer. 3. Address(es) where the beneficiary(ies) will work if different from address in Part 1.  If you need to provide more than two additional addresses, use Part 9. Additional Information. Address 2. Select State from a List of States.",
+            "3. Address(es) where the beneficiary(ies) will work if different from address in Address 2. State.",
         },
         {
           id: "part5.subform4ZipCode2",
@@ -30612,7 +30211,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "ZIP Code",
           required: true,
           helpText:
-            "Part 5.  Basic Information About the Proposed Employment and Employer. 3. Address(es) where the beneficiary(ies) will work if different from address in Part 1.  If you need to provide more than two additional addresses, use Part 9. Additional Information. Address 2. Enter ZIP Code.",
+            "3. Address(es) where the beneficiary(ies) will work if different from address in Address 2. ZIP Code.",
         },
         {
           id: "part5.subform4AptSteFlrNumber2",
@@ -30620,12 +30219,12 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Apartment, Suite or Floor Number",
           required: true,
           helpText:
-            "Part 5.  Basic Information About the Proposed Employment and Employer. 3. Address(es) where the beneficiary(ies) will work if different from address in Part 1.  If you need to provide more than two additional addresses, use Part 9. Additional Information. Address 2. If Apartment, Suite or Floor is Checked, Enter Apartment, Suite or Floor Number.",
+            "3. Address(es) where the beneficiary(ies) will work if different from address in Address 2. If Apartment, Suite or Floor is Checked, Apartment, Suite or Floor Number.",
         },
         {
           id: "part5.subform4Unit21",
           type: "radio",
-          label: "Check Floor",
+          label: "Floor",
           required: true,
           options: [
             { value: "", label: "None" },
@@ -30633,12 +30232,12 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "off", label: "Off" },
           ],
           helpText:
-            "Part 5.  Basic Information About the Proposed Employment and Employer. 3. Address(es) where the beneficiary(ies) will work if different from address in Part 1.  If you need to provide more than two additional addresses, use Part 9. Additional Information. Address 2. Check Floor.",
+            "3. Address(es) where the beneficiary(ies) will work if different from address in Address 2. Floor.",
         },
         {
           id: "part5.subform4Unit22",
           type: "radio",
-          label: "Check Suite",
+          label: "Suite",
           required: true,
           options: [
             { value: "", label: "None" },
@@ -30646,7 +30245,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "off", label: "Off" },
           ],
           helpText:
-            "Part 5.  Basic Information About the Proposed Employment and Employer. 3. Address(es) where the beneficiary(ies) will work if different from address in Part 1.  If you need to provide more than two additional addresses, use Part 9. Additional Information. Address 2. Check Suite",
+            "3. Address(es) where the beneficiary(ies) will work if different from address in Address 2. Suite",
         },
         {
           id: "part5.subform4StreetNumberName2",
@@ -30654,7 +30253,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Street Number and Name",
           required: true,
           helpText:
-            "Part 5.  Basic Information About the Proposed Employment and Employer. 3. Address(es) where the beneficiary(ies) will work if different from address in Part 1.  If you need to provide more than two additional addresses, use Part 9. Address 2. Enter Street Number and Name.",
+            "3. Address(es) where the beneficiary(ies) will work if different from address in Address 2. Street Number and Name.",
         },
         {
           id: "part5.subform4dd",
@@ -30666,7 +30265,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Part 5.  Basic Information About the Proposed Employment and Employer. 3. Address(es) where the beneficiary(ies) will work if different from address in Part 1.  If you need to provide more than two additional addresses, use Part 9. Is this a third-party location? Select No.",
+            "3. Address(es) where the beneficiary(ies) will work if different from address in Is this a third-party location? No.",
         },
         {
           id: "part5.subform4dd1",
@@ -30677,12 +30276,12 @@ const I_129_DEFINITION: FormDefinition = {
             {
               value: "1",
               label:
-                "Part5.  Basic Information About the Proposed Employment and Employer. 3. Address(es) where the beneficiary(ies) will work if different from address in Part .  If you need to provide more than two additional addresses",
+                "Part5. Basic Information About the Proposed Employment and Employer. 3. Address(es) where the beneficiary(ies) will work if different from address in Part . If you need to more than two additional addresses",
             },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Part 5.  Basic Information About the Proposed Employment and Employer. 3. Address(es) where the beneficiary(ies) will work if different from address in Part 1.  If you need to provide more than two additional addresses, use Part 9. Is this a third-party location? Select Yes.",
+            "3. Address(es) where the beneficiary(ies) will work if different from address in Is this a third-party location? Yes.",
         },
         {
           id: "part5.subform4ThirdpartyOrganization2",
@@ -30690,7 +30289,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Name",
           required: true,
           helpText:
-            "Part 5.  Basic Information About the Proposed Employment and Employer. 3. Address(es) where the beneficiary(ies) will work if different from address in Part 1.  If you need to provide more than two additional addresses, use Part 9. Is this a third-party location?  If you answered &quot;Yes,&quot; provide the name of the third-party organization. Enter name.",
+            "3. Address(es) where the beneficiary(ies) will work if different from address in Is this a third-party location? If you answered &quot;Yes,&quot; name of the third-party organization. name.",
         },
         {
           id: "part5.subform5TypeofBusiness",
@@ -30698,7 +30297,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Type of Business",
           required: true,
           helpText:
-            "Part 5. Basic Information About the Proposed Employment and Employer. Attach the Form I-1 29 supplement relevant to the classification of the worker or workers you are requesting. 12. Enter Type of Business.",
+            "Attach the Form I-1 29 supplement relevant to the classification of the worker or workers you are requesting. 12. Type of Business.",
         },
         {
           id: "part5.subform5YearEstablished",
@@ -30706,7 +30305,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Year Established",
           required: true,
           helpText:
-            "Part 5. Basic Information About the Proposed Employment and Employer. Attach the Form I-1 29 supplement relevant to the classification of the worker or workers you are requesting. 12. Enter Year Established.",
+            "Attach the Form I-1 29 supplement relevant to the classification of the worker or workers you are requesting. 12. Year Established.",
         },
         {
           id: "part5.subform5NumberofEmployees",
@@ -30714,33 +30313,33 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Current Number of Employees in the United States",
           required: true,
           helpText:
-            "Part 5. Basic Information About the Proposed Employment and Employer. Attach the Form I-1 29 supplement relevant to the classification of the worker or workers you are requesting. 14. Enter Current Number of Employees in the United States.",
+            "Attach the Form I-1 29 supplement relevant to the classification of the worker or workers you are requesting. 14. Current Number of Employees in the United States.",
         },
         {
           id: "part5.subform5CB",
           type: "select",
           label:
-            "Do you currently employ a total of 25 or fewer full-time equivalent employees in the United State...",
+            "Do you currently employ a total of 25 or fewer full-time equivalent employees in the United State.",
           required: true,
           options: [
             { value: "Y", label: "Y" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Part 5.  Basic Information About the Proposed Employment and Employer. 15. Do you currently employ a total of 25 or fewer full-time equivalent employees in the United States, including all affiliates or  subsidiaries of this company/organization? Check Yes.",
+            "15. Do you currently employ a total of 25 or fewer full-time equivalent employees in the United States, including all affiliates or subsidiaries of this company/organization? Yes.",
         },
         {
           id: "part5.subform5CB1",
           type: "select",
           label:
-            "Do you currently employ a total of 25 or fewer full-time equivalent employees in the United State...",
+            "Do you currently employ a total of 25 or fewer full-time equivalent employees in the United State.",
           required: true,
           options: [
             { value: "N", label: "N" },
             { value: "Off", label: "Off" },
           ],
           helpText:
-            "Part 5.  Basic Information About the Proposed Employment and Employer. 15. Do you currently employ a total of 25 or fewer full-time equivalent employees in the United States, including all affiliates or  subsidiaries of this company/organization? Check No.",
+            "15. Do you currently employ a total of 25 or fewer full-time equivalent employees in the United States, including all affiliates or subsidiaries of this company/organization? No.",
         },
         {
           id: "part5.subform6SignatureofApplicant",
@@ -30748,7 +30347,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "This is a protected field",
           required: true,
           helpText:
-            "Part 7.  Declaration, Signature, and Contact Information of Petitioner or Authorized Signatory (Read the information on penalties in the instructions before completing this section.) 2. Signature and Date. Signature of Authorized Signatory.  This is a protected field.",
+            "Part 7. Declaration, Signature, and Contact Information of Petitioner or Authorized Signatory (Read the information on penalties in the instructions before completing this section.) 2. Signature and Date. Signature of Authorized Signatory. This is a protected field.",
         },
         {
           id: "part5.subform9LineYearEstablished",
@@ -30756,7 +30355,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Assets",
           required: true,
           helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 4. Enter Assets.",
+            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 4. Assets.",
         },
         {
           id: "part5.subform11SignatureofApplicant1",
@@ -30765,7 +30364,7 @@ const I_129_DEFINITION: FormDefinition = {
             "The name of the applicant can not be typewritten into this space",
           required: true,
           helpText:
-            "Part 5.  Applicant&apos;s Statement, Contact Information, Acknowledgement of Appointment at USCIS Application Support Center, Certification, and Signature. NOTE:  Read the information on penalties in the Form I-90 instructions before completing this part.  You must file Form I-90 while in the United States. Applicant&apos;s Statement.  NOTE: Select the box for either Item Number 1. A. or 1. B.  If applicable, select the box for Item Number 2., 6 . A . Signature of Applicant.  This form can not be signed electronically.  The name of the applicant can not be typewritten into this space.",
+            "NOTE: Read the information on penalties in the Form I-90 instructions before completing this part. You must file Form I-90 while in the United States. Applicant&apos;s Statement. NOTE: box for either A. or 1. B. box for , 6 . A . Signature of Applicant. This form can not be signed electronically. The name of the applicant can not be typewritten into this space.",
         },
         {
           id: "part5.subform15SignatureofApplicant2",
@@ -30774,7 +30373,7 @@ const I_129_DEFINITION: FormDefinition = {
             "The name of the applicant can not be typewritten into this space",
           required: true,
           helpText:
-            "Part 5.  Applicant&apos;s Statement, Contact Information, Acknowledgement of Appointment at USCIS Application Support Center, Certification, and Signature. NOTE:  Read the information on penalties in the Form I-90 instructions before completing this part.  You must file Form I-90 while in the United States. Applicant&apos;s Statement.  NOTE: Select the box for either Item Number 1. A. or 1. B.  If applicable, select the box for Item Number 2., 6 . A . Signature of Applicant.  This form can not be signed electronically.  The name of the applicant can not be typewritten into this space.",
+            "NOTE: Read the information on penalties in the Form I-90 instructions before completing this part. You must file Form I-90 while in the United States. Applicant&apos;s Statement. NOTE: box for either A. or 1. B. box for , 6 . A . Signature of Applicant. This form can not be signed electronically. The name of the applicant can not be typewritten into this space.",
         },
         {
           id: "part5.subform19SignatureofApplicant3",
@@ -30783,7 +30382,7 @@ const I_129_DEFINITION: FormDefinition = {
             "The name of the applicant can not be typewritten into this space",
           required: true,
           helpText:
-            "Part 5.  Applicant&apos;s Statement, Contact Information, Acknowledgement of Appointment at USCIS Application Support Center, Certification, and Signature. NOTE:  Read the information on penalties in the Form I-90 instructions before completing this part.  You must file Form I-90 while in the United States. Applicant&apos;s Statement.  NOTE: Select the box for either Item Number 1. A. or 1. B.  If applicable, select the box for Item Number 2., 6 . A . Signature of Applicant.  This form can not be signed electronically.  The name of the applicant can not be typewritten into this space.",
+            "NOTE: Read the information on penalties in the Form I-90 instructions before completing this part. You must file Form I-90 while in the United States. Applicant&apos;s Statement. NOTE: box for either A. or 1. B. box for , 6 . A . Signature of Applicant. This form can not be signed electronically. The name of the applicant can not be typewritten into this space.",
         },
         {
           id: "part5.subform35SignatureofApplicant4",
@@ -30792,7 +30391,7 @@ const I_129_DEFINITION: FormDefinition = {
             "The name of the applicant can not be typewritten into this space",
           required: true,
           helpText:
-            "Part 5.  Applicant&apos;s Statement, Contact Information, Acknowledgement of Appointment at USCIS Application Support Center, Certification, and Signature. NOTE:  Read the information on penalties in the Form I-90 instructions before completing this part.  You must file Form I-90 while in the United States. Applicant&apos;s Statement.  NOTE: Select the box for either Item Number 1. A. or 1. B.  If applicable, select the box for Item Number 2., 6 . A . Signature of Applicant.  This form can not be signed electronically.  The name of the applicant can not be typewritten into this space.",
+            "NOTE: Read the information on penalties in the Form I-90 instructions before completing this part. You must file Form I-90 while in the United States. Applicant&apos;s Statement. NOTE: box for either A. or 1. B. box for , 6 . A . Signature of Applicant. This form can not be signed electronically. The name of the applicant can not be typewritten into this space.",
         },
         {
           id: "part5.subform36SignatureofApplicant5",
@@ -30801,7 +30400,7 @@ const I_129_DEFINITION: FormDefinition = {
             "The name of the applicant can not be typewritten into this space",
           required: true,
           helpText:
-            "Part 5.  Applicant&apos;s Statement, Contact Information, Acknowledgement of Appointment at USCIS Application Support Center, Certification, and Signature. NOTE:  Read the information on penalties in the Form I-90 instructions before completing this part.  You must file Form I-90 while in the United States. Applicant&apos;s Statement.  NOTE: Select the box for either Item Number 1. A. or 1. B.  If applicable, select the box for Item Number 2., 6 . A . Signature of Applicant.  This form can not be signed electronically.  The name of the applicant can not be typewritten into this space.",
+            "NOTE: Read the information on penalties in the Form I-90 instructions before completing this part. You must file Form I-90 while in the United States. Applicant&apos;s Statement. NOTE: box for either A. or 1. B. box for , 6 . A . Signature of Applicant. This form can not be signed electronically. The name of the applicant can not be typewritten into this space.",
         },
         {
           id: "part5.subform42SignatureofApplicant6",
@@ -30810,7 +30409,7 @@ const I_129_DEFINITION: FormDefinition = {
             "The name of the applicant can not be typewritten into this space",
           required: true,
           helpText:
-            "Part 5.  Applicant&apos;s Statement, Contact Information, Acknowledgement of Appointment at USCIS Application Support Center, Certification, and Signature. NOTE:  Read the information on penalties in the Form I-90 instructions before completing this part.  You must file Form I-90 while in the United States. Applicant&apos;s Statement.  NOTE: Select the box for either Item Number 1. A. or 1. B.  If applicable, select the box for Item Number 2., 6 . A . Signature of Applicant.  This form can not be signed electronically.  The name of the applicant can not be typewritten into this space.",
+            "NOTE: Read the information on penalties in the Form I-90 instructions before completing this part. You must file Form I-90 while in the United States. Applicant&apos;s Statement. NOTE: box for either A. or 1. B. box for , 6 . A . Signature of Applicant. This form can not be signed electronically. The name of the applicant can not be typewritten into this space.",
         },
       ],
     },
@@ -30823,8 +30422,7 @@ const I_129_DEFINITION: FormDefinition = {
           type: "text",
           label: "Group Name",
           required: true,
-          helpText:
-            "Part 3. Beneficiary Information. Information about the beneficiary/beneficiaries you are filing for. Complete the blocks below. Use the Attachment-1 sheet to name each beneficiary included in this petition. 2. If an Entertainment Group, Provide the Group Name. Enter Group Name.",
+          helpText: "2. If an Entertainment Group, Group Name. Group Name.",
         },
         {
           id: "part7.subform23LineBBEmp1City",
@@ -30832,12 +30430,12 @@ const I_129_DEFINITION: FormDefinition = {
           label: "City or Town",
           required: true,
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 2. If you answered Item Number 1. B. &quot;CAP H-1B U. S. Master&apos;s Degree or Higher,&quot; provide the following information regarding the master&apos;s or higher degree the beneficiary has earned from a U. S. institution as defined in 20 United States Code 10 0 1(A): D. Address of the United States institution of higher education. Enter City or Town.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 2. If you answered B. &quot;CAP H-1B U. S. Master&apos;s Degree or Higher,&quot; following information regarding the master&apos;s or higher degree the beneficiary has earned from a U. S. institution as defined in 20 United States Code 10 0 1(A): D. Address of the United States institution of higher education. City or Town.",
         },
         {
           id: "part7.subform23LineBBEmp1State",
           type: "select",
-          label: "Select State from a List of States",
+          label: "State",
           required: true,
           options: [
             { value: "", label: "" },
@@ -30905,7 +30503,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "WY", label: "Wyoming" },
           ],
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 2. If you answered Item Number 1. B. &quot;CAP H-1B U. S. Master&apos;s Degree or Higher,&quot; provide the following information regarding the master&apos;s or higher degree the beneficiary has earned from a U. S. institution as defined in 20 United States Code 10 0 1(A): D. Address of the United States institution of higher education. Select State from a List of States.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 2. If you answered B. &quot;CAP H-1B U. S. Master&apos;s Degree or Higher,&quot; following information regarding the master&apos;s or higher degree the beneficiary has earned from a U. S. institution as defined in 20 United States Code 10 0 1(A): D. Address of the United States institution of higher education. State.",
         },
         {
           id: "part7.subform23LineBBEmp1ZipCode",
@@ -30913,7 +30511,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "ZIP Code",
           required: true,
           helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 2. If you answered Item Number 1. B. &quot;CAP H-1B U. S. Master&apos;s Degree or Higher,&quot; provide the following information regarding the master&apos;s or higher degree the beneficiary has earned from a U. S. institution as defined in 20 United States Code 10 0 1(A): D. Address of the United States institution of higher education. Enter ZIP Code.",
+            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 2. If you answered B. &quot;CAP H-1B U. S. Master&apos;s Degree or Higher,&quot; following information regarding the master&apos;s or higher degree the beneficiary has earned from a U. S. institution as defined in 20 United States Code 10 0 1(A): D. Address of the United States institution of higher education. ZIP Code.",
         },
         {
           id: "part7.subform34EmpCity",
@@ -30921,12 +30519,12 @@ const I_129_DEFINITION: FormDefinition = {
           label: "City or Town",
           required: true,
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary Ability. 10. B. Physical Address. Enter City or Town.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary Ability. 10. B. address. City or Town.",
         },
         {
           id: "part7.subform34Emp1State",
           type: "select",
-          label: "Select State from a List of States",
+          label: "State",
           required: true,
           options: [
             { value: "", label: "" },
@@ -30994,7 +30592,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "WY", label: "Wyoming" },
           ],
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary Ability. 10. B. Physical Address. Select State from a List of States.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary Ability. 10. B. address. State.",
         },
         {
           id: "part7.subform34Emp1ZipCode",
@@ -31002,7 +30600,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "ZIP Code",
           required: true,
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary Ability. 10. B. Physical Address. Enter ZIP Code.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary Ability. 10. B. address. ZIP Code.",
         },
         {
           id: "part7.subform34Emp1StreetName",
@@ -31010,23 +30608,23 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Street Number and Name",
           required: true,
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary Ability. 10. B. Physical Address. Enter Street Number and Name.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary Ability. 10. B. address. Street Number and Name.",
         },
         {
           id: "part7.subform34Emp1FromDate",
           type: "date",
-          label: "Date Sent as 2-digit Month, 2-digit Day and 4-digit Year",
+          label: "Date Sent",
           required: true,
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary Ability. 10. C. Enter Date Sent as 2-digit Month, 2-digit Day and 4-digit Year.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary Ability. 10. C. Date Sent.",
         },
         {
           id: "part7.subform34Lin11cEmp1FromDate",
           type: "date",
-          label: "Date Sent as 2-digit Month, 2-digit Day and 4-digit Year",
+          label: "Date Sent",
           required: true,
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary achievement in motion pictures or television. 11. C. Enter Date Sent as 2-digit Month, 2-digit Day and 4-digit Year.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary achievement in motion pictures or television. 11. C. Date Sent.",
         },
         {
           id: "part7.subform35EmpCity",
@@ -31034,12 +30632,12 @@ const I_129_DEFINITION: FormDefinition = {
           label: "City or Town",
           required: true,
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-2 or P alien. 13. B. Complete Address. Enter City or Town.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-2 or P alien. 13. B. Complete Address. City or Town.",
         },
         {
           id: "part7.subform35Emp1State",
           type: "select",
-          label: "Select State from a List of States",
+          label: "State",
           required: true,
           options: [
             { value: "", label: "" },
@@ -31107,7 +30705,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "WY", label: "Wyoming" },
           ],
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-2 or P alien. 13. B. Complete Address. Select State from a List of States.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-2 or P alien. 13. B. Complete Address. State.",
         },
         {
           id: "part7.subform35Emp1ZipCode",
@@ -31115,7 +30713,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "ZIP Code",
           required: true,
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-2 or P alien. 13. B. Complete Address. Enter ZIP Code.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-2 or P alien. 13. B. Complete Address. ZIP Code.",
         },
         {
           id: "part7.subform35Emp1StreetName",
@@ -31123,15 +30721,15 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Street Number and Name",
           required: true,
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-2 or P alien. 13. B. Complete Address. Enter Street Number and Name.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-2 or P alien. 13. B. Complete Address. Street Number and Name.",
         },
         {
           id: "part7.subform35Emp1FromDate",
           type: "date",
-          label: "Date Sent as 2-digit Month, 2-digit Day and 4-digit Year",
+          label: "Date Sent",
           required: true,
           helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-2 or P alien. 13. C. Enter Date Sent as 2-digit Month, 2-digit Day and 4-digit Year.",
+            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-2 or P alien. 13. C. Date Sent.",
         },
         {
           id: "part7.subform44LineAEmpCity",
@@ -31139,12 +30737,12 @@ const I_129_DEFINITION: FormDefinition = {
           label: "City or Town",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). Enter City or Town.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). City or Town.",
         },
         {
           id: "part7.subform44LineAEmp1State",
           type: "select",
-          label: "Select State from a List of States.",
+          label: "State.",
           required: true,
           options: [
             { value: "", label: "" },
@@ -31212,7 +30810,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "WY", label: "Wyoming" },
           ],
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). Select State from a List of States.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). State.",
         },
         {
           id: "part7.subform44LineAEmp1ZipCode",
@@ -31220,7 +30818,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "ZIP Code",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). Enter ZIP Code.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). ZIP Code.",
         },
         {
           id: "part7.subform44LineAEmp1StreetName",
@@ -31228,7 +30826,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Street Number and Name",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). Enter Street Number and Name.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). Street Number and Name.",
         },
         {
           id: "part7.subform45LineAEmpCity1",
@@ -31236,12 +30834,12 @@ const I_129_DEFINITION: FormDefinition = {
           label: "City or Town",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). Enter City or Town.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). City or Town.",
         },
         {
           id: "part7.subform45LineAEmp1State1",
           type: "select",
-          label: "Select State from a List of States.",
+          label: "State.",
           required: true,
           options: [
             { value: "", label: "" },
@@ -31309,7 +30907,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "WY", label: "Wyoming" },
           ],
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). Select State from a List of States.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). State.",
         },
         {
           id: "part7.subform45LineAEmp1ZipCode1",
@@ -31317,7 +30915,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "ZIP Code",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). Enter ZIP Code.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). ZIP Code.",
         },
         {
           id: "part7.subform45LineAEmp1StreetName1",
@@ -31325,7 +30923,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Street Number and Name",
           required: true,
           helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). Enter Street Number and Name.",
+            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). Street Number and Name.",
         },
       ],
     },
@@ -31338,16 +30936,14 @@ const I_129_DEFINITION: FormDefinition = {
           type: "tel",
           label: "Daytime Telephone Number",
           required: true,
-          helpText:
-            "Part 1. Petitioner Information. 4. Contact Information. Enter Daytime Telephone Number.",
+          helpText: "Part 1. Daytime Telephone Number.",
         },
         {
           id: "part8.subformMobilePhoneNumber1",
           type: "tel",
           label: "Mobile Telephone Number",
           required: true,
-          helpText:
-            "Part 1. Petitioner Information. 4. Contact Information. Enter Mobile Telephone Number.",
+          helpText: "Part 1. Mobile Telephone Number.",
         },
         {
           id: "part8.subform6ZipCode",
@@ -31355,12 +30951,12 @@ const I_129_DEFINITION: FormDefinition = {
           label: "ZIP Code",
           required: true,
           helpText:
-            "Part 8. Declaration, Signature, and Contact Information of Person Preparing Form, If Other Than Above. Provide the following information concerning the preparer. 3. Preparer&apos;s Mailing Address. Enter ZIP Code.",
+            "following information concerning the preparer. 3. Preparer&apos;s address. ZIP Code.",
         },
         {
           id: "part8.subform6State",
           type: "select",
-          label: "Select State from a List of States",
+          label: "State",
           required: true,
           options: [
             { value: "", label: "" },
@@ -31428,12 +31024,12 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "WY", label: "Wyoming" },
           ],
           helpText:
-            "Part 8. Declaration, Signature, and Contact Information of Person Preparing Form, If Other Than Above. Provide the following information concerning the preparer. 3. Preparer&apos;s Mailing Address. Select State from a List of States.",
+            "following information concerning the preparer. 3. Preparer&apos;s address. State.",
         },
         {
           id: "part8.subform6Unit",
           type: "radio",
-          label: "Check Apartment",
+          label: "Apartment",
           required: true,
           options: [
             { value: "", label: "None" },
@@ -31441,12 +31037,12 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "off", label: "Off" },
           ],
           helpText:
-            "Part 8. Declaration, Signature, and Contact Information of Person Preparing Form, If Other Than Above. Provide the following information concerning the preparer. 3. Preparer&apos;s Mailing Address. Check Apartment.",
+            "following information concerning the preparer. 3. Preparer&apos;s address. Apartment.",
         },
         {
           id: "part8.subform6Unit1",
           type: "radio",
-          label: "Check Suite",
+          label: "Suite",
           required: true,
           options: [
             { value: "", label: "None" },
@@ -31454,12 +31050,12 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "off", label: "Off" },
           ],
           helpText:
-            "Part 8. Declaration, Signature, and Contact Information of Person Preparing Form, If Other Than Above. Provide the following information concerning the preparer. 3. Preparer&apos;s Mailing Address. Check Suite.",
+            "following information concerning the preparer. 3. Preparer&apos;s address. Suite.",
         },
         {
           id: "part8.subform6Unit2",
           type: "radio",
-          label: "Check Floor",
+          label: "Floor",
           required: true,
           options: [
             { value: "", label: "None" },
@@ -31467,7 +31063,7 @@ const I_129_DEFINITION: FormDefinition = {
             { value: "off", label: "Off" },
           ],
           helpText:
-            "Part 8. Declaration, Signature, and Contact Information of Person Preparing Form, If Other Than Above. Provide the following information concerning the preparer. 3. Preparer&apos;s Mailing Address. Check Floor.",
+            "following information concerning the preparer. 3. Preparer&apos;s address. Floor.",
         },
         {
           id: "part8.subform6AptSteFlrNumber",
@@ -31475,7 +31071,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Apartment, Suite or Floor Number",
           required: true,
           helpText:
-            "Part 8. Declaration, Signature, and Contact Information of Person Preparing Form, If Other Than Above. Provide the following information concerning the preparer. If Apartment, Suite or Floor is Checked, Enter Apartment, Suite or Floor Number.",
+            "following information concerning the preparer. If Apartment, Suite or Floor is Checked, Apartment, Suite or Floor Number.",
         },
         {
           id: "part8.subform6Province",
@@ -31483,7 +31079,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Province, if applicable",
           required: true,
           helpText:
-            "Part 8. Declaration, Signature, and Contact Information of Person Preparing Form, If Other Than Above. Provide the following information concerning the preparer. 3. Preparer&apos;s Mailing Address. Enter Province, if applicable.",
+            "following information concerning the preparer. 3. Preparer&apos;s address. Province, if applicable.",
         },
         {
           id: "part8.subform6PostalCode",
@@ -31491,7 +31087,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Postal Code, if applicable",
           required: true,
           helpText:
-            "Part 8. Declaration, Signature, and Contact Information of Person Preparing Form, If Other Than Above. Provide the following information concerning the preparer. 3. Preparer&apos;s Mailing Address. Enter Postal Code, if applicable.",
+            "following information concerning the preparer. 3. Preparer&apos;s address. Postal Code, if applicable.",
         },
         {
           id: "part8.subform6Country",
@@ -31499,7 +31095,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Country",
           required: true,
           helpText:
-            "Part 8. Declaration, Signature, and Contact Information of Person Preparing Form, If Other Than Above. Provide the following information concerning the preparer. 3. Preparer&apos;s Mailing Address. Enter Country.",
+            "following information concerning the preparer. 3. Preparer&apos;s address. Country.",
         },
       ],
     },
@@ -31508,21 +31104,12 @@ const I_129_DEFINITION: FormDefinition = {
       title: "Part 14",
       questions: [
         {
-          id: "part14.subform42DateofSignature",
-          type: "date",
-          label:
-            "Date of Signature as 2-digit Month, 2-digit Day, and 4-digit Year",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Attestation. I certify, under penalty of perjury, that the contents of this attestation and the evidence submitted with it are true and correct. Enter Date of Signature as 2-digit Month, 2-digit Day, and 4-digit Year.",
-        },
-        {
           id: "part14.subform42PreparerPrintedName",
           type: "text",
           label: "Name of the Petitioner",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Attestation. I certify, under penalty of perjury, that the contents of this attestation and the evidence submitted with it are true and correct. Enter Name of the Petitioner.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Attestation. I certify, under penalty of perjury, that the contents of this attestation and the evidence submitted with it are true and correct. Name of the Petitioner.",
         },
         {
           id: "part14.subform42FirmName",
@@ -31530,7 +31117,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Employer or Organization Name",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Attestation. Enter Employer or Organization Name.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Attestation. Employer or Organization Name.",
         },
         {
           id: "part14.subform43City",
@@ -31538,7 +31125,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "City or Town",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Employer or Organization Address (do not use a post office or private mail box). Enter City or Town.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Employer or Organization Address . City or Town.",
         },
         {
           id: "part14.subform43ZipCode",
@@ -31546,7 +31133,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "ZIP Code",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Employer or Organization Address (do not use a post office or private mail box). Enter ZIP Code.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Employer or Organization Address . ZIP Code.",
         },
         {
           id: "part14.subform43StreetName",
@@ -31554,24 +31141,23 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Street Number and Name",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Employer or Organization Address (do not use a post office or private mail box). Enter Street Number and Name.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Employer or Organization Address . Street Number and Name.",
         },
         {
           id: "part14.subform43EmailAddress",
           type: "email",
-          label: "E-Mail Address, if any",
+          label: "E-Mail Address (optional)",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Employer or Organization&apos;s Contact Information. Enter E-Mail Address, if any.",
+            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Employer or Organization&apos;s Contact Information. E-Mail Address (optional)",
         },
         {
           id: "part14.subform43DateofSignature1",
           type: "date",
-          label:
-            "Date of Signature as 2-digit Month, 2-digit Day, and 4-digit Year",
+          label: "Date of Signature",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. I certify, under penalty of perjury, that the Employing Organization named above is affiliated with the Religious Denomination named above and that the attesting organization within the religious denomination is tax-exempt as described in section 5 0 1(C)(3) of the Internal Revenue Code of 19 86 (codified at 26 United States Code 5 01(C)(3)), any subsequent amendment or amendments, subsequent amendment, or equivalent sections of prior enactments of the Internal Revenue Code. The contents of this certification are true and correct to the best of my knowledge. Enter Date of Signature as 2-digit Month, 2-digit Day, and 4-digit Year.",
+            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. I certify, under penalty of perjury, that the Employing Organization named above is affiliated with the Religious Denomination named above and that the attesting organization within the religious denomination is tax-exempt as described in section 5 0 1(C)(3) of the Internal Revenue Code of 19 86 (codified at 26 United States Code 5 01(C)(3)), any subsequent amendment or amendments, subsequent amendment, or equivalent sections of prior enactments of the Internal Revenue Code. The contents of this certification are true and correct to the best of my knowledge. Date of Signature.",
         },
         {
           id: "part14.subform43City1",
@@ -31579,7 +31165,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "City or Town",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization Name and Address (do not use a post office or private mail box). Enter City or Town.",
+            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization Name and Address . City or Town.",
         },
         {
           id: "part14.subform43ZipCode1",
@@ -31587,7 +31173,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "ZIP Code",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization Name and Address (do not use a post office or private mail box). Enter ZIP Code.",
+            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization Name and Address . ZIP Code.",
         },
         {
           id: "part14.subform43StreetName1",
@@ -31595,7 +31181,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Street Number and Name",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization Name and Address (do not use a post office or private mail box). Enter Street Number and Name.",
+            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization Name and Address . Street Number and Name.",
         },
         {
           id: "part14.subform43FirmName1",
@@ -31603,15 +31189,15 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Attesting Organization Name",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization Name and Address (do not use a post office or private mail box). Enter Attesting Organization Name.",
+            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization Name and Address . Attesting Organization Name.",
         },
         {
           id: "part14.subform43EmailAddress1",
           type: "email",
-          label: "EMail Address, if any",
+          label: "EMail Address (optional)",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization&apos;s Contact Information. Enter EMail Address, if any.",
+            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization&apos;s Contact Information. EMail Address (optional)",
         },
         {
           id: "part14.subform43PreparerPrintedName1",
@@ -31619,7 +31205,7 @@ const I_129_DEFINITION: FormDefinition = {
           label: "Name of Authorized Representative of Attesting Organization",
           required: true,
           helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. I certify, under penalty of perjury, that the Employing Organization named above is affiliated with the Religious Denomination named above and that the attesting organization within the religious denomination is tax-exempt as described in section 5 0 1(C)(3) of the Internal Revenue Code of 19 86 (codified at 26 United States Code 5 01(C)(3)), any subsequent amendment or amendments, subsequent amendment, or equivalent sections of prior enactments of the Internal Revenue Code. The contents of this certification are true and correct to the best of my knowledge. Enter Name of Authorized Representative of Attesting Organization.",
+            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. I certify, under penalty of perjury, that the Employing Organization named above is affiliated with the Religious Denomination named above and that the attesting organization within the religious denomination is tax-exempt as described in section 5 0 1(C)(3) of the Internal Revenue Code of 19 86 (codified at 26 United States Code 5 01(C)(3)), any subsequent amendment or amendments, subsequent amendment, or equivalent sections of prior enactments of the Internal Revenue Code. The contents of this certification are true and correct to the best of my knowledge. Name of Authorized Representative of Attesting Organization.",
         },
       ],
     },
@@ -31630,7 +31216,7 @@ const I_129_DEFINITION: FormDefinition = {
     "Support letter from employer describing job and why beneficiary qualifies",
     "Beneficiary's resume/CV",
     "Copies of beneficiary's degrees and transcripts",
-    "Evaluation of foreign degrees (if applicable)",
+    "Evaluation of foreign degrees (optional)",
     "Copy of beneficiary's passport biographical page",
     "Copy of current visa and I-94 (if in U.S.)",
     "Company organizational chart",
@@ -31657,6 +31243,7 @@ export const FORM_REGISTRY: Record<string, FormDefinition> = {
   // Employment/Work Authorization Forms
   "i-9": I9_DEFINITION, //=====4
   "i-765": I_765_DEFINITION, //=====8
+  // "i-129": I_129_DEFINITION,
   // Citizenship
 
   "n-400": N_400_DEFINITION, //=====10
@@ -31675,7 +31262,7 @@ export const FORM_REGISTRY: Record<string, FormDefinition> = {
   // "i-864": I864_DEFINITION,
 
   // Employment/Work Authorization Forms
-  // "i-129": I_129_DEFINITION,
+
   // "i-140": I140_DEFINITION,
 
   // "i-526": I526_DEFINITION,

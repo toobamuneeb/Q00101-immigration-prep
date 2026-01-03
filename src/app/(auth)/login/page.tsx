@@ -82,7 +82,7 @@ export default function LoginPage() {
                                 Forgot password?
                             </Link>
                             <span className="mx-2">•</span>
-                            <Link href="/signup" className="hover:underline">
+                            <Link href="/auth/signup" className="hover:underline">
                                 Create account
                             </Link>
                         </div>

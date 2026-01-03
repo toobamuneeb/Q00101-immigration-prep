@@ -29,7 +29,10 @@ export const I_9_AUTO_MAPPINGS: FieldMapping[] = [
   // Section 1: Employee Information
   { questionId: "section1.lastName", pdfField: "Last Name (Family Name)" },
   { questionId: "section1.firstName", pdfField: "First Name Given Name" },
-  { questionId: "section1.middleInitial", pdfField: "Employee Middle Initial (if any)" },
+  {
+    questionId: "section1.middleInitial",
+    pdfField: "Employee Middle Initial (if any)",
+  },
   {
     questionId: "section1.otherLastNames",
     pdfField: "Employee Other Last Names Used (if any)",
@@ -85,18 +88,39 @@ export const I_9_AUTO_MAPPINGS: FieldMapping[] = [
     pdfField: "Exp Date mmddyyyy",
   },
   { questionId: "section1.uscisANumber", pdfField: "USCIS ANumber" },
-  { questionId: "section1.uscisANumber", pdfField: "3 A lawful permanent resident Enter USCIS or ANumber" },
+  {
+    questionId: "section1.uscisANumber",
+    pdfField: "3 A lawful permanent resident Enter USCIS or ANumber",
+  },
   { questionId: "section1.i94Number", pdfField: "Form I94 Admission Number" },
   {
     questionId: "section1.foreignPassportNumber",
     pdfField: "Foreign Passport Number and Country of IssuanceRow1",
   },
-  { questionId: "section1.lastName", pdfField: "Last Name Family Name from Section 1" },
-  { questionId: "section1.firstName", pdfField: "First Name Given Name from Section 1" },
-  { questionId: "section1.middleInitial", pdfField: "Middle initial if any from Section 1" },
-  { questionId: "section1.lastName", pdfField: "Last Name Family Name from Section 1-2" },
-  { questionId: "section1.firstName", pdfField: "First Name Given Name from Section 1-2" },
-  { questionId: "section1.middleInitial", pdfField: "Middle initial if any from Section 1-2" },
+  {
+    questionId: "section1.lastName",
+    pdfField: "Last Name Family Name from Section 1",
+  },
+  {
+    questionId: "section1.firstName",
+    pdfField: "First Name Given Name from Section 1",
+  },
+  {
+    questionId: "section1.middleInitial",
+    pdfField: "Middle initial if any from Section 1",
+  },
+  {
+    questionId: "section1.lastName",
+    pdfField: "Last Name Family Name from Section 1-2",
+  },
+  {
+    questionId: "section1.firstName",
+    pdfField: "First Name Given Name from Section 1-2",
+  },
+  {
+    questionId: "section1.middleInitial",
+    pdfField: "Middle initial if any from Section 1-2",
+  },
 
   // Section 1: Signature
   {
@@ -108,25 +132,43 @@ export const I_9_AUTO_MAPPINGS: FieldMapping[] = [
   // Section 2: Document Information - Based on document type
   // List A Document (if using List A)
   { questionId: "section2.listA.documentTitle", pdfField: "Document Title 0" },
-  { questionId: "section2.listA.documentTitle", pdfField: "Document Title 1" },
+  { questionId: "section2.listA.documentTitle1", pdfField: "Document Title 1" },
+  { questionId: "section2.listA.documentTitle2", pdfField: "Document Title 2" },
   {
     questionId: "section2.listA.issuingAuthority",
     pdfField: "List A. Document 3.  Enter Issuing Authority",
   },
-  { questionId: "section2.listA.issuingAuthority", pdfField: "Issuing Authority 1" },
+
+  {
+    questionId: "section2.listA.issuingAuthority1",
+    pdfField: "List A. Document 2.  Enter Issuing Authority",
+  },
+  {
+    questionId: "section2.listA.issuingAuthority",
+    pdfField: "Issuing Authority 1",
+  },
   {
     questionId: "section2.listA.documentNumber",
     pdfField: "Document Number 0",
   },
-  { questionId: "section2.listA.documentNumber", pdfField: "Document Number 0 (if any)" },
+  {
+    questionId: "section2.listA.documentNumber1",
+    pdfField: "Document Number 1 (if any)",
+  },
   {
     questionId: "section2.listA.expirationDate",
     pdfField: "Expiration Date 0",
   },
-  { questionId: "section2.listA.expirationDate", pdfField: "Expiration Date if any" },
+  {
+    questionId: "section2.listA.expirationDate1",
+    pdfField: "Expiration Date if any",
+  },
 
   // List B Document (if using List B + C)
-  { questionId: "section2.listB.documentTitle", pdfField: "List B Document 1 Title" },
+  {
+    questionId: "section2.listB.documentTitle",
+    pdfField: "List B Document 1 Title",
+  },
   {
     questionId: "section2.listB.issuingAuthority",
     pdfField: "List B Issuing Authority 1",
@@ -171,9 +213,21 @@ export const I_9_AUTO_MAPPINGS: FieldMapping[] = [
     pdfField: "CB_Alt",
     type: "checkbox",
   },
-  { questionId: "section2.alternativeProcedure", pdfField: "CB_Alt_0", type: "checkbox" },
-  { questionId: "section2.alternativeProcedure", pdfField: "CB_Alt_1", type: "checkbox" },
-  { questionId: "section2.alternativeProcedure", pdfField: "CB_Alt_2", type: "checkbox" },
+  {
+    questionId: "section2.alternativeProcedure",
+    pdfField: "CB_Alt_0",
+    type: "checkbox",
+  },
+  {
+    questionId: "section2.alternativeProcedure",
+    pdfField: "CB_Alt_1",
+    type: "checkbox",
+  },
+  {
+    questionId: "section2.alternativeProcedure",
+    pdfField: "CB_Alt_2",
+    type: "checkbox",
+  },
 
   // Section 2: Employer Information
   {
@@ -182,12 +236,22 @@ export const I_9_AUTO_MAPPINGS: FieldMapping[] = [
   },
   {
     questionId: "section2.employerNameTitle",
-    pdfField: "Last Name First Name and Title of Employer or Authorized Representative",
+    pdfField:
+      "Last Name First Name and Title of Employer or Authorized Representative",
   },
-  { questionId: "section2.employerNameTitle", pdfField: "Name of Emp or Auth Rep 0" },
-  { questionId: "section2.employerNameTitle", pdfField: "Name of Emp or Auth Rep 1" },
-  { questionId: "section2.employerNameTitle", pdfField: "Name of Emp or Auth Rep 2" },
-  
+  {
+    questionId: "section2.employerNameTitle",
+    pdfField: "Name of Emp or Auth Rep 0",
+  },
+  {
+    questionId: "section2.employerNameTitle",
+    pdfField: "Name of Emp or Auth Rep 1",
+  },
+  {
+    questionId: "section2.employerNameTitle",
+    pdfField: "Name of Emp or Auth Rep 2",
+  },
+
   {
     questionId: "section2.employerDate",
     pdfField: "S2 Todays Date mmddyyyy",
@@ -200,35 +264,87 @@ export const I_9_AUTO_MAPPINGS: FieldMapping[] = [
     questionId: "section2.employerAddress",
     pdfField: "Employers Business or Org Address",
   },
-  { questionId: "preparer1.lastName", pdfField: "Preparer or Translator Last Name (Family Name) 0" },
-  { questionId: "preparer1.firstName", pdfField: "Preparer or Translator First Name (Given Name) 0" },
+  {
+    questionId: "preparer1.lastName",
+    pdfField: "Preparer or Translator Last Name (Family Name) 0",
+  },
+  {
+    questionId: "preparer1.firstName",
+    pdfField: "Preparer or Translator First Name (Given Name) 0",
+  },
   { questionId: "preparer1.middleInitial", pdfField: "PT Middle Initial 0" },
-  { questionId: "preparer1.streetAddress", pdfField: "Preparer or Translator Address (Street Number and Name) 0" },
-  { questionId: "preparer1.city", pdfField: "Preparer or Translator City or Town 0" },
-  { questionId: "preparer1.state", pdfField: "Preparer State 0" },
+  {
+    questionId: "preparer1.streetAddress",
+    pdfField: "Preparer or Translator Address (Street Number and Name) 0",
+  },
+  {
+    questionId: "preparer1.city",
+    pdfField: "Preparer or Translator City or Town 0",
+  },
+  {
+    questionId: "preparer1.state",
+    pdfField: "Preparer State 0",
+    type: "select",
+  },
   { questionId: "preparer1.zipCode", pdfField: "Zip Code 0" },
   { questionId: "preparer1.date", pdfField: "Sig Date mmddyyyy 0" },
-  { questionId: "preparer2.lastName", pdfField: "Preparer or Translator Last Name (Family Name) 1" },
-  { questionId: "preparer2.firstName", pdfField: "Preparer or Translator First Name (Given Name) 2" },
+  {
+    questionId: "preparer2.lastName",
+    pdfField: "Preparer or Translator Last Name (Family Name) 1",
+  },
+  {
+    questionId: "preparer2.firstName",
+    pdfField: "Preparer or Translator First Name (Given Name) 2",
+  },
   { questionId: "preparer2.middleInitial", pdfField: "PT Middle Initial 1" },
-  { questionId: "preparer2.streetAddress", pdfField: "Preparer or Translator Address (Street Number and Name) 1" },
-  { questionId: "preparer2.city", pdfField: "Preparer or Translator City or Town 1" },
+  {
+    questionId: "preparer2.streetAddress",
+    pdfField: "Preparer or Translator Address (Street Number and Name) 1",
+  },
+  {
+    questionId: "preparer2.city",
+    pdfField: "Preparer or Translator City or Town 1",
+  },
   { questionId: "preparer2.state", pdfField: "Preparer State 1" },
   { questionId: "preparer2.zipCode", pdfField: "Zip Code 1" },
   { questionId: "preparer2.date", pdfField: "Sig Date mmddyyyy 1" },
-  { questionId: "preparer3.lastName", pdfField: "Preparer or Translator Last Name (Family Name) 2" },
-  { questionId: "preparer3.firstName", pdfField: "Preparer or Translator First Name (Given Name) 2" },
+  {
+    questionId: "preparer3.lastName",
+    pdfField: "Preparer or Translator Last Name (Family Name) 2",
+  },
+  {
+    questionId: "preparer3.firstName",
+    pdfField: "Preparer or Translator First Name (Given Name) 2",
+  },
   { questionId: "preparer3.middleInitial", pdfField: "PT Middle Initial 2" },
-  { questionId: "preparer3.streetAddress", pdfField: "Preparer or Translator Address (Street Number and Name) 2" },
-  { questionId: "preparer3.city", pdfField: "Preparer or Translator City or Town 2" },
+  {
+    questionId: "preparer3.streetAddress",
+    pdfField: "Preparer or Translator Address (Street Number and Name) 2",
+  },
+  {
+    questionId: "preparer3.city",
+    pdfField: "Preparer or Translator City or Town 2",
+  },
   { questionId: "preparer3.state", pdfField: "Preparer State 2" },
   { questionId: "preparer3.zipCode", pdfField: "Zip Code 2" },
   { questionId: "preparer3.date", pdfField: "Sig Date mmddyyyy 2" },
-  { questionId: "preparer4.lastName", pdfField: "Preparer or Translator Last Name (Family Name) 3" },
-  { questionId: "preparer4.firstName", pdfField: "Preparer or Translator First Name (Given Name) 3" },
+  {
+    questionId: "preparer4.lastName",
+    pdfField: "Preparer or Translator Last Name (Family Name) 3",
+  },
+  {
+    questionId: "preparer4.firstName",
+    pdfField: "Preparer or Translator First Name (Given Name) 3",
+  },
   { questionId: "preparer4.middleInitial", pdfField: "PT Middle Initial 3" },
-  { questionId: "preparer4.streetAddress", pdfField: "Preparer or Translator Address (Street Number and Name) 3" },
-  { questionId: "preparer4.city", pdfField: "Preparer or Translator City or Town 3" },
+  {
+    questionId: "preparer4.streetAddress",
+    pdfField: "Preparer or Translator Address (Street Number and Name) 3",
+  },
+  {
+    questionId: "preparer4.city",
+    pdfField: "Preparer or Translator City or Town 3",
+  },
   { questionId: "preparer4.state", pdfField: "Preparer State 3" },
   { questionId: "preparer4.zipCode", pdfField: "Zip Code 3" },
   { questionId: "preparer4.date", pdfField: "Sig Date mmddyyyy 3" },

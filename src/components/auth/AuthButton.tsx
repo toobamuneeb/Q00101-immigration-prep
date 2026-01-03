@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
@@ -14,12 +14,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { UserIcon, LogOutIcon, CreditCardIcon } from "lucide-react";
+import { UserIcon, LogOutIcon, CreditCardIcon, Loader2 } from "lucide-react";
+import { signOut } from "@/app/actions/auth";
 
 export function AuthButton() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     const supabase = createClient();
@@ -41,10 +43,31 @@ export function AuthButton() {
   }, []);
 
   const handleLogout = async () => {
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    router.push("/");
-    router.refresh();
+    try {
+      // First, sign out on client side to clear local state
+      const supabase = createClient();
+      await supabase.auth.signOut({ scope: 'local' });
+      
+      // Clear user state immediately
+      setUser(null);
+      
+      // Then call server action to clear server-side session
+      startTransition(async () => {
+        try {
+          await signOut();
+        } catch (error) {
+          console.error('Server signout error:', error);
+          // Even if server action fails, redirect to home
+          router.push('/');
+          router.refresh();
+        }
+      });
+    } catch (error) {
+      console.error('Client signout error:', error);
+      // Fallback: force redirect even if signout fails
+      router.push('/');
+      router.refresh();
+    }
   };
 
   if (loading) {
@@ -88,9 +111,17 @@ export function AuthButton() {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
-          <LogOutIcon className="mr-2 h-4 w-4" />
-          Sign Out
+        <DropdownMenuItem 
+          onClick={handleLogout} 
+          className="cursor-pointer"
+          disabled={isPending}
+        >
+          {isPending ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <LogOutIcon className="mr-2 h-4 w-4" />
+          )}
+          {isPending ? 'Signing out...' : 'Sign Out'}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

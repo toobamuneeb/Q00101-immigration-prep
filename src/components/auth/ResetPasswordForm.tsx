@@ -76,7 +76,8 @@ export function ResetPasswordForm() {
       if (data.user) {
         document.cookie = "recovery_in_progress=; Max-Age=0; path=/";
 
-        await supabase.auth.signOut();
+        // Sign out with proper scope
+        await supabase.auth.signOut({ scope: 'local' });
         router.push("/auth/login?reset=success");
         router.refresh();
       }

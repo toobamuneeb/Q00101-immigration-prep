@@ -13,7 +13,7 @@ export default async function FormsListingPage() {
   } = await supabase.auth.getUser();
 
   if (authError || !user) {
-    redirect("/login");
+    redirect("/auth/login");
   }
 
   // Fetch all user's applications

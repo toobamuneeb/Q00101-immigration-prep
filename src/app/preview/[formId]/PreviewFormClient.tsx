@@ -34,7 +34,7 @@ export function PreviewFormClient({ formDefinition }: PreviewFormClientProps) {
               </span>
             </div>
             <Button asChild variant="outline" size="sm" className="bg-white">
-              <Link href="/signup">Sign Up to Save</Link>
+              <Link href="/auth/signup">Sign Up to Save</Link>
             </Button>
           </div>
         </div>

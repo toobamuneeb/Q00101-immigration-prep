@@ -14,7 +14,7 @@ export const I_485_FIELD_MAPPINGS: FieldMapping[] = [
   {
     questionId: "attorney.stateBarNumber",
     pdfField: "form1[0].#subform[0].AttorneyStateBarNumber[0]",
-    type: "button",
+    type: "text",
   },
   {
     questionId: "attorney.formG28Attached",
@@ -85,7 +85,7 @@ export const I_485_FIELD_MAPPINGS: FieldMapping[] = [
   {
     questionId: "part1.dateOfBirth",
     pdfField: "form1[0].#subform[0].Pt1Line3_DOB[0]",
-    type: "button",
+    type: "date",
   },
   {
     questionId: "part1.usedOtherDob",
@@ -112,7 +112,7 @@ export const I_485_FIELD_MAPPINGS: FieldMapping[] = [
   {
     questionId: "applicant.alienNumberReadOnly",
     pdfField: "form1[0].#subform[1].AlienNumber[1]",
-    type: "button",
+    type: "text",
   },
   {
     questionId: "part1.sex",
@@ -190,7 +190,7 @@ export const I_485_FIELD_MAPPINGS: FieldMapping[] = [
   {
     questionId: "part1.alienNumber",
     pdfField: "form1[0].#subform[1].Pt1Line4_AlienNumber[0]",
-    type: "button",
+    type: "text",
   },
   {
     questionId: "part1.hasAlienNumber",
@@ -224,7 +224,7 @@ export const I_485_FIELD_MAPPINGS: FieldMapping[] = [
   {
     questionId: "part1.otherANumberButton",
     pdfField: "form1[0].#subform[1].Pt1Line5B_ANumber[0]",
-    type: "button",
+    type: "text",
   },
   {
     questionId: "part2.cubanAdjustmentAct",
@@ -253,7 +253,7 @@ export const I_485_FIELD_MAPPINGS: FieldMapping[] = [
   {
     questionId: "part1.otherImmigrationHistory",
     pdfField: "form1[0].#subform[1].Pt1Line11_Other[0]",
-    type: "button",
+    type: "text",
   },
 
   {
@@ -291,7 +291,7 @@ export const I_485_FIELD_MAPPINGS: FieldMapping[] = [
   {
     questionId: "part1.i94ArrivalDepartureRecordNumber",
     pdfField: "form1[0].#subform[2].P1Line12_I94[0]",
-    type: "button",
+    type: "text", //"button",
   },
   {
     questionId: "part1.lastArrivalFirstTime",
@@ -308,7 +308,7 @@ export const I_485_FIELD_MAPPINGS: FieldMapping[] = [
   {
     questionId: "part1.expirationDateOfCurrentStatus",
     pdfField: "form1[0].#subform[2].Pt1Line15_Date[0]",
-    type: "button",
+    type: "date", //"button",
   },
   {
     questionId: "part1.alienCrewmanVisa",
@@ -349,7 +349,7 @@ export const I_485_FIELD_MAPPINGS: FieldMapping[] = [
   {
     questionId: "part1.aptSteFlrNumber",
     pdfField: "form1[0].#subform[2].Pt1Line18US_AptSteFlrNumber[0]",
-    type: "button",
+    type: "text", //"button",
   },
   {
     questionId: "part1.usUnit",
@@ -381,7 +381,7 @@ export const I_485_FIELD_MAPPINGS: FieldMapping[] = [
   {
     questionId: "part1.dateFirstResidedAtAddress",
     pdfField: "form1[0].#subform[2].Pt1Line18_Date[0]",
-    type: "button",
+    type: "date",
   },
   {
     questionId: "part1.currentMailingAddress",
@@ -444,7 +444,7 @@ export const I_485_FIELD_MAPPINGS: FieldMapping[] = [
   {
     questionId: "alienRegistrationNumber",
     pdfField: "form1[0].#subform[3].AlienNumber[3]",
-    type: "button",
+    type: "text",
   },
   {
     questionId: "part1.residedAtCurrentAddress5Years",
@@ -465,7 +465,7 @@ export const I_485_FIELD_MAPPINGS: FieldMapping[] = [
   {
     questionId: "part1.priorAddressStreetName",
     pdfField: "form1[0].#subform[3].Pt1Line18_PriorStreetName[0]",
-    type: "button",
+    type: "text",
   },
   {
     questionId: "part1.priorAddressUnit",
@@ -666,7 +666,7 @@ export const I_485_FIELD_MAPPINGS: FieldMapping[] = [
   {
     questionId: "part2.alienNumber",
     pdfField: "form1[0].#subform[4].Pt2Line2_AlienNumber[0]",
-    type: "button",
+    type: "text",
   },
   {
     questionId: "part2.applicationTypePrincipal",
@@ -1475,7 +1475,7 @@ export const I_485_FIELD_MAPPINGS: FieldMapping[] = [
   {
     questionId: "part5.parent2CountryOfBirth",
     pdfField: "form1[0].#subform[9].Pt5Line10_CityTownOfBirth[0]",
-    type: "button",
+    type: "text",
   },
   {
     questionId: "part6.currentMaritalStatus",

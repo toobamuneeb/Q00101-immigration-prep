@@ -16,16 +16,32 @@ export async function createClient(): Promise<SupabaseClient<Database>> {
                 },
                 set(name: string, value: string, options: CookieOptions) {
                     try {
-                        cookieStore.set({ name, value, ...options });
+                        cookieStore.set({ 
+                            name, 
+                            value, 
+                            ...options,
+                            sameSite: 'lax',
+                            secure: process.env.NODE_ENV === 'production',
+                            httpOnly: true,
+                            path: '/',
+                        });
                     } catch (error) {
                         // Handle cookies in Server Components
+                        console.error('Error setting cookie:', error);
                     }
                 },
                 remove(name: string, options: CookieOptions) {
                     try {
-                        cookieStore.set({ name, value: '', ...options });
+                        cookieStore.set({ 
+                            name, 
+                            value: '', 
+                            ...options,
+                            maxAge: 0,
+                            path: '/',
+                        });
                     } catch (error) {
                         // Handle cookies in Server Components
+                        console.error('Error removing cookie:', error);
                     }
                 },
             },

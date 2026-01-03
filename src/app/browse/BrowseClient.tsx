@@ -270,7 +270,7 @@ export function BrowseClient({
                     ) : (
                       <>
                         <Button asChild variant="default" className="w-full">
-                          <Link href="/signup">
+                          <Link href="/auth/signup">
                             {t("browse.signUpToStart")}
                           </Link>
                         </Button>

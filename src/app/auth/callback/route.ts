@@ -56,9 +56,10 @@ export async function GET(request: Request) {
       userId: data.user?.id,
       email: data.user?.email,
     });
-    console.log("🔄 Redirecting to login");
+    console.log("🔄 Redirecting to dashboard");
 
-    return NextResponse.redirect(`${origin}/auth/login?confirmed=true`);
+    // User is now authenticated, redirect to dashboard
+    return NextResponse.redirect(`${origin}/dashboard?welcome=true`);
   } catch (err) {
     console.error("💥 Unexpected error in callback:", err);
     return NextResponse.redirect(`${origin}/auth/login?error=unexpected_error`);

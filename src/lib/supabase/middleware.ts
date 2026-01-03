@@ -17,26 +17,45 @@ export async function updateSession(request: NextRequest) {
           return request.cookies.get(name)?.value;
         },
         set(name: string, value: string, options: CookieOptions) {
+          // Update request cookies
           request.cookies.set({ name, value, ...options });
+          // Create new response with updated cookies
           response = NextResponse.next({
             request: { headers: request.headers },
           });
-          response.cookies.set({ name, value, ...options });
+          // Set cookie on response with proper options
+          response.cookies.set({ 
+            name, 
+            value, 
+            ...options,
+            sameSite: 'lax',
+            secure: process.env.NODE_ENV === 'production',
+            httpOnly: true,
+            path: '/',
+          });
         },
         remove(name: string, options: CookieOptions) {
+          // Update request cookies
           request.cookies.set({ name, value: "", ...options });
+          // Create new response with updated cookies
           response = NextResponse.next({
             request: { headers: request.headers },
           });
-          response.cookies.set({ name, value: "", ...options });
+          // Remove cookie from response
+          response.cookies.set({ 
+            name, 
+            value: "", 
+            ...options,
+            maxAge: 0,
+            path: '/',
+          });
         },
       },
     }
   );
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // Refresh session if expired
+  await supabase.auth.getUser();
 
   const pathname = request.nextUrl.pathname;
 
@@ -45,14 +64,17 @@ export async function updateSession(request: NextRequest) {
     return response;
   }
 
+  // Get session to check auth status
+  const { data: { session } } = await supabase.auth.getSession();
+
   if (
-    user &&
+    session &&
     (pathname.startsWith("/auth") || pathname.startsWith("/(auth)"))
   ) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
-  if (!user && pathname.startsWith("/dashboard")) {
+  if (!session && pathname.startsWith("/dashboard")) {
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 

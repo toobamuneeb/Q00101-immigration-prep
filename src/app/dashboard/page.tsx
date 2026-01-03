@@ -19,7 +19,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   } = await supabase.auth.getUser();
 
   if (authError || !user) {
-    redirect('/login');
+    redirect('/auth/login');
   }
 
   // Fetch user's in-progress applications
