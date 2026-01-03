@@ -213,13 +213,13 @@ export const I_765_FIELD_MAPPINGS: FieldMapping[] = [
     value: "Married",
   },
   {
-    questionId: "part2.otherInformation.previouslyFiledFormI765",
+    questionId: "part2.otherInformation.previouslyFiledI765",
     pdfField: "form1[0].Page2[0].Line19_Checkbox[0]",
     type: "radio",
     value: "N",
   },
   {
-    questionId: "part2.otherInformation.previouslyFiledFormI765",
+    questionId: "part2.otherInformation.previouslyFiledI765",
     pdfField: "form1[0].Page2[0].Line19_Checkbox[1]",
     type: "radio",
     value: "Y",

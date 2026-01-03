@@ -6799,9 +6799,9 @@ const I_765_DEFINITION: FormDefinition = {
   sections: [
     {
       id: "part2-full-legal-name",
-      title: "Part 2: Your Full Legal Name",
+      title: "Part 2: Full Legal Name",
       description:
-        "Provide your current legal name as it appears on official documents.",
+        "Provide your full legal name as it appears on official documents.",
       questions: [
         {
           id: "part2.fullLegalName.familyName",
@@ -6823,10 +6823,29 @@ const I_765_DEFINITION: FormDefinition = {
       ],
     },
     {
+      id: "part2-attorney-representation",
+      title: "Part 2: Attorney or Accredited Representative",
+      description:
+        "Indicate if you have an attorney or accredited representative.",
+      questions: [
+        {
+          id: "part2.attorneyFormG28Attached",
+          type: "checkbox",
+          label: "Form G-28 is attached",
+          helpText: "Check this box if Form G-28 is attached.",
+        },
+        {
+          id: "part2.attorneyOrRepresentativeUSCISOnlineNumber",
+          type: "text",
+          label: "USCIS Online Account Number (if any)",
+          helpText: "Provide the USCIS Online Account Number if applicable.",
+        },
+      ],
+    },
+    {
       id: "part2-other-names-used",
       title: "Part 2: Other Names Used",
-      description:
-        "List any other names you have used, including maiden names.",
+      description: "List any other names you have used, including maiden name.",
       questions: [
         {
           id: "part2.otherNamesUsed.familyName",
@@ -6848,29 +6867,27 @@ const I_765_DEFINITION: FormDefinition = {
     {
       id: "part2-us-mailing-address",
       title: "Part 2: U.S. Mailing Address",
-      description:
-        "Provide the address where you want USCIS to send your documents.",
+      description: "Provide your current U.S. mailing address.",
       questions: [
         {
           id: "part2.usMailingAddress.sameAsPhysicalAddress",
           type: "radio",
-          label:
-            "5. Is your mailing address the same as your physical address?",
+          label: "Is your mailing address the same as your physical address?",
           options: [
-            { value: "Y", label: "Yes" },
-            { value: "N", label: "No" },
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
           ],
         },
         {
           id: "part2.usMailingAddress.streetNumberName",
           type: "text",
-          label: "5.a. Street Number and Name",
+          label: "5.b. Street Number and Name",
           required: true,
         },
         {
           id: "part2.usMailingAddress.unitType",
           type: "select",
-          label: "5.b. Unit Type",
+          label: "5.c. Unit Type",
           options: [
             { value: "", label: "Select if applicable" },
             { value: "apt", label: "Apt." },
@@ -6881,39 +6898,40 @@ const I_765_DEFINITION: FormDefinition = {
         {
           id: "part2.usMailingAddress.aptSteFlrNumber",
           type: "text",
-          label: "5.c. Unit Number",
+          label: "5.d. Unit Number",
         },
         {
           id: "part2.usMailingAddress.cityOrTown",
           type: "text",
-          label: "5.d. City or Town",
+          label: "5.e. City or Town",
           required: true,
         },
         {
           id: "part2.usMailingAddress.state",
           type: "select",
-          label: "5.e. State",
+          label: "5.f. State",
           options: US_STATES,
           required: true,
         },
         {
           id: "part2.usMailingAddress.zipCode",
           type: "text",
-          label: "5.f. ZIP Code",
+          label: "5.g. ZIP Code",
           required: true,
         },
         {
           id: "part2.usMailingAddress.inCareOfName",
           type: "text",
-          label: "5.g. In Care Of Name",
+          label: "5.a. In Care Of Name",
+          helpText:
+            "Provide the name of the person who receives mail at this address, if applicable.",
         },
       ],
     },
     {
       id: "part2-us-physical-address",
       title: "Part 2: U.S. Physical Address",
-      description:
-        "Provide your current physical address if different from your mailing address.",
+      description: "Provide your current U.S. physical address.",
       questions: [
         {
           id: "part2.usPhysicalAddress.streetNumberName",
@@ -6965,29 +6983,27 @@ const I_765_DEFINITION: FormDefinition = {
       questions: [
         {
           id: "part2.otherInformation.consentForDisclosure",
-          type: "radio",
-          label: "14. Do you consent to disclosure of information?",
-          options: [
-            { value: "yes", label: "Yes" },
-            { value: "no", label: "No" },
-          ],
+          type: "checkbox",
+          label: "Consent for Disclosure",
+          helpText:
+            "Check this box if you consent to the disclosure of your information.",
         },
         {
           id: "part2.otherInformation.alienNumber",
           type: "text",
-          label: "15. Alien Registration Number (A-Number)",
+          label: "8. Alien Registration Number (A-Number)",
           helpText: "Enter your A-Number if you have one.",
         },
         {
           id: "part2.otherInformation.uscisOnlineAccountNumber",
           type: "text",
-          label: "16. USCIS Online Account Number",
-          helpText: "Enter your USCIS Online Account Number if you have one.",
+          label: "9. USCIS Online Account Number (if any)",
+          helpText: "Provide your USCIS Online Account Number if applicable.",
         },
         {
           id: "part2.otherInformation.sex",
           type: "radio",
-          label: "17. Sex",
+          label: "10. Sex",
           required: true,
           options: [
             { value: "male", label: "Male" },
@@ -6997,7 +7013,7 @@ const I_765_DEFINITION: FormDefinition = {
         {
           id: "part2.otherInformation.maritalStatus",
           type: "select",
-          label: "18. Marital Status",
+          label: "11. Marital Status",
           options: [
             { value: "single", label: "Single" },
             { value: "married", label: "Married" },
@@ -7006,9 +7022,9 @@ const I_765_DEFINITION: FormDefinition = {
           ],
         },
         {
-          id: "part2.otherInformation.previouslyFiledI765",
+          id: "part2.otherInformation.previouslyFiledFormI765",
           type: "radio",
-          label: "19. Have you previously filed Form I-765?",
+          label: "12. Have you previously filed Form I-765?",
           options: [
             { value: "yes", label: "Yes" },
             { value: "no", label: "No" },
@@ -7017,33 +7033,33 @@ const I_765_DEFINITION: FormDefinition = {
         {
           id: "part2.otherInformation.fathersName.familyName",
           type: "text",
-          label: "20.a. Father's Family Name (Last Name)",
+          label: "13.a. Father's Family Name (Last Name)",
         },
         {
           id: "part2.otherInformation.fathersName.givenName",
           type: "text",
-          label: "20.b. Father's Given Name (First Name)",
+          label: "13.b. Father's Given Name (First Name)",
         },
         {
           id: "part2.otherInformation.mothersName.familyName",
           type: "text",
-          label: "21.a. Mother's Family Name (Last Name)",
+          label: "14.a. Mother's Family Name (Last Name)",
         },
         {
           id: "part2.otherInformation.mothersName.givenName",
           type: "text",
-          label: "21.b. Mother's Given Name (First Name)",
+          label: "14.b. Mother's Given Name (First Name)",
         },
         {
-          id: "part2.countryOfCitizenshipOrNationality",
+          id: "part2.countriesOfCitizenshipOrNationality.country",
           type: "text",
-          label: "22. Country of Citizenship or Nationality",
+          label: "15. Country of Citizenship or Nationality",
           required: true,
         },
         {
-          id: "part2.otherInformation.wantSSACard",
+          id: "part2.otherInformation.issueSSN",
           type: "radio",
-          label: "23. Do you want the SSA to issue you a Social Security card?",
+          label: "16. Do you want the SSA to issue you a Social Security card?",
           options: [
             { value: "yes", label: "Yes" },
             { value: "no", label: "No" },
@@ -7052,14 +7068,14 @@ const I_765_DEFINITION: FormDefinition = {
         {
           id: "part2.otherInformation.ssn",
           type: "ssn",
-          label: "24. U.S. Social Security Number (if any)",
+          label: "17. U.S. Social Security Number (if any)",
           placeholder: "###-##-####",
           helpText: "Leave blank if you do not have one.",
         },
         {
-          id: "part2.otherInformation.ssaCardIssued",
+          id: "part2.otherInformation.ssaIssuedSSN",
           type: "radio",
-          label: "25. Has the SSA ever issued you a Social Security card?",
+          label: "18. Has the SSA ever issued you a Social Security card?",
           options: [
             { value: "yes", label: "Yes" },
             { value: "no", label: "No" },
@@ -7071,60 +7087,59 @@ const I_765_DEFINITION: FormDefinition = {
       id: "part2-last-arrival",
       title: "Part 2: Last Arrival in the United States",
       description:
-        "Provide information about your most recent arrival in the United States.",
+        "Provide details about your most recent arrival in the United States.",
       questions: [
-        {
-          id: "part2.lastArrival.i94Number",
-          type: "text",
-          label: "26. I-94 Arrival-Departure Record Number",
-          helpText: "Enter your I-94 number if applicable.",
-        },
-        {
-          id: "part2.lastArrival.passportNumber",
-          type: "text",
-          label: "27. Passport Number",
-        },
         {
           id: "part2.lastArrival.travelDocumentNumber",
           type: "text",
-          label: "28. Travel Document Number",
-        },
-        {
-          id: "part2.lastArrival.countryOfIssuance",
-          type: "text",
-          label: "29. Country of Issuance for Passport/Travel Document",
-        },
-        {
-          id: "part2.lastArrival.expirationDate",
-          type: "date",
-          label: "30. Expiration Date for Passport/Travel Document",
-          placeholder: "MM/DD/YYYY",
+          label: "19. Travel Document Number (if any)",
         },
         {
           id: "part2.lastArrival.dateOfLastEntry",
           type: "date",
-          label: "31. Date of Last Entry into the U.S.",
+          label: "20. Date of Last Entry (mm/dd/yyyy)",
           placeholder: "MM/DD/YYYY",
         },
         {
-          id: "part2.lastArrival.placeOfLastArrival",
+          id: "part2.lastArrival.expirationDate",
+          type: "date",
+          label: "21. Passport Expiration Date (mm/dd/yyyy)",
+          placeholder: "MM/DD/YYYY",
+        },
+        {
+          id: "part2.lastArrival.countryOfIssuance",
           type: "text",
-          label: "32. Place of Last Arrival",
+          label: "22. Country of Issuance for Passport or Travel Document",
+        },
+        {
+          id: "part2.lastArrival.passportNumber",
+          type: "text",
+          label: "23. Passport Number",
         },
         {
           id: "part2.lastArrival.statusLastEntry",
           type: "text",
-          label: "33. Status at Last Entry",
+          label: "24. Status at Last Entry",
         },
         {
           id: "part2.lastArrival.currentStatus",
           type: "text",
-          label: "34. Current Immigration Status",
+          label: "25. Current Immigration Status",
         },
         {
           id: "part2.lastArrival.sevisNumber",
           type: "text",
-          label: "35. SEVIS Number (if applicable)",
+          label: "26. SEVIS Number (if any)",
+        },
+        {
+          id: "part2.lastArrival.i94Number",
+          type: "text",
+          label: "27. I-94 Arrival-Departure Record Number",
+        },
+        {
+          id: "part2.lastArrival.placeOfLastArrival",
+          type: "text",
+          label: "28. Place of Last Arrival",
         },
       ],
     },
@@ -7135,86 +7150,71 @@ const I_765_DEFINITION: FormDefinition = {
         "Provide information about your eligibility category for employment authorization.",
       questions: [
         {
-          id: "part2.eligibilityCategory.category",
+          id: "part2.eligibilityCategory.eligibilityCategory",
           type: "text",
-          label: "36. Eligibility Category",
+          label: "29. Eligibility Category",
           required: true,
           helpText:
-            "Enter the code for your eligibility category (e.g., (c)(3)(C)).",
+            "Enter the eligibility category that applies to your situation.",
         },
         {
-          id: "part2.eligibilityCategory.employerNameEverify",
+          id: "part2.eligibilityCategory.employerName",
           type: "text",
-          label: "37. Employer's Name as Listed in E-Verify",
+          label: "30. Employer's Name (if applicable)",
         },
         {
-          id: "part2.eligibilityCategory.everifyIDNumber",
+          id: "part2.eligibilityCategory.everifyIdNumber",
           type: "text",
-          label: "38. Employer's E-Verify Company Identification Number",
+          label: "31. E-Verify Company Identification Number (if applicable)",
         },
         {
-          id: "part2.eligibilityCategory.c8ArrestedConvicted",
+          id: "part2.eligibilityCategory.arrestedOrConvicted",
           type: "radio",
-          label: "39. Have you ever been arrested or convicted of any crime?",
+          label: "32. Have you ever been arrested or convicted of a crime?",
           options: [
             { value: "yes", label: "Yes" },
             { value: "no", label: "No" },
           ],
         },
         {
-          id: "part2.eligibilityCategory.c35c36ReceiptNumber",
+          id: "part2.eligibilityCategory.receiptNumber",
           type: "text",
-          label: "40. Receipt Number for Pending Form I-140 (if applicable)",
-        },
-        {
-          id: "part2.eligibilityCategory.c26ReceiptNumber",
-          type: "text",
-          label: "41. Receipt Number for Pending Form I-129 (if applicable)",
+          label: "33. Receipt Number (if applicable)",
         },
         {
           id: "part2.eligibilityCategory.degree",
           type: "text",
-          label: "42. Degree (if applicable)",
-        },
-        {
-          id: "part2.eligibilityCategory.c35c36ArrestedConvicted",
-          type: "radio",
-          label: "43. Have you ever been arrested or convicted of any crime?",
-          options: [
-            { value: "yes", label: "Yes" },
-            { value: "no", label: "No" },
-          ],
+          label: "34. Degree (if applicable)",
         },
       ],
     },
     {
       id: "part2-place-of-birth",
       title: "Part 2: Place of Birth",
-      description: "Provide information about your place of birth.",
+      description: "Provide details about your place of birth.",
       questions: [
         {
-          id: "part2.placeOfBirth.cityTownOfBirth",
-          type: "text",
-          label: "44.a. City or Town of Birth",
-        },
-        {
-          id: "part2.placeOfBirth.stateProvinceOfBirth",
-          type: "select",
-          label: "44.b. State or Province of Birth",
-          options: US_STATES,
+          id: "part2.placeOfBirth.dateOfBirth",
+          type: "date",
+          label: "35. Date of Birth (mm/dd/yyyy)",
+          required: true,
+          placeholder: "MM/DD/YYYY",
         },
         {
           id: "part2.placeOfBirth.countryOfBirth",
           type: "text",
-          label: "44.c. Country of Birth",
+          label: "36. Country of Birth",
           required: true,
         },
         {
-          id: "part2.placeOfBirth.dateOfBirth",
-          type: "date",
-          label: "45. Date of Birth (mm/dd/yyyy)",
-          required: true,
-          placeholder: "MM/DD/YYYY",
+          id: "part2.placeOfBirth.cityTownOfBirth",
+          type: "text",
+          label: "37. City or Town of Birth",
+        },
+        {
+          id: "part2.placeOfBirth.stateProvinceOfBirth",
+          type: "text",
+          label: "38. State or Province of Birth",
         },
       ],
     },
@@ -7223,7 +7223,7 @@ const I_765_DEFINITION: FormDefinition = {
       id: "part1-reason-for-applying",
       title: "Part 1: Reason for Applying",
       description:
-        "Select the reason you are applying for employment authorization.",
+        "Indicate the reason you are applying for employment authorization.",
       questions: [
         {
           id: "part1.reasonForApplying",
@@ -7235,7 +7235,7 @@ const I_765_DEFINITION: FormDefinition = {
             {
               value: "2",
               label:
-                "2. Replacement of lost, stolen, or damaged employment authorization document",
+                "2. Replacement (of lost employment authorization document)",
             },
             {
               value: "3",
@@ -7244,36 +7244,7 @@ const I_765_DEFINITION: FormDefinition = {
             },
           ],
           helpText:
-            "Choose the option that best describes your current situation. If renewing, ensure to attach a copy of your previous employment authorization document.",
-        },
-      ],
-    },
-
-    {
-      id: "attorneyOrRepresentative",
-      title: "Attorney or Accredited Representative",
-      description:
-        "Provide details about your attorney or accredited representative, if applicable.",
-      questions: [
-        {
-          id: "attorneyOrRepresentative",
-          type: "radio",
-          label:
-            "Is an attorney or accredited representative assisting you with this application?",
-          required: true,
-          options: [
-            { value: "1", label: "Yes" },
-            { value: "0", label: "No" },
-          ],
-          helpText:
-            "Select 'Yes' if you have an attorney or accredited representative assisting you with this application.",
-        },
-        {
-          id: "attorneyOrRepresentative.uscisOnlineNumber",
-          type: "text",
-          label: "USCIS Online Account Number (if any)",
-          helpText:
-            "Enter the USCIS Online Account Number of your attorney or representative, if applicable.",
+            "Select the option that best describes your situation. If you are renewing, ensure to attach a copy of your previous employment authorization document.",
         },
       ],
     },
@@ -7282,7 +7253,7 @@ const I_765_DEFINITION: FormDefinition = {
       id: "part3-applicant-statement",
       title: "Part 3: Applicant's Statement",
       description:
-        "Provide information about the use of interpreters and preparers.",
+        "Provide details about the use of an interpreter or preparer.",
       questions: [
         {
           id: "part3.applicantStatement.interpreterUsed",
@@ -7290,8 +7261,8 @@ const I_765_DEFINITION: FormDefinition = {
           label: "1. Did you use an interpreter to complete this application?",
           required: true,
           options: [
-            { value: "yes", label: "Yes" },
-            { value: "no", label: "No" },
+            { value: "A", label: "Yes" },
+            { value: "B", label: "No" },
           ],
           helpText:
             "Select 'Yes' if someone helped you translate or interpret the form.",
@@ -7299,30 +7270,52 @@ const I_765_DEFINITION: FormDefinition = {
         {
           id: "part3.applicantStatement.languageFluent",
           type: "text",
-          label: "1.b. If yes, specify the language:",
-          helpText: "Enter the language in which you are fluent.",
+          label: "1.b. Language in which you are fluent",
+          helpText: "Specify the language you are fluent in, if applicable.",
         },
         {
           id: "part3.applicantStatement.preparerUsed",
           type: "radio",
-          label: "2. Did you use a preparer to complete this application?",
+          label: "2. Did someone else prepare this application for you?",
           required: true,
           options: [
-            { value: "yes", label: "Yes" },
-            { value: "no", label: "No" },
+            { value: "C", label: "Yes" },
+            { value: "D", label: "No" },
           ],
-          helpText: "Select 'Yes' if someone helped you fill out the form.",
+          helpText:
+            "Select 'Yes' if someone else filled out the form on your behalf.",
         },
         {
           id: "part3.applicantStatement.preparerName",
           type: "text",
-          label: "2.a. Preparer's Name",
+          label: "2.a. Preparer's Full Name",
           helpText:
-            "Enter the full name of the person who prepared your application.",
+            "Enter the full name of the person who prepared the form, if applicable.",
         },
       ],
     },
-
+    // {
+    //   id: "part3-applicant-signature",
+    //   title: "Part 3: Applicant's Signature",
+    //   description: "Sign and date the application.",
+    //   questions: [
+    //     {
+    //       id: "part3.applicantSignature.dateOfSignature",
+    //       type: "date",
+    //       label: "7.b. Date of Signature (mm/dd/yyyy)",
+    //       required: true,
+    //       placeholder: "MM/DD/YYYY",
+    //       helpText: "Enter the date you are signing this form.",
+    //     },
+    //     {
+    //       id: "part3.applicantSignature.signature",
+    //       type: "text",
+    //       label: "7.a. Signature",
+    //       required: true,
+    //       helpText: "Sign your name as it appears on your official documents.",
+    //     },
+    //   ],
+    // },
     {
       id: "part3-contact-information",
       title: "Part 3: Contact Information",
@@ -7332,7 +7325,6 @@ const I_765_DEFINITION: FormDefinition = {
           id: "part3.contactInformation.daytimePhoneNumber",
           type: "tel",
           label: "3. Daytime Phone Number",
-          required: true,
           placeholder: "(555) 123-4567",
           helpText:
             "Enter a phone number where you can be reached during the day.",
@@ -7350,48 +7342,54 @@ const I_765_DEFINITION: FormDefinition = {
           type: "email",
           label: "5. Email Address",
           placeholder: "example@email.com",
-          helpText:
-            "Provide an email address where you can receive correspondence.",
+          helpText: "Provide your email address for electronic communication.",
         },
         {
           id: "part3.contactInformation.abcSettlement",
           type: "radio",
           label: "6. Are you eligible for ABC Settlement benefits?",
           options: [
-            { value: "yes", label: "Yes" },
-            { value: "no", label: "No" },
+            { value: "A", label: "Yes" },
+            { value: "B", label: "No" },
           ],
           helpText:
-            "Select 'Yes' if you are eligible for benefits under the ABC Settlement.",
+            "Select 'Yes' if you are eligible for benefits under the ABC Settlement agreement.",
         },
       ],
     },
 
     {
-      id: "part4-interpreter-contact-information",
-      title: "Part 4: Interpreter's Contact Information",
+      id: "part4-interpreter-information",
+      title: "Part 4: Interpreter's Information",
       description:
-        "Provide the contact details of the interpreter assisting with this application.",
+        "Provide the interpreter's personal and contact information.",
       questions: [
         {
-          id: "part4.interpreterContactInformation.familyName",
+          id: "part4.interpreterInformation.familyName",
           type: "text",
           label: "1.a. Family Name (Last Name)",
           required: true,
         },
         {
-          id: "part4.interpreterContactInformation.givenName",
+          id: "part4.interpreterInformation.givenName",
           type: "text",
           label: "1.b. Given Name (First Name)",
           required: true,
         },
         {
-          id: "part4.interpreterContactInformation.businessOrOrgName",
+          id: "part4.interpreterInformation.businessOrOrganizationName",
           type: "text",
           label: "2. Business or Organization Name",
           helpText:
-            "Enter the name of the business or organization, if applicable.",
+            "Enter the name of the business or organization the interpreter is affiliated with, if applicable.",
         },
+      ],
+    },
+    {
+      id: "part4-interpreter-contact-information",
+      title: "Part 4: Interpreter's Contact Information",
+      description: "Enter the interpreter's contact details.",
+      questions: [
         {
           id: "part4.interpreterContactInformation.daytimeTelephone",
           type: "tel",
@@ -7400,252 +7398,243 @@ const I_765_DEFINITION: FormDefinition = {
           required: true,
         },
         {
-          id: "part4.interpretersMobileNumber",
+          id: "part4.interpreterMobileTelephoneNumber",
           type: "tel",
           label: "5. Mobile Telephone Number",
           placeholder: "(555) 123-4567",
         },
         {
-          id: "part4.interpretersEmailAddress",
+          id: "part4.interpreterEmailAddress",
           type: "email",
           label: "6. Email Address",
           placeholder: "example@email.com",
         },
         {
-          id: "part4.languageInterpreterFluentIn",
+          id: "part4.interpreterLanguage",
           type: "text",
-          label: "7. Language the Interpreter is Fluent In",
+          label: "Language",
           required: true,
-          helpText: "Specify the language(s) the interpreter is fluent in.",
+          helpText:
+            "Specify the language in which the interpreter is providing assistance.",
         },
       ],
     },
     {
       id: "part4-interpreter-address",
-      title: "Part 4: Interpreter's Mailing Address",
-      description: "Provide the mailing address of the interpreter.",
+      title: "Part 4: Interpreter's Address",
+      description: "Provide the interpreter's physical address.",
       questions: [
         {
-          id: "part4.interpretersStreetNumberName",
+          id: "part4.interpreterStreetNumberName",
           type: "text",
           label: "3.a. Street Number and Name",
           required: true,
         },
         {
-          id: "part4.interpretersUnit",
+          id: "part4.interpreterUnit",
           type: "select",
           label: "3.b. Unit Type",
           options: [
             { value: "", label: "Select if applicable" },
-            { value: "APT", label: "Apt." },
-            { value: "STE", label: "Ste." },
-            { value: "FLR", label: "Flr." },
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
           ],
         },
         {
-          id: "part4.interpreterUnit",
-          type: "radio",
-          label: "3.b. Unit Type",
-          options: [
-            { value: "APT", label: "Apt." },
-            { value: "STE", label: "Ste." },
-            { value: "FLR", label: "Flr." },
-          ],
-        },
-        {
-          id: "part4.interpretersAptSteFlrNumber",
+          id: "part4.interpreterAptSteFlrNumber",
           type: "text",
           label: "3.b. Unit Number",
         },
         {
-          id: "part4.interpretersCityOrTown",
+          id: "part4.interpreterCityOrTown",
           type: "text",
           label: "3.c. City or Town",
           required: true,
         },
         {
-          id: "part4.interpretersState",
+          id: "part4.interpreterState",
           type: "select",
           label: "3.d. State",
           options: US_STATES,
           required: true,
         },
         {
-          id: "part4.interpretersZipCode",
+          id: "part4.interpreterZipCode",
           type: "text",
           label: "3.e. ZIP Code",
           required: true,
         },
         {
-          id: "part4.interpretersProvince",
+          id: "part4.interpreterProvince",
           type: "text",
           label: "3.f. Province",
           helpText: "If applicable, provide the province.",
         },
         {
-          id: "part4.interpretersPostalCode",
+          id: "part4.interpreterPostalCode",
           type: "text",
           label: "3.g. Postal Code",
-          helpText: "If applicable, provide the postal code.",
+          helpText: "Enter the postal code if outside the U.S.",
         },
         {
-          id: "part4.interpretersCountry",
+          id: "part4.interpreterCountry",
           type: "text",
           label: "3.h. Country",
           required: true,
         },
       ],
     },
+    // {
+    //   id: "part4-interpreter-signature",
+    //   title: "Part 4: Interpreter's Signature",
+    //   description: "The interpreter must sign and date this section.",
+    //   questions: [
+    //     {
+    //       id: "part4.interpreterSignature",
+    //       type: "button",
+    //       label: "6.a. Signature of Interpreter",
+    //       required: true,
+    //     },
+    //     {
+    //       id: "part4.interpreterDateOfSignature",
+    //       type: "date",
+    //       label: "6.b. Date of Signature (mm/dd/yyyy)",
+    //       required: true,
+    //       placeholder: "MM/DD/YYYY",
+    //     },
+    //   ],
+    // },
 
     {
       id: "part5-preparer-info",
       title: "Part 5: Preparer's Information",
       description:
-        "Provide details about the person who prepared this application, if applicable.",
+        "Provide the details of the person who prepared this application, if applicable.",
       questions: [
         {
-          id: "part5.preparersGivenName",
-          type: "text",
-          label: "1.b. Preparer's Given Name (First Name)",
-          required: true,
-        },
-        {
-          id: "part5.preparersFamilyName",
+          id: "part5.preparerFamilyName",
           type: "text",
           label: "1.a. Preparer's Family Name (Last Name)",
           required: true,
         },
         {
-          id: "part5.preparersBusinessName",
+          id: "part5.preparerGivenName",
+          type: "text",
+          label: "1.b. Preparer's Given Name (First Name)",
+          required: true,
+        },
+        {
+          id: "part5.preparerBusinessName",
           type: "text",
           label: "2. Preparer's Business or Organization Name",
         },
-      ],
-    },
-    {
-      id: "part5-preparer-address",
-      title: "Part 5: Preparer's Mailing Address",
-      description: "Enter the mailing address of the preparer.",
-      questions: [
         {
-          id: "part5.preparersStreetNumberName",
+          id: "part5.preparerStreetNumberName",
           type: "text",
           label: "3.a. Street Number and Name",
           required: true,
         },
         {
-          id: "part5.preparersUnit",
+          id: "part5.preparerUnit",
           type: "select",
           label: "3.b. Unit Type",
           options: [
-            { value: "", label: "Select if applicable" },
-            { value: "APT", label: "Apt." },
-            { value: "STE", label: "Ste." },
-            { value: "FLR", label: "Flr." },
+            { value: "apt", label: "Apt." },
+            { value: "ste", label: "Ste." },
+            { value: "flr", label: "Flr." },
           ],
         },
         {
-          id: "part5.preparersAptSteFlrNumber",
+          id: "part5.preparerAptSteFlrNumber",
           type: "text",
-          label: "3.b. Unit Number",
+          label: "3.c. Unit Number",
         },
         {
-          id: "part5.preparersCityOrTown",
+          id: "part5.preparerCityOrTown",
           type: "text",
-          label: "3.c. City or Town",
+          label: "3.d. City or Town",
           required: true,
         },
         {
-          id: "part5.preparersState",
+          id: "part5.preparerState",
           type: "select",
-          label: "3.d. State",
+          label: "3.e. State",
           options: US_STATES,
           required: true,
         },
         {
-          id: "part5.preparersZipCode",
+          id: "part5.preparerZipCode",
           type: "text",
-          label: "3.e. ZIP Code",
+          label: "3.f. ZIP Code",
           required: true,
         },
         {
-          id: "part5.preparersProvince",
+          id: "part5.preparerProvince",
           type: "text",
-          label: "3.f. Province",
+          label: "3.g. Province",
+          helpText: "Complete if outside the U.S.",
         },
         {
-          id: "part5.preparersPostalCode",
+          id: "part5.preparerPostalCode",
           type: "text",
-          label: "3.g. Postal Code",
+          label: "3.h. Postal Code",
+          helpText: "Complete if outside the U.S.",
         },
         {
-          id: "part5.preparersCountry",
+          id: "part5.preparerCountry",
           type: "text",
-          label: "3.h. Country",
+          label: "3.i. Country",
           required: true,
         },
-      ],
-    },
-    {
-      id: "part5-preparer-contact",
-      title: "Part 5: Preparer's Contact Information",
-      description: "Provide the contact details of the preparer.",
-      questions: [
         {
-          id: "part5.preparersDaytimeTelephoneNumber",
+          id: "part5.preparerDaytimePhoneNumber",
           type: "tel",
-          label: "4. Daytime Telephone Number",
+          label: "4. Preparer's Daytime Phone Number",
           placeholder: "(555) 123-4567",
           required: true,
         },
         {
-          id: "part5.preparersMobileTelephoneNumber",
+          id: "part5.preparerFaxNumber",
           type: "tel",
-          label: "5. Mobile Telephone Number",
+          label: "5. Preparer's Fax Number",
           placeholder: "(555) 123-4567",
         },
         {
-          id: "part5.preparersEmailAddress",
+          id: "part5.preparerEmailAddress",
           type: "email",
-          label: "6. Email Address",
+          label: "6. Preparer's Email Address",
           placeholder: "example@email.com",
         },
-      ],
-    },
-    {
-      id: "part5-preparer-statement",
-      title: "Part 5: Preparer's Statement",
-      description: "Indicate the preparer's role and representation.",
-      questions: [
         {
-          id: "part5.preparersStatement",
+          id: "part5.preparerStatement",
           type: "radio",
           label: "7. Preparer's Statement",
-          required: true,
           options: [
             {
               value: "A",
               label:
-                "A. I am not an attorney or accredited representative but have prepared this form on behalf of the applicant.",
+                "I am not an attorney or accredited representative but have prepared this application on behalf of the applicant.",
             },
             {
               value: "B",
               label:
-                "B. I am an attorney or accredited representative and my representation extends beyond the preparation of this form.",
+                "I am an attorney or accredited representative and my representation of the applicant in this case extends/does not extend beyond the preparation of this application.",
             },
           ],
         },
-        {
-          id: "part5.preparersRepresentation",
-          type: "radio",
-          label: "7.b. Preparer's Representation",
-          options: [
-            { value: "Y", label: "Yes" },
-            { value: "N", label: "No" },
-          ],
-          helpText:
-            "Indicate if the preparer is an attorney or accredited representative.",
-        },
+        // {
+        //   id: "part5.preparerSignature",
+        //   type: "text",
+        //   label: "8.a. Preparer's Signature",
+        //   required: true,
+        // },
+        // {
+        //   id: "part5.preparerDateOfSignature",
+        //   type: "date",
+        //   label: "8.b. Date of Signature (mm/dd/yyyy)",
+        //   required: true,
+        // },
       ],
     },
 
@@ -7653,7 +7642,7 @@ const I_765_DEFINITION: FormDefinition = {
       id: "part6-additional-information",
       title: "Part 6: Additional Information",
       description:
-        "Provide additional information as needed for any of the sections in this form.",
+        "Provide additional information if you need extra space to complete any item within this application.",
       questions: [
         {
           id: "part6.familyName",
@@ -7676,32 +7665,35 @@ const I_765_DEFINITION: FormDefinition = {
           id: "part6.alienNumber",
           type: "text",
           label: "7. Alien Registration Number (A-Number)",
-          helpText: "Enter your A-Number if you have one.",
+          helpText: "Enter your A-Number, if any.",
         },
         {
           id: "part6.additionalInformationPageNumber",
           type: "text",
           label: "3.a. Page Number",
-          helpText: "Enter the page number where the information appears.",
+          helpText:
+            "Enter the page number from the form where additional information is needed.",
         },
         {
           id: "part6.additionalInformationPartNumber",
           type: "text",
           label: "3.b. Part Number",
-          helpText: "Enter the part number where the information appears.",
+          helpText:
+            "Enter the part number from the form where additional information is needed.",
         },
         {
           id: "part6.additionalInformationItemNumber",
           type: "text",
           label: "3.c. Item Number",
-          helpText: "Enter the item number where the information appears.",
+          helpText:
+            "Enter the item number from the form where additional information is needed.",
         },
         {
           id: "part6.additionalInformation",
           type: "textarea",
-          label: "3.d. Additional Information",
+          label: "4.d. Additional Information",
           helpText:
-            "Provide any additional information related to the sections in this form.",
+            "Provide any additional information that does not fit in the standard fields of this form.",
         },
       ],
     },
