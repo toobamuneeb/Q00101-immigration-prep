@@ -67,14 +67,15 @@ export async function updateSession(request: NextRequest) {
   // Get session to check auth status
   const { data: { session } } = await supabase.auth.getSession();
 
-  if (
-    session &&
-    (pathname.startsWith("/auth") || pathname.startsWith("/(auth)"))
-  ) {
+  // Redirect authenticated users away from auth pages
+  if (session && pathname.startsWith("/auth") && !pathname.startsWith("/auth/callback")) {
+    console.log('🔄 Authenticated user on auth page, redirecting to dashboard');
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
+  // Redirect unauthenticated users to login
   if (!session && pathname.startsWith("/dashboard")) {
+    console.log('🔄 Unauthenticated user on dashboard, redirecting to login');
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 

@@ -23,6 +23,8 @@ export function SignupForm() {
     setError(null);
     setLoading(true);
 
+    console.log('📝 Starting signup process for:', email);
+
     // Validation
     if (password !== confirmPassword) {
       setError('Passwords do not match');
@@ -38,6 +40,8 @@ export function SignupForm() {
 
     try {
       const supabase = createClient();
+      console.log('🔐 Calling Supabase signUp...');
+      
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -47,14 +51,25 @@ export function SignupForm() {
       });
 
       if (error) {
+        console.error('❌ Signup error:', error);
         setError(error.message);
+        setLoading(false);
         return;
       }
 
+      console.log('✅ Signup response received:', {
+        userId: data.user?.id,
+        email: data.user?.email,
+        hasSession: !!data.session,
+        identitiesCount: data.user?.identities?.length,
+      });
+
       if (data.user) {
-        // Check if email confirmation is required
+        // Check if email is already registered
         if (data.user.identities && data.user.identities.length === 0) {
+          console.log('⚠️ Email already registered');
           setError('This email is already registered. Please log in instead.');
+          setLoading(false);
           return;
         }
         
@@ -63,15 +78,18 @@ export function SignupForm() {
           // User is logged in immediately, redirect to dashboard
           console.log('✅ User signed up and logged in immediately');
           router.push('/dashboard');
+          router.refresh();
           return;
         }
         
         // Email confirmation required
+        console.log('📧 Email confirmation required');
         setSuccess(true);
+        setLoading(false);
       }
     } catch (err) {
+      console.error('💥 Unexpected signup error:', err);
       setError('An unexpected error occurred');
-    } finally {
       setLoading(false);
     }
   };
@@ -81,14 +99,23 @@ export function SignupForm() {
       <Alert>
         <AlertTitle>Check your email!</AlertTitle>
         <AlertDescription>
-          <p className="text-sm">
-            We've sent you a confirmation link. Please check your email to verify your account.
-          </p>
-          <Link href="/auth/login">
-            <Button variant="outline" className="mt-4">
-              Go to Login
-            </Button>
-          </Link>
+          <div className="space-y-3">
+            <p className="text-sm">
+              We've sent a confirmation link to <strong>{email}</strong>.
+            </p>
+            <p className="text-sm">
+              Please check your email and click the link to verify your account. 
+              After verification, you'll be automatically redirected back to the app and logged in.
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Don't see the email? Check your spam folder.
+            </p>
+            <Link href="/auth/login" className="block mt-4">
+              <Button variant="outline" className="w-full">
+                Go to Login
+              </Button>
+            </Link>
+          </div>
         </AlertDescription>
       </Alert>
     );

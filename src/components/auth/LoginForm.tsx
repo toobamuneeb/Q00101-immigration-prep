@@ -21,6 +21,7 @@ export function LoginForm() {
   // Check for messages in URL params
   useEffect(() => {
     const urlError = searchParams.get('error');
+    const message = searchParams.get('message');
     const confirmed = searchParams.get('confirmed');
     const reset = searchParams.get('reset');
     
@@ -29,11 +30,15 @@ export function LoginForm() {
     } else if (reset === 'success') {
       setSuccess('Password updated successfully! Please sign in with your new password.');
     } else if (urlError) {
-      if (urlError === 'auth_callback_failed') {
-        setError('Email verification failed. Please try logging in again or contact support.');
-      } else if (urlError === 'unexpected_error') {
-        setError('An unexpected error occurred during authentication. Please try again.');
-      }
+      const errorMessages: Record<string, string> = {
+        'no_code': 'Invalid verification link. Please try signing up again.',
+        'verification_failed': message || 'Email verification failed. Please try again.',
+        'no_session': 'Could not create session. Please try logging in.',
+        'unexpected_error': message || 'An unexpected error occurred.',
+        'auth_callback_failed': 'Authentication failed. Please try again.',
+      };
+      
+      setError(errorMessages[urlError] || 'An error occurred. Please try again.');
     }
   }, [searchParams]);
 
@@ -68,10 +73,13 @@ export function LoginForm() {
         hasSession: !!data.session,
       });
 
-      if (data.user) {
-        console.log('🔄 Redirecting to dashboard...');
+      if (data.user && data.session) {
+        console.log('✅ Login successful, redirecting to dashboard');
         router.push('/dashboard');
         router.refresh();
+      } else {
+        console.error('❌ Login succeeded but no session created');
+        setError('Login succeeded but session creation failed. Please try again.');
       }
     } catch (err) {
       console.error('💥 Unexpected error during login:', err);
