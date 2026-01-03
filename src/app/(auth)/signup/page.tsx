@@ -51,14 +51,16 @@ export default function SignupPage() {
                     return;
                 }
                 
-                // Sign out immediately after signup to prevent auto-login
+                // Check if user is confirmed (no email confirmation required)
                 if (data.session) {
-                    console.log('🔓 Signing out after signup to require manual login');
-                    await supabase.auth.signOut();
+                    // User is logged in immediately, redirect to dashboard
+                    console.log('✅ User signed up and logged in immediately');
+                    router.push('/dashboard');
+                    router.refresh();
+                    return;
                 }
                 
-                // Show success message - user must login manually
-                console.log('✅ Signup successful - user must login');
+                // Email confirmation required
                 setSuccess(true);
                 setLoading(false);
             }
@@ -75,22 +77,26 @@ export default function SignupPage() {
             <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
                 <Card className="w-full max-w-md">
                     <CardHeader className="text-center">
-                        <CardTitle className="text-2xl font-bold">Account created!</CardTitle>
-                        <CardDescription>Please log in to continue</CardDescription>
+                        <CardTitle className="text-2xl font-bold">Check your email!</CardTitle>
+                        <CardDescription>We've sent you a confirmation link</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <Alert>
-                            <AlertTitle>Success</AlertTitle>
+                            <AlertTitle>Email Sent</AlertTitle>
                             <AlertDescription>
                                 <p className="text-sm mb-4">
-                                    Your account has been created successfully. Please log in with your credentials.
+                                    We've sent a confirmation link to <strong>{email}</strong>.
+                                    Please check your email and click the link to verify your account.
+                                </p>
+                                <p className="text-xs text-gray-500">
+                                    After clicking the link, you'll be redirected back to the app and automatically logged in.
                                 </p>
                             </AlertDescription>
                         </Alert>
                     </CardContent>
                     <CardFooter className="flex flex-col space-y-4">
                         <Link href="/auth/login" className="w-full">
-                            <Button className="w-full">
+                            <Button variant="outline" className="w-full">
                                 Go to Login
                             </Button>
                         </Link>

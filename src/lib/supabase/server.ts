@@ -22,7 +22,6 @@ export async function createClient(): Promise<SupabaseClient<Database>> {
                             ...options,
                             sameSite: 'lax',
                             secure: process.env.NODE_ENV === 'production',
-                            httpOnly: true,
                             path: '/',
                         });
                     } catch (error) {

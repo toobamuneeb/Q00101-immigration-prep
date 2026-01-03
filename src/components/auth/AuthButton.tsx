@@ -28,6 +28,7 @@ export function AuthButton() {
 
     // Get initial user
     supabase.auth.getUser().then(({ data: { user } }) => {
+      console.log('🔍 AuthButton: User check result:', user ? user.email : 'No user');
       setUser(user);
       setLoading(false);
     });
@@ -36,6 +37,7 @@ export function AuthButton() {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
+      console.log('🔍 AuthButton: Auth state changed:', session?.user?.email || 'No user');
       setUser(session?.user ?? null);
     });
 
@@ -70,19 +72,13 @@ export function AuthButton() {
     }
   };
 
-  // Show both states for debugging
   if (loading) {
-    return (
-      <div className="flex items-center gap-4">
-        <div className="text-sm text-muted-foreground">Loading...</div>
-      </div>
-    );
+    return <div className="w-20 h-9 bg-muted animate-pulse rounded-md" />;
   }
 
   if (!user) {
     return (
       <div className="flex items-center gap-4">
-        <div className="text-xs text-red-500">Not logged in</div>
         <Link href="/auth/login">
           <Button variant="ghost">Log in</Button>
         </Link>
@@ -92,9 +88,6 @@ export function AuthButton() {
       </div>
     );
   }
-
-  // User is logged in - show dropdown
-  console.log('User logged in:', user.email);
 
   return (
     <DropdownMenu>

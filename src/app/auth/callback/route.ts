@@ -61,13 +61,32 @@ export async function GET(request: Request) {
       email: data.user?.email,
     });
 
-    // Sign out the user immediately after verification
-    console.log("🔓 Signing out user after email verification");
-    await supabase.auth.signOut();
+    // User is now authenticated, redirect to dashboard
+    const response = NextResponse.redirect(`${origin}/dashboard?welcome=true`);
+    
+    // Ensure cookies are set properly
+    response.cookies.set({
+      name: 'sb-access-token',
+      value: data.session.access_token,
+      path: '/',
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+    });
 
-    // Redirect to login page with success message
-    console.log("🔄 Redirecting to login page");
-    return NextResponse.redirect(`${origin}/auth/login?verified=true&message=${encodeURIComponent('Email verified successfully. Please log in to continue.')}`);
+    response.cookies.set({
+      name: 'sb-refresh-token',
+      value: data.session.refresh_token,
+      path: '/',
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 30, // 30 days
+    });
+
+    console.log("🔄 Redirecting to dashboard");
+    return response;
   } catch (err) {
     console.error("💥 Unexpected error in callback:", err);
     return NextResponse.redirect(

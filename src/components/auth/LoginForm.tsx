@@ -23,11 +23,10 @@ export function LoginForm() {
     const urlError = searchParams.get('error');
     const message = searchParams.get('message');
     const confirmed = searchParams.get('confirmed');
-    const verified = searchParams.get('verified');
     const reset = searchParams.get('reset');
     
-    if (verified === 'true' || confirmed === 'true') {
-      setSuccess(message || 'Email verified successfully! Please log in to continue.');
+    if (confirmed === 'true') {
+      setSuccess('Email confirmed! You can now sign in with your credentials.');
     } else if (reset === 'success') {
       setSuccess('Password updated successfully! Please sign in with your new password.');
     } else if (urlError) {
