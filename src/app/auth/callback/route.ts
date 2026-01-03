@@ -11,17 +11,14 @@ export async function GET(request: Request) {
   console.log("🔗 Auth callback received:", {
     hasCode: !!code,
     origin,
-    fullUrl: requestUrl.toString(),
-    intent,
     type,
-    code,
-    requestUrl,
+    intent,
   });
 
   try {
     if (!code) {
       console.log("⚠️ No code provided, redirecting to login");
-      return NextResponse.redirect(`${origin}/auth/login`);
+      return NextResponse.redirect(`${origin}/auth/login?error=no_code`);
     }
 
     const supabase = await createClient();
@@ -42,13 +39,20 @@ export async function GET(request: Request) {
     }
 
     // Normal signup/login flow - exchange code for session
-    console.log("📧 Email confirmation flow detected");
+    console.log("📧 Email confirmation flow - exchanging code for session");
     const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (error) {
       console.error("❌ Error exchanging code for session:", error);
       return NextResponse.redirect(
-        `${origin}/auth/login?error=auth_callback_failed`
+        `${origin}/auth/login?error=verification_failed&message=${encodeURIComponent(error.message)}`
+      );
+    }
+
+    if (!data.session) {
+      console.error("❌ No session created after code exchange");
+      return NextResponse.redirect(
+        `${origin}/auth/login?error=no_session`
       );
     }
 
@@ -56,12 +60,37 @@ export async function GET(request: Request) {
       userId: data.user?.id,
       email: data.user?.email,
     });
-    console.log("🔄 Redirecting to dashboard");
 
     // User is now authenticated, redirect to dashboard
-    return NextResponse.redirect(`${origin}/dashboard?welcome=true`);
+    const response = NextResponse.redirect(`${origin}/dashboard?welcome=true`);
+    
+    // Ensure cookies are set properly
+    response.cookies.set({
+      name: 'sb-access-token',
+      value: data.session.access_token,
+      path: '/',
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+    });
+
+    response.cookies.set({
+      name: 'sb-refresh-token',
+      value: data.session.refresh_token,
+      path: '/',
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 30, // 30 days
+    });
+
+    console.log("🔄 Redirecting to dashboard");
+    return response;
   } catch (err) {
     console.error("💥 Unexpected error in callback:", err);
-    return NextResponse.redirect(`${origin}/auth/login?error=unexpected_error`);
+    return NextResponse.redirect(
+      `${origin}/auth/login?error=unexpected_error&message=${encodeURIComponent(String(err))}`
+    );
   }
 }

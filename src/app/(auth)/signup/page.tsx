@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 export default function SignupPage() {
     const [email, setEmail] = useState('');
@@ -16,6 +16,7 @@ export default function SignupPage() {
     const [fullName, setFullName] = useState('');
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState(false);
     const router = useRouter();
     const supabase = createClient();
 
@@ -24,24 +25,86 @@ export default function SignupPage() {
         setLoading(true);
         setError(null);
 
-        const { error } = await supabase.auth.signUp({
-            email,
-            password,
-            options: {
-                data: {
-                    full_name: fullName,
+        try {
+            const { data, error } = await supabase.auth.signUp({
+                email,
+                password,
+                options: {
+                    emailRedirectTo: `${window.location.origin}/auth/callback`,
+                    data: {
+                        full_name: fullName,
+                    },
                 },
-            },
-        });
+            });
 
-        if (error) {
-            setError(error.message);
+            if (error) {
+                setError(error.message);
+                setLoading(false);
+                return;
+            }
+
+            if (data.user) {
+                // Check if email is already registered
+                if (data.user.identities && data.user.identities.length === 0) {
+                    setError('This email is already registered. Please log in instead.');
+                    setLoading(false);
+                    return;
+                }
+                
+                // Check if user is confirmed (no email confirmation required)
+                if (data.session) {
+                    // User is logged in immediately, redirect to dashboard
+                    console.log('✅ User signed up and logged in immediately');
+                    router.push('/dashboard');
+                    router.refresh();
+                    return;
+                }
+                
+                // Email confirmation required
+                setSuccess(true);
+                setLoading(false);
+            }
+        } catch (err) {
+            console.error('Signup error:', err);
+            setError('An unexpected error occurred. Please try again.');
             setLoading(false);
-        } else {
-            router.push('/dashboard');
-            router.refresh();
         }
     };
+
+    // Show success message after signup
+    if (success) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+                <Card className="w-full max-w-md">
+                    <CardHeader className="text-center">
+                        <CardTitle className="text-2xl font-bold">Check your email!</CardTitle>
+                        <CardDescription>We've sent you a confirmation link</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <Alert>
+                            <AlertTitle>Email Sent</AlertTitle>
+                            <AlertDescription>
+                                <p className="text-sm mb-4">
+                                    We've sent a confirmation link to <strong>{email}</strong>.
+                                    Please check your email and click the link to verify your account.
+                                </p>
+                                <p className="text-xs text-gray-500">
+                                    After clicking the link, you'll be redirected back to the app and automatically logged in.
+                                </p>
+                            </AlertDescription>
+                        </Alert>
+                    </CardContent>
+                    <CardFooter className="flex flex-col space-y-4">
+                        <Link href="/auth/login" className="w-full">
+                            <Button variant="outline" className="w-full">
+                                Go to Login
+                            </Button>
+                        </Link>
+                    </CardFooter>
+                </Card>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -66,6 +129,7 @@ export default function SignupPage() {
                                 value={fullName}
                                 onChange={(e) => setFullName(e.target.value)}
                                 required
+                                disabled={loading}
                             />
                         </div>
                         <div className="space-y-2">
@@ -77,6 +141,7 @@ export default function SignupPage() {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
+                                disabled={loading}
                             />
                         </div>
                         <div className="space-y-2">
@@ -88,6 +153,7 @@ export default function SignupPage() {
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
                                 minLength={6}
+                                disabled={loading}
                             />
                             <p className="text-xs text-gray-500">Minimum 6 characters</p>
                         </div>

@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
@@ -16,24 +16,53 @@ export default function LoginPage() {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const router = useRouter();
+    const searchParams = useSearchParams();
     const supabase = createClient();
+
+    useEffect(() => {
+        // Check for error messages from URL params
+        const errorParam = searchParams.get('error');
+        const messageParam = searchParams.get('message');
+        
+        if (errorParam) {
+            const errorMessages: Record<string, string> = {
+                'no_code': 'Invalid verification link. Please try signing up again.',
+                'verification_failed': messageParam || 'Email verification failed. Please try again.',
+                'no_session': 'Could not create session. Please try logging in.',
+                'unexpected_error': messageParam || 'An unexpected error occurred.',
+                'auth_callback_failed': 'Authentication failed. Please try again.',
+            };
+            
+            setError(errorMessages[errorParam] || 'An error occurred. Please try again.');
+        }
+    }, [searchParams]);
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
 
-        const { error } = await supabase.auth.signInWithPassword({
-            email,
-            password,
-        });
+        try {
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email,
+                password,
+            });
 
-        if (error) {
-            setError(error.message);
+            if (error) {
+                setError(error.message);
+                setLoading(false);
+                return;
+            }
+
+            if (data.session) {
+                console.log('✅ User logged in successfully');
+                router.push('/dashboard');
+                router.refresh();
+            }
+        } catch (err) {
+            console.error('Login error:', err);
+            setError('An unexpected error occurred. Please try again.');
             setLoading(false);
-        } else {
-            router.push('/dashboard');
-            router.refresh();
         }
     };
 
@@ -60,6 +89,7 @@ export default function LoginPage() {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
+                                disabled={loading}
                             />
                         </div>
                         <div className="space-y-2">
@@ -70,6 +100,7 @@ export default function LoginPage() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
+                                disabled={loading}
                             />
                         </div>
                     </CardContent>
