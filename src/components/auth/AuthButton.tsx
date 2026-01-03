@@ -70,13 +70,19 @@ export function AuthButton() {
     }
   };
 
+  // Show both states for debugging
   if (loading) {
-    return <div className="w-20 h-9 bg-muted animate-pulse rounded-md" />;
+    return (
+      <div className="flex items-center gap-4">
+        <div className="text-sm text-muted-foreground">Loading...</div>
+      </div>
+    );
   }
 
   if (!user) {
     return (
       <div className="flex items-center gap-4">
+        <div className="text-xs text-red-500">Not logged in</div>
         <Link href="/auth/login">
           <Button variant="ghost">Log in</Button>
         </Link>
@@ -86,6 +92,9 @@ export function AuthButton() {
       </div>
     );
   }
+
+  // User is logged in - show dropdown
+  console.log('User logged in:', user.email);
 
   return (
     <DropdownMenu>

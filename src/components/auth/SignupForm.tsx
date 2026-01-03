@@ -73,17 +73,14 @@ export function SignupForm() {
           return;
         }
         
-        // Check if user is confirmed (no email confirmation required)
+        // Sign out immediately after signup to prevent auto-login
         if (data.session) {
-          // User is logged in immediately, redirect to dashboard
-          console.log('✅ User signed up and logged in immediately');
-          router.push('/dashboard');
-          router.refresh();
-          return;
+          console.log('🔓 Signing out after signup to require manual login');
+          await supabase.auth.signOut();
         }
         
-        // Email confirmation required
-        console.log('📧 Email confirmation required');
+        // Show success message - user must login manually
+        console.log('✅ Signup successful - redirecting to login');
         setSuccess(true);
         setLoading(false);
       }
@@ -97,21 +94,14 @@ export function SignupForm() {
   if (success) {
     return (
       <Alert>
-        <AlertTitle>Check your email!</AlertTitle>
+        <AlertTitle>Account created successfully!</AlertTitle>
         <AlertDescription>
           <div className="space-y-3">
             <p className="text-sm">
-              We've sent a confirmation link to <strong>{email}</strong>.
-            </p>
-            <p className="text-sm">
-              Please check your email and click the link to verify your account. 
-              After verification, you'll be automatically redirected back to the app and logged in.
-            </p>
-            <p className="text-xs text-muted-foreground">
-              Don't see the email? Check your spam folder.
+              Your account has been created. Please log in to continue.
             </p>
             <Link href="/auth/login" className="block mt-4">
-              <Button variant="outline" className="w-full">
+              <Button className="w-full">
                 Go to Login
               </Button>
             </Link>
