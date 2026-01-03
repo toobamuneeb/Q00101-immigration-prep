@@ -2290,7 +2290,7 @@ const I_485_DEFINITION: FormDefinition = {
   category: "family",
   estimatedTime: "90-120 minutes",
   filingFee: 1140,
-  price: 70,
+  price: 60,
   sections: [
     {
       id: "attorney-info",
@@ -17592,7 +17592,7 @@ const I130_DEFINITION: FormDefinition = {
   category: "family",
   estimatedTime: "45-60 minutes",
   filingFee: 535,
-  price: 70,
+  price: 60,
   sections: [
     // 1
     {
