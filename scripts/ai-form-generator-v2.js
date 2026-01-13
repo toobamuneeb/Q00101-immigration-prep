@@ -19,9 +19,8 @@ const fs = require("fs");
 const path = require("path");
 const https = require("https");
 
-// Check for API key
-const OPENAI_API_KEY =
-  "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";
+// Check for API key from environment variable
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 if (!OPENAI_API_KEY) {
   console.error("❌ Error: OPENAI_API_KEY environment variable not set");
