@@ -295,7 +295,7 @@ export const N_400_FIELD_MAPPINGS: FieldMapping[] = [
   {
     questionId: "part4.weightSecondDigit",
     pdfField: "form1[0].#subform[2].P7_Line4_Pounds2[0]",
-    type: "choice",
+    type: "text",
   },
   {
     questionId: "part4.heightFeet",
@@ -312,10 +312,11 @@ export const N_400_FIELD_MAPPINGS: FieldMapping[] = [
     pdfField: "form1[0].#subform[2].P7_Line4_Pounds1[0]",
     type: "text",
   },
+
   {
     questionId: "part4.weightPoundsThirdDigit",
     pdfField: "form1[0].#subform[2].P7_Line4_Pounds3[0]",
-    type: "button",
+    type: "text",
   },
   {
     questionId: "part4.eyeColor",

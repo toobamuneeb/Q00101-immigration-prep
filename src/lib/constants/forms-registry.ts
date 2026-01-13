@@ -1,7 +1,7 @@
 // @ts-nocheck - Form definitions have some type inconsistencies
 import { z } from "zod";
 import { I_600_FIELD_MAPPINGS } from "./form-mappings/i-600-field-mappings";
-import { I_129_FIELD_MAPPINGS } from "./form-mappings/i-129-field-mappings";
+import { I_129_FIELD_MAPPINGS } from "./form-mappings/i-129-fieldmappings";
 import { I_131_FIELD_MAPPINGS } from "./form-mappings/i-131-field-mappings";
 import { I_765_FIELD_MAPPINGS } from "./form-mappings/i-765-field-mappings";
 import { N_400_FIELD_MAPPINGS } from "./form-mappings/n-400-field-mappings";
@@ -7859,6 +7859,7 @@ const N_400_DEFINITION: FormDefinition = {
         },
       ],
     },
+
     {
       id: "part2-nationality",
       title: "Part 2: Nationality Information",
@@ -7877,6 +7878,7 @@ const N_400_DEFINITION: FormDefinition = {
         },
       ],
     },
+
     {
       id: "part2-parent-us-citizen",
       title: "Part 2: Parent's Citizenship",
@@ -7893,6 +7895,7 @@ const N_400_DEFINITION: FormDefinition = {
         },
       ],
     },
+
     {
       id: "part2-social-security",
       title: "Part 2: Social Security Information",
@@ -8008,7 +8011,8 @@ const N_400_DEFINITION: FormDefinition = {
           options: [
             { value: "0", label: "American Indian or Alaska Native" },
             { value: "1", label: "Asian" },
-            { value: "2", label: "Black or African American" },
+            { value: "2", label: "Black" },
+            { value: "3", label: "Native Hawaiian" },
             { value: "4", label: "White" },
           ],
         },
@@ -8024,7 +8028,7 @@ const N_400_DEFINITION: FormDefinition = {
         },
       ],
     },
-
+    // ===
     {
       id: "part4-physical-characteristics",
       title: "Part 4: Physical Characteristics",
@@ -8074,6 +8078,7 @@ const N_400_DEFINITION: FormDefinition = {
           label: "Weight (Second Digit)",
           required: false,
         },
+
         {
           id: "part4.weightPoundsThirdDigit",
           type: "text",
@@ -22123,9081 +22128,7068 @@ const I_129_DEFINITION: FormDefinition = {
   status: "active",
   sections: [
     {
-      id: "part0",
-      title: "General Information",
+      id: "section_0",
+      title: "Section 0",
       questions: [
         {
-          id: "subformMiddleName",
+          id: "line.cityTown",
           type: "text",
-          label: "Middle Name",
-          required: true,
-          helpText: "Middle Name.",
+          label: "Line - City Town",
+          required: false,
         },
         {
-          id: "subformGivenName",
+          id: "line1.familyName",
           type: "text",
-          label: "Given Name (First Name)",
-          required: true,
-          helpText: "Given Name (First Name).",
+          label: "Line1 - Family Name",
+          required: false,
         },
         {
-          id: "subformFamilyName",
+          id: "line1.givenName",
           type: "text",
-          label: "Family Name (Last Name)",
-          required: true,
-          helpText: "Family Name (Last Name).",
+          label: "Line1 - Given Name",
+          required: false,
         },
         {
-          id: "subformCompanyorOrgName",
+          id: "line1.middleName",
           type: "text",
-          label: "Company or Organization Name",
-          required: true,
-          helpText: "Part 1. Company or Organization Name.",
+          label: "Line1 - Middle Name",
+          required: false,
         },
         {
-          id: "subformLineCityTown",
+          id: "line2.daytimePhoneNumber1.part8",
           type: "text",
-          label: "City or Town",
-          required: true,
-          helpText: "City or Town.",
+          label: "Line2 - Daytime Phone Number1 - Part8",
+          required: false,
         },
         {
-          id: "subformInCareofName",
+          id: "line3.aptSteFlrNumber",
           type: "text",
-          label: "In Care of Name",
-          required: true,
-          helpText: "In Care of Name.",
+          label: "Apt. / Ste. / Flr.",
+          required: false,
         },
         {
-          id: "subformStreetNumberName",
+          id: "line3.companyorOrgName",
           type: "text",
-          label: "Street Number and Name",
-          required: true,
-          helpText: "Street Number and Name.",
+          label: "Line3 - Companyor Org Name",
+          required: false,
         },
         {
-          id: "subformUnit",
-          type: "radio",
-          label: "Suite",
-          required: true,
+          id: "line3.mobilePhoneNumber1.part8",
+          type: "text",
+          label: "Line3 - Mobile Phone Number1 - Part8",
+          required: false,
+        },
+        {
+          id: "line3.unit",
+          type: "select",
+          label: "Unit Number",
+          required: false,
           options: [
-            { value: "APT", label: "Apt." },
-            { value: "STE", label: "Ste." },
-            { value: "FLR", label: "Flr." },
+            { value: "STE", label: "ste" },
+            { value: "APT", label: "Apt" },
+            { value: "FLR", label: "flr" },
           ],
-          helpText: "Suite.",
         },
+
         {
-          id: "subformAptSteFlrNumber",
+          id: "line7a.inCareofName",
           type: "text",
-          label: "Apartment, Suite or Floor Number",
-          required: true,
-          helpText: "Part 1. Unit Number.",
+          label: "Line7a - In Careof Name",
+          required: false,
         },
         {
-          id: "subformEmailAddress",
-          type: "email",
-          label: "Email Address (optional)",
-          required: true,
-          helpText: "Part 1. Email Address (optional)",
-        },
-        {
-          id: "subformTextField1",
+          id: "line7b.streetNumberName",
           type: "text",
-          label: "Federal Employer Identification Number (F E I N)",
-          required: true,
-          helpText: "Federal Employer Identification Number (F E I N).",
+          label: "Line7b - Street Number Name",
+          required: false,
         },
         {
-          id: "subform1continuation",
+          id: "line9.emailAddress",
+          type: "text",
+          label: "Line9 - Email Address",
+          required: false,
+        },
+        {
+          id: "p1.line3.country",
+          type: "text",
+          label: "P1 - Line3 - Country",
+          required: false,
+        },
+        {
+          id: "p1.line3.postalCode",
+          type: "text",
+          label: "P1 - Line3 - Postal Code",
+          required: false,
+        },
+        {
+          id: "p1.line3.province",
+          type: "text",
+          label: "P1 - Line3 - Province",
+          required: false,
+        },
+        {
+          id: "p1.line3.state",
+          type: "select",
+          label: "P1 - Line3 - State",
+          required: false,
+          options: US_STATES,
+        },
+        {
+          id: "p1.line3.zipCode",
+          type: "text",
+          label: "P1 - Line3 - Zip Code",
+          required: false,
+        },
+        {
+          id: "p1Line6",
           type: "radio",
-          label: "Basis for Classification",
-          required: true,
+          label:
+            "Are you a nonprofit organized as tax exempt or a governmental research organization? ",
+          required: false,
+          options: [
+            { value: "Yes", label: "Yes" },
+            { value: "No", label: "No" },
+          ],
+        },
+
+        {
+          id: "textField1",
+          type: "text",
+          label: "Federal Employer Identification Number (FEIN)",
+          required: false,
+        },
+      ],
+    },
+    {
+      id: "section_1",
+      title: "Part 2. Information About This Petition",
+      questions: [
+        {
+          id: "p2",
+          label: "Basis for Classification (select only one box):",
+          type: "radio",
+          required: false,
+        },
+        {
+          id: "p2checkbox4new",
+          type: "checkbox",
+          label: "New employment",
+          required: false,
+        },
+        {
+          id: "p2checkbox4continuation",
+          type: "checkbox",
+          label:
+            "Continuation of previously approved employment without change with the same employer.",
+          required: false,
+        },
+
+        {
+          id: "p2checkbox4previouschange",
+          type: "checkbox",
+          label: "Change in previously approved employment.",
+          required: false,
+        },
+
+        {
+          id: "p2checkbox4concurrent",
+          type: "checkbox",
+          label: "New concurrent employment.",
+          required: false,
+        },
+
+        {
+          id: "p2checkbox4change",
+          type: "checkbox",
+          label: "Change of employer.",
+          required: false,
+        },
+
+        {
+          id: "p2checkbox4amended",
+          type: "checkbox",
+          label: "Amended petition.",
+          required: false,
+        },
+
+        // =============
+        {
+          id: "line1.receiptNumber",
+          type: "text",
+          label: "Line1 - Receipt Number",
+          required: false,
+        },
+        {
+          id: "line3.taxNumber",
+          type: "text",
+          label: "Line3 - Tax Number",
+          required: false,
+        },
+        {
+          id: "line4.sSN",
+          type: "text",
+          label: "Line4 - S S N",
+          required: false,
+        },
+
+        // {
+        //   id: "new",
+        //   type: "checkbox",
+        //   label: "New",
+        //   required: false,
+        // },
+        {
+          id: "p2Checkbox4",
+          type: "checkbox",
+          label:
+            "Notify the office in Part 4. so each beneficiary can obtain a visa or be admitted. (NOTE: A petition is not required for E-1, E-2, E-3, H-1B1 Chile/Singapore, or TN visa beneficiaries.)",
+          required: false,
+        },
+        {
+          id: "p2Checkbox4_2",
+          type: "checkbox",
+          label:
+            "Change the status and extend the stay of each beneficiary because the beneficiary(ies) is/are now in the United States in another status (see instructions for limitations). This is available only when you check New Employment in Item Number 2., above.",
+          required: false,
+        },
+        {
+          id: "p2Checkbox4_3",
+          type: "checkbox",
+          label:
+            "Extend the stay of each beneficiary because the beneficiary(ies) now hold(s) this status.",
+          required: false,
+        },
+        {
+          id: "p2Checkbox4_4",
+          type: "checkbox",
+          label:
+            "Amend the stay of each beneficiary because the beneficiary(ies) now hold(s) this status and is/are not seeking additional time from the current authorized period of stay.",
+          required: false,
+        },
+        {
+          id: "p2Checkbox4_5",
+          type: "checkbox",
+          label:
+            "Extend the status of a nonimmigrant classification based on a free trade agreement. (See Trade Agreement Supplement to Form I-129 for TN and H-1B1.)",
+          required: false,
+        },
+        {
+          id: "p2Checkbox4_6",
+          type: "checkbox",
+          label:
+            "Change status to a nonimmigrant classification based on a free trade agreement. (See Trade Agreement Supplement to Form I-129 for TN and H-1B1.)",
+          required: false,
+        },
+        // =======
+        {
+          id: "p3L",
+          type: "radio",
+          label: "Type of Beneficiaries Requested (select only one box)",
+          required: false,
+        },
+
+        //
+        {
+          id: "p3Line1.checkbox",
+          type: "checkbox",
+          label: "Named",
+          required: false,
+        },
+        {
+          id: "p3Line1.checkbox_2",
+          type: "checkbox",
+          label: "Unnamed (for H-2A or H-2B petitions only)",
+          required: false,
+        },
+        // ==========
+        {
+          id: "part2.classificationSymbol",
+          type: "text",
+          label: "Part2 - Classification Symbol",
+          required: false,
+        },
+        {
+          id: "part3.line2.familyName",
+          type: "text",
+          label: "Part3 - Line2 - Family Name",
+          required: false,
+        },
+        {
+          id: "part3.line2.givenName",
+          type: "text",
+          label: "Part3 - Line2 - Given Name",
+          required: false,
+        },
+        {
+          id: "part3.line2.middleName",
+          type: "text",
+          label: "Part3 - Line2 - Middle Name",
+          required: false,
+        },
+        {
+          id: "part7LineD.emp1Name",
+          type: "text",
+          label: "Part7. If an Entertainment Group, Provide the Group Name",
+          required: false,
+        },
+        // {
+        //   id: "previouschange",
+        //   type: "checkbox",
+        //   label: "Previouschange",
+        //   required: false,
+        // },
+        {
+          id: "ttlNumbersofWorker",
+          type: "text",
+          label: "Ttl Numbersof Worker",
+          required: false,
+        },
+      ],
+    },
+
+    {
+      id: "section_2",
+      title: "Beneficiary Information",
+      questions: [
+        {
+          id: "line.countryOfIssuance",
+          type: "text",
+          label: "Line - Country Of Issuance",
+          required: false,
+        },
+        {
+          id: "line1.alienNumber",
+          type: "text",
+          label: "Line1 - Alien Number",
+          required: false,
+        },
+        {
+          id: "line1.gender.p3",
+          type: "checkbox",
+          label: "Male",
+          required: false,
+        },
+        {
+          id: "line1.gender.p3_2",
+          type: "checkbox",
+          label: "Female",
+          required: false,
+        },
+        {
+          id: "line11e.expDate",
+          type: "date",
+          label: "Line11e - Exp Date",
+          required: false,
+        },
+        {
+          id: "line11e.expDate_2",
+          type: "date",
+          label: "Line11e - Exp Date_2",
+          required: false,
+        },
+        {
+          id: "line11g.currentNon",
+          type: "select",
+          label: "Line11g - Current Non",
+          required: false,
           options: [
             {
-              value: "0",
-              label:
-                "Continuation of previously approved employment without change with the same employer",
+              label: "       ",
+              value: "       ",
             },
-            { value: "1", label: "New employment" },
-            { value: "2", label: "Change in previously approved employment" },
-            { value: "3", label: "New concurrent employment" },
-            { value: "1", label: "Change of employer" },
-            { value: "1", label: "Amended petition" },
+            {
+              label: "1B1 - H-1B1 SPECIALITY OCCUPATION",
+              value: "1B1 - H-1B1 SPECIALITY OCCUPATION",
+            },
+            {
+              label: "1B2 - H-1B2 DoD SPECIALITY",
+              value: "1B2 - H-1B2 DoD SPECIALITY",
+            },
+            {
+              label: "1B3 - H-1B3 FASHION MODEL",
+              value: "1B3 - H-1B3 FASHION MODEL",
+            },
+            {
+              label: "1B4 - H-1B4 UNIQUE PGM ARTIST-ENT",
+              value: "1B4 - H-1B4 UNIQUE PGM ARTIST-ENT",
+            },
+            {
+              label: "1B5 - H-1B5 ALIEN ATHLETE",
+              value: "1B5 - H-1B5 ALIEN ATHLETE",
+            },
+            {
+              label: "1BS - SUPPORT PERSON OF H-1",
+              value: "1BS - SUPPORT PERSON OF H-1",
+            },
+            {
+              label: "A1 - AMBASSADOR, DIPLOMAT",
+              value: "A1 - AMBASSADOR, DIPLOMAT",
+            },
+            {
+              label: "A2 - OTHER DIPLOMATIC OFFICIALS",
+              value: "A2 - OTHER DIPLOMATIC OFFICIALS",
+            },
+            {
+              label: "A3 - ATTENDANTS OF A-1, A-2",
+              value: "A3 - ATTENDANTS OF A-1, A-2",
+            },
+            {
+              label: "AS - ASYLUM",
+              value: "AS - ASYLUM",
+            },
+            {
+              label: "ASD - ASYLUM STATUS DENIED",
+              value: "ASD - ASYLUM STATUS DENIED",
+            },
+            {
+              label: "AW - RAW APPLIED FOR AT A PORT",
+              value: "AW - RAW APPLIED FOR AT A PORT",
+            },
+            {
+              label: "B1 - TEMPORARY VISITOR FOR BUSINESS",
+              value: "B1 - TEMPORARY VISITOR FOR BUSINESS",
+            },
+            {
+              label: "B1A - NI PERSNL-DOM SRVANT OF NI EMP",
+              value: "B1A - NI PERSNL-DOM SRVANT OF NI EMP",
+            },
+            {
+              label: "B1B - NI DOMESTIC SERVANT OF USC",
+              value: "B1B - NI DOMESTIC SERVANT OF USC",
+            },
+            {
+              label: "B1C - NI EMPLOYED BY FOREIGN AIRLINE",
+              value: "B1C - NI EMPLOYED BY FOREIGN AIRLINE",
+            },
+            {
+              label: "B1D - NI - MISSIONARIES",
+              value: "B1D - NI - MISSIONARIES",
+            },
+            {
+              label: "B2 - TEMPORARY VISITOR FOR PLEASURE",
+              value: "B2 - TEMPORARY VISITOR FOR PLEASURE",
+            },
+            {
+              label: "BE - BERING STRAIT ENTRIES",
+              value: "BE - BERING STRAIT ENTRIES",
+            },
+            {
+              label: "C1 - ALIEN IN TRANSIT THROUGH U.S.",
+              value: "C1 - ALIEN IN TRANSIT THROUGH U.S.",
+            },
+            {
+              label: "C2 - ALIEN IN TRANSIT TO UN HQ",
+              value: "C2 - ALIEN IN TRANSIT TO UN HQ",
+            },
+            {
+              label: "C3 - FRN GOV OFF IN TRANSIT THRU US",
+              value: "C3 - FRN GOV OFF IN TRANSIT THRU US",
+            },
+            {
+              label: "C4 - TRANSIT WITHOUT A VISA",
+              value: "C4 - TRANSIT WITHOUT A VISA",
+            },
+            {
+              label: "CC - CUBAN MASS MIGRATION PROJECT",
+              value: "CC - CUBAN MASS MIGRATION PROJECT",
+            },
+            {
+              label: "CH - PAROLEE (HUMANITARIAN-HQ AUTH)",
+              value: "CH - PAROLEE (HUMANITARIAN-HQ AUTH)",
+            },
+            {
+              label: "CP - PAROLEE (PUBLIC INT-HQ AUTH)",
+              value: "CP - PAROLEE (PUBLIC INT-HQ AUTH)",
+            },
+            {
+              label: "CW1 - PRINCIPAL TRANSITIONAL WORKERS",
+              value: "CW1 - PRINCIPAL TRANSITIONAL WORKERS",
+            },
+            {
+              label: "CW2 - DEPENDENT OF CW1",
+              value: "CW2 - DEPENDENT OF CW1",
+            },
+            {
+              label: "D1 - ALIEN CREW DEPART SAME VESSEL",
+              value: "D1 - ALIEN CREW DEPART SAME VESSEL",
+            },
+            {
+              label: "D2 - ALIEN CREW DEPART OTHER VESSEL",
+              value: "D2 - ALIEN CREW DEPART OTHER VESSEL",
+            },
+            {
+              label: "DA - ADVANCE PAROLE (DISTRICT AUTH)",
+              value: "DA - ADVANCE PAROLE (DISTRICT AUTH)",
+            },
+            {
+              label: "DE - PAROLEE (DEFERRED INSPECTION)",
+              value: "DE - PAROLEE (DEFERRED INSPECTION)",
+            },
+            {
+              label: "DT - PAROLEE (DISTRICT-POE AUTH)",
+              value: "DT - PAROLEE (DISTRICT-POE AUTH)",
+            },
+            {
+              label: "DX - CREW ARRIVING DETAINED ON SHIP",
+              value: "DX - CREW ARRIVING DETAINED ON SHIP",
+            },
+            {
+              label: "E1 - TREATY TRADER-SPOUSE-CHILDREN",
+              value: "E1 - TREATY TRADER-SPOUSE-CHILDREN",
+            },
+            {
+              label: "E2 - TREATY INVESTOR-SPOUSE-CHILD",
+              value: "E2 - TREATY INVESTOR-SPOUSE-CHILD",
+            },
+            {
+              label: "E2C - CNMI INVESTOR",
+              value: "E2C - CNMI INVESTOR",
+            },
+            {
+              label: "E3 - AUSTRALIA FREE TRADE AGREEMENT",
+              value: "E3 - AUSTRALIA FREE TRADE AGREEMENT",
+            },
+            {
+              label: "EAO - EMPLOYMENT ADVISORY OPTION",
+              value: "EAO - EMPLOYMENT ADVISORY OPTION",
+            },
+            {
+              label: "EWI - ENTRY WITHOUT INSPECTION",
+              value: "EWI - ENTRY WITHOUT INSPECTION",
+            },
+            {
+              label: "X - EOIR",
+              value: "X - EOIR",
+            },
+            {
+              label: "F1 - STUDENT - ACADEMIC",
+              value: "F1 - STUDENT - ACADEMIC",
+            },
+            {
+              label: "F2 - SPOUSE-CHILD OF F-1",
+              value: "F2 - SPOUSE-CHILD OF F-1",
+            },
+            {
+              label: "FSM - CFA ADM FED STATES MICRONESIA",
+              value: "FSM - CFA ADM FED STATES MICRONESIA",
+            },
+            {
+              label: "FUG - FAMILY UNITY GRANTED",
+              value: "FUG - FAMILY UNITY GRANTED",
+            },
+            {
+              label: "G1 - PRINCIPAL REP. FOREIGN GOVT",
+              value: "G1 - PRINCIPAL REP. FOREIGN GOVT",
+            },
+            {
+              label: "G2 - OTHER REP FOREIGN GOVT",
+              value: "G2 - OTHER REP FOREIGN GOVT",
+            },
+            {
+              label: "G3 - REP NON-RECOGNIZED FOREIGN GOV",
+              value: "G3 - REP NON-RECOGNIZED FOREIGN GOV",
+            },
+            {
+              label: "G4 - OFFICER-EMPLOYEE INTL. ORG.",
+              value: "G4 - OFFICER-EMPLOYEE INTL. ORG.",
+            },
+            {
+              label: "G5 - ATTENDANTS OF G1, G2, G3, G4",
+              value: "G5 - ATTENDANTS OF G1, G2, G3, G4",
+            },
+            {
+              label: "GB - VISITOR WITHOUT A VISA 15 DAYS",
+              value: "GB - VISITOR WITHOUT A VISA 15 DAYS",
+            },
+            {
+              label: "GT - VISITOR WITHOUT A VISA 15 DAYS",
+              value: "GT - VISITOR WITHOUT A VISA 15 DAYS",
+            },
+            {
+              label: "H1 - ALIEN OF DIST MERIT & ABILITY",
+              value: "H1 - ALIEN OF DIST MERIT & ABILITY",
+            },
+            {
+              label: "H1A - REGISTERED NURSE",
+              value: "H1A - REGISTERED NURSE",
+            },
+            {
+              label: "H1B - SPECIALITY OCCUPATION",
+              value: "H1B - SPECIALITY OCCUPATION",
+            },
+            {
+              label: "H1C - NURSE RELIEF",
+              value: "H1C - NURSE RELIEF",
+            },
+            {
+              label: "H2 - TEMPORARY LABOR CERTIFICATION",
+              value: "H2 - TEMPORARY LABOR CERTIFICATION",
+            },
+            {
+              label: "H2A - TEMPORARY AGRICULTURAL WORKER",
+              value: "H2A - TEMPORARY AGRICULTURAL WORKER",
+            },
+            {
+              label: "H2B - TEMPORARY NON-AG WORKER",
+              value: "H2B - TEMPORARY NON-AG WORKER",
+            },
+            {
+              label: "H2R - RET(H2B)WRKR NOT SUBJCT TO CAP",
+              value: "H2R - RET(H2B)WRKR NOT SUBJCT TO CAP",
+            },
+            {
+              label: "H3 - ALIEN TRAINEE",
+              value: "H3 - ALIEN TRAINEE",
+            },
+            {
+              label: "H3A - TRAINEE",
+              value: "H3A - TRAINEE",
+            },
+            {
+              label: "H3B - SPECIAL EDUCATION TRAINING",
+              value: "H3B - SPECIAL EDUCATION TRAINING",
+            },
+            {
+              label: "H4 - SPS OR CHLD OF H1,H2,H3 OR H2R",
+              value: "H4 - SPS OR CHLD OF H1,H2,H3 OR H2R",
+            },
+            {
+              label: "HSC - FREE TRADE H1B1",
+              value: "HSC - FREE TRADE H1B1",
+            },
+            {
+              label: "I - FOREIGN PRESS",
+              value: "I - FOREIGN PRESS",
+            },
+            {
+              label: "IMM - IMMIGRANT",
+              value: "IMM - IMMIGRANT",
+            },
+            {
+              label: "IN - INDEFINITE PAROLE",
+              value: "IN - INDEFINITE PAROLE",
+            },
+            {
+              label: "J1 - EXCHANGE VISITOR - OTHERS",
+              value: "J1 - EXCHANGE VISITOR - OTHERS",
+            },
+            {
+              label: "J1S - EXCHANGE VISITOR - STUDENT",
+              value: "J1S - EXCHANGE VISITOR - STUDENT",
+            },
+            {
+              label: "J2 - SPOUSE-CHILD OF J-1",
+              value: "J2 - SPOUSE-CHILD OF J-1",
+            },
+            {
+              label: "J2S - SPOUSE-CHILD OF J-1S",
+              value: "J2S - SPOUSE-CHILD OF J-1S",
+            },
+            {
+              label: "K1 - ALIEN FIANCE(E) OF USC",
+              value: "K1 - ALIEN FIANCE(E) OF USC",
+            },
+            {
+              label: "K2 - CHILD OF K1",
+              value: "K2 - CHILD OF K1",
+            },
+            {
+              label: "K3 - SPOUSE OF USC",
+              value: "K3 - SPOUSE OF USC",
+            },
+            {
+              label: "K4 - CHILD OF USC",
+              value: "K4 - CHILD OF USC",
+            },
+            {
+              label: "L1 - INTRA-COMPANY TRANSFEREE",
+              value: "L1 - INTRA-COMPANY TRANSFEREE",
+            },
+            {
+              label: "L1A - MANAGER OR EXECUTIVE",
+              value: "L1A - MANAGER OR EXECUTIVE",
+            },
+            {
+              label: "L1B - SPECIALIZED KNOWLEDGE ALIEN",
+              value: "L1B - SPECIALIZED KNOWLEDGE ALIEN",
+            },
+            {
+              label: "L2 - SPOUSE-CHILD OF L-1",
+              value: "L2 - SPOUSE-CHILD OF L-1",
+            },
+            {
+              label: "LZ - BLANKET L PETITION",
+              value: "LZ - BLANKET L PETITION",
+            },
+            {
+              label: "M1 - STUDENT - VOCATIONAL-NON-ACAD.",
+              value: "M1 - STUDENT - VOCATIONAL-NON-ACAD.",
+            },
+            {
+              label: "M2 - SPOUSE-CHILD OF M-1",
+              value: "M2 - SPOUSE-CHILD OF M-1",
+            },
+            {
+              label: "MIS - CFA ADM REP MARSHALL ISLANDS",
+              value: "MIS - CFA ADM REP MARSHALL ISLANDS",
+            },
+            {
+              label: "ML - PAROLEE-MEDICAL, LEGAL, HUMAN",
+              value: "ML - PAROLEE-MEDICAL, LEGAL, HUMAN",
+            },
+            {
+              label: "N1 - PRINCIPAL REP. OF NATO MEMBER",
+              value: "N1 - PRINCIPAL REP. OF NATO MEMBER",
+            },
+            {
+              label: "N2 - OTHER REP. OF NATO MEMBER",
+              value: "N2 - OTHER REP. OF NATO MEMBER",
+            },
+            {
+              label: "N3 - CLERICAL STAFF FOR N-1, N-2",
+              value: "N3 - CLERICAL STAFF FOR N-1, N-2",
+            },
+            {
+              label: "N4 - OFFICIALS OF NATO",
+              value: "N4 - OFFICIALS OF NATO",
+            },
+            {
+              label: "N5 - EXPERTS EMPLOYED BY NATO",
+              value: "N5 - EXPERTS EMPLOYED BY NATO",
+            },
+            {
+              label: "N6 - CIVILIAN COMPONENT OF NATO",
+              value: "N6 - CIVILIAN COMPONENT OF NATO",
+            },
+            {
+              label: "N7 - ATTENDANTS OF N-1 THROUGH N-6",
+              value: "N7 - ATTENDANTS OF N-1 THROUGH N-6",
+            },
+            {
+              label: "N8 - PARENT OF SPEC IMMIGRANT CHILD",
+              value: "N8 - PARENT OF SPEC IMMIGRANT CHILD",
+            },
+            {
+              label: "N9 - SPOUSE-CHILD OF N8",
+              value: "N9 - SPOUSE-CHILD OF N8",
+            },
+            {
+              label: "O1 - ALIEN W-EXTRAORDINARY ABILITY",
+              value: "O1 - ALIEN W-EXTRAORDINARY ABILITY",
+            },
+            {
+              label: "O1A - EXTRAORDINARY ALIEN - NON-ARTS",
+              value: "O1A - EXTRAORDINARY ALIEN - NON-ARTS",
+            },
+            {
+              label: "O1B - EXTRAORDINARY ALIEN IN ARTS",
+              value: "O1B - EXTRAORDINARY ALIEN IN ARTS",
+            },
+            {
+              label: "O2 - ACCOMPANYING ALIEN TO O1",
+              value: "O2 - ACCOMPANYING ALIEN TO O1",
+            },
+            {
+              label: "O3 - SPOUSE-CHILD OF O-1, O-2",
+              value: "O3 - SPOUSE-CHILD OF O-1, O-2",
+            },
+            {
+              label: "OP - PAROLEE (OVERSEAS AUTHORIZED)",
+              value: "OP - PAROLEE (OVERSEAS AUTHORIZED)",
+            },
+            {
+              label: "P1 - ATHLETE OR ENTERTAINER",
+              value: "P1 - ATHLETE OR ENTERTAINER",
+            },
+            {
+              label: "P1A - ALIEN WITH ATHLETIC EVENT",
+              value: "P1A - ALIEN WITH ATHLETIC EVENT",
+            },
+            {
+              label: "P1B - ALIEN WITH ENTERTAINMENT GROUP",
+              value: "P1B - ALIEN WITH ENTERTAINMENT GROUP",
+            },
+            {
+              label: "P1S - SUPPORT PERSON OF P-1",
+              value: "P1S - SUPPORT PERSON OF P-1",
+            },
+            {
+              label: "P2 - EXHANGE ARTIST-ENTERTAINER",
+              value: "P2 - EXHANGE ARTIST-ENTERTAINER",
+            },
+            {
+              label: "P2S - SUPPORT PERSON OF P-2",
+              value: "P2S - SUPPORT PERSON OF P-2",
+            },
+            {
+              label: "P3 - UNIQUE PGM ARTIST-ENTERTAINER",
+              value: "P3 - UNIQUE PGM ARTIST-ENTERTAINER",
+            },
+            {
+              label: "P3S - SUPPORT PERSON OF P-3",
+              value: "P3S - SUPPORT PERSON OF P-3",
+            },
+            {
+              label: "P4 - SPOUSE-CHILD OF P-1, P-2, P-3",
+              value: "P4 - SPOUSE-CHILD OF P-1, P-2, P-3",
+            },
+            {
+              label: "PAL - CFA ADMISSION PALAU",
+              value: "PAL - CFA ADMISSION PALAU",
+            },
+            {
+              label: "PAR - PAROLEE",
+              value: "PAR - PAROLEE",
+            },
+            {
+              label: "PI - PACIFIC ISLANDER",
+              value: "PI - PACIFIC ISLANDER",
+            },
+            {
+              label: "Q1 - INTL CULTURAL XCHG VISITORS",
+              value: "Q1 - INTL CULTURAL XCHG VISITORS",
+            },
+            {
+              label: "Q2 - IRISH PEACE PROCESS PARTICPNTS",
+              value: "Q2 - IRISH PEACE PROCESS PARTICPNTS",
+            },
+            {
+              label: "Q3 - SPOUSE-CHILD OF Q2",
+              value: "Q3 - SPOUSE-CHILD OF Q2",
+            },
+            {
+              label: "R1 - RELIGIOUS OCCUPATION",
+              value: "R1 - RELIGIOUS OCCUPATION",
+            },
+            {
+              label: "R2 - SPOUSE-CHILD OF R-1",
+              value: "R2 - SPOUSE-CHILD OF R-1",
+            },
+            {
+              label: "RE - REFUGEE",
+              value: "RE - REFUGEE",
+            },
+            {
+              label: "RE5 - HAITIAN W-GRANTED REFUGEE STAT",
+              value: "RE5 - HAITIAN W-GRANTED REFUGEE STAT",
+            },
+            {
+              label: "RW - RAW APPLIED FOR AT A US CO",
+              value: "RW - RAW APPLIED FOR AT A US CO",
+            },
+            {
+              label: "S1 - SPECIAL AGRICULTURAL WORKER",
+              value: "S1 - SPECIAL AGRICULTURAL WORKER",
+            },
+            {
+              label: "S2 - SPECIAL AGRICULTURAL WORKER",
+              value: "S2 - SPECIAL AGRICULTURAL WORKER",
+            },
+            {
+              label: "S9 - EMERGENCY FARM WORKER",
+              value: "S9 - EMERGENCY FARM WORKER",
+            },
+            {
+              label: "SDF - SUSPECTED DOCUMENT FRAUD",
+              value: "SDF - SUSPECTED DOCUMENT FRAUD",
+            },
+            {
+              label: "ST - STOWAWAY",
+              value: "ST - STOWAWAY",
+            },
+            {
+              label: "T1 - VICTIM OF SEVERE FORM OF TRAFK",
+              value: "T1 - VICTIM OF SEVERE FORM OF TRAFK",
+            },
+            {
+              label: "T2 - SPOUSE OF T1",
+              value: "T2 - SPOUSE OF T1",
+            },
+            {
+              label: "T3 - CHILD OF T1",
+              value: "T3 - CHILD OF T1",
+            },
+            {
+              label: "T4 - PARENT OF T1",
+              value: "T4 - PARENT OF T1",
+            },
+            {
+              label: "T5 - UNMARRIED UNDER 18 SIBLG T1 NI",
+              value: "T5 - UNMARRIED UNDER 18 SIBLG T1 NI",
+            },
+            {
+              label: "TB - SPOUSE OR CHILD OF CAN. FR",
+              value: "TB - SPOUSE OR CHILD OF CAN. FR",
+            },
+            {
+              label: "TC - CANADIAN FREE TRADE AGREEMENT",
+              value: "TC - CANADIAN FREE TRADE AGREEMENT",
+            },
+            {
+              label: "TD - NAFTA DEPENDENT",
+              value: "TD - NAFTA DEPENDENT",
+            },
+            {
+              label: "TN1 - NAFTA PRINCIPAL (CANADA)",
+              value: "TN1 - NAFTA PRINCIPAL (CANADA)",
+            },
+            {
+              label: "TN2 - NAFTA PRINCIPAL (MEXICO)",
+              value: "TN2 - NAFTA PRINCIPAL (MEXICO)",
+            },
+            {
+              label: "TWO - TRANSIT WITHOUT A VISA",
+              value: "TWO - TRANSIT WITHOUT A VISA",
+            },
+            {
+              label: "U1 - VICTIM OF CRIMINAL ACTIVITY",
+              value: "U1 - VICTIM OF CRIMINAL ACTIVITY",
+            },
+            {
+              label: "U2 - SPOUSE OF U1",
+              value: "U2 - SPOUSE OF U1",
+            },
+            {
+              label: "U3 - CHILD OF U1",
+              value: "U3 - CHILD OF U1",
+            },
+            {
+              label: "U4 - PARENT OF U1",
+              value: "U4 - PARENT OF U1",
+            },
+            {
+              label: "U5 - UNMARRIED UNDER 18 SIBLG U1 NI",
+              value: "U5 - UNMARRIED UNDER 18 SIBLG U1 NI",
+            },
+            {
+              label: "UN - UNKNOWN",
+              value: "UN - UNKNOWN",
+            },
+            {
+              label: "UU - UNKNOWN",
+              value: "UU - UNKNOWN",
+            },
+            {
+              label: "V1 - SPOUSE OF LPR",
+              value: "V1 - SPOUSE OF LPR",
+            },
+            {
+              label: "V2 - CHILD OF LPR",
+              value: "V2 - CHILD OF LPR",
+            },
+            {
+              label: "V3 - CHILD OF V2",
+              value: "V3 - CHILD OF V2",
+            },
+            {
+              label: "WB - VISITOR FOR BUSINESS - VWPP",
+              value: "WB - VISITOR FOR BUSINESS - VWPP",
+            },
+            {
+              label: "WD - WITHDRAWL (I-275)",
+              value: "WD - WITHDRAWL (I-275)",
+            },
+            {
+              label: "WI - WITHOUT INSPECTION",
+              value: "WI - WITHOUT INSPECTION",
+            },
+            {
+              label: "WT - VISITOR FOR PLEASURE - VWPP",
+              value: "WT - VISITOR FOR PLEASURE - VWPP",
+            },
           ],
-          helpText:
-            "2. Basis for Classification (only one box). B. Continuation of previously approved employment without change with the same employer.",
         },
         {
-          id: "subform1TtlNumbersofWorker",
-          type: "text",
-          label: "Total Number of Workers",
-          required: true,
-          helpText:
-            "5. Total number of workers included in this petition. (See instructions relating to when more than one worker can be included.) Total Number of Workers.",
-        },
-        {
-          id: "subform1ReceiptNumber",
-          type: "text",
-          label: "If none exists, &quot;None.&quot;",
-          helpText:
-            "3. most recent U S C I S petition/application receipt number for the beneficiary. If none exists, &quot;None.&quot;",
-        },
-        {
-          id: "subform1SSN",
-          type: "ssn",
-          label: "Social Security Number (optional)",
-          required: true,
-          helpText: "U. S. Social Security Number (optional)",
-        },
-        {
-          id: "subform1TaxNumber",
-          type: "text",
-          label: "Individual Internal Revenue Service (I R S) Tax Number",
-          required: true,
-          helpText: "Individual Internal Revenue Service (I R S) Tax Number.",
-        },
-        {
-          id: "subform2ExpDate",
+          id: "line11h.dateStatusExpires",
           type: "date",
-          label: "Date",
-          required: true,
-          helpText:
-            "6. If the beneficiary is in the United States, complete the following: Date Passport or Travel Document Expires. Date.",
+          label: "Line11h - Date Status Expires",
+          required: false,
         },
+
         {
-          id: "subform2SEVIS",
-          type: "text",
+          id: "line3.fami",
+          type: "radio",
           label:
-            "Student and Exchange Visitor Information System (S E V I S) Number (optional)",
-          required: true,
-          helpText:
-            "6. If the beneficiary is in the United States, complete the following: Student and Exchange Visitor Information System (S E V I S) Number (optional)",
+            "Provide all other names the beneficiary has used. Include nicknames, aliases, maiden name, and names from all previous marriages.",
         },
         {
-          id: "subform2EAD",
+          id: "line3.familyName1",
           type: "text",
-          label: "Employment Authorization Document (E A D) Number (optional)",
-          required: true,
-          helpText:
-            "6. If the beneficiary is in the United States, complete the following: Employment Authorization Document (E A D) Number (optional)",
+          label: "Line3 - Family Name1",
+          required: false,
         },
         {
-          id: "subform2State",
-          type: "select",
-          label: "State",
-          required: true,
-          options: [
-            { value: "", label: "" },
-            { value: "AA", label: "AA" },
-            { value: "AE", label: "AE" },
-            { value: "AK", label: "Alaska" },
-            { value: "AL", label: "Alabama" },
-            { value: "AP", label: "AP" },
-            { value: "AR", label: "Arkansas" },
-            { value: "AS", label: "American Samoa" },
-            { value: "AZ", label: "Arizona" },
-            { value: "CA", label: "California" },
-            { value: "CO", label: "Colorado" },
-            { value: "CT", label: "Connecticut" },
-            { value: "DC", label: "District of Columbia" },
-            { value: "DE", label: "Delaware" },
-            { value: "FL", label: "Florida" },
-            { value: "FM", label: "FM" },
-            { value: "GA", label: "Georgia" },
-            { value: "GU", label: "Guam" },
-            { value: "HI", label: "Hawaii" },
-            { value: "IA", label: "Iowa" },
-            { value: "ID", label: "Idaho" },
-            { value: "IL", label: "Illinois" },
-            { value: "IN", label: "Indiana" },
-            { value: "KS", label: "Kansas" },
-            { value: "KY", label: "Kentucky" },
-            { value: "LA", label: "Louisiana" },
-            { value: "MA", label: "Massachusetts" },
-            { value: "MD", label: "Maryland" },
-            { value: "ME", label: "Maine" },
-            { value: "MH", label: "MH" },
-            { value: "MI", label: "Michigan" },
-            { value: "MN", label: "Minnesota" },
-            { value: "MO", label: "Missouri" },
-            { value: "MP", label: "Northern Mariana Islands" },
-            { value: "MS", label: "Mississippi" },
-            { value: "MT", label: "Montana" },
-            { value: "NC", label: "North Carolina" },
-            { value: "ND", label: "North Dakota" },
-            { value: "NE", label: "Nebraska" },
-            { value: "NH", label: "New Hampshire" },
-            { value: "NJ", label: "New Jersey" },
-            { value: "NM", label: "New Mexico" },
-            { value: "NV", label: "Nevada" },
-            { value: "NY", label: "New York" },
-            { value: "OH", label: "Ohio" },
-            { value: "OK", label: "Oklahoma" },
-            { value: "OR", label: "Oregon" },
-            { value: "PA", label: "Pennsylvania" },
-            { value: "PR", label: "Puerto Rico" },
-            { value: "PW", label: "PW" },
-            { value: "RI", label: "Rhode Island" },
-            { value: "SC", label: "South Carolina" },
-            { value: "SD", label: "South Dakota" },
-            { value: "TN", label: "Tennessee" },
-            { value: "TX", label: "Texas" },
-            { value: "UT", label: "Utah" },
-            { value: "VA", label: "Virginia" },
-            { value: "VI", label: "U.S. Virgin Islands" },
-            { value: "VT", label: "Vermont" },
-            { value: "WA", label: "Washington" },
-            { value: "WI", label: "Wisconsin" },
-            { value: "WV", label: "West Virginia" },
-            { value: "WY", label: "Wyoming" },
-          ],
-          helpText:
-            "7. Current Residential U. S. Address, if applicable. State.",
-        },
-        {
-          id: "subform2ZipCode",
+          id: "line3.familyName2",
           type: "text",
-          label: "ZIP Code",
-          required: true,
-          helpText:
-            "7. Current Residential U. S. Address, if applicable. ZIP Code.",
+          label: "Line3 - Family Name2",
+          required: false,
         },
         {
-          id: "subform2CityTown",
-          type: "radio",
-          label: "City or Town",
-          required: true,
-          helpText:
-            "7. Current Residential U. S. Address, if applicable. City or Town.",
-        },
-        {
-          id: "subform2Unit",
-          type: "radio",
-          label: "Apartment",
-          required: true,
-          options: [
-            { value: "APT", label: "Apt." },
-            { value: "STE", label: "Ste." },
-            { value: "FLR", label: "Flr." },
-          ],
-          helpText:
-            "7. Current Residential U. S. Address, if applicable. Apartment.",
-        },
-        {
-          id: "subform2StreetNumberName",
+          id: "line3.familyName3",
           type: "text",
-          label: "Street Number and Name",
-          required: true,
-          helpText:
-            "7. Current Residential U. S. Address, if applicable. Street Number and Name.",
+          label: "Line3 - Family Name3",
+          required: false,
         },
         {
-          id: "subform2CurrentNon",
-          type: "select",
-          label:
-            "If the beneficiary is in the United States, complete the following: Current Nonimmigrant Status f.",
-          required: true,
-          options: [
-            { value: "", label: "" },
-            { value: "1B1", label: "1B1" },
-            { value: "1B2", label: "1B2" },
-            { value: "1B3", label: "1B3" },
-            { value: "1B4", label: "1B4" },
-            { value: "1B5", label: "1B5" },
-            { value: "1BS", label: "1BS" },
-            { value: "A1", label: "A1" },
-            { value: "A2", label: "A2" },
-            { value: "A3", label: "A3" },
-            { value: "AS", label: "American Samoa" },
-            { value: "ASD", label: "ASD" },
-            { value: "AW", label: "AW" },
-            { value: "B1", label: "B1" },
-            { value: "B1A", label: "B1A" },
-            { value: "B1B", label: "B1B" },
-            { value: "B1C", label: "B1C" },
-            { value: "B1D", label: "B1D" },
-            { value: "B2", label: "B2" },
-            { value: "BE", label: "BE" },
-            { value: "C1", label: "C1" },
-            { value: "C2", label: "C2" },
-            { value: "C3", label: "C3" },
-            { value: "C4", label: "C4" },
-            { value: "CC", label: "CC" },
-            { value: "CH", label: "CH" },
-            { value: "CP", label: "CP" },
-            { value: "CW1", label: "CW1" },
-            { value: "CW2", label: "CW2" },
-            { value: "D1", label: "D1" },
-            { value: "D2", label: "D2" },
-            { value: "DA", label: "DA" },
-            { value: "DE", label: "Delaware" },
-            { value: "DT", label: "DT" },
-            { value: "DX", label: "DX" },
-            { value: "E1", label: "E1" },
-            { value: "E2", label: "E2" },
-            { value: "E2C", label: "E2C" },
-            { value: "E3", label: "E3" },
-            { value: "EAO", label: "EAO" },
-            { value: "EWI", label: "EWI" },
-            { value: "X", label: "X" },
-            { value: "F1", label: "F1" },
-            { value: "F2", label: "F2" },
-            { value: "FSM", label: "FSM" },
-            { value: "FUG", label: "FUG" },
-            { value: "G1", label: "G1" },
-            { value: "G2", label: "G2" },
-            { value: "G3", label: "G3" },
-            { value: "G4", label: "G4" },
-            { value: "G5", label: "G5" },
-            { value: "GB", label: "GB" },
-            { value: "GT", label: "GT" },
-            { value: "H1", label: "H1" },
-            { value: "H1A", label: "H1A" },
-            { value: "H1B", label: "H1B" },
-            { value: "H1C", label: "H1C" },
-            { value: "H2", label: "H2" },
-            { value: "H2A", label: "H2A" },
-            { value: "H2B", label: "H2B" },
-            { value: "H2R", label: "H2R" },
-            { value: "H3", label: "H3" },
-            { value: "H3A", label: "H3A" },
-            { value: "H3B", label: "H3B" },
-            { value: "H4", label: "H4" },
-            { value: "HSC", label: "HSC" },
-            { value: "I", label: "I" },
-            { value: "IMM", label: "IMM" },
-            { value: "IN", label: "Indiana" },
-            { value: "J1", label: "J1" },
-            { value: "J1S", label: "J1S" },
-            { value: "J2", label: "J2" },
-            { value: "J2S", label: "J2S" },
-            { value: "K1", label: "K1" },
-            { value: "K2", label: "K2" },
-            { value: "K3", label: "K3" },
-            { value: "K4", label: "K4" },
-            { value: "L1", label: "L1" },
-            { value: "L1A", label: "L1A" },
-            { value: "L1B", label: "L1B" },
-            { value: "L2", label: "L2" },
-            { value: "LZ", label: "LZ" },
-            { value: "M1", label: "M1" },
-            { value: "M2", label: "M2" },
-            { value: "MIS", label: "MIS" },
-            { value: "ML", label: "ML" },
-            { value: "N1", label: "N1" },
-            { value: "N2", label: "N2" },
-            { value: "N3", label: "N3" },
-            { value: "N4", label: "N4" },
-            { value: "N5", label: "N5" },
-            { value: "N6", label: "N6" },
-            { value: "N7", label: "N7" },
-            { value: "N8", label: "N8" },
-            { value: "N9", label: "N9" },
-            { value: "O1", label: "O1" },
-            { value: "O1A", label: "O1A" },
-            { value: "O1B", label: "O1B" },
-            { value: "O2", label: "O2" },
-            { value: "O3", label: "O3" },
-            { value: "OP", label: "OP" },
-            { value: "P1", label: "P1" },
-            { value: "P1A", label: "P1A" },
-            { value: "P1B", label: "P1B" },
-            { value: "P1S", label: "P1S" },
-            { value: "P2", label: "P2" },
-            { value: "P2S", label: "P2S" },
-            { value: "P3", label: "P3" },
-            { value: "P3S", label: "P3S" },
-            { value: "P4", label: "P4" },
-            { value: "PAL", label: "PAL" },
-            { value: "PAR", label: "PAR" },
-            { value: "PI", label: "PI" },
-            { value: "Q1", label: "Q1" },
-            { value: "Q2", label: "Q2" },
-            { value: "Q3", label: "Q3" },
-            { value: "R1", label: "R1" },
-            { value: "R2", label: "R2" },
-            { value: "RE", label: "RE" },
-            { value: "RE5", label: "RE5" },
-            { value: "RW", label: "RW" },
-            { value: "S1", label: "S1" },
-            { value: "S2", label: "S2" },
-            { value: "S9", label: "S9" },
-            { value: "SDF", label: "SDF" },
-            { value: "ST", label: "ST" },
-            { value: "T1", label: "T1" },
-            { value: "T2", label: "T2" },
-            { value: "T3", label: "T3" },
-            { value: "T4", label: "T4" },
-            { value: "T5", label: "T5" },
-            { value: "TB", label: "TB" },
-            { value: "TC", label: "TC" },
-            { value: "TD", label: "TD" },
-            { value: "TN1", label: "TN1" },
-            { value: "TN2", label: "TN2" },
-            { value: "TWO", label: "TWO" },
-            { value: "U1", label: "U1" },
-            { value: "U2", label: "U2" },
-            { value: "U3", label: "U3" },
-            { value: "U4", label: "U4" },
-            { value: "U5", label: "U5" },
-            { value: "UN", label: "UN" },
-            { value: "UU", label: "UU" },
-            { value: "V1", label: "V1" },
-            { value: "V2", label: "V2" },
-            { value: "V3", label: "V3" },
-            { value: "WB", label: "WB" },
-            { value: "WD", label: "WD" },
-            { value: "WI", label: "Wisconsin" },
-            { value: "WT", label: "WT" },
-          ],
-          helpText:
-            "6. If the beneficiary is in the United States, complete the following: Current Nonimmigrant Status from list.",
+          id: "line3.givenName1",
+          type: "text",
+          label: "Line3 - Given Name1",
+          required: false,
         },
         {
-          id: "subform2DateStatusExpires",
+          id: "line3.givenName2",
+          type: "text",
+          label: "Line3 - Given Name2",
+          required: false,
+        },
+        {
+          id: "line3.givenName3",
+          type: "text",
+          label: "Line3 - Given Name3",
+          required: false,
+        },
+        {
+          id: "line3.middleName1",
+          type: "text",
+          label: "Line3 - Middle Name1",
+          required: false,
+        },
+        {
+          id: "line3.middleName2",
+          type: "text",
+          label: "Line3 - Middle Name2",
+          required: false,
+        },
+        {
+          id: "line3.middleName3",
+          type: "text",
+          label: "Line3 - Middle Name3",
+          required: false,
+        },
+        {
+          id: "line5.eAD",
+          type: "text",
+          label: "Line5 - E A D",
+          required: false,
+        },
+        {
+          id: "line5.sEVIS",
+          type: "text",
+          label: "Line5 - S E V I S",
+          required: false,
+        },
+        {
+          id: "line5.sSN",
+          type: "text",
+          label: "Line5 - S S N",
+          required: false,
+        },
+        {
+          id: "line6.aptSteFlrNumber",
+          type: "text",
+          label: "Apt. / Ste. / Flr.",
+          required: false,
+        },
+        {
+          id: "line6.dateOfBirth",
           type: "date",
-          label: "Expires",
-          required: true,
-          helpText:
-            "6. If the beneficiary is in the United States, complete the following: Date Status or D/S. Expires.",
+          label: "Line6 - Date Of Birth",
+          required: false,
         },
         {
-          id: "subform2ExpDate1",
+          id: "line6.unit",
+          type: "select",
+          label: "APT",
+          required: false,
+          options: [
+            { value: "STE", label: "ste" },
+            { value: "APT", label: "Apt" },
+            { value: "FLR", label: "flr" },
+          ],
+        },
+
+        {
+          id: "line8a.streetNumberName",
+          type: "text",
+          label: "Line8a - Street Number Name",
+          required: false,
+        },
+        {
+          id: "line8d.cityTown",
+          type: "text",
+          label: "Line8d - City Town",
+          required: false,
+        },
+        {
+          id: "line8e.state",
+          type: "select",
+          label: "Line8e - State",
+          required: false,
+          options: US_STATES,
+        },
+        {
+          id: "line8f.zipCode",
+          type: "text",
+          label: "Line8f - Zip Code",
+          required: false,
+        },
+        {
+          id: "officeAddressCity",
+          type: "text",
+          label: "Office Address City",
+          required: false,
+        },
+        {
+          id: "part3Line4.countryOfBirth",
+          type: "text",
+          label: "Part3 Line4 - Country Of Birth",
+          required: false,
+        },
+        {
+          id: "part3Line4.countryOfCitizenship",
+          type: "text",
+          label: "Part3 Line4 - Country Of Citizenship",
+          required: false,
+        },
+        {
+          id: "part3Line5.arrivalDeparture",
+          type: "text",
+          label: "Part3 I-94 Arrival-Departure Record Number",
+          required: false,
+        },
+        {
+          id: "part3Line5.dateofArrival",
           type: "date",
-          label: "Date as 2-digit Month, 2-digit Day, and 4 digit Year",
-          required: true,
-          helpText:
-            "6. If the beneficiary is in the United States, complete the following: Date Passport or Travel Document was Issued. Date as 2-digit Month, 2-digit Day, and 4 digit Year.",
+          label: "Part3 Line5 - Date of Arrival",
+          required: false,
         },
         {
-          id: "subform2LineCountryOfIssuance",
+          id: "part3Line5.passportorTravDoc",
           type: "text",
-          label: "Passport or Travel Document Country of Issuance",
-          required: true,
-          helpText:
-            "6. If the beneficiary is in the United States, complete the following: Passport or Travel Document Country of Issuance.",
+          label: "Part3 Line5 Passport or Travel Document Number",
+          required: false,
         },
         {
-          id: "subform2OfficeAddressCity",
+          id: "part4.1c.state.or.country",
           type: "text",
-          label: "City",
-          required: true,
-          helpText:
-            "If a beneficiary or beneficiaries named in S. Consulate or inspection facility you want notified if this petition is approved. B. Office Address. City.",
+          label: "Part4 - 1c - State - Or - Country",
+          required: false,
         },
         {
-          id: "subform2TypeofOffice",
+          id: "part4Line3.dProvince",
+          type: "text",
+          label: "Part4 Line3 Province of Birth",
+          required: false,
+        },
+        {
+          id: "part4Linee",
           type: "radio",
+          label: "Type of Office (select only one box)",
+          required: false,
+        },
+
+        {
+          id: "typeofOffice",
+          type: "checkbox",
           label: "Consulate",
-          required: true,
-          options: [
-            { value: "CON", label: "Consulate" },
-            { value: "PFI", label: "Pre-flight inspection" },
-            { value: "POE", label: "Port of Entry" },
-          ],
-          helpText:
-            "If a beneficiary or beneficiaries named in S. Consulate or inspection facility you want notified if this petition is approved. A. Type of Office. Consulate.",
-        },
-        {
-          id: "subform2AlienNumber",
-          type: "text",
-          label: "Alien Registration Number (A-Number)",
-          required: true,
-          helpText: "Part 3.Alien Registration Number (A-Number).",
-        },
-        {
-          id: "subform2DateOfBirth",
-          type: "date",
-          label: "Date of Birth",
-          required: true,
-          helpText: "Date of Birth.",
-        },
-        {
-          id: "subform2SSN",
-          type: "ssn",
-          label: "Social Security Number (optional)",
           required: false,
-          helpText: "Part 3.U. S. Social Security Number (optional)",
         },
         {
-          id: "subform2GivenName2",
-          type: "text",
-          label: "Given Name (First Name)",
-          required: true,
-          helpText:
-            "4. all other names the beneficiary has used. Include nicknames, aliases, maiden name, and names from all previous marriages. Name 2. Given Name (First Name).",
-        },
-        {
-          id: "subform2MiddleName2",
-          type: "text",
-          label: "Middle Name",
-          required: true,
-          helpText:
-            "4. all other names the beneficiary has used. Include nicknames, aliases, maiden name, and names from all previous marriages. Name 2. Middle Name.",
-        },
-        {
-          id: "subform2FamilyName3",
-          type: "text",
-          label: "Family Name (Last Name)",
-          required: true,
-          helpText:
-            "4. all other names the beneficiary has used. Include nicknames, aliases, maiden name, and names from all previous marriages. Name 3. Family Name (Last Name).",
-        },
-        {
-          id: "subform2GivenName3",
-          type: "text",
-          label: "Given Name (First Name)",
-          required: true,
-          helpText:
-            "4. all other names the beneficiary has used. Include nicknames, aliases, maiden name, and names from all previous marriages. Name 3. Given Name (First Name).",
-        },
-        {
-          id: "subform2MiddleName3",
-          type: "text",
-          label: "Middle Name",
-          required: true,
-          helpText:
-            "4. all other names the beneficiary has used. Include nicknames, aliases, maiden name, and names from all previous marriages. Name 3. Middle Name.",
-        },
-        {
-          id: "subform2FamilyName2",
-          type: "text",
-          label: "Family Name (Last Name)",
-          required: true,
-          helpText:
-            "4. all other names the beneficiary has used. Include nicknames, aliases, maiden name, and names from all previous marriages. Name 2. Family Name (Last Name).",
-        },
-        {
-          id: "subform2MiddleName1",
-          type: "text",
-          label: "Middle Name",
-          required: true,
-          helpText:
-            "4. all other names the beneficiary has used. Include nicknames, aliases, maiden name, and names from all previous marriages. Name 1. Middle Name.",
-        },
-        {
-          id: "subform2GivenName1",
-          type: "text",
-          label: "Given Name (First Name)",
-          required: true,
-          helpText:
-            "4. all other names the beneficiary has used. Include nicknames, aliases, maiden name, and names from all previous marriages. Name 1. Given Name (First Name).",
-        },
-        {
-          id: "subform2FamilyName1",
-          type: "text",
-          label: "Family Name (Last Name)",
-          required: true,
-          helpText:
-            "4. all other names the beneficiary has used. Include nicknames, aliases, maiden name, and names from all previous marriages. Name 1. Family Name (Last Name).",
-        },
-        {
-          id: "subform3CityTown",
-          type: "text",
-          label: "City or Town",
-          required: true,
-          helpText:
-            "If a beneficiary or beneficiaries named in S. Consulate or inspection facility you want notified if this petition is approved. D. Beneficiary&apos;s Foreign Address. City or Town.",
-        },
-        {
-          id: "subform3StreetNumberName",
-          type: "radio",
-          label: "Street Number and Name",
-          required: true,
-          helpText:
-            "If a beneficiary or beneficiaries named in S. Consulate or inspection facility you want notified if this petition is approved. D. Beneficiary&apos;s Foreign Address. Street Number and Name.",
-        },
-        {
-          id: "subform32Unit",
-          type: "select",
-          label: "Suite",
-          required: true,
-          options: [
-            { value: "STE", label: "STE" },
-            { value: "FLR", label: "FLR" },
-            { value: "APT", label: "APT" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "If a beneficiary or beneficiaries named in S. Consulate or inspection facility you want notified if this petition is approved. D. Beneficiary&apos;s Foreign Address. Suite.",
-        },
-        {
-          id: "subform32AptSteFlrNumber",
-          type: "radio",
-          label: "Apartment, Suite or Floor Number",
-          required: true,
-          helpText:
-            "If a beneficiary or beneficiaries named in S. Consulate or inspection facility you want notified if this petition is approved. D. Beneficiary&apos;s Foreign Address. If Apartment, Suite or Floor is Checked, Apartment, Suite or Floor Number.",
-        },
-        {
-          id: "subform32Province",
-          type: "text",
-          label: "State, if applicable",
-          required: true,
-          helpText:
-            "If a beneficiary or beneficiaries named in S. Consulate or inspection facility you want notified if this petition is approved. D. Beneficiary&apos;s Foreign Address. State, if applicable.",
-        },
-        {
-          id: "subform3PostalCode",
-          type: "text",
-          label: "Postal Code",
-          required: true,
-          helpText:
-            "If a beneficiary or beneficiaries named in S. Consulate or inspection facility you want notified if this petition is approved. D. Beneficiary&apos;s Foreign Address. Postal Code.",
-        },
-        {
-          id: "subform3LineCountry",
-          type: "text",
-          label: "Country",
-          required: true,
-          helpText:
-            "If a beneficiary or beneficiaries named in S. Consulate or inspection facility you want notified if this petition is approved. D. Beneficiary&apos;s Foreign Address. Country.",
-        },
-        {
-          id: "subform32Province1",
-          type: "text",
-          label: "Province, if applicable",
+          id: "typeofOffice_2",
+          type: "checkbox",
+          label: "Pre-flight inspection",
           required: false,
-          helpText: "Part 4. 1.Province, if applicable.",
         },
         {
-          id: "subform4Explanation",
-          type: "text",
-          label: "Explanation",
+          id: "typeofOffice_3",
+          type: "checkbox",
+          label: "Port of Entry",
           required: false,
-          helpText: "Part 5.Other Compensation (Explain). Explanation.",
-        },
-        {
-          id: "subform4Wages",
-          type: "text",
-          label:
-            "Dollar Amount and specify per hour, week, month or year in the next field",
-          required: true,
-          helpText:
-            "Part 5.Dollar Amount and specify per hour, week, month or year in the next field.",
-        },
-        {
-          id: "subform4Per",
-          type: "text",
-          label: "Hour, week, month or year",
-          required: true,
-          helpText: "Part 5.hour, week, month or year.",
-        },
-        {
-          id: "subform5GrossAnnualIncome",
-          type: "text",
-          label: "Gross Annual Income",
-          required: true,
-          helpText: "Part 5.16. Gross Annual Income.",
-        },
-        {
-          id: "subform5NetAnnualIncome",
-          type: "radio",
-          label: "Net Annual Income",
-          required: true,
-          helpText: "Part 5.17. Net Annual Income.",
-        },
-        {
-          id: "subform5NoDeemed",
-          type: "select",
-          label:
-            "Department of State to release such technology or technical data to the foreign person; or",
-          required: true,
-          options: [
-            { value: "Yes", label: "Yes" },
-            { value: "No", label: "No" },
-          ],
-          helpText:
-            "This section of the form is required only for H-1 B, H-1 B 1 Chile/Singapore, L-1, and O-1 A petitions. It is not required for any other classifications. Please review the Form I-1 29 General Filing Instructions before completing this section. or as appropriate. DO NOT both boxes. With respect to the technology or technical data the petitioner will release or otherwise access to the beneficiary, the petitioner certifies that it has reviewed the Export Administration Regulations (E A R) and the International Traffic in Arms Regulations (I T A R) and has determined that: 1. A license is not required from either the U. S. Department of Commerce or the U. S. Department of State to release such technology or technical data to the foreign person; or",
-        },
-        {
-          id: "subform5Deemed",
-          type: "select",
-          label:
-            "Department of State to release such technology or technical data to the beneficiary and the petit.",
-          required: true,
-          options: [
-            { value: "Yes", label: "Yes" },
-            { value: "No", label: "No" },
-          ],
-          helpText:
-            "This section of the form is required only for H-1 B, H-1 B 1 Chile/Singapore, L-1, and O-1 A petitions. It is not required for any other classifications. Please review the Form I-1 29 General Filing Instructions before completing this section. or as appropriate. DO NOT both boxes. With respect to the technology or technical data the petitioner will release or otherwise access to the beneficiary, the petitioner certifies that it has reviewed the Export Administration Regulations (E A R) and the International Traffic in Arms Regulations (I T A R) and has determined that: 2. A license is required from the U. S. Department of Commerce and/or the U. S. Department of State to release such technology or technical data to the beneficiary and the petitioner will prevent access to the controlled technology or technical data by the beneficiary until and unless the petitioner has received the required license or other authorization to release it to the beneficiary.",
-        },
-        {
-          id: "subform5PetitionerLastName",
-          type: "date",
-          label: "Family Name (Last Name)",
-          required: true,
-          helpText:
-            "Part 7. Declaration, Signature, and Contact Information of Petitioner or Authorized Signatory (Read the information on penalties in the instructions before completing this section.) Copies of any documents submitted are exact photocopies of unaltered, original documents, and I understand that, as the petitioner, I may be required to submit original documents to U. S. Citizenship and Immigration Services (U S C I S) at a later date. I authorize the release of any information from my records, or from the petitioning organization&apos;s records that U S C I S needs to determine eligibility for the immigration benefit sought. I recognize the authority of U S C I S to conduct audits of this petition using publicly available open source information. I also recognize that any supporting evidence submitted in support of this petition may be verified by U S C I S through any means determined appropriate by U S C I S, including but not limited to, on-site compliance reviews. If filing this petition on behalf of an organization, I certify that I am authorized to do so by the organization. I certify, under penalty of perjury, that I have reviewed this petition and that all of the information contained in the petition, including all responses to specific questions, and in the supporting documents, is complete, true, and correct. 1. Name and Title of Authorized Signatory. Family Name (Last Name).",
-        },
-        {
-          id: "subform5PetitionerLastName1",
-          type: "date",
-          label: "Title",
-          required: true,
-          helpText:
-            "Part 7. Declaration, Signature, and Contact Information of Petitioner or Authorized Signatory (Read the information on penalties in the instructions before completing this section.) Copies of any documents submitted are exact photocopies of unaltered, original documents, and I understand that, as the petitioner, I may be required to submit original documents to U. S. Citizenship and Immigration Services (U S C I S) at a later date. I authorize the release of any information from my records, or from the petitioning organization&apos;s records that U S C I S needs to determine eligibility for the immigration benefit sought. I recognize the authority of U S C I S to conduct audits of this petition using publicly available open source information. I also recognize that any supporting evidence submitted in support of this petition may be verified by U S C I S through any means determined appropriate by U S C I S, including but not limited to, on-site compliance reviews. If filing this petition on behalf of an organization, I certify that I am authorized to do so by the organization. I certify, under penalty of perjury, that I have reviewed this petition and that all of the information contained in the petition, including all responses to specific questions, and in the supporting documents, is complete, true, and correct. 1. Name and Title of Authorized Signatory. Title.",
-        },
-        {
-          id: "subform5PetitionerFirstName",
-          type: "date",
-          label: "Given Name (First Name)",
-          required: true,
-          helpText:
-            "Part 7. Declaration, Signature, and Contact Information of Petitioner or Authorized Signatory (Read the information on penalties in the instructions before completing this section.) Copies of any documents submitted are exact photocopies of unaltered, original documents, and I understand that, as the petitioner, I may be required to submit original documents to U. S. Citizenship and Immigration Services (U S C I S) at a later date. I authorize the release of any information from my records, or from the petitioning organization&apos;s records that U S C I S needs to determine eligibility for the immigration benefit sought. I recognize the authority of U S C I S to conduct audits of this petition using publicly available open source information. I also recognize that any supporting evidence submitted in support of this petition may be verified by U S C I S through any means determined appropriate by U S C I S, including but not limited to, on-site compliance reviews. If filing this petition on behalf of an organization, I certify that I am authorized to do so by the organization. I certify, under penalty of perjury, that I have reviewed this petition and that all of the information contained in the petition, including all responses to specific questions, and in the supporting documents, is complete, true, and correct. 1. Name and Title of Authorized Signatory. Given Name (First Name).",
-        },
-        {
-          id: "subform6Pt7EmailAddress",
-          type: "email",
-          label: "Email Address (optional)",
-          required: true,
-          helpText:
-            "Part 7. Declaration, Signature, and Contact Information of Petitioner or Authorized Signatory (Read the information on penalties in the instructions before completing this section.) 3. Signatory&apos;s Contact Information. Email Address (optional)",
-        },
-        {
-          id: "subform6Pt7DaytimePhoneNumber1",
-          type: "tel",
-          label: "Daytime Telephone Number",
-          required: true,
-          helpText:
-            "Part 7. Declaration, Signature, and Contact Information of Petitioner or Authorized Signatory (Read the information on penalties in the instructions before completing this section.) 3. Signatory&apos;s Contact Information. Daytime Telephone Number.",
-        },
-        {
-          id: "subform6EmailAddress",
-          type: "email",
-          label: "E-mail Address (optional)",
-          required: true,
-          helpText:
-            "following information concerning the preparer. 4. Preparer&apos;s Contact Information. E-mail Address (optional)",
-        },
-        {
-          id: "subform6Pt8DaytimePhoneNumber1",
-          type: "tel",
-          label: "Daytime Telephone Number",
-          required: true,
-          helpText:
-            "following information concerning the preparer. 4. Preparer&apos;s Contact Information. Daytime Telephone Number.",
-        },
-        {
-          id: "subform6Pt8DaytimePhoneNumber11",
-          type: "tel",
-          label: "Fax Number",
-          required: true,
-          helpText:
-            "following information concerning the preparer. 4. Preparer&apos;s Contact Information. Fax Number.",
-        },
-        {
-          id: "subform6LinePreparerFamilyName",
-          type: "text",
-          label: "Family Name (Last Name)",
-          required: true,
-          helpText:
-            "following information concerning the preparer. 1. Name of Preparer. Family Name (Last Name).",
-        },
-        {
-          id: "subform6LinePreparerGivenName",
-          type: "text",
-          label: "Given Name (First Name)",
-          required: true,
-          helpText:
-            "following information concerning the preparer. 1. Name of Preparer. Given Name (First Name).",
-        },
-        {
-          id: "subform6LineBusinessName",
-          type: "ssn",
-          label:
-            "the name of your accredited organization recognized by the Board of Immigration Ap.",
-          required: true,
-          helpText:
-            "following information concerning the preparer. 2. Preparer&apos;s Business or Organization Name. name of your accredited organization recognized by the Board of Immigration Appeals (B I A).",
-        },
-        {
-          id: "subform6LineCityTown1",
-          type: "text",
-          label: "City or Town",
-          required: true,
-          helpText:
-            "following information concerning the preparer. 3. Preparer&apos;s address. City or Town.",
-        },
-        {
-          id: "subform6StreetNumberName1",
-          type: "radio",
-          label: "Street Number and Name",
-          required: true,
-          helpText:
-            "following information concerning the preparer. 3. Preparer&apos;s address. Street Number and Name.",
-        },
-        {
-          id: "subform7AdditionalInfo",
-          type: "text",
-          label: "Additional Information here",
-          required: true,
-          helpText:
-            "If you require more space to any additional information within this application, please use the space below. If you require more space than what is provided to complete this application, you may make a copy of Part 10 to complete and file with this application. In order to assist us in reviewing your response, you must identify the Page Number, Part Number and Item Number along with the additional information. 4. D. Additional Information here.",
-        },
-        {
-          id: "subform7areaAlienNumber",
-          type: "text",
-          label: "Alien Registration Number (A-Number)",
-          required: true,
-          helpText:
-            "If you require more space to any additional information within this application, please use the space below. If you require more space than what is provided to complete this application, you may make a copy of Part 10 to complete and file with this application. In order to assist us in reviewing your response, you must identify the Page Number, Part Number and Item Number along with the additional information. Alien Registration Number (A-Number).",
-        },
-        {
-          id: "subform7PageNumber",
-          type: "text",
-          label: "Page Number",
-          required: false,
-          helpText:
-            "If you require more space to any additional information within this application, please use the space below. If you require more space than what is provided to complete this application, you may make a copy of Part 10 to complete and file with this application. In order to assist us in reviewing your response, you must identify the Page Number, Part Number and Item Number along with the additional information. 2. A. Page Number.",
-        },
-        {
-          id: "subform7PartNumber",
-          type: "text",
-          label: "Part Number",
-          required: false,
-          helpText:
-            "If you require more space to any additional information within this application, please use the space below. If you require more space than what is provided to complete this application, you may make a copy of Part 10 to complete and file with this application. In order to assist us in reviewing your response, you must identify the Page Number, Part Number and Item Number along with the additional information. 2. B. Part Number.",
-        },
-        {
-          id: "subform7ItemNumber",
-          type: "text",
-          label: "Item Number",
-          required: false,
-          helpText:
-            "If you require more space to any additional information within this application, please use the space below. If you require more space than what is provided to complete this application, you may make a copy of Part 10 to complete and file with this application. In order to assist us in reviewing your response, you must identify the Page Number, Part Number and Item Number along with the additional information. 2. C. Item Number.",
-        },
-        {
-          id: "subform7PageNumber1",
-          type: "text",
-          label: "Page Number",
-          required: false,
-          helpText:
-            "If you require more space to any additional information within this application, please use the space below. If you require more space than what is provided to complete this application, you may make a copy of Part 10 to complete and file with this application. In order to assist us in reviewing your response, you must identify the Page Number, Part Number and Item Number along with the additional information. 3. A. Page Number.",
-        },
-        {
-          id: "subform7PartNumber1",
-          type: "text",
-          label: "Part Number",
-          required: false,
-          helpText:
-            "If you require more space to any additional information within this application, please use the space below. If you require more space than what is provided to complete this application, you may make a copy of Part 10 to complete and file with this application. In order to assist us in reviewing your response, you must identify the Page Number, Part Number and Item Number along with the additional information. 3. B. Part Number.",
-        },
-        {
-          id: "subform7ItemNumber1",
-          type: "text",
-          label: "Item Number",
-          required: false,
-          helpText:
-            "If you require more space to any additional information within this application, please use the space below. If you require more space than what is provided to complete this application, you may make a copy of Part 10 to complete and file with this application. In order to assist us in reviewing your response, you must identify the Page Number, Part Number and Item Number along with the additional information. 3. C. Item Number.",
-        },
-        {
-          id: "subform8FamilyName1",
-          type: "text",
-          label: "Family Name (Last Name)",
-          required: false,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. 2. Name of the Beneficiary. Family Name (Last Name).",
-        },
-        {
-          id: "subform8GivenName1",
-          type: "text",
-          label: "Given Name (First Name)",
-          required: false,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. 2. Name of the Beneficiary. Given Name (First Name).",
-        },
-        {
-          id: "subform8MiddleName1",
-          type: "radio",
-          label: "Middle Name",
-          required: false,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. 2. Name of the Beneficiary. Middle Name.",
-        },
-        {
-          id: "subform8E1Treaty",
-          type: "radio",
-          label: "E-1 Treaty Trader.",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "29. 3. Classification sought (only one box). E-1 Treaty Trader.",
-            },
-            {
-              value: "1",
-              label:
-                "29. 3. Classification sought (only one box). E-2 Treaty Investor.",
-            },
-            {
-              value: "1",
-              label:
-                "29. 3. Classification sought (only one box). E-2 C N M I Investor.",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. 3. Classification sought (only one box). E-1 Treaty Trader.",
-        },
-        {
-          id: "subform8E2TreatyInvestor",
-          type: "radio",
-          label: "E-2 Treaty Investor.",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "29. 3. Classification sought (only one box). E-2 Treaty Investor.",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. 3. Classification sought (only one box). E-2 Treaty Investor.",
-        },
-        {
-          id: "subform8E2CNMI",
-          type: "radio",
-          label: "E-2 C N M I Investor.",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "29. 3. Classification sought (only one box). E-2 C N M I Investor.",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. 3. Classification sought (only one box). E-2 C N M I Investor.",
-        },
-        {
-          id: "subform8SupEYes",
-          type: "radio",
-          label:
-            "Are you seeking advice from U S C I S to determine whether changes in the terms or conditions of .",
-          required: true,
-          options: [
-            { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. 5. Are you seeking advice from U S C I S to determine whether changes in the terms or conditions of E status for one or more employees are substantive? Yes.",
-        },
-        {
-          id: "subform8SupENo",
-          type: "radio",
-          label:
-            "Are you seeking advice from U S C I S to determine whether changes in the terms or conditions of .",
-          required: true,
-          options: [
-            { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. 5. Are you seeking advice from U S C I S to determine whether changes in the terms or conditions of E status for one or more employees are substantive? No.",
-        },
-        {
-          id: "subform8CompanyorOrgName1",
-          type: "text",
-          label: "Employer&apos;s Name",
-          required: true,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 1. Information About the Employer Outside the United States (optional) 1. Employer&apos;s Name.",
-        },
-        {
-          id: "subform8LineCityTown2",
-          type: "text",
-          label: "City or Town",
-          required: true,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 1. Information About the Employer Outside the United States (optional) 3. Employer&apos;s Address. City or Town.",
-        },
-        {
-          id: "subform8S1ZipCode",
-          type: "text",
-          label: "ZIP Code",
-          required: true,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 1. Information About the Employer Outside the United States (optional) 3. Employer&apos;s Address. ZIP Code.",
-        },
-        {
-          id: "subform8S1State",
-          type: "select",
-          label: "State",
-          required: true,
-          options: [
-            { value: "", label: "" },
-            { value: "AA", label: "AA" },
-            { value: "AE", label: "AE" },
-            { value: "AK", label: "Alaska" },
-            { value: "AL", label: "Alabama" },
-            { value: "AP", label: "AP" },
-            { value: "AR", label: "Arkansas" },
-            { value: "AS", label: "American Samoa" },
-            { value: "AZ", label: "Arizona" },
-            { value: "CA", label: "California" },
-            { value: "CO", label: "Colorado" },
-            { value: "CT", label: "Connecticut" },
-            { value: "DC", label: "District of Columbia" },
-            { value: "DE", label: "Delaware" },
-            { value: "FL", label: "Florida" },
-            { value: "FM", label: "FM" },
-            { value: "GA", label: "Georgia" },
-            { value: "GU", label: "Guam" },
-            { value: "HI", label: "Hawaii" },
-            { value: "IA", label: "Iowa" },
-            { value: "ID", label: "Idaho" },
-            { value: "IL", label: "Illinois" },
-            { value: "IN", label: "Indiana" },
-            { value: "KS", label: "Kansas" },
-            { value: "KY", label: "Kentucky" },
-            { value: "LA", label: "Louisiana" },
-            { value: "MA", label: "Massachusetts" },
-            { value: "MD", label: "Maryland" },
-            { value: "ME", label: "Maine" },
-            { value: "MH", label: "MH" },
-            { value: "MI", label: "Michigan" },
-            { value: "MN", label: "Minnesota" },
-            { value: "MO", label: "Missouri" },
-            { value: "MP", label: "Northern Mariana Islands" },
-            { value: "MS", label: "Mississippi" },
-            { value: "MT", label: "Montana" },
-            { value: "NC", label: "North Carolina" },
-            { value: "ND", label: "North Dakota" },
-            { value: "NE", label: "Nebraska" },
-            { value: "NH", label: "New Hampshire" },
-            { value: "NJ", label: "New Jersey" },
-            { value: "NM", label: "New Mexico" },
-            { value: "NV", label: "Nevada" },
-            { value: "NY", label: "New York" },
-            { value: "OH", label: "Ohio" },
-            { value: "OK", label: "Oklahoma" },
-            { value: "OR", label: "Oregon" },
-            { value: "PA", label: "Pennsylvania" },
-            { value: "PR", label: "Puerto Rico" },
-            { value: "PW", label: "PW" },
-            { value: "RI", label: "Rhode Island" },
-            { value: "SC", label: "South Carolina" },
-            { value: "SD", label: "South Dakota" },
-            { value: "TN", label: "Tennessee" },
-            { value: "TX", label: "Texas" },
-            { value: "UT", label: "Utah" },
-            { value: "VA", label: "Virginia" },
-            { value: "VI", label: "U.S. Virgin Islands" },
-            { value: "VT", label: "Vermont" },
-            { value: "WA", label: "Washington" },
-            { value: "WI", label: "Wisconsin" },
-            { value: "WV", label: "West Virginia" },
-            { value: "WY", label: "Wyoming" },
-          ],
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 1. Information About the Employer Outside the United States (optional) 3. Employer&apos;s Address. State.",
-        },
-        {
-          id: "subform8StreetNumberName2",
-          type: "radio",
-          label: "Street Number and Name",
-          required: true,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 1. Information About the Employer Outside the United States (optional) 3. Employer&apos;s Address. Street Number and Name.",
-        },
-        {
-          id: "subform8Sec1Unit",
-          type: "select",
-          label: "Apartment",
-          required: true,
-          options: [
-            { value: "APT", label: "APT" },
-            { value: "STE", label: "STE" },
-            { value: "FLR", label: "FLR" },
-          ],
-          helpText: "E-1/E-2 Apartment.",
-        },
-        {
-          id: "subform8Sec1AptSteFlrNumber",
-          type: "text",
-          label: "Apartment, Suite or Floor Number",
-          required: true,
-          helpText: "Apartment, Suite or Floor Number.",
-        },
-        {
-          id: "subform8TtlNumberofEmployees",
-          type: "text",
-          label: "Total Number of Employees",
-          required: true,
-          helpText: "E-1/E-2 Total Number of Employees.",
-        },
-        {
-          id: "subform8Description",
-          type: "text",
-          label: "Description",
-          required: true,
-          helpText: "Description.",
-        },
-        {
-          id: "subform8SupENameofEmployer",
-          type: "text",
-          label: "Name of the Petitioner",
-          required: true,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. 1. Name of the Petitioner.",
-        },
-        {
-          id: "subform8S1Province",
-          type: "text",
-          label: "Province, if applicable",
-          required: true,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 1. Information About the Employer Outside the United States (optional) 3. Employer&apos;s Address. Province, if applicable.",
-        },
-        {
-          id: "subform8S1PostalCode",
-          type: "text",
-          label: "Postal Code, if applicable",
-          required: true,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 1. Information About the Employer Outside the United States (optional) 3. Employer&apos;s Address. Postal Code, if applicable.",
-        },
-        {
-          id: "subform8S1Country",
-          type: "text",
-          label: "Country",
-          required: true,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 1. Information About the Employer Outside the United States (optional) 3. Employer&apos;s Address. Country.",
-        },
-        {
-          id: "subform8LineCountry1",
-          type: "text",
-          label: "Name of country signatory to treaty with the United States",
-          required: true,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. 4. name of country signatory to treaty with the United States.",
-        },
-        {
-          id: "subform8EmployeePositionDescription",
-          type: "text",
-          label: "Title, duties and number of years employed",
-          required: true,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 1. Information About the Employer Outside the United States (optional) 5. Employee&apos;s Position. Title, duties and number of years employed.",
-        },
-        {
-          id: "subform9Sect2Parent",
-          type: "radio",
-          label: "Parent",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "29. Section 2. Additional Information About the U. S. Employer. 1. How is the U. S. company related to the company abroad? Parent.",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 1. How is the U. S. company related to the company abroad? Parent.",
-        },
-        {
-          id: "subform9Sect2Branch",
-          type: "radio",
-          label: "Branch",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "29. Section 2. Additional Information About the U. S. Employer. 1. How is the U. S. company related to the company abroad? Branch.",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 1. How is the U. S. company related to the company abroad? Branch.",
-        },
-        {
-          id: "subform9Sect2Subsidiary",
-          type: "radio",
-          label: "Subsidiary",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "29. Section 2. Additional Information About the U. S. Employer. 1. How is the U. S. company related to the company abroad? Subsidiary.",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 1. How is the U. S. company related to the company abroad? Subsidiary.",
-        },
-        {
-          id: "subform9Sect2Affiliate",
-          type: "radio",
-          label: "Affiliate",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "29. Section 2. Additional Information About the U. S. Employer. 1. How is the U. S. company related to the company abroad? Affiliate.",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 1. How is the U. S. company related to the company abroad? Affiliate.",
-        },
-        {
-          id: "subform9Sect2JointVenture",
-          type: "radio",
-          label: "Joint Venture",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "29. Section 2. Additional Information About the U. S. Employer. 1. How is the U. S. company related to the company abroad? Joint Venture.",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 1. How is the U. S. company related to the company abroad? Joint Venture.",
-        },
-        {
-          id: "subform9TypeofBusiness",
-          type: "text",
-          label: "Place of Incorporation or Establishment in the United States",
-          required: true,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 2. A. Place of Incorporation or Establishment in the United States.",
-        },
-        {
-          id: "subform9DateEstablished",
-          type: "date",
-          label: "Date of incorporation or establishment",
-          required: true,
-          helpText: "Date of incorporation or establishment.",
-        },
-        {
-          id: "subform9Table1Row1NAME",
-          type: "text",
-          label: "First, Middle and Last Name",
-          required: true,
-          helpText:
-            "E-1/E-2 Nationality of Ownership (Individual or Corporate). Row 1. First, Middle and Last Name.",
-        },
-        {
-          id: "subform9Table1Row1Nationality",
-          type: "text",
-          label: "Nationality",
-          required: true,
-          helpText:
-            "E-1/E-2 Nationality of Ownership (Individual or Corporate). Row 1. Nationality.",
-        },
-        {
-          id: "subform9Table1Row1ImmigrationStatus",
-          type: "text",
-          label: "Immigration Status",
-          required: true,
-          helpText:
-            "E-1/E-2 Nationality of Ownership (Individual or Corporate). Row 1. Immigration Status.",
-        },
-        {
-          id: "subform9Table1Row1PercentOwnership",
-          type: "text",
-          label: "Percent of Ownership",
-          required: true,
-          helpText:
-            "E-1/E-2 Nationality of Ownership (Individual or Corporate). Row 1. Percent of Ownership.",
-        },
-        {
-          id: "subform9Table1Row2NAME",
-          type: "text",
-          label: "First, Middle and Last Name",
-          required: true,
-          helpText: "E-1/E-2 Middle and Last Name.",
-        },
-        {
-          id: "subform9Table1Row2Nationality",
-          type: "text",
-          label: "Nationality",
-          required: true,
-          helpText: "E-1/E-2 Nationality.",
-        },
-        {
-          id: "subform9Table1Row2ImmigrationStatus",
-          type: "text",
-          label: "Immigration Status",
-          required: true,
-          helpText: "E-1/E-2 Immigration Status.",
-        },
-        {
-          id: "subform9Table1Row2PercentOwnership",
-          type: "text",
-          label: "Percent of Ownership",
-          required: true,
-          helpText: "E-1/E-2 Percent of Ownership.",
-        },
-        {
-          id: "subform9Table1Row3NAME",
-          type: "text",
-          label: "First, Middle and Last Name",
-          required: true,
-          helpText: "E-1/E-2 First, Middle and Last Name.",
-        },
-        {
-          id: "subform9Table1Row3Nationality",
-          type: "text",
-          label: "Nationality",
-          required: true,
-          helpText: "E-1/E-2 Nationality.",
-        },
-        {
-          id: "subform9Table1Row3ImmigrationStatus",
-          type: "text",
-          label: "Immigration Status",
-          required: true,
-          helpText: "E-1/E-2 Immigration Status.",
-        },
-        {
-          id: "subform9Table1Row3PercentOwnership",
-          type: "text",
-          label: "Percent of Ownership",
-          required: true,
-          helpText: "E-1/E-2 Percent of Ownership.",
-        },
-        {
-          id: "subform9Table1Row4NAME",
-          type: "text",
-          label: "First, Middle and Last Name",
-          required: true,
-          helpText:
-            "E-1/E-2 Employer. 3. Nationality of Ownership (Individual or Corporate). Row 4. First, Middle and Last Name.",
-        },
-        {
-          id: "subform9Table1Row4Nationality",
-          type: "text",
-          label: "Nationality",
-          required: true,
-          helpText:
-            "E-1/E-2 CEmployer. 3. Nationality of Ownership (Individual or Corporate). Row 4. Nationality.",
-        },
-        {
-          id: "subform9Table1Row4ImmigrationStatus",
-          type: "text",
-          label: "Immigration Status",
-          required: true,
-          helpText:
-            "E-1/E-2 Employer. 3. Nationality of Ownership (Individual or Corporate). Row 4. Immigration Status.",
-        },
-        {
-          id: "subform9Table1Row4PercentOwnership",
-          type: "text",
-          label: "Percent of Ownership",
-          required: true,
-          helpText:
-            "E-1/E-2 Employer. 3. Nationality of Ownership (Individual or Corporate). Row 4. Percent of Ownership.",
-        },
-        {
-          id: "subform9Table1Row5NAME5",
-          type: "text",
-          label: "First, Middle and Last Name",
-          required: true,
-          helpText:
-            "E-1/E-2 Employer. 3. Nationality of Ownership (Individual or Corporate). Row 5. First, Middle and Last Name.",
-        },
-        {
-          id: "subform9Table1Row5Nationality",
-          type: "text",
-          label: "Nationality",
-          required: true,
-          helpText:
-            "E-1/E-2 Employer. 3. Nationality of Ownership (Individual or Corporate). Row 5. Nationality.",
-        },
-        {
-          id: "subform9Table1Row5ImmigrationStatus",
-          type: "text",
-          label: "Immigration Status",
-          required: true,
-          helpText:
-            "E-1/E-2 Employer. 3. Nationality of Ownership (Individual or Corporate). Row 5. Immigration Status.",
-        },
-        {
-          id: "subform9Table1Row5PercentOwnership",
-          type: "text",
-          label: "Percent of Ownership",
-          required: true,
-          helpText:
-            "E-1/E-2 Employer. 3. Nationality of Ownership (Individual or Corporate). Row 5. Percent of Ownership.",
-        },
-        {
-          id: "subform9Table1Row51NAME",
-          type: "text",
-          label: "First, Middle and Last Name",
-          required: true,
-          helpText:
-            "E-1/E-2 Employer. 3. Nationality of Ownership (Individual or Corporate). Row 6. First, Middle and Last Name.",
-        },
-        {
-          id: "subform9Table1Row51Nationality",
-          type: "text",
-          label: "Nationality",
-          required: true,
-          helpText:
-            "E-1/E-2 Employer. 3. Nationality of Ownership (Individual or Corporate). Row 6. Nationality.",
-        },
-        {
-          id: "subform9Table1Row51ImmigrationStatus",
-          type: "text",
-          label: "Immigration Status",
-          required: true,
-          helpText:
-            "E-1/E-2 Employer. 3. Nationality of Ownership (Individual or Corporate). Row 6. Immigration Status.",
-        },
-        {
-          id: "subform9Table1Row51PercentOwnership",
-          type: "text",
-          label: "Percent of Ownership",
-          required: true,
-          helpText:
-            "E-1/E-2 Employer. 3. Nationality of Ownership (Individual or Corporate). Row 6. Percent of Ownership.",
-        },
-        {
-          id: "subform9Table1Row52NAME",
-          type: "text",
-          label: "First, Middle and Last Name",
-          required: true,
-          helpText:
-            "E-1/E-2 Employer. 3. Nationality of Ownership (Individual or Corporate). Row 7. First, Middle and Last Name.",
-        },
-        {
-          id: "subform9Table1Row52Nationality",
-          type: "text",
-          label: "Nationality",
-          required: true,
-          helpText:
-            "E-1/E-2 Employer. 3. Nationality of Ownership (Individual or Corporate). Row 7. Nationality.",
-        },
-        {
-          id: "subform9Table1Row52ImmigrationStatus",
-          type: "text",
-          label: "Immigration Status",
-          required: true,
-          helpText:
-            "E-1/E-2 Employer. 3. Nationality of Ownership (Individual or Corporate). Row 7. Immigration Status.",
-        },
-        {
-          id: "subform9Table1Row52PercentOwnership",
-          type: "text",
-          label: "Percent of Ownership",
-          required: true,
-          helpText:
-            "E-1/E-2 Employer. 3. Nationality of Ownership (Individual or Corporate). Row 7. Percent of Ownership.",
-        },
-        {
-          id: "subform9GrossAnnualIncome",
-          type: "text",
-          label: "Net Worth",
-          required: true,
-          helpText: "E-1/E-2 Employer. 5. Net Worth.",
-        },
-        {
-          id: "subform9NetAnnualIncome",
-          type: "text",
-          label: "Net Annual Income",
-          required: true,
-          helpText: "E-1/E-2 Employer. 6. Net Annual Income.",
-        },
-        {
-          id: "subform9SupEHowMany",
-          type: "text",
-          label: "Number",
-          required: true,
-          helpText:
-            "E-1/E-2 Additional Information About the U. S. Employer. 7. Staff in the United States. A. How many executive and managerial employees does the petitioner have who are nationals of the treaty country in either E, L, or H nonimmigrant status? Number.",
-        },
-        {
-          id: "subform9SupETotalNumber",
-          type: "text",
-          label: "Number",
-          required: true,
-          helpText: "E-1/E-2 Number.",
-        },
-        {
-          id: "subform9JobDescription",
-          type: "text",
-          label:
-            "An explanation for why the special qualifications are essential to the successful or efficient op.",
-          required: true,
-        },
-        {
-          id: "subform9ESec3TtlAnnualGross",
-          type: "text",
-          label: "Company",
-          required: true,
-          helpText:
-            "E-1/E-2 Total Annual Gross Trade/Business of the U. S. company.",
-        },
-        {
-          id: "subform9ESec4Cash",
-          type: "text",
-          label: "Dollar Amount",
-          required: true,
-          helpText: "E-1/E-2 Total Investment: Cash. Dollar Amount.",
-        },
-        {
-          id: "subform9ESec3YearEnding",
-          type: "text",
-          label: "For Year Ending as a 4-digit year",
-          required: true,
-          helpText: "E-1/E-2 For Year Ending as a 4-digit year.",
-        },
-        {
-          id: "subform9ESec3PercentOfTtlGross",
-          type: "text",
-          label:
-            "The Percent of total gross trade between the United States and the treaty trader country",
-          required: true,
-          helpText:
-            "E-1/E-2 Percent of total gross trade between the United States and the treaty trader country.",
-        },
-        {
-          id: "subform9ESec4Equipment",
-          type: "text",
-          label: "Dollar Amount",
-          required: true,
-          helpText:
-            "E-1/E-2 Complete If Filing for an E-2 Treaty Investor. Total Investment: Equipment. Dollar Amount.",
-        },
-        {
-          id: "subform9ESec4Premises",
-          type: "text",
-          label: "Dollar Amount",
-          required: true,
-          helpText: "E-1/E-2 Total Investment: Premises. Dollar Amount.",
-        },
-        {
-          id: "subform9ESec4Inventory",
-          type: "text",
-          label: "Dollar Amount",
-          required: true,
-          helpText: "E-1/E-2 Total Investment: Inventory. Dollar Amount.",
-        },
-        {
-          id: "subform9ESec4Other",
-          type: "text",
-          label: "Dollar Amount",
-          required: true,
-          helpText: "E-1/E-2 Total Investment: Other. Dollar Amount.",
-        },
-        {
-          id: "subform9ESec4Totla",
-          type: "radio",
-          label: "Dollar Amount",
-          required: true,
-          helpText: "E-1/E-2 Total Investment: Total. Dollar Amount.",
-        },
-        {
-          id: "subform11employer",
-          type: "radio",
-          label: "Employer is a (only one box): Foreign Employer",
-          required: true,
-          options: [
-            { value: "F", label: "Female" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText: "Foreign Employer.",
-        },
-        {
-          id: "subform11employer1",
-          type: "radio",
-          label: "Employer",
-          required: true,
-          options: [
-            {
-              value: "U",
-              label:
-                "TradeAgreement Supplement to Form I-1 29. 3. Employer is a (only one box): . S. Employer.",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText: "Employer is a (only one box): U. S. Employer.",
-        },
-        {
-          id: "subform11aCanada",
-          type: "radio",
-          label: "Free Trade, Canada (T N 1)",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "29. Section 1. Information About Requested Extension or Change. See instructions attached to this form. 1. This is a request for Free Trade status based on (only one box): A. Free Trade",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "This is a request for Free Trade status based on (only one box): A. Free Trade, Canada (T N 1).",
-        },
-        {
-          id: "subform11bMexico",
-          type: "radio",
-          label: "Free Trade, Mexico (T N 2)",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "29. Section 1. Information About Requested Extension or Change. See instructions attached to this form. 1. This is a request for Free Trade status based on (only one box): B. Free Trade",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "This is a request for Free Trade status based on (only one box): B. Free Trade, Mexico (T N 2).",
-        },
-        {
-          id: "subform11cChile",
-          type: "radio",
-          label: "Free Trade, Chile (H-1 B 1)",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "29. Section 1. Information About Requested Extension or Change. See instructions attached to this form. 1. This is a request for Free Trade status based on (only one box): C. Free Trade",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "This is a request for Free Trade status based on (only one box): C. Free Trade, Chile (H-1 B 1).",
-        },
-        {
-          id: "subform11eOther",
-          type: "radio",
-          label: "Free Trade, Other",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "29. Section 1. Information About Requested Extension or Change. See instructions attached to this form. 1. This is a request for Free Trade status based on (only one box): E. Free Trade",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "This is a request for Free Trade status based on (only one box): E. Free Trade, Other.",
-        },
-        {
-          id: "subform11dSingapore",
-          type: "radio",
-          label: "Free Trade, Singapore (H-1 B 1)",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "29. Section 1. Information About Requested Extension or Change. See instructions attached to this form. 1. This is a request for Free Trade status based on (only one box): D. Free Trade",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "This is a request for Free Trade status based on (only one box): D. Free Trade, Singapore (H-1 B 1).",
-        },
-        {
-          id: "subform11fChileOrSingapore",
-          type: "radio",
-          label:
-            "A sixth consecutive request for Free Trade, Chile or Singapore (H-1 B 1)",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "29. Section 1. Information About Requested Extension or Change. See instructions attached to this form. 1. This is a request for Free Trade status based on (only one box): F. A sixth consecutive request for Free Trade",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "This is a request for Free Trade status based on (only one box): F. A sixth consecutive request for Free Trade, Chile or Singapore (H-1 B 1).",
-        },
-        {
-          id: "subform11TASupNameofPetitioner",
-          type: "text",
-          label: "Name of Petitioner",
-          required: true,
-          helpText:
-            "Trade Agreement Supplement to Form I-1 29. 1. Name of Petitioner.",
-        },
-        {
-          id: "subform11TASupEmail",
-          type: "email",
-          label: "E-mail Address (optional)",
-          required: true,
-          helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 2. Petitioner&apos;s Signature and Contact Information. Read the information on penalties in the instructions before completing this section. 3. Petitioner&apos;s Contact Information. E-mail Address (optional)",
-        },
-        {
-          id: "subform11TASupPetitionerLastName",
-          type: "text",
-          label: "Family Name (Last Name)",
-          required: true,
-          helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 2. Petitioner&apos;s Signature and Contact Information. Read the information on penalties in the instructions before completing this section. I certify, under penalty of perjury, that this petition and the evidence submitted with it is all true and correct to the best of my knowledge. I authorize the release of any information from my records, or from the petitioning organization&apos;s records that U. S. Citizenship and Immigration Services (U S C I S) needs to determine eligibility for the benefit being sought. I recognize the authority of U S C I S to conduct audits of this petition using publicly available open source information. I also recognize that supporting evidence submitted may be verified by U S C I S through any means determined appropriate by U S C I S, including but not limited to, on-site compliance reviews. I am filing this petition on behalf of an organization and I certify that I am authorized to do so by the organization. 1. Name of Petitioner. Family Name (Last Name).",
-        },
-        {
-          id: "subform11TASupPetitionerFirstName",
-          type: "text",
-          label: "Given Name (First Name)",
-          required: true,
-          helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 2. Petitioner&apos;s Signature and Contact Information. Read the information on penalties in the instructions before completing this section. I certify, under penalty of perjury, that this petition and the evidence submitted with it is all true and correct to the best of my knowledge. I authorize the release of any information from my records, or from the petitioning organization&apos;s records that U. S. Citizenship and Immigration Services (U S C I S) needs to determine eligibility for the benefit being sought. I recognize the authority of U S C I S to conduct audits of this petition using publicly available open source information. I also recognize that supporting evidence submitted may be verified by U S C I S through any means determined appropriate by U S C I S, including but not limited to, on-site compliance reviews. I am filing this petition on behalf of an organization and I certify that I am authorized to do so by the organization. 1. Name of Petitioner. Given Name (First Name).",
-        },
-        {
-          id: "subform11Country",
-          type: "text",
-          label: "Country",
-          required: true,
-          helpText:
-            "Trade Agreement Supplement to Form I-1 29. 4. If Foreign Employer, Name the Foreign Country. Country.",
-        },
-        {
-          id: "subform11TASupNameofBeneficiary",
-          type: "text",
-          label: "Name of the Beneficiary",
-          required: true,
-          helpText:
-            "Trade Agreement Supplement to Form I-1 29. 2. Name of the Beneficiary.",
-        },
-        {
-          id: "subform11TASupDaytimePhoneNumber1",
-          type: "tel",
-          label: "Digit Area Code",
-          required: true,
-          helpText: "3-digit Area Code.",
-        },
-        {
-          id: "subform11TASupMobilePhoneNumber1",
-          type: "tel",
-          label: "Digit Area Code",
-          required: true,
-          helpText: "3-digit Area Code.",
-        },
-        {
-          id: "subform12LineCityTown3",
-          type: "text",
-          label: "City or Town",
-          required: true,
-          helpText: "City or Town.",
-        },
-        {
-          id: "subform12S3ZipCode",
-          type: "text",
-          label: "ZIP Code",
-          required: true,
-          helpText: "ZIP Code.",
-        },
-        {
-          id: "subform12S3State",
-          type: "select",
-          label: "State",
-          required: true,
-          options: [
-            { value: "", label: "" },
-            { value: "AA", label: "AA" },
-            { value: "AE", label: "AE" },
-            { value: "AK", label: "Alaska" },
-            { value: "AL", label: "Alabama" },
-            { value: "AP", label: "AP" },
-            { value: "AR", label: "Arkansas" },
-            { value: "AS", label: "American Samoa" },
-            { value: "AZ", label: "Arizona" },
-            { value: "CA", label: "California" },
-            { value: "CO", label: "Colorado" },
-            { value: "CT", label: "Connecticut" },
-            { value: "DC", label: "District of Columbia" },
-            { value: "DE", label: "Delaware" },
-            { value: "FL", label: "Florida" },
-            { value: "FM", label: "FM" },
-            { value: "GA", label: "Georgia" },
-            { value: "GU", label: "Guam" },
-            { value: "HI", label: "Hawaii" },
-            { value: "IA", label: "Iowa" },
-            { value: "ID", label: "Idaho" },
-            { value: "IL", label: "Illinois" },
-            { value: "IN", label: "Indiana" },
-            { value: "KS", label: "Kansas" },
-            { value: "KY", label: "Kentucky" },
-            { value: "LA", label: "Louisiana" },
-            { value: "MA", label: "Massachusetts" },
-            { value: "MD", label: "Maryland" },
-            { value: "ME", label: "Maine" },
-            { value: "MH", label: "MH" },
-            { value: "MI", label: "Michigan" },
-            { value: "MN", label: "Minnesota" },
-            { value: "MO", label: "Missouri" },
-            { value: "MP", label: "Northern Mariana Islands" },
-            { value: "MS", label: "Mississippi" },
-            { value: "MT", label: "Montana" },
-            { value: "NC", label: "North Carolina" },
-            { value: "ND", label: "North Dakota" },
-            { value: "NE", label: "Nebraska" },
-            { value: "NH", label: "New Hampshire" },
-            { value: "NJ", label: "New Jersey" },
-            { value: "NM", label: "New Mexico" },
-            { value: "NV", label: "Nevada" },
-            { value: "NY", label: "New York" },
-            { value: "OH", label: "Ohio" },
-            { value: "OK", label: "Oklahoma" },
-            { value: "OR", label: "Oregon" },
-            { value: "PA", label: "Pennsylvania" },
-            { value: "PR", label: "Puerto Rico" },
-            { value: "PW", label: "PW" },
-            { value: "RI", label: "Rhode Island" },
-            { value: "SC", label: "South Carolina" },
-            { value: "SD", label: "South Dakota" },
-            { value: "TN", label: "Tennessee" },
-            { value: "TX", label: "Texas" },
-            { value: "UT", label: "Utah" },
-            { value: "VA", label: "Virginia" },
-            { value: "VI", label: "U.S. Virgin Islands" },
-            { value: "VT", label: "Vermont" },
-            { value: "WA", label: "Washington" },
-            { value: "WI", label: "Wisconsin" },
-            { value: "WV", label: "West Virginia" },
-            { value: "WY", label: "Wyoming" },
-          ],
-          helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 3. Declaration, Signature and Contact Information of Person Preparing Form, If Other Than Above. NOTE: If you are an attorney or accredited representative, DO NOT complete this section. Complete the Preparer&apos;s Declaration below. following information concerning the preparer: 3. Preparer&apos;s address. State.",
-        },
-        {
-          id: "subform12StreetNumberName3",
-          type: "radio",
-          label: "Street Number and Name",
-          required: true,
-          helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 3. Declaration, Signature and Contact Information of Person Preparing Form, If Other Than Above. NOTE: If you are an attorney or accredited representative, DO NOT complete this section. Complete the Preparer&apos;s Declaration below. following information concerning the preparer: 3. Preparer&apos;s address. Street Number and Name.",
-        },
-        {
-          id: "subform12Sec3Unit",
-          type: "radio",
-          label: "Apartment",
-          required: true,
-          options: [
-            { value: "APT", label: "Apt." },
-            { value: "STE", label: "Ste." },
-            { value: "FLR", label: "Flr." },
-          ],
-          helpText:
-            "Trade Agreement Supplement to Form I-1 29. Section 3. Declaration, Signature and Contact Information of Person Preparing Form, If Other Than Above. NOTE: If you are an attorney or accredited representative, DO NOT complete this section. Complete the Preparer&apos;s Declaration below. following information concerning the preparer: 3. Preparer&apos;s address. Apartment.",
-        },
-        {
-          id: "subform12Sec3AptSteFlrNumber",
-          type: "text",
-          label: "Apartment, Suite or Floor Number",
-          required: true,
-          helpText: "Apartment, Suite or Floor Number.",
-        },
-        {
-          id: "subform12TASupEmail1",
-          type: "email",
-          label: "Email Address (optional)",
-          required: true,
-          helpText: "Email Address (optional)",
-        },
-        {
-          id: "subform12S3Province",
-          type: "text",
-          label: "Province, if applicable",
-          required: true,
-          helpText: "address. Province, if applicable.",
-        },
-        {
-          id: "subform12LineBusinessName1",
-          type: "ssn",
-          label:
-            "the name of your accredited organization recognized by the Board of Immigration Ap.",
-          required: true,
-        },
-        {
-          id: "subform12LinePreparerFamilyName1",
-          type: "text",
-          label: "Family Name (Last Name)",
-          required: true,
-        },
-        {
-          id: "subform12LinePreparerGivenName1",
-          type: "text",
-          label: "Given Name (First Name)",
-          required: true,
-        },
-        {
-          id: "subform12S3PostalCode",
-          type: "text",
-          label: "Postal Code, if applicable",
-          required: true,
-        },
-        {
-          id: "subform12S3Country",
-          type: "text",
-          label: "Country",
-          required: true,
-        },
-        {
-          id: "subform12TASupDaytimePhoneNumber11",
-          type: "tel",
-          label: "Daytime Telephone Number",
-          required: true,
-        },
-        {
-          id: "subform12Pt8DaytimePhoneNumber12",
-          type: "tel",
-          label: "Fax Number",
-          required: true,
-        },
-        {
-          id: "subform13PetitionerName",
-          type: "text",
-          label: "Name of the Petitioner",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. 1. Name of the Petitioner.",
-        },
-        {
-          id: "subform13BeneficiaryName",
-          type: "text",
-          label: "H Classification Supplement to Form I-1 29",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Name of the beneficiary or if this petition includes multiple beneficiaries, the total number of beneficiaries. 2 A. Name of the Beneficiary, or total number of beneficiaries in 2. B.",
-        },
-        {
-          id: "subform13TtlNumberofBeneficiaries",
-          type: "text",
-          label: "The total number of beneficiaries",
-          required: true,
-          helpText: "total number of beneficiaries.",
-        },
-        {
-          id: "subform13Table11Row2Name",
-          type: "text",
-          label: "Subject&apos;s Name",
-          required: true,
-          helpText:
-            ". 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 1. Subject&apos;s Name.",
-        },
-        {
-          id: "subform13Table11Row2DateFrom",
-          type: "date",
-          label: "From Date",
-          required: true,
-          helpText: "Period of Stay From Date.",
-        },
-        {
-          id: "subform13Table11Row2DateTo",
-          type: "date",
-          label: "To Date",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 1. Period of Stay To Date.",
-        },
-        {
-          id: "subform13Table11Row3Name",
-          type: "text",
-          label: "Subject&apos;s Name",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 2. Subject&apos;s Name.",
-        },
-        {
-          id: "subform13Table11Row3DateFrom",
-          type: "date",
-          label: "From Date",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 2. Period of Stay From Date.",
-        },
-        {
-          id: "subform13Table11Row3DateTo",
-          type: "date",
-          label: "To Date",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 2. Period of Stay To Date.",
-        },
-        {
-          id: "subform13Table11Row4Name",
-          type: "text",
-          label: "Subject&apos;s Name",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 3. Subject&apos;s Name.",
-        },
-        {
-          id: "subform13Table11Row4DateFrom",
-          type: "date",
-          label: "From Date",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 3. Period of Stay From Date.",
-        },
-        {
-          id: "subform13Table11Row4DateTo",
-          type: "date",
-          label: "To Date",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 3. Period of Stay To Date.",
-        },
-        {
-          id: "subform13Table11Row5Name",
-          type: "text",
-          label: "Subject&apos;s Name",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 4. Subject&apos;s Name.",
-        },
-        {
-          id: "subform13Table11Row5DateFrom",
-          type: "date",
-          label: "From Date",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 4. Period of Stay From Date.",
-        },
-        {
-          id: "subform13Table11Row5DateTo",
-          type: "date",
-          label: "To Date",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 4. Period of Stay To Date.",
-        },
-        {
-          id: "subform13Table11Row6Name",
-          type: "text",
-          label: "Subject&apos;s Name",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 5. Subject&apos;s Name.",
-        },
-        {
-          id: "subform13Table11Row6DateFrom",
-          type: "date",
-          label: "From Date",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 5. Period of Stay From Date.",
-        },
-        {
-          id: "subform13Table11Row6DateTo",
-          type: "date",
-          label: "To Date",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 5. Period of Stay To Date.",
-        },
-        {
-          id: "subform13Table11Row61Name",
-          type: "text",
-          label: "Subject&apos;s Name",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 6. Subject&apos;s Name.",
-        },
-        {
-          id: "subform13Table11Row61DateFrom",
-          type: "date",
-          label: "From Date",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 6. Period of Stay From Date.",
-        },
-        {
-          id: "subform13Table11Row61DateTo",
-          type: "date",
-          label: "To Date",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. 3. List each beneficiary&apos;s prior periods of stay in H or L classification in the United States for the last 6 years. Beneficiaries requesting H-2 A or H-2 B classification need only list the last 3 years. Be sure to only list those periods in which each beneficiary was actually in the United States in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. Note: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 6. Period of Stay To Date.",
-        },
-        {
-          id: "subform13SubHclass",
-          type: "radio",
-          label: "H-1 B Specialty Occupation",
-          required: true,
-          options: [
-            {
-              value: "A",
-              label:
-                "HClassification Supplement to Form I-1 29. 4. Classification sought (only one box). . H-1 B Specialty Occupation.",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. 4. Classification sought (only one box). A. H-1 B Specialty Occupation.",
-        },
-        {
-          id: "subform13SubHclass1",
-          type: "radio",
-          label: "H-1 B 1 Chile and Singapore",
-          required: true,
-          options: [
-            { value: "B", label: "1 Chile and Singapore." },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. 4. Classification sought (only one box). B. H-1 B 1 Chile and Singapore.",
-        },
-        {
-          id: "subform13SubHclass2",
-          type: "radio",
-          label: "Department of Defense (D O D)",
-          required: true,
-          options: [
-            {
-              value: "C",
-              label:
-                "Hlassification Supplement to Form I-1 29. 4. Classification sought (only one box). C. H-1 B 2 Exceptional services relating to a cooperative research and development project administered by the U. S. Department of Defense (D O D).",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. 4. Classification sought (only one box). C. H-1 B 2 Exceptional services relating to a cooperative research and development project administered by the U. S. Department of Defense (D O D).",
-        },
-        {
-          id: "subform13SubHclass3",
-          type: "radio",
-          label: "H-1 B 3 Fashion model of distinguished merit and ability",
-          required: true,
-          options: [
-            { value: "D", label: "merit and ability." },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. 4. Classification sought (only one box). D. H-1 B 3 Fashion model of distinguished merit and ability.",
-        },
-        {
-          id: "subform13SubHclass4",
-          type: "radio",
-          label: "H-2 A Agricultural worker",
-          required: true,
-          options: [
-            { value: "E", label: "box). E. H-2 A Agricultural worker." },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. 4. Classification sought (only one box). E. H-2 A Agricultural worker.",
-        },
-        {
-          id: "subform13SubHclass5",
-          type: "radio",
-          label: "H-3 Trainee",
-          required: true,
-          options: [
-            {
-              value: "G",
-              label:
-                "HClassification Supplement to Form I-1 29. 4. Classification sought (only one box). . H-3 Trainee.",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. 4. Classification sought (only one box). G. H-3 Trainee.",
-        },
-        {
-          id: "subform13SubHclass6",
-          type: "radio",
-          label: "H-3 Special education exchange visitor program",
-          required: true,
-          options: [
-            {
-              value: "H",
-              label:
-                "Classification Supplement to Form I-1 29. 4. Classification sought (only one box). H. H-3 Special education exchange visitor program.",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. 4. Classification sought (only one box). H. H-3 Special education exchange visitor program.",
-        },
-        {
-          id: "subform13SubHclass7",
-          type: "radio",
-          label: "H-2 B Non-agricultural worker",
-          required: true,
-          options: [
-            { value: "F", label: "Female" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. 4. Classification sought (only one box). F. H-2 B Non-agricultural worker.",
-        },
-        {
-          id: "subform13SubHConfirmationNum",
-          type: "text",
-          label:
-            "Beneficiary Confirmation Number from the H- 1B Registration Notice",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. 5. If you selected a. or d. in , and are filing an H-1B cap petition (including a petition under the U.S. advanced degree exemption), Beneficiary Confirmation Number from the H-1B Registration Selection Notice for the beneficiary named in this petition (optional). Beneficiary Confirmation Number from the H- 1B Registration Notice.",
-        },
-        {
-          id: "subform15ClassHExpDate",
-          type: "date",
-          label: "ClassHLine5b_ExpDate",
-          required: true,
-        },
-        {
-          id: "subform15ClassHCountryOfIssuance",
-          type: "text",
-          label: "ClassHLine5b_CountryOfIssuance",
-          required: true,
-        },
-        {
-          id: "subform15ClassHPassportorTravDoc",
-          type: "radio",
-          label: "ClassHLine5b_PassportorTravDoc",
-          required: true,
-        },
-        {
-          id: "subform15Check",
-          type: "radio",
-          label:
-            "Does any beneficiary in this petition have a controlling interest in the petitioning organization.",
-          required: true,
-          options: [
-            { value: "N", label: "No" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. 8. A. Does any beneficiary in this petition have a controlling interest in the petitioning organization, meaning the beneficiary owns more than 50 percent of the petitioner or has majority voting rights in the petitioner? No.",
-        },
-        {
-          id: "subform15Check1",
-          type: "radio",
-          label: "H Classification Supplement to Form I-1 29",
-          required: true,
-          options: [
-            { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. 8. A. Does any beneficiary in this petition have a controlling interest in the petitioning organization, meaning the beneficiary owns more than 50 percent of the petitioner or has majority voting rights in the petitioner ? Yes. If yes, please explain in B.",
-        },
-        {
-          id: "subform15SummaryofWorkExperience",
-          type: "text",
-          label: "Description and Summary",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing for H-1 B Classification. 2. Describe the beneficiary&apos;s present occupation and summary of prior work experience. Description and Summary.",
-        },
-        {
-          id: "subform15Duties",
-          type: "text",
-          label: "Description",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing for H-1 B Classification. 1. Describe the proposed duties. Description.",
-        },
-        {
-          id: "subform15Explain",
-          type: "radio",
-          label:
-            "Explanation of beneficiary ownership interest in the petitioning organization",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. 8. B. If 8. A. is Yes, Explanation of beneficiary ownership interest in the petitioning organization.",
-        },
-        {
-          id: "subform15SupHNo",
-          type: "radio",
-          label:
-            "Are you requesting a change of employer and was the beneficiary previously subject to the Guam-Co.",
-          required: true,
-          options: [
-            { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. 7. Are you requesting a change of employer and was the beneficiary previously subject to the Guam-Commonwealth of the Northern Mariana Islands (C N M I) cap exemption under Public Law 1 10 through 2 29? No.",
-        },
-        {
-          id: "subform15SupHYes",
-          type: "radio",
-          label:
-            "Are you requesting a change of employer and was the beneficiary previously subject to the Guam-Co.",
-          required: true,
-          options: [
-            { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. 7. Are you requesting a change of employer and was the beneficiary previously subject to the Guam-Commonwealth of the Northern Mariana Islands (C N M I) cap exemption under Public Law 1 10 through 2 29? Yes.",
-        },
-        {
-          id: "subform15SupHYes1",
-          type: "radio",
-          label:
-            "Are you filing this petition on behalf of a beneficiary subject to the Guam-Commonwealth of the N.",
-          required: true,
-          options: [
-            { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. 6. Are you filing this petition on behalf of a beneficiary subject to the Guam-Commonwealth of the Northern Mariana Islands (C N M I) cap exemption under Public Law 1 10 through 2 29? Yes.",
-        },
-        {
-          id: "subform15SupHNo1",
-          type: "radio",
-          label:
-            "Are you filing this petition on behalf of a beneficiary subject to the Guam-Commonwealth of the N.",
-          required: true,
-          options: [
-            { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. 6. Are you filing this petition on behalf of a beneficiary subject to the Guam-Commonwealth of the Northern Mariana Islands (C N M I) cap exemption under Public Law 1 10 through 2 29? No.",
-        },
-        {
-          id: "subform15Sect1DateSignedByPetitioner",
-          type: "date",
-          label: "Date of Signature",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing for H-1 B Classification. Statement for H-1 B Specialty Occupations and H-1 B 1 Chile and Singapore. By filing this petition, I agree to, and will abide by, the terms of the labor condition application (L C A) for the duration of the beneficiary&apos;s authorized period of stay for H-1 B employment. I certify that I will maintain a valid employer-employee relationship with the beneficiary at all times. If the beneficiary is assigned to a position in a new location, I will obtain and post a labor condition application (L C A) for that site prior to reassignment. I further understand that I cannot charge the beneficiary the American Competitiveness and Workforce Improvement Act (A C W I A) fee, and that any other required reimbursement will be considered an offset against wages and benefits paid relative to the labor condition application (L C A). Date of Signature.",
-        },
-        {
-          id: "subform15Sect1PetitionerPrintedName",
-          type: "text",
-          label: "Name of Petitioner",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing for H-1 B Classification. Statement for H-1 B Specialty Occupations and H-1 B 1 Chile and Singapore. By filing this petition, I agree to, and will abide by, the terms of the labor condition application (L C A) for the duration of the beneficiary&apos;s authorized period of stay for H-1 B employment. I certify that I will maintain a valid employer-employee relationship with the beneficiary at all times. If the beneficiary is assigned to a position in a new location, I will obtain and post a labor condition application (L C A) for that site prior to reassignment. I further understand that I cannot charge the beneficiary the American Competitiveness and Workforce Improvement Act (A C W I A) fee, and that any other required reimbursement will be considered an offset against wages and benefits paid relative to the labor condition application (L C A). Name of Petitioner.",
-        },
-        {
-          id: "subform16Sect1DateSignedByDODPM",
-          type: "date",
-          label: "Date of Signature",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing for H-1 B Classification. Statement for H-1 B U. S. Department of Defense Projects Only. I certify that the beneficiary will be working on a cooperative research and development project or a co-production project under a reciprocal government-to-government agreement administered by the U. S. Department of Defense (D O D). Date of Signature.",
-        },
-        {
-          id: "subform16Sect1DODPMName",
-          type: "radio",
-          label: "Name of DOD Project Manager",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing for H-1 B Classification. Statement for H-1 B U. S. Department of Defense Projects Only. I certify that the beneficiary will be working on a cooperative research and development project or a co-production project under a reciprocal government-to-government agreement administered by the U. S. Department of Defense (D O D). Name of DOD Project Manager.",
-        },
-        {
-          id: "subform16aseasonal",
-          type: "radio",
-          label: "Seasonal",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 1. Employment is: (only one box). A. Seasonal.",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 1. Employment is: (only one box). A. Seasonal.",
-        },
-        {
-          id: "subform16bpeakload",
-          type: "radio",
-          label: "Peak load",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 1. Employment is: (only one box). B. Peak load.",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 1. Employment is: (only one box). B. Peak load.",
-        },
-        {
-          id: "subform16donetime",
-          type: "radio",
-          label: "One-time occurrence",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 1. Employment is: (only one box). D. One-time occurrence",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 1. Employment is: (only one box). D. One-time occurrence",
-        },
-        {
-          id: "subform16crecurrent",
-          type: "radio",
-          label: "Recurrent annually",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 2. Temporary need is: (only one box). C. Recurrent annually.",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 2. Temporary need is: (only one box). C. Recurrent annually.",
-        },
-        {
-          id: "subform16aunpredictable",
-          type: "radio",
-          label: "Unpredictable",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 2. Temporary need is: (only one box). A. Unpredictable.",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 2. Temporary need is: (only one box). A. Unpredictable.",
-        },
-        {
-          id: "subform16bperiodic",
-          type: "radio",
-          label: "Periodic",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 2. Temporary need is: (only one box). B. Periodic.",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 2. Temporary need is: (only one box). B. Periodic.",
-        },
-        {
-          id: "subform16cintermittent",
-          type: "radio",
-          label: "Intermittent",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 1. Employment is: (only one box). C. Intermittent.",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 1. Employment is: (only one box). C. Intermittent.",
-        },
-        {
-          id: "subform16Explanation",
-          type: "radio",
-          label: "Explanation",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 3. Explain your temporary need for the workers&apos; services (Attach a separate sheet if additional space is needed). Explanation.",
-        },
-        {
-          id: "subform16SupH",
-          type: "select",
-          label:
-            "You must also submit evidence of each entry and each exit to establish each period of absence",
-          required: true,
-          options: [
-            { value: "Y", label: "Y" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 5. Are you requesting a restarting of the 3-year maximum period of stay limit in H-2A/H-2B status for any of your named beneficiaries because they were absent from the United States for an uninterrupted period of at least 60 days? (See form Instructions for more information on &#8220;Period of Absence.&#8221;) Yes. If you answered &#8220;Yes&#8221; to , you must document the beneficiaries&apos; periods of stay for the last 3 years in on the table on the first page of this supplement. You must also submit evidence of each entry and each exit to establish each period of absence.",
-        },
-        {
-          id: "subform16SupH1",
-          type: "select",
-          label:
-            "Are you requesting a restarting of the 3-year maximum period of stay limit in H-2A/H-2B status for any of your named beneficiaries because they were absent from the United States for an uninterrupted period of at least 60 days? (See form Instructions for more information on &#8220",
-          required: true,
-          options: [
-            { value: "N", label: "N" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 5. Are you requesting a restarting of the 3-year maximum period of stay limit in H-2A/H-2B status for any of your named beneficiaries because they were absent from the United States for an uninterrupted period of at least 60 days? (See form Instructions for more information on &#8220;Period of Absence.&#8221;) No.",
-        },
-        {
-          id: "subform16Sect1AuthorizedOfficialName",
-          type: "radio",
-          label: "Name of Authorized Official of Employer",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing for H-1 B Classification. Statement for H-1 B Specialty Occupations and U. S. Department of Defense (D O D) Projects. As an authorized official of the employer, I certify that the employer will be liable for the reasonable costs of return transportation of the alien abroad if the beneficiary is dismissed from employment by the employer before the end of the period of authorized stay. Name of Authorized Official of Employer.",
-        },
-        {
-          id: "subform17SupH",
-          type: "radio",
-          label: "If you answered &#8220",
-          required: true,
-          options: [
-            { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Prohibited H-2A and H-2B Fees. 11. If you answered &#8220;Yes&#8221; to , are you requesting an exception to the mandatory denial or revocation for prohibited fees (see form Instructions for information about exceptions)? Yes. If you answered &#8220;Yes&#8221; to , submit evidence supporting your request for an exception, as described in the form Instructions.",
-        },
-        {
-          id: "subform17SupH1",
-          type: "radio",
-          label: "If you answered &#8220",
-          required: true,
-          options: [
-            { value: "N", label: "No" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Prohibited H-2A and H-2B Fees. 11. If you answered &#8220;Yes&#8221; to , are you requesting an exception to the mandatory denial or revocation for prohibited fees (see form Instructions for information about exceptions)? No.",
-        },
-        {
-          id: "subform17SupH1Types",
-          type: "text",
-          label: "List type of and amounts of fees",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Prohibited H-2A and H-2B Fees. 9. If you answered &#8220;Yes&#8221; to , list the types and amounts of fees that the worker(s) paid or will pay. List type of and amounts of fees.",
-        },
-        {
-          id: "subform17Sec2CityTown",
-          type: "text",
-          label: "City or Town",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to , list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity. If you need to include the name and address of more than one person or entity, use the space provided in City or Town.",
-        },
-        {
-          id: "subform17Sec2ZipCode",
-          type: "text",
-          label: "ZIP Code",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to , list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity. If you need to include the name and address of more than one person or entity, use the space provided in ZIP Code.",
-        },
-        {
-          id: "subform17Sec2State",
-          type: "select",
-          label: "State",
-          required: true,
-          options: [
-            { value: "", label: "" },
-            { value: "AA", label: "AA" },
-            { value: "AE", label: "AE" },
-            { value: "AK", label: "Alaska" },
-            { value: "AL", label: "Alabama" },
-            { value: "AP", label: "AP" },
-            { value: "AR", label: "Arkansas" },
-            { value: "AS", label: "American Samoa" },
-            { value: "AZ", label: "Arizona" },
-            { value: "CA", label: "California" },
-            { value: "CO", label: "Colorado" },
-            { value: "CT", label: "Connecticut" },
-            { value: "DC", label: "District of Columbia" },
-            { value: "DE", label: "Delaware" },
-            { value: "FL", label: "Florida" },
-            { value: "FM", label: "FM" },
-            { value: "GA", label: "Georgia" },
-            { value: "GU", label: "Guam" },
-            { value: "HI", label: "Hawaii" },
-            { value: "IA", label: "Iowa" },
-            { value: "ID", label: "Idaho" },
-            { value: "IL", label: "Illinois" },
-            { value: "IN", label: "Indiana" },
-            { value: "KS", label: "Kansas" },
-            { value: "KY", label: "Kentucky" },
-            { value: "LA", label: "Louisiana" },
-            { value: "MA", label: "Massachusetts" },
-            { value: "MD", label: "Maryland" },
-            { value: "ME", label: "Maine" },
-            { value: "MH", label: "MH" },
-            { value: "MI", label: "Michigan" },
-            { value: "MN", label: "Minnesota" },
-            { value: "MO", label: "Missouri" },
-            { value: "MP", label: "Northern Mariana Islands" },
-            { value: "MS", label: "Mississippi" },
-            { value: "MT", label: "Montana" },
-            { value: "NC", label: "North Carolina" },
-            { value: "ND", label: "North Dakota" },
-            { value: "NE", label: "Nebraska" },
-            { value: "NH", label: "New Hampshire" },
-            { value: "NJ", label: "New Jersey" },
-            { value: "NM", label: "New Mexico" },
-            { value: "NV", label: "Nevada" },
-            { value: "NY", label: "New York" },
-            { value: "OH", label: "Ohio" },
-            { value: "OK", label: "Oklahoma" },
-            { value: "OR", label: "Oregon" },
-            { value: "PA", label: "Pennsylvania" },
-            { value: "PR", label: "Puerto Rico" },
-            { value: "PW", label: "PW" },
-            { value: "RI", label: "Rhode Island" },
-            { value: "SC", label: "South Carolina" },
-            { value: "SD", label: "South Dakota" },
-            { value: "TN", label: "Tennessee" },
-            { value: "TX", label: "Texas" },
-            { value: "UT", label: "Utah" },
-            { value: "VA", label: "Virginia" },
-            { value: "VI", label: "U.S. Virgin Islands" },
-            { value: "VT", label: "Vermont" },
-            { value: "WA", label: "Washington" },
-            { value: "WI", label: "Wisconsin" },
-            { value: "WV", label: "West Virginia" },
-            { value: "WY", label: "Wyoming" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to , list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity. If you need to include the name and address of more than one person or entity, use the space provided in State.",
-        },
-        {
-          id: "subform17Sec2StreetNumberName",
-          type: "radio",
-          label: "Street Number and Name",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to , list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity. If you need to include the name and address of more than one person or entity, use the space provided in Street Number and Name.",
-        },
-        {
-          id: "subform17Sec2Unit",
-          type: "select",
-          label: "Suite",
-          required: true,
-          options: [
-            { value: "STE", label: "STE" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to , list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity. If you need to include the name and address of more than one person or entity, use the space provided in Suite.",
-        },
-        {
-          id: "subform17Sec2Unit1",
-          type: "select",
-          label: "Apartment",
-          required: true,
-          options: [
-            { value: "APT", label: "APT" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to , list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity. If you need to include the name and address of more than one person or entity, use the space provided in Apartment.",
-        },
-        {
-          id: "subform17Sec2Unit2",
-          type: "select",
-          label: "Floor",
-          required: true,
-          options: [
-            { value: "FLR", label: "FLR" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to , list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity. If you need to include the name and address of more than one person or entity, use the space provided in Floor.",
-        },
-        {
-          id: "subform17Sec2AptSteFlrNumber",
-          type: "radio",
-          label: "Apartment, Suite or Floor Number",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to , list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity. If you need to include the name and address of more than one person or entity, use the space provided in If Apartment, Suite or Floor is Checked, Apartment, Suite or Floor Number.",
-        },
-        {
-          id: "subform17RecruitOrganization",
-          type: "text",
-          label:
-            "Name of Recruiting Organization or Similar Employment Service (optional)",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to , list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity. If you need to include the name and address of more than one person or entity, use the space provided in Name of Recruiting Organization or Similar Employment Service (optional).",
-        },
-        {
-          id: "subform17MiddleName",
-          type: "text",
-          label: "Middle Name",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to , list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity. If you need to include the name and address of more than one person or entity, use the space provided in Middle Name.",
-        },
-        {
-          id: "subform17GivenName",
-          type: "text",
-          label: "Given Name (First Name)",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to , list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity. If you need to include the name and address of more than one person or entity, use the space provided in Given Name (First Name).",
-        },
-        {
-          id: "subform17FamilyName",
-          type: "radio",
-          label: "Family Name (Last Name)",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. 7. If you answered &#8220;Yes,&#8221; to , list the name and address(es) of all such persons and entities regardless of whether you have a direct or indirect contractual relationship, and whether such person or entity is located inside or outside the United States or is a governmental or quasi-governmental entity. If you need to include the name and address of more than one person or entity, use the space provided in Family Name (Last Name).",
-        },
-        {
-          id: "subform18SupH",
-          type: "radio",
-          label: "If you answered &#8220",
-          required: true,
-          options: [
-            { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Other Violations. 14. Are you currently subject to any debarment order by the U.S. Department of Labor (or, the Governor of Guam)? Yes. If you answered &#8220;Yes&#8221; to , you must submit a complete copy of the final notice of debarment or administrative determination(s).",
-        },
-        {
-          id: "subform18SupH1",
-          type: "radio",
-          label: "Department of Labor (or, the Governor of Guam)? No",
-          required: true,
-          options: [
-            { value: "N", label: "No" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Other Violations. 14. Are you currently subject to any debarment order by the U.S. Department of Labor (or, the Governor of Guam)? No.",
-        },
-        {
-          id: "subform19Sect3PartAPetitionerName",
-          type: "date",
-          label: "Name of Petitioner",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part A. Petitioner. By filing this petition, I agree to the conditions of H-2 A/H-2 B employment and agree to the notification requirements. For H-2 A petitioners: I also agree to the liquidated damages requirements defined in 8 Code of Federal Regulations 2 14.2(h)(5)(vi)(B)(3). Name of Petitioner.",
-        },
-        {
-          id: "subform19Date",
-          type: "date",
-          label: "Date of Signature",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part B. Employer who is not the Petitioner. I certify that I have authorized the party filing this petition to act as my agent in this regard. I assume full responsibility for all representations made by this agent on my behalf and agree to the conditions of H-2 A/H-2 B eligibility. Date of Signature.",
-        },
-        {
-          id: "subform19TextField5",
-          type: "radio",
-          label: "Name of Employer",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part B. Employer who is not the Petitioner. I certify that I have authorized the party filing this petition to act as my agent in this regard. I assume full responsibility for all representations made by this agent on my behalf and agree to the conditions of H-2 A/H-2 B eligibility. Name of Employer.",
-        },
-        {
-          id: "subform19SupH",
-          type: "select",
-          label: "Yes",
-          required: true,
-          options: [
-            { value: "Y", label: "Y" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. H-2A and H-2B Petitioner and Employer Obligations. 21. The petitioner agrees to notify DHS beginning on a date and in a manner specified in a notice published in the Federal Register within 2 workdays if: an H-2A/H-2B worker does not report for work within 5 workdays after the employment start date stated on the petition or, applicable to H-2A petitioners only, within 5 workdays of the start date established by the petitioner, whichever is later; the agricultural labor or services for which H-2A/H-2B workers were hired is completed more than 30 days early; or the H-2A/H-2B worker does not report for work for a period of 5 consecutive workdays without the consent of the employer or is terminated prior to the completion of agricultural labor or services for which he or she was hired. Yes.",
-        },
-        {
-          id: "subform19SupH1",
-          type: "select",
-          label: "No",
-          required: true,
-          options: [
-            { value: "N", label: "N" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. H-2A and H-2B Petitioner and Employer Obligations. 21. The petitioner agrees to notify DHS beginning on a date and in a manner specified in a notice published in the Federal Register within 2 workdays if: an H-2A/H-2B worker does not report for work within 5 workdays after the employment start date stated on the petition or, applicable to H-2A petitioners only, within 5 workdays of the start date established by the petitioner, whichever is later; the agricultural labor or services for which H-2A/H-2B workers were hired is completed more than 30 days early; or the H-2A/H-2B worker does not report for work for a period of 5 consecutive workdays without the consent of the employer or is terminated prior to the completion of agricultural labor or services for which he or she was hired. No.",
-        },
-        {
-          id: "subform19FamilyName",
-          type: "text",
-          label: "Family Name (Last Name)",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C. Joint Employers. 24. For H-2A petitioners only: A separate Part C. must be submitted for each Joint Employer. Legal Name of Individual Joint Employer. Family Name (Last Name).",
-        },
-        {
-          id: "subform19GivenName",
-          type: "text",
-          label: "Given Name (First Name)",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C. Joint Employers. 24. For H-2A petitioners only: A separate Part C. must be submitted for each Joint Employer. Legal Name of Individual Joint Employer. Given Name (First Name).",
-        },
-        {
-          id: "subform19MiddleName",
-          type: "text",
-          label: "Middle Name",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C. Joint Employers. 24. For H-2A petitioners only: A separate Part C. must be submitted for each Joint Employer. Legal Name of Individual Joint Employer. Middle Name.",
-        },
-        {
-          id: "subform19PetitionerName",
-          type: "text",
-          label: "Joint Employer Company or Organization Name",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C. Joint Employers. 24. For H-2A petitioners only: A separate Part C. must be submitted for each Joint Employer. Legal Name of Individual Joint Employer. Joint Employer Company or Organization Name.",
-        },
-        {
-          id: "subform20Sect3PartCDateSigned1",
-          type: "date",
-          label: "Date of Signature",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Joint Employer&apos;s Certification. 28. Date of Signature.",
-        },
-        {
-          id: "subform20CityTown",
-          type: "text",
-          label: "City or Town",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C. Joint Employers. 24. For H-2A petitioners only: A separate Part C. must be submitted for each Joint Employer. address of Joint Employer. City or Town.",
-        },
-        {
-          id: "subform20ZipCode",
-          type: "text",
-          label: "ZIP Code",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C. Joint Employers. 24. For H-2A petitioners only: A separate Part C. must be submitted for each Joint Employer. address of Joint Employer. ZIP Code.",
-        },
-        {
-          id: "subform20State",
-          type: "select",
-          label: "State from the List of States",
-          required: true,
-          options: [
-            { value: "", label: "" },
-            { value: "AA", label: "AA" },
-            { value: "AE", label: "AE" },
-            { value: "AK", label: "Alaska" },
-            { value: "AL", label: "Alabama" },
-            { value: "AP", label: "AP" },
-            { value: "AR", label: "Arkansas" },
-            { value: "AS", label: "American Samoa" },
-            { value: "AZ", label: "Arizona" },
-            { value: "CA", label: "California" },
-            { value: "CO", label: "Colorado" },
-            { value: "CT", label: "Connecticut" },
-            { value: "DC", label: "District of Columbia" },
-            { value: "DE", label: "Delaware" },
-            { value: "FL", label: "Florida" },
-            { value: "FM", label: "FM" },
-            { value: "GA", label: "Georgia" },
-            { value: "GU", label: "Guam" },
-            { value: "HI", label: "Hawaii" },
-            { value: "IA", label: "Iowa" },
-            { value: "ID", label: "Idaho" },
-            { value: "IL", label: "Illinois" },
-            { value: "IN", label: "Indiana" },
-            { value: "KS", label: "Kansas" },
-            { value: "KY", label: "Kentucky" },
-            { value: "LA", label: "Louisiana" },
-            { value: "MA", label: "Massachusetts" },
-            { value: "MD", label: "Maryland" },
-            { value: "ME", label: "Maine" },
-            { value: "MH", label: "MH" },
-            { value: "MI", label: "Michigan" },
-            { value: "MN", label: "Minnesota" },
-            { value: "MO", label: "Missouri" },
-            { value: "MP", label: "Northern Mariana Islands" },
-            { value: "MS", label: "Mississippi" },
-            { value: "MT", label: "Montana" },
-            { value: "NC", label: "North Carolina" },
-            { value: "ND", label: "North Dakota" },
-            { value: "NE", label: "Nebraska" },
-            { value: "NH", label: "New Hampshire" },
-            { value: "NJ", label: "New Jersey" },
-            { value: "NM", label: "New Mexico" },
-            { value: "NV", label: "Nevada" },
-            { value: "NY", label: "New York" },
-            { value: "OH", label: "Ohio" },
-            { value: "OK", label: "Oklahoma" },
-            { value: "OR", label: "Oregon" },
-            { value: "PA", label: "Pennsylvania" },
-            { value: "PR", label: "Puerto Rico" },
-            { value: "PW", label: "PW" },
-            { value: "RI", label: "Rhode Island" },
-            { value: "SC", label: "South Carolina" },
-            { value: "SD", label: "South Dakota" },
-            { value: "TN", label: "Tennessee" },
-            { value: "TX", label: "Texas" },
-            { value: "UT", label: "Utah" },
-            { value: "VA", label: "Virginia" },
-            { value: "VI", label: "U.S. Virgin Islands" },
-            { value: "VT", label: "Vermont" },
-            { value: "WA", label: "Washington" },
-            { value: "WI", label: "Wisconsin" },
-            { value: "WV", label: "West Virginia" },
-            { value: "WY", label: "Wyoming" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C. Joint Employers. 24. For H-2A petitioners only: A separate Part C. must be submitted for each Joint Employer. address of Joint Employer. State from the List of States.",
-        },
-        {
-          id: "subform20InCareofName",
-          type: "text",
-          label: "In Care Of Name (if any)",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C. Joint Employers. 24. For H-2A petitioners only: A separate Part C. must be submitted for each Joint Employer. address of Joint Employer. In Care Of Name (if any).",
-        },
-        {
-          id: "subform20StreetNumberName",
-          type: "radio",
-          label: "Street Number and Name",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C. Joint Employers. 24. For H-2A petitioners only: A separate Part C. must be submitted for each Joint Employer. address of Joint Employer. Street Number and Name.",
-        },
-        {
-          id: "subform20Unit",
-          type: "radio",
-          label: "Suite",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "ste", label: "Ste." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C. Joint Employers. 24. For H-2A petitioners only: A separate Part C. must be submitted for each Joint Employer. address of Joint Employer. Suite.",
-        },
-        {
-          id: "subform20Unit1",
-          type: "radio",
-          label: "Apartment",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "apt", label: "Apt." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C. Joint Employers. 24. For H-2A petitioners only: A separate Part C. must be submitted for each Joint Employer. address of Joint Employer. Apartment.",
-        },
-        {
-          id: "subform20Unit2",
-          type: "radio",
-          label: "Floor",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "flr", label: "Flr." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C. Joint Employers. 24. For H-2A petitioners only: A separate Part C. must be submitted for each Joint Employer. address of Joint Employer. Floor.",
-        },
-        {
-          id: "subform20AptSteFlrNumber",
-          type: "text",
-          label: "Apartment, Suite or Floor Number",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C. Joint Employers. 24. For H-2A petitioners only: A separate Part C. must be submitted for each Joint Employer. address of Joint Employer. If Apartment, Suite or Floor is Checked, Apartment, Suite or Floor Number.",
-        },
-        {
-          id: "subform20PostalCode",
-          type: "text",
-          label: "Postal Code",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C. Joint Employers. 24. For H-2A petitioners only: A separate Part C. must be submitted for each Joint Employer. address of Joint Employer. Postal Code.",
-        },
-        {
-          id: "subform20Province",
-          type: "text",
-          label: "Province",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C. Joint Employers. 24. For H-2A petitioners only: A separate Part C. must be submitted for each Joint Employer. address of Joint Employer. Province.",
-        },
-        {
-          id: "subform20Country",
-          type: "text",
-          label: "Country",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Part C. Joint Employers. 24. For H-2A petitioners only: A separate Part C. must be submitted for each Joint Employer. address of Joint Employer. Country.",
-        },
-        {
-          id: "subform20EmailAddress",
-          type: "email",
-          label: "Email Address (if any)",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. H-2A and H-2B. Part C. Joint Employers. Contact Information. Email Address (if any).",
-        },
-        {
-          id: "subform20DaytimePhoneNumber1",
-          type: "tel",
-          label: "Daytime Telephone Number",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. H-2A and H-2B. Part C. Joint Employers. Contact Information. Daytime Telephone Number.",
-        },
-        {
-          id: "subform20MobilePhoneNumber1",
-          type: "tel",
-          label: "Mobile Telephone Number",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. H-2A and H-2B. Part C. Joint Employers. Contact Information. Mobile Telephone Number.",
-        },
-        {
-          id: "subform20EIN",
-          type: "text",
-          label: "Employer Identification Number (EIN)",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Taxpayer Identification Numbers. 25. following information, as applicable. Employer Identification Number (EIN).",
-        },
-        {
-          id: "subform20SSN",
-          type: "ssn",
-          label: "Social Security Number (SSN)",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Taxpayer Identification Numbers. 25. following information, as applicable. U.S. Social Security Number (SSN).",
-        },
-        {
-          id: "subform20TaxNumber",
-          type: "text",
-          label: "Individual Taxpayer Identification Number (ITIN)",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Taxpayer Identification Numbers. 25. following information, as applicable. Individual Taxpayer Identification Number (ITIN).",
-        },
-        {
-          id: "subform20TypeofBusiness",
-          type: "text",
-          label: "Type of Business Activity(ies)",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Other Information. 26. Type of Business Activity(ies).",
-        },
-        {
-          id: "subform20YearEstablished",
-          type: "text",
-          label: "Year Established",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Other Information. 26. Year Established.",
-        },
-        {
-          id: "subform20NumberofEmployees",
-          type: "text",
-          label: "Current Number of Employees in the United States",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Other Information. 26. Current Number of Employees in the United States.",
-        },
-        {
-          id: "subform20GrossAnnualIncome",
-          type: "text",
-          label: "Gross Annual Income",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Other Information. 26. Gross Annual Income.",
-        },
-        {
-          id: "subform20NetAnnualIncome",
-          type: "text",
-          label: "Net Annual Income",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Other Information. 26. Net Annual Income.",
-        },
-        {
-          id: "subform20Title",
-          type: "text",
-          label: "Title of Authorized Signatory",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Joint Employer&apos;s Certification. 27. Title of Authorized Signatory.",
-        },
-        {
-          id: "subform20GivenName",
-          type: "text",
-          label: "Given Name (First Name) of Authorized Signatory",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Joint Employer&apos;s Certification. 27. Given Name (First Name) of Authorized Signatory.",
-        },
-        {
-          id: "subform20FamilyName",
-          type: "text",
-          label: "Family Name (Last Name) of Authorized Signatory",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing for H-2 A or H-2 B Classification. Joint Employer&apos;s Certification. 27. Family Name (Last Name) of Authorized Signatory.",
-        },
-        {
-          id: "subform21HSec3Yes",
-          type: "select",
-          label:
-            "Is the training you intend to provide, or similar training, available in the beneficiary&apos",
-          required: true,
-          options: [
-            { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 3. Complete This Section If Filing for H-3 Classification. If you answer yes to any of the following questions, attach a full explanation. 1. Is the training you intend to provide, or similar training, available in the beneficiary&apos;s country? Yes.",
-        },
-        {
-          id: "subform21HSec3No",
-          type: "radio",
-          label:
-            "Will the training benefit the beneficiary in pursuing a career abroad? Yes",
-          required: true,
-          options: [
-            { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 3. Complete This Section If Filing for H-3 Classification. If you answer yes to any of the following questions, attach a full explanation. 2. Will the training benefit the beneficiary in pursuing a career abroad? Yes.",
-        },
-        {
-          id: "subform21HSec3Check",
-          type: "radio",
-          label:
-            "Do you intend to employ the beneficiary abroad at the end of this training? No",
-          required: true,
-          options: [
-            { value: "N", label: "No" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 3. Complete This Section If Filing for H-3 Classification. If you answer yes to any of the following questions, attach a full explanation. 6. Do you intend to employ the beneficiary abroad at the end of this training? No.",
-        },
-        {
-          id: "subform21HSec3Check1",
-          type: "radio",
-          label:
-            "Do you intend to employ the beneficiary abroad at the end of this training? Yes",
-          required: true,
-          options: [
-            { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 3. Complete This Section If Filing for H-3 Classification. If you answer yes to any of the following questions, attach a full explanation. 6. Do you intend to employ the beneficiary abroad at the end of this training? Yes.",
-        },
-        {
-          id: "subform21Explanation",
-          type: "text",
-          label: "Explanation",
-          required: true,
-          helpText:
-            "H Classification Supplement to Form I-1 29. Section 3. Complete This Section If Filing for H-3 Classification. If you answer yes to any of the following questions, attach a full explanation. 7. If you do not intend to employ the beneficiary abroad at the end of this training, explanation as to why you wish to incur the cost of providing this training and your expected return from this training. Explanation.",
-        },
-        {
-          id: "subform22FamilyName2",
-          type: "text",
-          label: "Name of the Beneficiary",
-          required: true,
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. 2. Name of the Beneficiary.",
-        },
-        {
-          id: "subform22FamilyName3",
-          type: "radio",
-          label: "Name of the Petitioner",
-          required: true,
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. 1. Name of the Petitioner.",
-        },
-        {
-          id: "subform22anodiploma",
-          type: "radio",
-          label: "No Diploma",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos;s Highest Level of Education, A. No Diploma.",
-        },
-        {
-          id: "subform22bHSDiploma",
-          type: "radio",
-          label:
-            "High School Graduate Diploma or the equivalent (for example: General Educational Development (G E.",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos;s Highest Level of Education, B. High School Graduate Diploma or the equivalent (for example: General Educational Development (G E D)).",
-        },
-        {
-          id: "subform22csomecollege",
-          type: "radio",
-          label: "Some college credit, but less than 1 year",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos;s Highest Level of Education, C. Some college credit, but less than 1 year.",
-        },
-        {
-          id: "subform22dcollegeplus",
-          type: "radio",
-          label: "One or more years of college, no degree",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos;s Highest Level of Education, D. One or more years of college, no degree.",
-        },
-        {
-          id: "subform22eAssociateDegree",
-          type: "radio",
-          label:
-            "Associate&apos;s degree (for example: Associate in Arts (A A), Associate in Science (A S))",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos;s Highest Level of Education, E. Associate&apos;s degree (for example: Associate in Arts (A A), Associate in Science (A S)).",
-        },
-        {
-          id: "subform22gMasterDegree",
-          type: "radio",
-          label: "Master&apos",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos;s Highest Level of Education, G. Master&apos;s degree (for Example: Master of Arts (M A), Master of Science (M S), Master of Engineering (M E N G), Master of Education (M E D), Master of Social Work (M S W), Master of Business Administration (M B A)).",
-        },
-        {
-          id: "subform22hProfessionalDegree",
-          type: "radio",
-          label:
-            "Professional degree (for example: Doctor of Medicine (M D), Doctor of Dental Surgery (D D S), Doc.",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos;s Highest Level of Education, H. Professional degree (for example: Doctor of Medicine (M D), Doctor of Dental Surgery (D D S), Doctor of Veterinary Medicine (D V M), Bachelor of Laws (L L B), Juris Doctor (J D)).",
-        },
-        {
-          id: "subform22fBachelorDegree",
-          type: "radio",
-          label:
-            "Bachelor&apos;s degree (for Example: Bachelor of Arts (B A or A B), Bachelor f Science (B S))",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos;s Highest Level of Education, F. Bachelor&apos;s degree (for Example: Bachelor of Arts (B A or A B), Bachelor f Science (B S)).",
-        },
-        {
-          id: "subform22iDoctorateDegree",
-          type: "radio",
-          label:
-            "Doctorate degree (for example: Doctor of Philosophy (P H D), Doctor of Education (E D D))",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 2. Beneficiary&apos;s Highest Level of Education, I. Doctorate degree (for example: Doctor of Philosophy (P H D), Doctor of Education (E D D)).",
-        },
-        {
-          id: "subform22H1BSecANo",
-          type: "radio",
-          label: "Is the petitioner an H-1B dependent employer? No",
-          required: true,
-          options: [
-            { value: "N", label: "No" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 1 Employer Information. All Items That Apply. A. Is the petitioner an H-1B dependent employer? No.",
-        },
-        {
-          id: "subform22H1BSecAYes",
-          type: "radio",
-          label:
-            "Has the petitioner ever been found to be a willful violator? Yes",
-          required: true,
-          options: [
-            { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 1 Employer Information. All Items That Apply. B. Has the petitioner ever been found to be a willful violator? Yes.",
-        },
-        {
-          id: "subform22H1BSecA1Yes",
-          type: "radio",
-          label: "If yes, is it because the beneficiary&apos",
-          required: true,
-          options: [
-            { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 1 Employer Information. All Items That Apply. C. 1. If yes, is it because the beneficiary&apos;s annual rate of pay is equal to at least 60,000 dollars? Yes.",
-        },
-        {
-          id: "subform22H1BSecA2No",
-          type: "radio",
-          label: "Or is it because the beneficiary has a master&apos",
-          required: true,
-          options: [
-            { value: "N", label: "No" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 1 Employer Information. All Items That Apply. C. 2. Or is it because the beneficiary has a master&apos;s degree or higher degree in a specialty related to the employment? No.",
-        },
-        {
-          id: "subform22H1BSecA1No",
-          type: "radio",
-          label:
-            "If yes, are more than 50 percent of those employees in H-1B or L-1A or L-1B nonimmigrant status? .",
-          required: true,
-          options: [
-            { value: "N", label: "No" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 1 Employer Information. All Items That Apply. D. 1. If yes, are more than 50 percent of those employees in H-1B or L-1A or L-1B nonimmigrant status? No.",
-        },
-        {
-          id: "subform22H1BSecA2Yes",
-          type: "radio",
-          label: "Or is it because the beneficiary has a master&apos",
-          required: true,
-          options: [
-            { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 1 Employer Information. All Items That Apply. C. 2. Or is it because the beneficiary has a master&apos;s degree or higher degree in a specialty related to the employment? Yes.",
-        },
-        {
-          id: "subform22PartAq3FieldofStudy",
-          type: "text",
-          label: "Major/Primary Field of Study",
-          required: true,
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. Major/Primary Field of Study.",
-        },
-        {
-          id: "subform22Line6NAICSCode",
-          type: "text",
-          label:
-            "North American Industry Classification System (N A I C S) Code",
-          required: true,
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. North American Industry Classification System (N A I C S) Code.",
-        },
-        {
-          id: "subform221Line5DOTCode",
-          type: "text",
-          label: "Dictionary of Occupational Titles (D O T) Code",
-          required: true,
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 5. Dictionary of Occupational Titles (D O T) Code.",
-        },
-        {
-          id: "subform22RateofPayPerYear",
-          type: "radio",
-          label: "Dollar Amount",
-          required: true,
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 1. General Information. 4. Rate of Pay Per Year. Dollar Amount.",
-        },
-        {
-          id: "subform22H1BSec2Yes",
-          type: "select",
-          label:
-            "Are you an institution of higher education as defined in section 1 0 1(A) of the Higher Education.",
-          required: true,
-          options: [
-            { value: "Y", label: "Y" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 2. Fee Exemption and/or Determination. In order for U S C I S to determine if you must pay the additional 1,500 dollar or 750 dollar American Competitiveness and Workforce Improvement Act (A C W I A) fee, answer all of the following questions. 1. Are you an institution of higher education as defined in section 1 0 1(A) of the Higher Education Act of 1965, 20 United States Code 10 0 1(A)? Yes.",
-        },
-        {
-          id: "subform22H1BSec2No",
-          type: "select",
-          label:
-            "Are you an institution of higher education as defined in section 1 0 1(A) of the Higher Education.",
-          required: true,
-          options: [
-            { value: "Y", label: "Y" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 2. Fee Exemption and/or Determination. In order for U S C I S to determine if you must pay the additional 1,500 dollar or 750 dollar American Competitiveness and Workforce Improvement Act (A C W I A) fee, answer all of the following questions. 1. Are you an institution of higher education as defined in section 1 0 1(A) of the Higher Education Act of 1965, 20 United States Code 10 0 1(A)? No.",
-        },
-        {
-          id: "subform23H1BSec2No",
-          type: "radio",
-          label:
-            "Are you a nonprofit research organization or a governmental research organization, as defined in 8 Code of Federal Regulations 2 14",
-          required: true,
-          options: [
-            { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 2. Fee Exemption and/or Determination. In order for U S C I S to determine if you must pay the additional 1,500 dollar or 750 dollar American Competitiveness and Workforce Improvement Act (A C W I A) fee, answer all of the following questions. 3. Are you a nonprofit research organization or a governmental research organization, as defined in 8 Code of Federal Regulations 2 14.2(H)(19)(I I I)(C)? No.",
-        },
-        {
-          id: "subform23H1BSec2Yes",
-          type: "radio",
-          label:
-            "Is this the second or subsequent request for an extension of stay that this petitioner has filed .",
-          required: true,
-          options: [
-            { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 2. Fee Exemption and/or Determination. In order for U S C I S to determine if you must pay the additional 1,500 dollar or 750 dollar American Competitiveness and Workforce Improvement Act (A C W I A) fee, answer all of the following questions. 4. Is this the second or subsequent request for an extension of stay that this petitioner has filed for this alien? Yes.",
-        },
-        {
-          id: "subform23Cap",
-          type: "radio",
-          label: "Cap H-1B Bachelor&apos;s Degree",
-          required: true,
-          options: [
-            {
-              value: "A",
-              label:
-                "Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 1. Specify the type of H-1B petition you are filing. A. Cap H-1B Bachelor&apos",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 1. Specify the type of H-1B petition you are filing. A. Cap H-1B Bachelor&apos;s Degree.",
-        },
-        {
-          id: "subform23Cap1",
-          type: "radio",
-          label: "Master&apos;s Degree or Higher",
-          required: true,
-          options: [
-            {
-              value: "B",
-              label:
-                "and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 1. Specify the type of H-1 B petition you are filing. B. Cap H-1 B U. S. Master&apos",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 1. Specify the type of H-1 B petition you are filing. B. Cap H-1 B U. S. Master&apos;s Degree or Higher.",
-        },
-        {
-          id: "subform23Cap2",
-          type: "radio",
-          label: "Cap H-1B1 Chile/Singapore",
-          required: true,
-          options: [
-            {
-              value: "C",
-              label:
-                "H1B and H-1B1 Data ollection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 1. Specify the type of H-1 B petition you are filing. C. Cap H-1B1 Chile/Singapore.",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 1. Specify the type of H-1 B petition you are filing. C. Cap H-1B1 Chile/Singapore.",
-        },
-        {
-          id: "subform23Cap3",
-          type: "radio",
-          label: "Cap Exempt",
-          required: true,
-          options: [
-            {
-              value: "D",
-              label:
-                "H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 1. Specify the type of H-1B petition you are filing. D. Cap Exempt.",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 1. Specify the type of H-1B petition you are filing. D. Cap Exempt.",
-        },
-        {
-          id: "subform23H1bSec3TypeofDegree",
-          type: "text",
-          label: "Type of United States Degree",
-          required: true,
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 2. If you answered B. &quot;CAP H-1B U. S. Master&apos;s Degree or Higher,&quot; following information regarding the master&apos;s or higher degree the beneficiary has earned from a U. S. institution as defined in 20 United States Code 10 0 1(A): C. Type of United States Degree.",
-        },
-        {
-          id: "subform23H1bSec3DateDegreeAwarded",
-          type: "date",
-          label: "Date Degree Awarded",
-          required: true,
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 2. If you answered B. &quot;CAP H-1B U. S. Master&apos;s Degree or Higher,&quot; following information regarding the master&apos;s or higher degree the beneficiary has earned from a U. S. institution as defined in 20 United States Code 10 0 1(A): B. Date Degree Awarded.",
-        },
-        {
-          id: "subform23H1bSec3Name",
-          type: "text",
-          label:
-            "The Name of the United States institution of higher education",
-          required: true,
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 2. If you answered B. &quot;CAP H-1B U. S. Master&apos;s Degree or Higher,&quot; following information regarding the master&apos;s or higher degree the beneficiary has earned from a U. S. institution as defined in 20 United States Code 10 0 1(A): A. Name of the United States institution of higher education.",
-        },
-        {
-          id: "subform23H1bSec3StreetName",
-          type: "text",
-          label: "Street Number and Name",
-          required: true,
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 2. If you answered B. &quot;CAP H-1B U. S. Master&apos;s Degree or Higher,&quot; following information regarding the master&apos;s or higher degree the beneficiary has earned from a U. S. institution as defined in 20 United States Code 10 0 1(A): D. Address of the United States institution of higher education. Street Number and Name.",
-        },
-        {
-          id: "subform23Sec3AptSteFlrNumber",
-          type: "radio",
-          label: "Apartment, Suite or Floor Number",
-          required: true,
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 2. If you answered B. &quot;CAP H-1B U. S. Master&apos;s Degree or Higher,&quot; following information regarding the master&apos;s or higher degree the beneficiary has earned from a U. S. institution as defined in 20 United States Code 10 0 1(A): D. Address of the United States institution of higher education. If Apartment, Suite or Floor is Checked, Apartment, Suite or Floor Number.",
-        },
-        {
-          id: "subform23LinebUnit",
-          type: "select",
-          label: "Floor",
-          required: true,
-          options: [
-            { value: "FLR", label: "FLR" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 2. If you answered B. &quot;CAP H-1B U. S. Master&apos;s Degree or Higher,&quot; following information regarding the master&apos;s or higher degree the beneficiary has earned from a U. S. institution as defined in 20 United States Code 10 0 1(A): D. Address of the United States institution of higher education. Floor.",
-        },
-        {
-          id: "subform23LinebUnit1",
-          type: "select",
-          label: "Suite",
-          required: true,
-          options: [
-            { value: "STE", label: "STE" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 2. If you answered B. &quot;CAP H-1B U. S. Master&apos;s Degree or Higher,&quot; following information regarding the master&apos;s or higher degree the beneficiary has earned from a U. S. institution as defined in 20 United States Code 10 0 1(A): D. Address of the United States institution of higher education. Suite.",
-        },
-        {
-          id: "subform23LinebUnit2",
-          type: "select",
-          label: "Apartment",
-          required: true,
-          options: [
-            { value: "APT", label: "APT" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 2. If you answered B. &quot;CAP H-1B U. S. Master&apos;s Degree or Higher,&quot; following information regarding the master&apos;s or higher degree the beneficiary has earned from a U. S. institution as defined in 20 United States Code 10 0 1(A): D. Address of the United States institution of higher education. Apartment.",
-        },
-        {
-          id: "subform24PartC3aCheckbox",
-          type: "select",
-          label:
-            "The petitioner is an institution of higher education as defined in section 1 0 1(A) of the Higher.",
-          required: true,
-          options: [
-            { value: "Yes", label: "Yes" },
-            { value: "No", label: "No" },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered D. &quot;CAP Exempt,&quot; you must specify the reason or reasons this petition is exempt from the numerical limitation for H-1B classification. A. The petitioner is an institution of higher education as defined in section 1 0 1(A) of the Higher Education Act, of 1965, 20 United States Code 10 0 1(A).",
-        },
-        {
-          id: "subform24PartC3cCheckbox",
-          type: "radio",
-          label:
-            "The petitioner is a nonprofit research organization or a governmental research organization as defined in 8 Code of Federal Regulations 2 14",
-          required: true,
-          options: [
-            { value: "Yes", label: "Yes" },
-            { value: "No", label: "No" },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered D. &quot;CAP Exempt,&quot; you must specify the reason or reasons this petition is exempt from the numerical limitation for H-1B classification. C. The petitioner is a nonprofit research organization or a governmental research organization as defined in 8 Code of Federal Regulations 2 14.2(H)(19)(III)(C).",
-        },
-        {
-          id: "subform24PartC3bCheckbox",
-          type: "select",
-          label:
-            "The petitioner is a nonprofit entity related to or affiliated with an institution of higher educa.",
-          required: true,
-          options: [
-            { value: "Yes", label: "Yes" },
-            { value: "No", label: "No" },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered D. &quot;CAP Exempt,&quot; you must specify the reason or reasons this petition is exempt from the numerical limitation for H-1B classification. B. The petitioner is a nonprofit entity related to or affiliated with an institution of higher education as defined in section 1 0 1(A) of the Higher Education Act of 1965, 20 United States Code 10 0 1(A).",
-        },
-        {
-          id: "subform24PartC3eCheckbox",
-          type: "radio",
-          label:
-            "The petitioner is requesting an amendment to or extension of stay for the beneficiary&apos",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered D. &quot",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered D. &quot;CAP Exempt,&quot; you must specify the reason or reasons this petition is exempt from the numerical limitation for H-1B classification. E. The petitioner is requesting an amendment to or extension of stay for the beneficiary&apos;s current H-1B classification.",
-        },
-        {
-          id: "subform24PartC3fCheckbox",
-          type: "radio",
-          label:
-            "The beneficiary of this petition is a J-1 nonimmigrant physician who has received a waiver based .",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered D. &quot",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered D. &quot;CAP Exempt,&quot; you must specify the reason or reasons this petition is exempt from the numerical limitation for H-1B classification. F. The beneficiary of this petition is a J-1 nonimmigrant physician who has received a waiver based on section 2 14(l) of the Act.",
-        },
-        {
-          id: "subform24PartC3dCheckbox",
-          type: "radio",
-          label:
-            "That directly and predominately furthers the normal, primary, or essential purpose, mission, obje.",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered D. &quot",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered D. &quot;CAP Exempt,&quot; you must specify the reason or reasons this petition is exempt from the numerical limitation for H-1B classification. D. The petitioner will employ the beneficiary to perform job duties at a qualifying institution, see Item Numbers 3. A. through 3. C. above. That directly and predominately furthers the normal, primary, or essential purpose, mission, objectives, or function of the qualifying institution, namely higher education or nonprofit or government research.",
-        },
-        {
-          id: "subform24PartC3gCheckbox",
-          type: "radio",
-          label:
-            "The beneficiary of this petition has been counted against the cap and: (1) was previously granted.",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered D. &quot",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered D. &quot;CAP Exempt,&quot; you must specify the reason or reasons this petition is exempt from the numerical limitation for H-1B classification. G. The beneficiary of this petition has been counted against the cap and: (1) was previously granted status as an H-1B nonimmigrant in the past 6 years, (2) is applying from abroad to reclaim the remaining portion of the 6 years, or (3) is seeking an extension beyond the 6-year limitation based upon sections 1 04(c) or 1 06(A) of the American Competitiveness in the Twenty-First Century Act (A C 21).",
-        },
-        {
-          id: "subform24PartC3hCheckbox",
-          type: "radio",
-          label:
-            "The petitioner is an employer subject to the Guam-Commonwealth of the Northern Mariana Islands (C.",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered D. &quot",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 3. If you answered D. &quot;CAP Exempt,&quot; you must specify the reason or reasons this petition is exempt from the numerical limitation for H-1B classification. H. The petitioner is an employer subject to the Guam-Commonwealth of the Northern Mariana Islands (C N M I) cap exemption pursuant to Public Law 1 10-2 29.",
-        },
-        {
-          id: "subform24H1BSec4Yes",
-          type: "radio",
-          label: "Yes",
-          required: true,
-          options: [
-            { value: "Y", label: "Yes" },
-            {
-              value: "Off",
-              label:
-                "Site Assignment of H-1B Beneficiaries. 1. The beneficiary of this petition will be assigned to work at an off-site location for all or part of the period for which H-1B classification sought. Yes.",
-            },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 4. Off-Site Assignment of H-1B Beneficiaries. 1. The beneficiary of this petition will be assigned to work at an off-site location for all or part of the period for which H-1B classification sought. Yes.",
-        },
-        {
-          id: "subform24H1BSec4No",
-          type: "radio",
-          label: "And 3",
-          required: true,
-          options: [
-            { value: "Y", label: "Yes" },
-            {
-              value: "Off",
-              label:
-                "Site Assignment of H-1B Beneficiaries. 1. The beneficiary of this petition will be assigned to work at an off-site location for all or part of the period for which H-1B classification sought. No. If no",
-            },
-          ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 4. Off-Site Assignment of H-1B Beneficiaries. 1. The beneficiary of this petition will be assigned to work at an off-site location for all or part of the period for which H-1B classification sought. No. If no, do not complete Item Numbers 2. and 3.",
-        },
-        {
-          id: "subform25FamilyName4",
-          type: "text",
-          label: "Name of the Petitioner",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. 1. Name of the Petitioner.",
-        },
-        {
-          id: "subform25HSupFamilyName",
-          type: "radio",
-          label: "Name of the Beneficiary",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. 2. Name of the Beneficiary.",
-        },
-        {
-          id: "subform25aindividual",
-          type: "radio",
-          label: "An individual petition",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "29. 3. This petition is (only one box): A. An individual petition.",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "L Classification Supplement to Form I-1 29. 3. This petition is (only one box): A. An individual petition.",
-        },
-        {
-          id: "subform25bblanket",
-          type: "radio",
-          label: "A blanket petition",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "29. 3. This petition is (only one box): B. A blanket petition.",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "L Classification Supplement to Form I-1 29. 3. This petition is (only one box): B. A blanket petition.",
-        },
-        {
-          id: "subform25LSupp",
-          type: "radio",
-          label: "S.? No.",
-          required: true,
-          options: [
-            { value: "N", label: "No" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "L Classification Supplement to Form I-1 29. 4. A. Does the petitioner employ 50 or more individuals in the U. S.? No.",
-        },
-        {
-          id: "subform25LSuppYes",
-          type: "radio",
-          label:
-            "If yes, are more than 50 percent of those employee in H-1B, L-1A or L-1B nonimmigrant status? Che.",
-          required: true,
-          options: [
-            { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "L Classification Supplement to Form I-1 29. 4. B. If yes, are more than 50 percent of those employee in H-1B, L-1A or L-1B nonimmigrant status? Yes.",
-        },
-        {
-          id: "subform25LSuppNo",
-          type: "radio",
-          label:
-            "If yes, are more than 50 percent of those employee in H-1B, L-1A or L-1B nonimmigrant status? Che.",
-          required: true,
-          options: [
-            { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "L Classification Supplement to Form I-1 29. 4. B. If yes, are more than 50 percent of those employee in H-1B, L-1A or L-1B nonimmigrant status? No.",
-        },
-        {
-          id: "subform25LSupp1",
-          type: "radio",
-          label: "S.? Yes.",
-          required: true,
-          options: [
-            { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "L Classification Supplement to Form I-1 29. 4. A. Does the petitioner employ 50 or more individuals in the U. S.? Yes.",
-        },
-        {
-          id: "subform25Table2Row1Sect1Name",
-          type: "text",
-          label: "Subject&apos;s Name",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 1. Subject&apos;s Name.",
-        },
-        {
-          id: "subform25Table2Row1DateFrom",
-          type: "date",
-          label: "From Date",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 1. Period of Stay. From Date.",
-        },
-        {
-          id: "subform25Table2Row1DateTo",
-          type: "date",
-          label: "To Date",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 1. Period of Stay. To Date.",
-        },
-        {
-          id: "subform25Table2Row2Sect1Name",
-          type: "text",
-          label: "Subject&apos;s Name",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 2. Subject&apos;s Name.",
-        },
-        {
-          id: "subform25Table2Row2DateFrom",
-          type: "date",
-          label: "From Date",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 2. Period of Stay. From Date.",
-        },
-        {
-          id: "subform25Table2Row2DateTo",
-          type: "date",
-          label: "To Date",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 2. Period of Stay. To Date.",
-        },
-        {
-          id: "subform25Table2Row3Sect1Name",
-          type: "text",
-          label: "Subject&apos;s Name",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 3. Subject&apos;s Name.",
-        },
-        {
-          id: "subform25Table2Row3DateFrom",
-          type: "date",
-          label: "From Date",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 3. Period of Stay. From Date.",
-        },
-        {
-          id: "subform25Table2Row3DateTo",
-          type: "date",
-          label: "To Date",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 3. Period of Stay. To Date.",
-        },
-        {
-          id: "subform25Table2Row4Sect1Name",
-          type: "text",
-          label: "Subject&apos;s Name",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 4. Subject&apos;s Name.",
-        },
-        {
-          id: "subform25Table2Row4DateFrom",
-          type: "date",
-          label: "From Date",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 4. Period of Stay. From Date.",
-        },
-        {
-          id: "subform25Table2Row4DateTo",
-          type: "date",
-          label: "To Date",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 4. Period of Stay. To Date.",
-        },
-        {
-          id: "subform25Table2Row41Sect1Name",
-          type: "text",
-          label: "Subject&apos;s Name",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 5. Subject&apos;s Name.",
-        },
-        {
-          id: "subform25Table2Row41DateFrom",
-          type: "date",
-          label: "From Date",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 5. Period of Stay. From Date.",
-        },
-        {
-          id: "subform25Table2Row41DateTo",
-          type: "date",
-          label: "To Date",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 5. Period of Stay. To Date.",
-        },
-        {
-          id: "subform25Table2Row42Sect1Name",
-          type: "text",
-          label: "Subject&apos;s Name",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 6. Subject&apos;s Name.",
-        },
-        {
-          id: "subform25Table2Row42DateFrom",
-          type: "date",
-          label: "From Date",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 6. Period of Stay. From Date.",
-        },
-        {
-          id: "subform25Table2Row42DateTo",
-          type: "date",
-          label: "To Date",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 6. Period of Stay. To Date.",
-        },
-        {
-          id: "subform25Table2Row43Sect1Name",
-          type: "text",
-          label: "Subject&apos;s Name",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 7. Subject&apos;s Name.",
-        },
-        {
-          id: "subform25Table2Row43DateFrom",
-          type: "date",
-          label: "From Date",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 7. Period of Stay. From Date.",
-        },
-        {
-          id: "subform25Table2Row43DateTo",
-          type: "date",
-          label: "To Date",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 2. List the beneficiary&apos;s and any dependent family member&apos;s prior periods of stay in an H or L classification in the United States for the last 7 years. Be sure to list only those periods in which the beneficiary and/or family members were physically present in the U. S. in an H or L classification. Do not include periods in which the beneficiary was in a dependent status, for example, H-4 or L-2 status. If more space is needed, go to NOTE: Submit photocopies of Forms I-94, I-7 97, and/or other U S C I S issued documents noting these periods of stay in the H or L classification. If more space is needed, attach an additional sheet. Row 7. Period of Stay. To Date.",
-        },
-        {
-          id: "subform25aL1A",
-          type: "radio",
-          label: "L-1A manager or executive",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "29. Section 1. Complete This Section If Filing For An Individual Petition. 1. Classification sought (only one box): A. L-1A manager or executive.",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 1. Classification sought (only one box): A. L-1A manager or executive.",
-        },
-        {
-          id: "subform25bL1B",
-          type: "radio",
-          label: "L-1B specialized knowledge",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "29. Section 1. Complete This Section If Filing For An Individual Petition. 1. Classification sought (only one box): B. L-1B specialized knowledge.",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 1. Classification sought (only one box): B. L-1B specialized knowledge.",
-        },
-        {
-          id: "subform25AptSteFlrNumber",
-          type: "radio",
-          label: "Apartment, Suite or Floor Number",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 4 Address of employer abroad. If Apartment, Suite or Floor is Checked, Apartment, Suite or Floor Number.",
-        },
-        {
-          id: "subform25LClassUnit",
-          type: "radio",
-          label: "Floor",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "flr", label: "Flr." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 4 Address of employer abroad. Floor.",
-        },
-        {
-          id: "subform25LClassUnit1",
-          type: "radio",
-          label: "Suite",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "ste", label: "Ste." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 4 Address of employer abroad. Suite.",
-        },
-        {
-          id: "subform25LClassUnit2",
-          type: "radio",
-          label: "Apartment",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "apt", label: "Apt." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 4 Address of employer abroad. Apartment.",
-        },
-        {
-          id: "subform25LSuppNameofEmployerAbroad",
-          type: "text",
-          label: "Name of employer abroad",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 3. Name of employer abroad.",
-        },
-        {
-          id: "subform27JobDescription1",
-          type: "text",
-          label: "Description",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 7. Describe the beneficiary&apos;s proposed duties in the United States. Description.",
-        },
-        {
-          id: "subform27JobDescription2",
-          type: "text",
-          label: "Summary",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 8. Summarize the beneficiary&apos;s education and work experience. Summary.",
-        },
-        {
-          id: "subform27Table3Row1q5DateFrom",
-          type: "date",
-          label: "From Date",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 1. Dates of Employment. From Date.",
-        },
-        {
-          id: "subform27Table3Row1q5DateTo",
-          type: "date",
-          label: "To Date",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 1. Dates of Employment. To Date.",
-        },
-        {
-          id: "subform27Table3Row1q5Explanation",
-          type: "date",
-          label: "Explanation of Interruptions",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 1. Explanation of Interruptions.",
-        },
-        {
-          id: "subform27Table3Row2q5DateFrom",
-          type: "date",
-          label: "From Date",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 2. Dates of Employment. From Date.",
-        },
-        {
-          id: "subform27Table3Row2q5DateTo",
-          type: "date",
-          label: "To Date",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 2. Dates of Employment. To Date.",
-        },
-        {
-          id: "subform27Table3Row2q5Explanation",
-          type: "date",
-          label: "Explanation of Interruptions",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 2. Explanation of Interruptions.",
-        },
-        {
-          id: "subform27Table3Row3q5DateFrom",
-          type: "date",
-          label: "From Date",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 3. Dates of Employment. From Date.",
-        },
-        {
-          id: "subform27Table3Row3q5DateTo",
-          type: "date",
-          label: "To Date",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 3. Dates of Employment. To Date.",
-        },
-        {
-          id: "subform27Table3Row3q5Explanation",
-          type: "date",
-          label: "Explanation of Interruptions",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 3. Explanation of Interruptions.",
-        },
-        {
-          id: "subform27Table3Row4q5DateFrom",
-          type: "date",
-          label: "From Date",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 4. Dates of Employment. From Date.",
-        },
-        {
-          id: "subform27Table3Row4q5DateTo",
-          type: "date",
-          label: "To Date",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 4. Dates of Employment. To Date.",
-        },
-        {
-          id: "subform27Table3Row4q5Explanation",
-          type: "date",
-          label: "Explanation of Interruptions",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 4. Explanation of Interruptions.",
-        },
-        {
-          id: "subform27Table3Row41q5DateFrom",
-          type: "date",
-          label: "From Date",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 5. Dates of Employment. From Date.",
-        },
-        {
-          id: "subform27Table3Row41q5DateTo",
-          type: "date",
-          label: "To Date",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 5. Dates of Employment. To Date.",
-        },
-        {
-          id: "subform27Table3Row41q5Explanation",
-          type: "date",
-          label: "Explanation of Interruptions",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 5. Explanation of Interruptions.",
-        },
-        {
-          id: "subform27Table3Row42q5DateFrom",
-          type: "date",
-          label: "From Date",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 6. Dates of Employment. From Date.",
-        },
-        {
-          id: "subform27Table3Row42q5DateTo",
-          type: "date",
-          label: "To Date",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 6. Dates of Employment. To Date.",
-        },
-        {
-          id: "subform27Table3Row42q5Explanation",
-          type: "date",
-          label: "Explanation of Interruptions",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 5. Dates of beneficiary&apos;s employment with this employer. Explain any interruptions in employment. Row 6. Explanation of Interruptions.",
-        },
-        {
-          id: "subform27JobDescription3",
-          type: "radio",
-          label: "Description",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 6. Describe the beneficiary&apos;s duties abroad for the 3 years preceding the filing of the petition. (If the beneficiary is currently inside the United States, describe the beneficiary&apos;s duties abroad for the 3 years preceding the beneficiary&apos;s admission to the United States.) Description.",
-        },
-        {
-          id: "subform27aParent",
-          type: "radio",
-          label: "Parent",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "29. Section 1. Complete This Section If Filing For An Individual Petition. 9. How is the U. S. company related to the company abroad? (only one box). A. Parent.",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 9. How is the U. S. company related to the company abroad? (only one box). A. Parent.",
-        },
-        {
-          id: "subform27bBranch",
-          type: "radio",
-          label: "Branch",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "29. Section 1. Complete This Section If Filing For An Individual Petition. 9. How is the U. S. company related to the company abroad? (only one box). B. Branch.",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 9. How is the U. S. company related to the company abroad? (only one box). B. Branch.",
-        },
-        {
-          id: "subform27cSubsidiary",
-          type: "radio",
-          label: "Subsidiary",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "29. Section 1. Complete This Section If Filing For An Individual Petition. 9. How is the U. S. company related to the company abroad? (only one box). C. Subsidiary.",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 9. How is the U. S. company related to the company abroad? (only one box). C. Subsidiary.",
-        },
-        {
-          id: "subform27dAffiliate",
-          type: "radio",
-          label: "Affiliate",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "29. Section 1. Complete This Section If Filing For An Individual Petition. 9. How is the U. S. company related to the company abroad? (only one box). D. Affiliate.",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 9. How is the U. S. company related to the company abroad? (only one box). D. Affiliate.",
-        },
-        {
-          id: "subform27eJointVenture",
-          type: "radio",
-          label: "Joint Venture",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "29. Section 1. Complete This Section If Filing For An Individual Petition. 9. How is the U. S. company related to the company abroad? (only one box). E. Joint Venture.",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 9. How is the U. S. company related to the company abroad? (only one box). E. Joint Venture.",
-        },
-        {
-          id: "subform29JobDescription4",
-          type: "text",
-          label: "Description",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. If you are seeking L-1B specialized knowledge status for an individual, answer the following question: 13. C. If you answered yes to the preceding question, describe the reasons why placement at another worksite outside the petitioner, subsidiary, affiliate, or parent is needed. Include a description of how the beneficiary&apos;s duties at another worksite relate to the need for the specialized knowledge he or she possesses. If you need additional space to respond to this question, proceed to Description.",
-        },
-        {
-          id: "subform29Table4Row1",
-          type: "text",
-          label:
-            "Percentage of company stock ownership and managerial control of each company that has a qualifyin.",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 10. Describe the percentage of stock ownership and managerial control of each company that has a qualifying relationship. Federal Employer Identification Number for each U. S. company that has a qualifying relationship. Row 1. Percentage of company stock ownership and managerial control of each company that has a qualifying relationship.",
-        },
-        {
-          id: "subform29Table4Row1FEIN",
-          type: "text",
-          label: "Company that has a qualifying relationship",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 10. Describe the percentage of stock ownership and managerial control of each company that has a qualifying relationship. Federal Employer Identification Number for each U. S. company that has a qualifying relationship. Row 1. Federal Employer Identification Number for each U. S. company that has a qualifying relationship.",
-        },
-        {
-          id: "subform29Table4Row2",
-          type: "text",
-          label:
-            "Percentage of company stock ownership and managerial control of each company that has a qualifyin.",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 10. Describe the percentage of stock ownership and managerial control of each company that has a qualifying relationship. Federal Employer Identification Number for each U. S. company that has a qualifying relationship. Row 2. Percentage of company stock ownership and managerial control of each company that has a qualifying relationship.",
-        },
-        {
-          id: "subform29Table4Row2FEIN",
-          type: "text",
-          label: "Company that has a qualifying relationship",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 10. Describe the percentage of stock ownership and managerial control of each company that has a qualifying relationship. Federal Employer Identification Number for each U. S. company that has a qualifying relationship. Row 2. Federal Employer Identification Number for each U. S. company that has a qualifying relationship.",
-        },
-        {
-          id: "subform29Table4Row3",
-          type: "text",
-          label:
-            "Percentage of company stock ownership and managerial control of each company that has a qualifyin.",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 10. Describe the percentage of stock ownership and managerial control of each company that has a qualifying relationship. Federal Employer Identification Number for each U. S. company that has a qualifying relationship. Row 3. Percentage of company stock ownership and managerial control of each company that has a qualifying relationship.",
-        },
-        {
-          id: "subform29Table4Row3FEIN",
-          type: "text",
-          label: "Company that has a qualifying relationship",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 10. Describe the percentage of stock ownership and managerial control of each company that has a qualifying relationship. Federal Employer Identification Number for each U. S. company that has a qualifying relationship. Row 3. Federal Employer Identification Number for each U. S. company that has a qualifying relationship.",
-        },
-        {
-          id: "subform29Table4Row4",
-          type: "text",
-          label:
-            "Percentage of company stock ownership and managerial control of each company that has a qualifyin.",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 10. Describe the percentage of stock ownership and managerial control of each company that has a qualifying relationship. Federal Employer Identification Number for each U. S. company that has a qualifying relationship. Row 4. Percentage of company stock ownership and managerial control of each company that has a qualifying relationship.",
-        },
-        {
-          id: "subform29Table4Row4FEIN",
-          type: "text",
-          label: "Company that has a qualifying relationship",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 10. Describe the percentage of stock ownership and managerial control of each company that has a qualifying relationship. Federal Employer Identification Number for each U. S. company that has a qualifying relationship. Row 4. Federal Employer Identification Number for each U. S. company that has a qualifying relationship.",
-        },
-        {
-          id: "subform29Table4Row41",
-          type: "text",
-          label:
-            "Percentage of company stock ownership and managerial control of each company that has a qualifyin.",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 10. Describe the percentage of stock ownership and managerial control of each company that has a qualifying relationship. Federal Employer Identification Number for each U. S. company that has a qualifying relationship. Row 5. Percentage of company stock ownership and managerial control of each company that has a qualifying relationship.",
-        },
-        {
-          id: "subform29Table4Row41FEIN",
-          type: "radio",
-          label: "Company that has a qualifying relationship",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 10. Describe the percentage of stock ownership and managerial control of each company that has a qualifying relationship. Federal Employer Identification Number for each U. S. company that has a qualifying relationship. Row 5. Federal Employer Identification Number for each U. S. company that has a qualifying relationship.",
-        },
-        {
-          id: "subform29LSec1No",
-          type: "radio",
-          label:
-            "Company has and will have a qualifying relationship with another foreign entity during the full p.",
-          required: true,
-          options: [
-            { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 11. Do the companies currently have the same qualifying relationship as they did during the 1-year period of the alien&apos;s employment with the company abroad? No. If no, explanation in S. company has and will have a qualifying relationship with another foreign entity during the full period of the requested period of stay.",
-        },
-        {
-          id: "subform29LSec1Yes",
-          type: "select",
-          label:
-            "Is the beneficiary coming to the United States to open a new office? Yes",
-          required: true,
-          options: [
-            { value: "Y", label: "Y" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 12. Is the beneficiary coming to the United States to open a new office? Yes.",
-        },
-        {
-          id: "subform29LSec1",
-          type: "radio",
-          label:
-            "Will the beneficiary be stationed primarily offsite (at the worksite of an employer other than th.",
-          required: true,
-          options: [
-            { value: "N", label: "No" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. If you are seeking L-1B specialized knowledge status for an individual, answer the following question: 13. A. Will the beneficiary be stationed primarily offsite (at the worksite of an employer other than the petitioner or its affiliate, subsidiary, or parent)? No.",
-        },
-        {
-          id: "subform29LSec11",
-          type: "radio",
-          label:
-            "Will the beneficiary be stationed primarily offsite (at the worksite of an employer other than th.",
-          required: true,
-          options: [
-            { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. If you are seeking L-1B specialized knowledge status for an individual, answer the following question: 13. A. Will the beneficiary be stationed primarily offsite (at the worksite of an employer other than the petitioner or its affiliate, subsidiary, or parent)? Yes.",
-        },
-        {
-          id: "subform29JobDescription5",
-          type: "text",
-          label: "Description",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. If you are seeking L-1B specialized knowledge status for an individual, answer the following question: 13. B. If you answered yes to the preceding question, describe how and by whom the beneficiary&apos;s work will be controlled and supervised. Include a description of the amount of time each supervisor is expected to control and supervise the work. If you need additional space to respond to this question, proceed to Description.",
-        },
-        {
-          id: "subform31Table5Row1Cell1",
-          type: "text",
-          label: "Name and Address",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 1. Name and Address.",
-        },
-        {
-          id: "subform31Table5Row1Cell2",
-          type: "text",
-          label: "Relationship",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 1. Relationship.",
-        },
-        {
-          id: "subform31Table5Row2Cell1",
-          type: "text",
-          label: "Name and Address",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 2. Name and Address.",
-        },
-        {
-          id: "subform31Table5Row2Cell2",
-          type: "text",
-          label: "Relationship",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 2. Relationship.",
-        },
-        {
-          id: "subform31Table5Row3Cell1",
-          type: "text",
-          label: "Name and Address",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 3. Name and Address.",
-        },
-        {
-          id: "subform31Table5Row3Cell2",
-          type: "text",
-          label: "Relationship",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 3. Relationship.",
-        },
-        {
-          id: "subform31Table5Row4Cell1",
-          type: "text",
-          label: "Name and Address",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 4. Name and Address.",
-        },
-        {
-          id: "subform31Table5Row4Cell2",
-          type: "text",
-          label: "Relationship",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 4. Relationship.",
-        },
-        {
-          id: "subform31Table5Row41Cell1",
-          type: "text",
-          label: "Name and Address",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 5. Name and Address.",
-        },
-        {
-          id: "subform31Table5Row41Cell2",
-          type: "text",
-          label: "Relationship",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 5. Relationship.",
-        },
-        {
-          id: "subform31Table5Row42Cell1",
-          type: "text",
-          label: "Name and Address",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 6. Name and Address.",
-        },
-        {
-          id: "subform31Table5Row42Cell2",
-          type: "text",
-          label: "Relationship",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 6. Relationship.",
-        },
-        {
-          id: "subform31Table5Row43Cell1",
-          type: "text",
-          label: "Name and Address",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 7. Name and Address.",
-        },
-        {
-          id: "subform31Table5Row43Cell2",
-          type: "text",
-          label: "Relationship",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 7. Relationship.",
-        },
-        {
-          id: "subform31Table5Row44Cell1",
-          type: "text",
-          label: "Name and Address",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 8. Name and Address.",
-        },
-        {
-          id: "subform31Table5Row44Cell2",
-          type: "text",
-          label: "Relationship",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 2. Complete This Section If Filing A Blanket Petition. List all U. S. and foreign parent, branches, subsidiaries, and affiliates included in this petition. Attach a separate sheet or sheets of paper if additional space is needed. Row 8. Relationship.",
-        },
-        {
-          id: "subform33FamilyName5",
-          type: "radio",
-          label: "Name of the Petitioner",
-          required: true,
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 1. Name of the Petitioner.",
-        },
-        {
-          id: "subform33bO1B",
-          type: "radio",
-          label:
-            "O-1B Alien of extraordinary ability in the arts or extraordinary achievement in the motion pictur.",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). B. O-1B Alien of extraordinary ability in the arts or extraordinary achievement in the motion picture or television industry.",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). B. O-1B Alien of extraordinary ability in the arts or extraordinary achievement in the motion picture or television industry.",
-        },
-        {
-          id: "subform33aO1A",
-          type: "radio",
-          label:
-            "O-1A Alien of extraordinary ability in sciences, education, business or athletics, not including .",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). A. O-1A Alien of extraordinary ability in sciences",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). A. O-1A Alien of extraordinary ability in sciences, education, business or athletics, not including the arts, motion picture or television industry.",
-        },
-        {
-          id: "subform33cO2",
-          type: "select",
-          label:
-            "O-2 Accompanying alien who is coming to the United States to assist in the performance of the O-1",
-          required: true,
-          options: [
-            { value: "Yes", label: "Yes" },
-            { value: "No", label: "No" },
-          ],
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). C. O-2 Accompanying alien who is coming to the United States to assist in the performance of the O-1.",
-        },
-        {
-          id: "subform33HSupFamilyName1",
-          type: "text",
-          label: "Below)",
-          required: true,
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. Name of the Beneficiary or if this petition includes multiple beneficiaries, the total number of beneficiaries included. 2. A. Name of the Beneficiary. (Or total number of beneficiaries in item 2. B. below).",
-        },
-        {
-          id: "subform33TtlNumberofBeneficiaries1",
-          type: "text",
-          label: "Number of Beneficiaries",
-          required: true,
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. Name of the Beneficiary or if this petition includes multiple beneficiaries, the total number of beneficiaries included. 2. B. total number of beneficiaries. Number of Beneficiaries.",
-        },
-        {
-          id: "subform33JobDescription6",
-          type: "date",
-          label: "List",
-          required: true,
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 6. If filing for an O-2 or P support classification, list dates of the beneficiary&apos;s prior work experience under the principal O-1 or P alien. List.",
-        },
-        {
-          id: "subform33JobDescription7",
-          type: "text",
-          label: "Description",
-          required: true,
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 5. Describe the duties to be preformed. Description.",
-        },
-        {
-          id: "subform33JobDescription8",
-          type: "radio",
-          label: "Explanation",
-          required: true,
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 4. Explain the nature of the event. Explanation.",
-        },
-        {
-          id: "subform33OandPSupp",
-          type: "radio",
-          label: "O and P Classifications Supplement to Form I-1 29",
-          required: true,
-          options: [
-            { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 7. A. Does any beneficiary in this petition have ownership interest in the petitioning organization? Yes. If yes, please explain in B.",
-        },
-        {
-          id: "subform33OandPSupp1",
-          type: "radio",
-          label:
-            "Does any beneficiary in this petition have ownership interest in the petitioning organization? Ch.",
-          required: true,
-          options: [
-            { value: "N", label: "No" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 7. A. Does any beneficiary in this petition have ownership interest in the petitioning organization? No.",
-        },
-        {
-          id: "subform34AptSteFlrNumber",
-          type: "radio",
-          label: "Apartment, Suite or Floor Number",
-          required: true,
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary Ability. 10. B. address. If Apartment, Suite or Floor is Checked, Apartment, Suite or Floor Number.",
-        },
-        {
-          id: "subform34Unit",
-          type: "radio",
-          label: "Floor",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "flr", label: "Flr." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary Ability. 10. B. address. Floor.",
-        },
-        {
-          id: "subform34Unit1",
-          type: "radio",
-          label: "Suite",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "ste", label: "Ste." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary Ability. 10. B. address. Suite.",
-        },
-        {
-          id: "subform34Unit2",
-          type: "radio",
-          label: "Apartment",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "apt", label: "Apt." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary Ability. 10. B. address. Apartment.",
-        },
-        {
-          id: "subform34LSuppNameofPeer",
-          type: "text",
-          label: "Name of Recognized Peer/Peer Group or Labor Organization",
-          required: true,
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary Ability. 10. A. Name of Recognized Peer/Peer Group or Labor Organization.",
-        },
-        {
-          id: "subform34OandPSuppYes",
-          type: "radio",
-          label:
-            "Does an appropriate labor organization exist for the petition? Yes",
-          required: true,
-          options: [
-            { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 8. Does an appropriate labor organization exist for the petition? Yes.",
-        },
-        {
-          id: "subform34OandPSupp",
-          type: "radio",
-          label:
-            "If no, the following information about the organization or organizations to which you have sent a.",
-          required: true,
-          options: [
-            { value: "N", label: "No" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 9. Is the required consultation or written advisory opinion being submitted with this petition? No - Copy of request attached. If no, following information about the organization or organizations to which you have sent a duplicate of this petition.",
-        },
-        {
-          id: "subform34OandPSupp1",
-          type: "radio",
-          label:
-            "Is the required consultation or written advisory opinion being submitted with this petition? Chec.",
-          required: true,
-          options: [
-            { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 9. Is the required consultation or written advisory opinion being submitted with this petition? Yes.",
-        },
-        {
-          id: "subform34OandPSupp2",
-          type: "radio",
-          label:
-            "Is the required consultation or written advisory opinion being submitted with this petition? Chec.",
-          required: true,
-          options: [
-            {
-              value: "A",
-              label:
-                "Oand P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 9. Is the required consultation or written advisory opinion being submitted with this petition? N/",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 9. Is the required consultation or written advisory opinion being submitted with this petition? N/A, Not Applicable.",
-        },
-        {
-          id: "subform34OandPSuppNo",
-          type: "radio",
-          label: "And type or print your explanation",
-          required: true,
-          options: [
-            { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 8. Does an appropriate labor organization exist for the petition? No. If no, proceed to Part 9. and type or print your explanation.",
-        },
-        {
-          id: "subform34Duties1",
-          type: "text",
-          label: "Explanation",
-          required: true,
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 7. B. If you answered Yes to A. Explanation.",
-        },
-        {
-          id: "subform34PreparerDaytimePhoneNumber110d",
-          type: "tel",
-          label: "Daytime Telephone Number",
-          required: true,
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary Ability. 10. D. Daytime Telephone Number.",
-        },
-        {
-          id: "subform34PreparerDaytimePhoneNumber111d",
-          type: "tel",
-          label: "Daytime Telephone Number",
-          required: true,
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary achievement in motion pictures or television. 11. D. Daytime Telephone Number.",
-        },
-        {
-          id: "subform34PreparerDaytimePhoneNumber112d",
-          type: "tel",
-          label: "Daytime Telephone Number",
-          required: true,
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary achievement in motion pictures or television. 12. D. Daytime Telephone Number.",
-        },
-        {
-          id: "subform35AptSteFlrNumber",
-          type: "radio",
-          label: "Apartment, Suite or Floor Number",
-          required: true,
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-2 or P alien. 13. B. Complete Address. If Apartment, Suite or Floor is Checked, Apartment, Suite or Floor Number.",
-        },
-        {
-          id: "subform35Unit",
-          type: "radio",
-          label: "Floor",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "flr", label: "Flr." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-2 or P alien. 13. B. Complete Address. Floor.",
-        },
-        {
-          id: "subform35Unit1",
-          type: "radio",
-          label: "Suite",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "ste", label: "Ste." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-2 or P alien. 13. B. Complete Address. Suite.",
-        },
-        {
-          id: "subform35Unit2",
-          type: "radio",
-          label: "Apartment",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "apt", label: "Apt." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-2 or P alien. 13. B. Complete Address. Apartment.",
-        },
-        {
-          id: "subform35LSuppNameofPeer",
-          type: "text",
-          label: "Name of Labor Organization",
-          required: true,
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-2 or P alien. 13. A. Name of Labor Organization.",
-        },
-        {
-          id: "subform35FamilyName6",
-          type: "text",
-          label: "Family Name (Last Name)",
-          required: true,
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 2. Statement by the Petitioner. I certify that I, the petitioner, and the employer whose offer of employment formed the basis of status (if different from the petitioner) will be jointly and severally liable for the reasonable costs of return transportation of the beneficiary abroad if the beneficiary is dismissed from employment by the employer before the end of the period of authorized stay. 1. Name of Petitioner. Family Name (Last Name).",
-        },
-        {
-          id: "subform35GivenName2",
-          type: "text",
-          label: "Given Name (First Name)",
-          required: true,
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 2. Statement by the Petitioner. I certify that I, the petitioner, and the employer whose offer of employment formed the basis of status (if different from the petitioner) will be jointly and severally liable for the reasonable costs of return transportation of the beneficiary abroad if the beneficiary is dismissed from employment by the employer before the end of the period of authorized stay. 1. Name of Petitioner. Given Name (First Name).",
-        },
-        {
-          id: "subform35MiddleName2",
-          type: "text",
-          label: "Middle Name",
-          required: true,
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 2. Statement by the Petitioner. I certify that I, the petitioner, and the employer whose offer of employment formed the basis of status (if different from the petitioner) will be jointly and severally liable for the reasonable costs of return transportation of the beneficiary abroad if the beneficiary is dismissed from employment by the employer before the end of the period of authorized stay. 1. Name of Petitioner. Middle Name.",
-        },
-        {
-          id: "subform35DateofSignature1",
-          type: "date",
-          label: "Date of Signature",
-          required: true,
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 2. Statement by the Petitioner. I certify that I, the petitioner, and the employer whose offer of employment formed the basis of status (if different from the petitioner) will be jointly and severally liable for the reasonable costs of return transportation of the beneficiary abroad if the beneficiary is dismissed from employment by the employer before the end of the period of authorized stay. 2. Signature and Date. Date of Signature.",
-        },
-        {
-          id: "subform35Pt7EmailAddress1",
-          type: "email",
-          label: "Email Address (optional)",
-          required: true,
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 2. Statement by the Petitioner. 3. Petitioner&apos;s Contact Information. Email Address (optional)",
-        },
-        {
-          id: "subform35PreparerDaytimePhoneNumber113d",
-          type: "tel",
-          label: "Daytime Telephone Number",
-          required: true,
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-2 or P alien. 13. D. Daytime Telephone Number.",
-        },
-        {
-          id: "subform35Pt7DaytimePhoneNumber11",
-          type: "tel",
-          label: "Daytime Telephone Number",
-          required: true,
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 2. Statement by the Petitioner. 3. Petitioner&apos;s Contact Information. Daytime Telephone Number.",
-        },
-        {
-          id: "subform36FamilyName7",
-          type: "text",
-          label: "Name of the Petitioner",
-          required: true,
-          helpText:
-            "Q-1 Classification Supplement to Form I-1 29. 1. Name of the Petitioner.",
-        },
-        {
-          id: "subform36HSupFamilyName2",
-          type: "text",
-          label: "Name of the Beneficiary",
-          required: true,
-          helpText:
-            "Q-1 Classification Supplement to Form I-1 29. 2. Name of the Beneficiary.",
-        },
-        {
-          id: "subform36GivenName3",
-          type: "text",
-          label: "Given Name (First Name)",
-          required: true,
-          helpText:
-            "Q-1 Classification Supplement to Form I-1 29. Section 1. Complete if you are filing for a Q-1 International Cultural Exchange Alien. I hereby certify that the participant or participants in the international cultural exchange program: A. Is at least 18 years of age, B. Is qualified to perform the service or labor or receive the type of training stated in the petition, C. Has the ability to communicate effectively about the cultural attributes of his or her country of nationality to the American public, and D. Has resided and been physically present outside the United States for the immediate prior year. Applies only if the participant was previously admitted as a Q-1. I also certify that I will offer the alien or aliens the same wages and working conditions comparable to those accorded local domestic workers similarly employed. 1. Name of Petitioner. Given Name (First Name).",
-        },
-        {
-          id: "subform36MiddleName3",
-          type: "text",
-          label: "Middle Name",
-          required: true,
-          helpText:
-            "Q-1 Classification Supplement to Form I-1 29. Section 1. Complete if you are filing for a Q-1 International Cultural Exchange Alien. I hereby certify that the participant or participants in the international cultural exchange program: A. Is at least 18 years of age, B. Is qualified to perform the service or labor or receive the type of training stated in the petition, C. Has the ability to communicate effectively about the cultural attributes of his or her country of nationality to the American public, and D. Has resided and been physically present outside the United States for the immediate prior year. Applies only if the participant was previously admitted as a Q-1. I also certify that I will offer the alien or aliens the same wages and working conditions comparable to those accorded local domestic workers similarly employed. 1. Name of Petitioner. Middle Name.",
-        },
-        {
-          id: "subform36DateofSignature2",
-          type: "date",
-          label: "Date of Signature",
-          required: true,
-          helpText:
-            "Q-1 Classification Supplement to Form I-1 29. Section 1. Complete if you are filing for a Q-1 International Cultural Exchange Alien. I hereby certify that the participant or participants in the international cultural exchange program: A. Is at least 18 years of age, B. Is qualified to perform the service or labor or receive the type of training stated in the petition, C. Has the ability to communicate effectively about the cultural attributes of his or her country of nationality to the American public, and D. Has resided and been physically present outside the United States for the immediate prior year. Applies only if the participant was previously admitted as a Q-1. I also certify that I will offer the alien or aliens the same wages and working conditions comparable to those accorded local domestic workers similarly employed. 2. Signature and Date. Date of Signature.",
-        },
-        {
-          id: "subform36Pt7EmailAddress2",
-          type: "email",
-          label: "E-mail Address (optional)",
-          required: true,
-          helpText:
-            "Q-1 Classification Supplement to Form I-1 29. Section 1. Complete if you are filing for a Q-1 International Cultural Exchange Alien. 3. Petitioner&apos;s Contact Information. E-mail Address (optional)",
-        },
-        {
-          id: "subform36Pt7DaytimePhoneNumber12",
-          type: "tel",
-          label: "Daytime Telephone Number",
-          required: true,
-          helpText:
-            "Q-1 Classification Supplement to Form I-1 29. Section 1. Complete if you are filing for a Q-1 International Cultural Exchange Alien. 3. Petitioner&apos;s Contact Information. Daytime Telephone Number.",
-        },
-        {
-          id: "subform36FamilyName8",
-          type: "text",
-          label: "Family Name (Last Name)",
-          required: true,
-          helpText:
-            "Q-1 Classification Supplement to Form I-1 29. Section 1. Complete if you are filing for a Q-1 International Cultural Exchange Alien. I hereby certify that the participant or participants in the international cultural exchange program: A. Is at least 18 years of age, B. Is qualified to perform the service or labor or receive the type of training stated in the petition, C. Has the ability to communicate effectively about the cultural attributes of his or her country of nationality to the American public, and D. Has resided and been physically present outside the United States for the immediate prior year. Applies only if the participant was previously admitted as a Q-1. I also certify that I will offer the alien or aliens the same wages and working conditions comparable to those accorded local domestic workers similarly employed. 1. Name of Petitioner. Family Name (Last Name).",
-        },
-        {
-          id: "subform37TtlNumbersofWorker1",
-          type: "text",
-          label:
-            "Number of members of the petitioner&apos;s religious organization",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 1. A. Number of members of the petitioner&apos;s religious organization.",
-        },
-        {
-          id: "subform37TtlNumbersofWorker2",
-          type: "text",
-          label:
-            "Number of employees working at the same location where the beneficiary will be employed",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 1. B. Number of employees working at the same location where the beneficiary will be employed.",
-        },
-        {
-          id: "subform37TtlNumbersofWorker3",
-          type: "text",
-          label:
-            "Number of aliens holding special immigrant or nonimmigrant religious worker status currently empl.",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 1. C. Number of aliens holding special immigrant or nonimmigrant religious worker status currently employed or employed within the past 5 years.",
-        },
-        {
-          id: "subform37TtlNumbersofWorker4",
-          type: "radio",
-          label:
-            "Number of special immigrant religious worker petition or petitions, I-3 60, and nonimmigrant reli.",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 1. D. Number of special immigrant religious worker petition or petitions, I-3 60, and nonimmigrant religious worker petition or petitions, I-1 29, filed by the petitioner within the past 5 years.",
-        },
-        {
-          id: "subform37R1Sec1",
-          type: "select",
-          label: "Has the beneficiary or any of the beneficiary&apos",
-          required: true,
-          options: [
-            { value: "N", label: "N" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. Has the beneficiary or any of the beneficiary&apos;s dependent family members previously been admitted to the United States for a period of stay in the R visa classification in the last 5 years? No.",
-        },
-        {
-          id: "subform37R1Sec11",
-          type: "select",
-          label:
-            "Please be sure to list only those periods in which the beneficiary and/or family members were act.",
-          required: true,
-          options: [
-            { value: "Y", label: "Y" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. Has the beneficiary or any of the beneficiary&apos;s dependent family members previously been admitted to the United States for a period of stay in the R visa classification in the last 5 years? Yes. If yes, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification.",
-        },
-        {
-          id: "subform37Table21Row1FamilyMemberName",
-          type: "text",
-          label: "Alien or Dependent Family Member&apos;s Name",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 1. Alien or Dependent Family Member&apos;s Name.",
-        },
-        {
-          id: "subform37Table21Row1FromDate1",
-          type: "date",
-          label: "From Date",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 1. Period of Stay. From Date.",
-        },
-        {
-          id: "subform37Table21Row1ToDate1",
-          type: "date",
-          label: "To Date",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 1. Period of Stay. To Date.",
-        },
-        {
-          id: "subform37Table21Row2FamilyMemberName2",
-          type: "text",
-          label: "Alien or Dependent Family Member&apos;s Name",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 2. Alien or Dependent Family Member&apos;s Name.",
-        },
-        {
-          id: "subform37Table21Row2FromDate2",
-          type: "date",
-          label: "From Date",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 2. Period of Stay. From Date.",
-        },
-        {
-          id: "subform37Table21Row2ToDate2",
-          type: "date",
-          label: "To Date",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 2. Period of Stay. To Date.",
-        },
-        {
-          id: "subform37Table21Row3FamilyMemberName3",
-          type: "text",
-          label: "Alien or Dependent Family Member&apos;s Name",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 3. Alien or Dependent Family Member&apos;s Name.",
-        },
-        {
-          id: "subform37Table21Row3FromDate3",
-          type: "date",
-          label: "From Date",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 3. Period of Stay. From Date.",
-        },
-        {
-          id: "subform37Table21Row3ToDate3",
-          type: "date",
-          label: "To Date",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 3. Period of Stay. To Date.",
-        },
-        {
-          id: "subform37Table21Row31FamilyMemberName4",
-          type: "text",
-          label: "Alien or Dependent Family Member&apos;s Name",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 4. Alien or Dependent Family Member&apos;s Name.",
-        },
-        {
-          id: "subform37Table21Row31FromDate4",
-          type: "date",
-          label: "From Date",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 4. Period of Stay. From Date.",
-        },
-        {
-          id: "subform37Table21Row31ToDate4",
-          type: "date",
-          label: "To Date",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 4. Period of Stay. To Date.",
-        },
-        {
-          id: "subform37Table21Row32FamilyMemberName5",
-          type: "text",
-          label: "Alien or Dependent Family Member&apos;s Name",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 5. Alien or Dependent Family Member&apos;s Name.",
-        },
-        {
-          id: "subform37Table21Row32FromDate5",
-          type: "date",
-          label: "From Date",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 5. Period of Stay. From Date.",
-        },
-        {
-          id: "subform37Table21Row32ToDate5",
-          type: "date",
-          label: "To Date",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 5. Period of Stay. To Date.",
-        },
-        {
-          id: "subform37Table21Row33FamilyMemberName6",
-          type: "text",
-          label: "Alien or Dependent Family Member&apos;s Name",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 6. Alien or Dependent Family Member&apos;s Name.",
-        },
-        {
-          id: "subform37Table21Row33FromDate6",
-          type: "date",
-          label: "From Date",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 6. Period of Stay. From Date.",
-        },
-        {
-          id: "subform37Table21Row33ToDate6",
-          type: "date",
-          label: "To Date",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 6. Period of Stay. To Date.",
-        },
-        {
-          id: "subform37Table21Row34FamilyMemberName7",
-          type: "text",
-          label: "Alien or Dependent Family Member&apos;s Name",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 7. Alien or Dependent Family Member&apos;s Name.",
-        },
-        {
-          id: "subform37Table21Row34FromDate7",
-          type: "date",
-          label: "From Date",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 7. Period of Stay. From Date.",
-        },
-        {
-          id: "subform37Table21Row34ToDate7",
-          type: "date",
-          label: "To Date",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 2. If Yes is Checked, complete the spaces below. List the beneficiary and any dependent family member&#8217;s prior periods of stay in the R visa classification in the United States in the last 5 years. Please be sure to list only those periods in which the beneficiary and/or family members were actually in the United States in an R classification. NOTE: Submit photocopies of Forms I-94 Arrival-Departure Record, I-7 97 Notice of Action, and/or other U S C I S documents identifying these periods of stay in the R visa classification or classifications. If more space is needed, information in Row 7. Period of Stay. To Date.",
-        },
-        {
-          id: "subform37PetitionerName1",
-          type: "text",
-          label: "Name of the Petitioner",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. 1. Name of the Petitioner.",
-        },
-        {
-          id: "subform37BeneficiaryName1",
-          type: "text",
-          label: "Name of the Beneficiary",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. 2. Name of the Beneficiary.",
-        },
-        {
-          id: "subform39JobDescription9",
-          type: "text",
-          label: "Description",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 4. Describe the relationship (optional), between the religious organization in the United States and the organization abroad of which the beneficiary is a member. Description.",
-        },
-        {
-          id: "subform39JobDescription10",
-          type: "text",
-          label:
-            "A Detailed description of the beneficiary&apos;s proposed daily duties",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the prospective employment: 5. B. Detailed description of the beneficiary&apos;s proposed daily duties.",
-        },
-        {
-          id: "subform39JobDescription11",
-          type: "text",
-          label:
-            "A Description of the beneficiary&apos;s qualifications for position offered",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: following information about the prospective employment: 5. C. Description of the beneficiary&apos;s qualifications for position offered.",
-        },
-        {
-          id: "subform39Table31Row1Position1",
-          type: "text",
-          label: "Position",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 3. summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, information on additional sheet or sheets of paper. Row 1. Position.",
-        },
-        {
-          id: "subform39Table31Row1Summary1",
-          type: "text",
-          label: "Summary of the Type of Responsibilities for That Position",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 3. summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, information on additional sheet or sheets of paper. Row 1. Summary of the Type of Responsibilities for That Position.",
-        },
-        {
-          id: "subform39Table31Row2Position2",
-          type: "text",
-          label: "Position",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 3. summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, information on additional sheet or sheets of paper. Row 2. Position.",
-        },
-        {
-          id: "subform39Table31Row2Summary2",
-          type: "text",
-          label: "Summary of the Type of Responsibilities for That Position",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 3. summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, information on additional sheet or sheets of paper. Row 2. Summary of the Type of Responsibilities for That Position.",
-        },
-        {
-          id: "subform39Table31Row21Position3",
-          type: "text",
-          label: "Position",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 3. summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, information on additional sheet or sheets of paper. Row 3. Position.",
-        },
-        {
-          id: "subform39Table31Row21Summary3",
-          type: "text",
-          label: "Summary of the Type of Responsibilities for That Position",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 3. summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, information on additional sheet or sheets of paper. Row 3. Summary of the Type of Responsibilities for That Position.",
-        },
-        {
-          id: "subform39Table31Row22Position4",
-          type: "text",
-          label: "Position",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 3. summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, information on additional sheet or sheets of paper. Row 4. Position.",
-        },
-        {
-          id: "subform39Table31Row22Summary4",
-          type: "text",
-          label: "Summary of the Type of Responsibilities for That Position",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 3. summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, information on additional sheet or sheets of paper. Row 4. Summary of the Type of Responsibilities for That Position.",
-        },
-        {
-          id: "subform39Table31Row23Position5",
-          type: "text",
-          label: "Position",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 3. summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, information on additional sheet or sheets of paper. Row 5. Position.",
-        },
-        {
-          id: "subform39Table31Row23Summary5",
-          type: "text",
-          label: "Summary of the Type of Responsibilities for That Position",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 3. summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, information on additional sheet or sheets of paper. Row 5. Summary of the Type of Responsibilities for That Position.",
-        },
-        {
-          id: "subform39Table31Row24Position6",
-          type: "text",
-          label: "Position",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 3. summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, information on additional sheet or sheets of paper. Row 6. Position.",
-        },
-        {
-          id: "subform39Table31Row24Summary6",
-          type: "text",
-          label: "Summary of the Type of Responsibilities for That Position",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the petitioner: 3. summary of the type of responsibilities of those employees who work at the same location where the beneficiary will be employed. If additional space is needed, information on additional sheet or sheets of paper. Row 6. Summary of the Type of Responsibilities for That Position.",
-        },
-        {
-          id: "subform39JobDescription12",
-          type: "text",
-          label: "Title of Position Offered",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the prospective employment: 5. A. Title of Position Offered.",
-        },
-        {
-          id: "subform39JobDescription13",
-          type: "text",
-          label:
-            "If the beneficiary will be self-supporting, the petitioner must submit documentation establishing.",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the prospective employment: 5. D. Description of the proposed salaried compensation or non-salaried compensation. If the beneficiary will be self-supporting, the petitioner must submit documentation establishing that the position the beneficiary will hold is part of an established program for temporary, uncompensated missionary work, which is part of a broader international program of missionary work sponsored by the denomination.",
-        },
-        {
-          id: "subform41R1Sec11Explanation",
-          type: "radio",
-          label: "Of Form I-1 29",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Does the petitioner attest to all of the requirements described in Item Numbers 6. through 12. below? 6. If No, type or print your explanation here. If needed, go to Part 9. of Form I-1 29.",
-        },
-        {
-          id: "subform41R1Sec1",
-          type: "radio",
-          label: "Yes",
-          required: true,
-          options: [
-            { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Does the petitioner attest to all of the requirements described in Item Numbers 6. through 12. below? 7. The petitioner is willing and able to salaried or non-salaried compensation to the beneficiary. If the beneficiary will be self-supporting, the petitioner must submit documentation establishing that the position the beneficiary will hold is part of an established program for temporary, uncompensated missionary work, which is part of a broader international program of missionary work sponsored by the denomination. Yes.",
-        },
-        {
-          id: "subform41R1Sec11",
-          type: "radio",
-          label: "Of Form I-1 29",
-          required: true,
-          options: [
-            { value: "N", label: "No" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Does the petitioner attest to all of the requirements described in Item Numbers 6. through 12. below? 7. The petitioner is willing and able to salaried or non-salaried compensation to the beneficiary. If the beneficiary will be self-supporting, the petitioner must submit documentation establishing that the position the beneficiary will hold is part of an established program for temporary, uncompensated missionary work, which is part of a broader international program of missionary work sponsored by the denomination. No. If no, type or print your explanation below and if needed, go to Part 9. of Form I-1 29.",
-        },
-        {
-          id: "subform41JobDescription14",
-          type: "radio",
-          label:
-            "A List of the address or addresses or location or locations where the beneficiary will be working",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Employer Attestation. following information about the prospective employment: 5. E. List of the address or addresses or location or locations where the beneficiary will be working.",
-        },
-        {
-          id: "subform42R1Sec11Explanation",
-          type: "text",
-          label: "Of Form I-1 29",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Does the petitioner attest to all of the requirements described in Item Numbers 6. through 12. below? 10. If No, type or print your explanation here. If needed, go to Part 9. of Form I-1 29.",
-        },
-        {
-          id: "subform42R1Sec1",
-          type: "radio",
-          label: "Yes",
-          required: true,
-          options: [
-            { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Does the petitioner attest to all of the requirements described in Item Numbers 6. through 12. below? 10. The offered position requires at least 20 hours of work per week. If the offered position at the petitioning organization requires fewer than 20 hours per week, the compensated service for another religious organization and the compensated service at the petitioning organization will total 20 hours per week. If the beneficiary will be self-supporting, the petitioner must submit documentation establishing that the position the beneficiary will hold is part of an established program for temporary, uncompensated missionary work, which is part of a broader international program of missionary work sponsored by the denomination. Yes.",
-        },
-        {
-          id: "subform42R1Sec11",
-          type: "radio",
-          label: "Of Form I-1 29",
-          required: true,
-          options: [
-            { value: "N", label: "No" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Does the petitioner attest to all of the requirements described in Item Numbers 6. through 12. below? 10. The offered position requires at least 20 hours of work per week. If the offered position at the petitioning organization requires fewer than 20 hours per week, the compensated service for another religious organization and the compensated service at the petitioning organization will total 20 hours per week. If the beneficiary will be self-supporting, the petitioner must submit documentation establishing that the position the beneficiary will hold is part of an established program for temporary, uncompensated missionary work, which is part of a broader international program of missionary work sponsored by the denomination. No. If no, type or print your explanation below and if needed, go to Part 9. of Form I-1 29.",
-        },
-        {
-          id: "subform42R1Sec1Yes",
-          type: "radio",
-          label: "Yes",
-          required: true,
-          options: [
-            { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Does the petitioner attest to all of the requirements described in Item Numbers 6. through 12. below? 11. The beneficiary has been a member of the petitioner&apos;s denomination for at least 2 years immediately before Form I-1 29 was filed and is otherwise qualified to perform the duties of the offered position. Yes.",
-        },
-        {
-          id: "subform42R1Sec1No",
-          type: "radio",
-          label: "Of Form I-1 29",
-          required: true,
-          options: [
-            { value: "N", label: "No" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Does the petitioner attest to all of the requirements described in Item Numbers 6. through 12. below? 11. The beneficiary has been a member of the petitioner&apos;s denomination for at least 2 years immediately before Form I-1 29 was filed and is otherwise qualified to perform the duties of the offered position. No. If no, type or print your explanation below and if needed, go to Part 9. of Form I-1 29.",
-        },
-        {
-          id: "subform42JobTitle",
-          type: "text",
-          label: "Title",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Attestation. I certify, under penalty of perjury, that the contents of this attestation and the evidence submitted with it are true and correct. Title.",
-        },
-        {
-          id: "subform43State",
-          type: "select",
-          label: "State.",
-          required: true,
-          options: [
-            { value: "", label: "" },
-            { value: "AA", label: "AA" },
-            { value: "AE", label: "AE" },
-            { value: "AK", label: "Alaska" },
-            { value: "AL", label: "Alabama" },
-            { value: "AP", label: "AP" },
-            { value: "AR", label: "Arkansas" },
-            { value: "AS", label: "American Samoa" },
-            { value: "AZ", label: "Arizona" },
-            { value: "CA", label: "California" },
-            { value: "CO", label: "Colorado" },
-            { value: "CT", label: "Connecticut" },
-            { value: "DC", label: "District of Columbia" },
-            { value: "DE", label: "Delaware" },
-            { value: "FL", label: "Florida" },
-            { value: "FM", label: "FM" },
-            { value: "GA", label: "Georgia" },
-            { value: "GU", label: "Guam" },
-            { value: "HI", label: "Hawaii" },
-            { value: "IA", label: "Iowa" },
-            { value: "ID", label: "Idaho" },
-            { value: "IL", label: "Illinois" },
-            { value: "IN", label: "Indiana" },
-            { value: "KS", label: "Kansas" },
-            { value: "KY", label: "Kentucky" },
-            { value: "LA", label: "Louisiana" },
-            { value: "MA", label: "Massachusetts" },
-            { value: "MD", label: "Maryland" },
-            { value: "ME", label: "Maine" },
-            { value: "MH", label: "MH" },
-            { value: "MI", label: "Michigan" },
-            { value: "MN", label: "Minnesota" },
-            { value: "MO", label: "Missouri" },
-            { value: "MP", label: "Northern Mariana Islands" },
-            { value: "MS", label: "Mississippi" },
-            { value: "MT", label: "Montana" },
-            { value: "NC", label: "North Carolina" },
-            { value: "ND", label: "North Dakota" },
-            { value: "NE", label: "Nebraska" },
-            { value: "NH", label: "New Hampshire" },
-            { value: "NJ", label: "New Jersey" },
-            { value: "NM", label: "New Mexico" },
-            { value: "NV", label: "Nevada" },
-            { value: "NY", label: "New York" },
-            { value: "OH", label: "Ohio" },
-            { value: "OK", label: "Oklahoma" },
-            { value: "OR", label: "Oregon" },
-            { value: "PA", label: "Pennsylvania" },
-            { value: "PR", label: "Puerto Rico" },
-            { value: "PW", label: "PW" },
-            { value: "RI", label: "Rhode Island" },
-            { value: "SC", label: "South Carolina" },
-            { value: "SD", label: "South Dakota" },
-            { value: "TN", label: "Tennessee" },
-            { value: "TX", label: "Texas" },
-            { value: "UT", label: "Utah" },
-            { value: "VA", label: "Virginia" },
-            { value: "VI", label: "U.S. Virgin Islands" },
-            { value: "VT", label: "Vermont" },
-            { value: "WA", label: "Washington" },
-            { value: "WI", label: "Wisconsin" },
-            { value: "WV", label: "West Virginia" },
-            { value: "WY", label: "Wyoming" },
-          ],
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Employer or Organization Address . State.",
-        },
-        {
-          id: "subform43Sec1AptSteFlrNumber",
-          type: "radio",
-          label: "Apartment, Suite or Floor Number",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Employer or Organization Address . If Apartment, Suite or Floor is Checked, Apartment, Suite or Floor Number.",
-        },
-        {
-          id: "subform43Sec1Unit",
-          type: "radio",
-          label: "Floor.",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "flr", label: "Flr." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Employer or Organization Address . Floor.",
-        },
-        {
-          id: "subform43Sec1Unit1",
-          type: "radio",
-          label: "Suite.",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "ste", label: "Ste." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Employer or Organization Address . Suite.",
-        },
-        {
-          id: "subform43Sec1Unit2",
-          type: "radio",
-          label: "Apartment.",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "apt", label: "Apt." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Employer or Organization Address . Apartment.",
-        },
-        {
-          id: "subform43EmployingOrgName",
-          type: "text",
-          label: "Name of Employing Organization",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. I certify, under penalty of perjury, that: Name of Employing Organization.",
-        },
-        {
-          id: "subform43NameOfReligiousDenomination",
-          type: "text",
-          label: "Name of Religious Denomination",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. I certify, under penalty of perjury, that the Employing Organization named above is affiliated with: Name of Religious Denomination.",
-        },
-        {
-          id: "subform43State1",
-          type: "select",
-          label: "State.",
-          required: true,
-          options: [
-            { value: "", label: "" },
-            { value: "AA", label: "AA" },
-            { value: "AE", label: "AE" },
-            { value: "AK", label: "Alaska" },
-            { value: "AL", label: "Alabama" },
-            { value: "AP", label: "AP" },
-            { value: "AR", label: "Arkansas" },
-            { value: "AS", label: "American Samoa" },
-            { value: "AZ", label: "Arizona" },
-            { value: "CA", label: "California" },
-            { value: "CO", label: "Colorado" },
-            { value: "CT", label: "Connecticut" },
-            { value: "DC", label: "District of Columbia" },
-            { value: "DE", label: "Delaware" },
-            { value: "FL", label: "Florida" },
-            { value: "FM", label: "FM" },
-            { value: "GA", label: "Georgia" },
-            { value: "GU", label: "Guam" },
-            { value: "HI", label: "Hawaii" },
-            { value: "IA", label: "Iowa" },
-            { value: "ID", label: "Idaho" },
-            { value: "IL", label: "Illinois" },
-            { value: "IN", label: "Indiana" },
-            { value: "KS", label: "Kansas" },
-            { value: "KY", label: "Kentucky" },
-            { value: "LA", label: "Louisiana" },
-            { value: "MA", label: "Massachusetts" },
-            { value: "MD", label: "Maryland" },
-            { value: "ME", label: "Maine" },
-            { value: "MH", label: "MH" },
-            { value: "MI", label: "Michigan" },
-            { value: "MN", label: "Minnesota" },
-            { value: "MO", label: "Missouri" },
-            { value: "MP", label: "Northern Mariana Islands" },
-            { value: "MS", label: "Mississippi" },
-            { value: "MT", label: "Montana" },
-            { value: "NC", label: "North Carolina" },
-            { value: "ND", label: "North Dakota" },
-            { value: "NE", label: "Nebraska" },
-            { value: "NH", label: "New Hampshire" },
-            { value: "NJ", label: "New Jersey" },
-            { value: "NM", label: "New Mexico" },
-            { value: "NV", label: "Nevada" },
-            { value: "NY", label: "New York" },
-            { value: "OH", label: "Ohio" },
-            { value: "OK", label: "Oklahoma" },
-            { value: "OR", label: "Oregon" },
-            { value: "PA", label: "Pennsylvania" },
-            { value: "PR", label: "Puerto Rico" },
-            { value: "PW", label: "PW" },
-            { value: "RI", label: "Rhode Island" },
-            { value: "SC", label: "South Carolina" },
-            { value: "SD", label: "South Dakota" },
-            { value: "TN", label: "Tennessee" },
-            { value: "TX", label: "Texas" },
-            { value: "UT", label: "Utah" },
-            { value: "VA", label: "Virginia" },
-            { value: "VI", label: "U.S. Virgin Islands" },
-            { value: "VT", label: "Vermont" },
-            { value: "WA", label: "Washington" },
-            { value: "WI", label: "Wisconsin" },
-            { value: "WV", label: "West Virginia" },
-            { value: "WY", label: "Wyoming" },
-          ],
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization Name and Address . State.",
-        },
-        {
-          id: "subform43AttestAptSteFlrNumber",
-          type: "radio",
-          label: "Apartment, Suite or Floor Number",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization Name and Address . If Apartment, Suite or Floor is Checked, Apartment, Suite or Floor Number.",
-        },
-        {
-          id: "subform43AttestUnit",
-          type: "radio",
-          label: "Floor.",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "flr", label: "Flr." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization Name and Address . Floor.",
-        },
-        {
-          id: "subform43AttestUnit1",
-          type: "radio",
-          label: "Suite.",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "ste", label: "Ste." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization Name and Address . Suite.",
-        },
-        {
-          id: "subform43AttestUnit2",
-          type: "radio",
-          label: "Apartment.",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "apt", label: "Apt." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization Name and Address . Apartment.",
-        },
-        {
-          id: "subform43JobTitle1",
-          type: "text",
-          label: "Title",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. I certify, under penalty of perjury, that the Employing Organization named above is affiliated with the Religious Denomination named above and that the attesting organization within the religious denomination is tax-exempt as described in section 5 0 1(C)(3) of the Internal Revenue Code of 19 86 (codified at 26 United States Code 5 01(C)(3)), any subsequent amendment or amendments, subsequent amendment, or equivalent sections of prior enactments of the Internal Revenue Code. The contents of this certification are true and correct to the best of my knowledge. Title.",
-        },
-        {
-          id: "subform43PreparerDaytimePhoneNumber1",
-          type: "tel",
-          label: "Daytime Telephone Number",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Employer or Organization&apos;s Contact Information. Daytime Telephone Number.",
-        },
-        {
-          id: "subform43PreparersFaxPhoneNumber1",
-          type: "tel",
-          label: "Fax Number",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Employer or Organization&apos;s Contact Information. Fax Number.",
-        },
-        {
-          id: "subform43PreparersFaxPhoneNumber11",
-          type: "tel",
-          label: "Fax Number",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization&apos;s Contact Information. Fax Number.",
-        },
-        {
-          id: "subform43PreparerDaytimePhoneNumber11",
-          type: "tel",
-          label: "Daytime Telephone Number",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization&apos;s Contact Information. Daytime Telephone Number.",
-        },
-        {
-          id: "subform44MiddleName11",
-          type: "text",
-          label: "Middle Name",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Middle Name.",
-        },
-        {
-          id: "subform44GivenName11",
-          type: "text",
-          label: "Given Name (First Name)",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Given Name (First Name).",
-        },
-        {
-          id: "subform44FamilyName11",
-          type: "radio",
-          label: "Family Name (Last Name)",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Family Name (Last Name).",
-        },
-        {
-          id: "subform44Gender",
-          type: "radio",
-          label: "Male",
-          required: true,
-          options: [
-            { value: "M", label: "Male" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Sex. Male.",
-        },
-        {
-          id: "subform44Gender1",
-          type: "radio",
-          label: "Female",
-          required: true,
-          options: [
-            { value: "F", label: "Female" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Sex. Female.",
-        },
-        {
-          id: "subform44SSN1",
-          type: "ssn",
-          label: "Social Security Number (optional)",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) U. S. Social Security Number (optional)",
-        },
-        {
-          id: "subform44DateOfBirth1",
-          type: "date",
-          label: "Date of Birth",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Date of Birth.",
-        },
-        {
-          id: "subform44AlienNumber1",
-          type: "text",
-          label: "Alien Registration Number (A-Number) (optional)",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Alien Registration Number (A-Number) (optional)",
-        },
-        {
-          id: "subform44MiddleName12",
-          type: "text",
-          label: "Middle Name",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) All Other Names Used (include aliases, maiden name and names from previous Marriages). Middle Name.",
-        },
-        {
-          id: "subform44GivenName12",
-          type: "text",
-          label: "Given Name (First Name)",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) All Other Names Used (include aliases, maiden name and names from previous Marriages). Given Name (First Name).",
-        },
-        {
-          id: "subform44FamilyName12",
-          type: "text",
-          label: "Family Name (Last Name)",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) All Other Names Used (include aliases, maiden name and names from previous Marriages). Family Name (Last Name).",
-        },
-        {
-          id: "subform44Att1AptSteFlrNumber",
-          type: "radio",
-          label: "Apartment, Suite or Floor Number",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). If Apartment, Suite or Floor is Checked, Apartment, Suite or Floor Number.",
-        },
-        {
-          id: "subform44Att1Unit",
-          type: "select",
-          label: "Floor.",
-          required: true,
-          options: [
-            { value: "FLR", label: "FLR" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). Floor.",
-        },
-        {
-          id: "subform44Att1Unit1",
-          type: "select",
-          label: "Suite.",
-          required: true,
-          options: [
-            { value: "STE", label: "STE" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). Suite.",
-        },
-        {
-          id: "subform44Att1Unit2",
-          type: "select",
-          label: "Apartment.",
-          required: true,
-          options: [
-            { value: "APT", label: "APT" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). Apartment.",
-        },
-        {
-          id: "subform44LineCityTown4",
-          type: "text",
-          label: "City or Town",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). City or Town.",
-        },
-        {
-          id: "subform44A1ZipCode",
-          type: "text",
-          label: "ZIP Code",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). ZIP Code.",
-        },
-        {
-          id: "subform44A1State",
-          type: "select",
-          label: "State.",
-          required: true,
-          options: [
-            { value: "", label: "" },
-            { value: "AA", label: "AA" },
-            { value: "AE", label: "AE" },
-            { value: "AK", label: "Alaska" },
-            { value: "AL", label: "Alabama" },
-            { value: "AP", label: "AP" },
-            { value: "AR", label: "Arkansas" },
-            { value: "AS", label: "American Samoa" },
-            { value: "AZ", label: "Arizona" },
-            { value: "CA", label: "California" },
-            { value: "CO", label: "Colorado" },
-            { value: "CT", label: "Connecticut" },
-            { value: "DC", label: "District of Columbia" },
-            { value: "DE", label: "Delaware" },
-            { value: "FL", label: "Florida" },
-            { value: "FM", label: "FM" },
-            { value: "GA", label: "Georgia" },
-            { value: "GU", label: "Guam" },
-            { value: "HI", label: "Hawaii" },
-            { value: "IA", label: "Iowa" },
-            { value: "ID", label: "Idaho" },
-            { value: "IL", label: "Illinois" },
-            { value: "IN", label: "Indiana" },
-            { value: "KS", label: "Kansas" },
-            { value: "KY", label: "Kentucky" },
-            { value: "LA", label: "Louisiana" },
-            { value: "MA", label: "Massachusetts" },
-            { value: "MD", label: "Maryland" },
-            { value: "ME", label: "Maine" },
-            { value: "MH", label: "MH" },
-            { value: "MI", label: "Michigan" },
-            { value: "MN", label: "Minnesota" },
-            { value: "MO", label: "Missouri" },
-            { value: "MP", label: "Northern Mariana Islands" },
-            { value: "MS", label: "Mississippi" },
-            { value: "MT", label: "Montana" },
-            { value: "NC", label: "North Carolina" },
-            { value: "ND", label: "North Dakota" },
-            { value: "NE", label: "Nebraska" },
-            { value: "NH", label: "New Hampshire" },
-            { value: "NJ", label: "New Jersey" },
-            { value: "NM", label: "New Mexico" },
-            { value: "NV", label: "Nevada" },
-            { value: "NY", label: "New York" },
-            { value: "OH", label: "Ohio" },
-            { value: "OK", label: "Oklahoma" },
-            { value: "OR", label: "Oregon" },
-            { value: "PA", label: "Pennsylvania" },
-            { value: "PR", label: "Puerto Rico" },
-            { value: "PW", label: "PW" },
-            { value: "RI", label: "Rhode Island" },
-            { value: "SC", label: "South Carolina" },
-            { value: "SD", label: "South Dakota" },
-            { value: "TN", label: "Tennessee" },
-            { value: "TX", label: "Texas" },
-            { value: "UT", label: "Utah" },
-            { value: "VA", label: "Virginia" },
-            { value: "VI", label: "U.S. Virgin Islands" },
-            { value: "VT", label: "Vermont" },
-            { value: "WA", label: "Washington" },
-            { value: "WI", label: "Wisconsin" },
-            { value: "WV", label: "West Virginia" },
-            { value: "WY", label: "Wyoming" },
-          ],
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). State.",
-        },
-        {
-          id: "subform44StreetNumberName4",
-          type: "radio",
-          label: "Street Number and Name",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Street Number and Name.",
-        },
-        {
-          id: "subform44ForUnit",
-          type: "radio",
-          label: "Suite.",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "ste", label: "Ste." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Suite.",
-        },
-        {
-          id: "subform44ForUnit1",
-          type: "radio",
-          label: "Apartment.",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "apt", label: "Apt." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Apartment.",
-        },
-        {
-          id: "subform44ForUnit2",
-          type: "radio",
-          label: "Floor.",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "flr", label: "Flr." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Floor.",
-        },
-        {
-          id: "subform44ForAptSteFlrNumber",
-          type: "text",
-          label: "Apartment, Suite or Floor Number",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). If Apartment, Suite or Floor is Checked, Apartment, Suite or Floor Number.",
-        },
-        {
-          id: "subform44A1Province",
-          type: "text",
-          label: "Province, if applicable",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Province, if applicable.",
-        },
-        {
-          id: "subform44A1PostalCode",
-          type: "text",
-          label: "Postal Code, if applicable",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Postal Code, if applicable.",
-        },
-        {
-          id: "subform44A1Country",
-          type: "text",
-          label: "Country",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Country.",
-        },
-        {
-          id: "subform44LineCountry2",
-          type: "text",
-          label: "Country of Birth",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Country of Birth.",
-        },
-        {
-          id: "subform44LineCountry3",
-          type: "text",
-          label: "Country of Citizenship or Nationality.",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Country of Citizenship or Nationality.",
-        },
-        {
-          id: "subform44ExpDate",
-          type: "date",
-          label: "Date the Passport or Travel Document expires",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Date the Passport or Travel Document expires.",
-        },
-        {
-          id: "subform44ArrivalDeparture",
-          type: "text",
-          label: "I-94 Arrival-Departure Record Number",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: I-94 Arrival-Departure Record Number.",
-        },
-        {
-          id: "subform44CurrentNon",
-          type: "select",
-          label: "Do not include the person you named on the Form I-1 29",
-          required: true,
-          options: [
-            { value: "", label: "" },
-            { value: "1B1", label: "1B1" },
-            { value: "1B2", label: "1B2" },
-            { value: "1B3", label: "1B3" },
-            { value: "1B4", label: "1B4" },
-            { value: "1B5", label: "1B5" },
-            { value: "1BS", label: "1BS" },
-            { value: "A1", label: "A1" },
-            { value: "A2", label: "A2" },
-            { value: "A3", label: "A3" },
-            { value: "AS", label: "American Samoa" },
-            { value: "ASD", label: "ASD" },
-            { value: "AW", label: "AW" },
-            { value: "B1", label: "B1" },
-            { value: "B1A", label: "B1A" },
-            { value: "B1B", label: "B1B" },
-            { value: "B1C", label: "B1C" },
-            { value: "B1D", label: "B1D" },
-            { value: "B2", label: "B2" },
-            { value: "BE", label: "BE" },
-            { value: "C1", label: "C1" },
-            { value: "C2", label: "C2" },
-            { value: "C3", label: "C3" },
-            { value: "C4", label: "C4" },
-            { value: "CC", label: "CC" },
-            { value: "CH", label: "CH" },
-            { value: "CP", label: "CP" },
-            { value: "CW1", label: "CW1" },
-            { value: "CW2", label: "CW2" },
-            { value: "D1", label: "D1" },
-            { value: "D2", label: "D2" },
-            { value: "DA", label: "DA" },
-            { value: "DE", label: "Delaware" },
-            { value: "DT", label: "DT" },
-            { value: "DX", label: "DX" },
-            { value: "E1", label: "E1" },
-            { value: "E2", label: "E2" },
-            { value: "E2C", label: "E2C" },
-            { value: "E3", label: "E3" },
-            { value: "EAO", label: "EAO" },
-            { value: "EWI", label: "EWI" },
-            { value: "X", label: "X" },
-            { value: "F1", label: "F1" },
-            { value: "F2", label: "F2" },
-            { value: "FSM", label: "FSM" },
-            { value: "FUG", label: "FUG" },
-            { value: "G1", label: "G1" },
-            { value: "G2", label: "G2" },
-            { value: "G3", label: "G3" },
-            { value: "G4", label: "G4" },
-            { value: "G5", label: "G5" },
-            { value: "GB", label: "GB" },
-            { value: "GT", label: "GT" },
-            { value: "H1", label: "H1" },
-            { value: "H1A", label: "H1A" },
-            { value: "H1B", label: "H1B" },
-            { value: "H1C", label: "H1C" },
-            { value: "H2", label: "H2" },
-            { value: "H2A", label: "H2A" },
-            { value: "H2B", label: "H2B" },
-            { value: "H2R", label: "H2R" },
-            { value: "H3", label: "H3" },
-            { value: "H3A", label: "H3A" },
-            { value: "H3B", label: "H3B" },
-            { value: "H4", label: "H4" },
-            { value: "HSC", label: "HSC" },
-            { value: "I", label: "I" },
-            { value: "IMM", label: "IMM" },
-            { value: "IN", label: "Indiana" },
-            { value: "J1", label: "J1" },
-            { value: "J1S", label: "J1S" },
-            { value: "J2", label: "J2" },
-            { value: "J2S", label: "J2S" },
-            { value: "K1", label: "K1" },
-            { value: "K2", label: "K2" },
-            { value: "K3", label: "K3" },
-            { value: "K4", label: "K4" },
-            { value: "L1", label: "L1" },
-            { value: "L1A", label: "L1A" },
-            { value: "L1B", label: "L1B" },
-            { value: "L2", label: "L2" },
-            { value: "LZ", label: "LZ" },
-            { value: "M1", label: "M1" },
-            { value: "M2", label: "M2" },
-            { value: "MIS", label: "MIS" },
-            { value: "ML", label: "ML" },
-            { value: "N1", label: "N1" },
-            { value: "N2", label: "N2" },
-            { value: "N3", label: "N3" },
-            { value: "N4", label: "N4" },
-            { value: "N5", label: "N5" },
-            { value: "N6", label: "N6" },
-            { value: "N7", label: "N7" },
-            { value: "N8", label: "N8" },
-            { value: "N9", label: "N9" },
-            { value: "O1", label: "O1" },
-            { value: "O1A", label: "O1A" },
-            { value: "O1B", label: "O1B" },
-            { value: "O2", label: "O2" },
-            { value: "O3", label: "O3" },
-            { value: "OP", label: "OP" },
-            { value: "P1", label: "P1" },
-            { value: "P1A", label: "P1A" },
-            { value: "P1B", label: "P1B" },
-            { value: "P1S", label: "P1S" },
-            { value: "P2", label: "P2" },
-            { value: "P2S", label: "P2S" },
-            { value: "P3", label: "P3" },
-            { value: "P3S", label: "P3S" },
-            { value: "P4", label: "P4" },
-            { value: "PAL", label: "PAL" },
-            { value: "PAR", label: "PAR" },
-            { value: "PI", label: "PI" },
-            { value: "Q1", label: "Q1" },
-            { value: "Q2", label: "Q2" },
-            { value: "Q3", label: "Q3" },
-            { value: "R1", label: "R1" },
-            { value: "R2", label: "R2" },
-            { value: "RE", label: "RE" },
-            { value: "RE5", label: "RE5" },
-            { value: "RW", label: "RW" },
-            { value: "S1", label: "S1" },
-            { value: "S2", label: "S2" },
-            { value: "S9", label: "S9" },
-            { value: "SDF", label: "SDF" },
-            { value: "ST", label: "ST" },
-            { value: "T1", label: "T1" },
-            { value: "T2", label: "T2" },
-            { value: "T3", label: "T3" },
-            { value: "T4", label: "T4" },
-            { value: "T5", label: "T5" },
-            { value: "TB", label: "TB" },
-            { value: "TC", label: "TC" },
-            { value: "TD", label: "TD" },
-            { value: "TN1", label: "TN1" },
-            { value: "TN2", label: "TN2" },
-            { value: "TWO", label: "TWO" },
-            { value: "U1", label: "U1" },
-            { value: "U2", label: "U2" },
-            { value: "U3", label: "U3" },
-            { value: "U4", label: "U4" },
-            { value: "U5", label: "U5" },
-            { value: "UN", label: "UN" },
-            { value: "UU", label: "UU" },
-            { value: "V1", label: "V1" },
-            { value: "V2", label: "V2" },
-            { value: "V3", label: "V3" },
-            { value: "WB", label: "WB" },
-            { value: "WD", label: "WD" },
-            { value: "WI", label: "Wisconsin" },
-            { value: "WT", label: "WT" },
-          ],
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Current Nonimmigrant Status from list.",
-        },
-        {
-          id: "subform44DateStatusExpires",
-          type: "date",
-          label: "Date the Status Expires",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Date the Status Expires.",
-        },
-        {
-          id: "subform44ExpDate1",
-          type: "date",
-          label: "Date the Passport or Travel Document was Issued",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Date the Passport or Travel Document was Issued.",
-        },
-        {
-          id: "subform44DateofArrival",
-          type: "date",
-          label: "Date of Last Arrival",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Date of Last Arrival.",
-        },
-        {
-          id: "subform44Passport",
-          type: "text",
-          label:
-            "Student and Exchange Visitor Information System (S E V I S) Number (optional)",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Student and Exchange Visitor Information System (S E V I S) Number (optional)",
-        },
-        {
-          id: "subform44Passport1",
-          type: "text",
-          label: "Employment Authorization Document (E A D) Number (optional)",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Employment Authorization Document (E A D) Number (optional)",
-        },
-        {
-          id: "subform44Passport2",
-          type: "text",
-          label: "Passport or Travel Document Number",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Passport or Travel Document Number.",
-        },
-        {
-          id: "subform44LineCountry4",
-          type: "text",
-          label: "Country of Issuance for Passport or Travel Document",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Country of Issuance for Passport or Travel Document.",
-        },
-        {
-          id: "subform45MiddleName13",
-          type: "text",
-          label: "Middle Name",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Middle Name.",
-        },
-        {
-          id: "subform45GivenName13",
-          type: "text",
-          label: "Given Name (First Name)",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Given Name (First Name).",
-        },
-        {
-          id: "subform45FamilyName13",
-          type: "radio",
-          label: "Family Name (Last Name)",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Family Name (Last Name).",
-        },
-        {
-          id: "subform45Gender",
-          type: "radio",
-          label: "Male",
-          required: true,
-          options: [
-            { value: "M", label: "Male" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Sex. Male.",
-        },
-        {
-          id: "subform45Gender1",
-          type: "radio",
-          label: "Female",
-          required: true,
-          options: [
-            { value: "F", label: "Female" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Sex. Female.",
-        },
-        {
-          id: "subform45SSN2",
-          type: "ssn",
-          label: "Social Security Number (optional)",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) U. S. Social Security Number (optional)",
-        },
-        {
-          id: "subform45DateOfBirth2",
-          type: "date",
-          label: "Date of Birth",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Date of Birth.",
-        },
-        {
-          id: "subform45AlienNumber2",
-          type: "text",
-          label: "Alien Registration Number (A-Number) (optional)",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Alien Registration Number (A-Number) (optional)",
-        },
-        {
-          id: "subform45MiddleName14",
-          type: "text",
-          label: "Middle Name",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) All Other Names Used (include aliases, maiden name and names from previous Marriages). Middle Name.",
-        },
-        {
-          id: "subform45GivenName14",
-          type: "text",
-          label: "Given Name (First Name)",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) All Other Names Used (include aliases, maiden name and names from previous Marriages). Given Name (First Name).",
-        },
-        {
-          id: "subform45FamilyName14",
-          type: "text",
-          label: "Family Name (Last Name)",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) All Other Names Used (include aliases, maiden name and names from previous Marriages). Family Name (Last Name).",
-        },
-        {
-          id: "subform45Att2AptSteFlrNumber",
-          type: "radio",
-          label: "Apartment, Suite or Floor Number",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). If Apartment, Suite or Floor is Checked, Apartment, Suite or Floor Number.",
-        },
-        {
-          id: "subform45Att2Unit",
-          type: "select",
-          label: "Floor.",
-          required: true,
-          options: [
-            { value: "FLR", label: "FLR" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). Floor.",
-        },
-        {
-          id: "subform45Att2Unit1",
-          type: "select",
-          label: "Suite.",
-          required: true,
-          options: [
-            { value: "STE", label: "STE" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). Suite.",
-        },
-        {
-          id: "subform45Att2Unit2",
-          type: "select",
-          label: "Apartment.",
-          required: true,
-          options: [
-            { value: "APT", label: "APT" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). Apartment.",
-        },
-        {
-          id: "subform45LineCityTown5",
-          type: "text",
-          label: "City or Town",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). City or Town.",
-        },
-        {
-          id: "subform45FRZipCode",
-          type: "text",
-          label: "ZIP Code",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). ZIP Code.",
-        },
-        {
-          id: "subform45FRState",
-          type: "select",
-          label: "State.",
-          required: true,
-          options: [
-            { value: "", label: "" },
-            { value: "AA", label: "AA" },
-            { value: "AE", label: "AE" },
-            { value: "AK", label: "Alaska" },
-            { value: "AL", label: "Alabama" },
-            { value: "AP", label: "AP" },
-            { value: "AR", label: "Arkansas" },
-            { value: "AS", label: "American Samoa" },
-            { value: "AZ", label: "Arizona" },
-            { value: "CA", label: "California" },
-            { value: "CO", label: "Colorado" },
-            { value: "CT", label: "Connecticut" },
-            { value: "DC", label: "District of Columbia" },
-            { value: "DE", label: "Delaware" },
-            { value: "FL", label: "Florida" },
-            { value: "FM", label: "FM" },
-            { value: "GA", label: "Georgia" },
-            { value: "GU", label: "Guam" },
-            { value: "HI", label: "Hawaii" },
-            { value: "IA", label: "Iowa" },
-            { value: "ID", label: "Idaho" },
-            { value: "IL", label: "Illinois" },
-            { value: "IN", label: "Indiana" },
-            { value: "KS", label: "Kansas" },
-            { value: "KY", label: "Kentucky" },
-            { value: "LA", label: "Louisiana" },
-            { value: "MA", label: "Massachusetts" },
-            { value: "MD", label: "Maryland" },
-            { value: "ME", label: "Maine" },
-            { value: "MH", label: "MH" },
-            { value: "MI", label: "Michigan" },
-            { value: "MN", label: "Minnesota" },
-            { value: "MO", label: "Missouri" },
-            { value: "MP", label: "Northern Mariana Islands" },
-            { value: "MS", label: "Mississippi" },
-            { value: "MT", label: "Montana" },
-            { value: "NC", label: "North Carolina" },
-            { value: "ND", label: "North Dakota" },
-            { value: "NE", label: "Nebraska" },
-            { value: "NH", label: "New Hampshire" },
-            { value: "NJ", label: "New Jersey" },
-            { value: "NM", label: "New Mexico" },
-            { value: "NV", label: "Nevada" },
-            { value: "NY", label: "New York" },
-            { value: "OH", label: "Ohio" },
-            { value: "OK", label: "Oklahoma" },
-            { value: "OR", label: "Oregon" },
-            { value: "PA", label: "Pennsylvania" },
-            { value: "PR", label: "Puerto Rico" },
-            { value: "PW", label: "PW" },
-            { value: "RI", label: "Rhode Island" },
-            { value: "SC", label: "South Carolina" },
-            { value: "SD", label: "South Dakota" },
-            { value: "TN", label: "Tennessee" },
-            { value: "TX", label: "Texas" },
-            { value: "UT", label: "Utah" },
-            { value: "VA", label: "Virginia" },
-            { value: "VI", label: "U.S. Virgin Islands" },
-            { value: "VT", label: "Vermont" },
-            { value: "WA", label: "Washington" },
-            { value: "WI", label: "Wisconsin" },
-            { value: "WV", label: "West Virginia" },
-            { value: "WY", label: "Wyoming" },
-          ],
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). State.",
-        },
-        {
-          id: "subform45StreetNumberName5",
-          type: "radio",
-          label: "Street Number and Name",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Street Number and Name.",
-        },
-        {
-          id: "subform45For2Unit",
-          type: "radio",
-          label: "Suite.",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "ste", label: "Ste." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Suite.",
-        },
-        {
-          id: "subform45For2Unit1",
-          type: "radio",
-          label: "Apartment.",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "apt", label: "Apt." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Apartment.",
-        },
-        {
-          id: "subform45For2Unit2",
-          type: "radio",
-          label: "Floor.",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "flr", label: "Flr." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Floor.",
-        },
-        {
-          id: "subform45For2AptSteFlrNumber",
-          type: "text",
-          label: "Apartment, Suite or Floor Number",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). If Apartment, Suite or Floor is Checked, Apartment, Suite or Floor Number.",
-        },
-        {
-          id: "subform45FRProvince",
-          type: "text",
-          label: "Province, if applicable",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Province, if applicable.",
-        },
-        {
-          id: "subform45FRPostalCode",
-          type: "text",
-          label: "Postal Code, if applicable",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Postal Code, if applicable.",
-        },
-        {
-          id: "subform45FRCountry",
-          type: "text",
-          label: "Country",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Country.",
-        },
-        {
-          id: "subform45LineCountry5",
-          type: "text",
-          label: "Country of Birth",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Country of Birth.",
-        },
-        {
-          id: "subform45LineCountry6",
-          type: "text",
-          label: "Country of Citizenship or Nationality.",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Foreign Address (Complete Address). Country of Citizenship or Nationality.",
-        },
-        {
-          id: "subform45ExpDate2",
-          type: "date",
-          label: "Date the Passport or Travel Document expires",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Date the Passport or Travel Document expires.",
-        },
-        {
-          id: "subform45ArrivalDeparture1",
-          type: "text",
-          label: "I-94 Arrival-Departure Record Number",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: I-94 Arrival-Departure Record Number.",
-        },
-        {
-          id: "subform45CurrentNon1",
-          type: "select",
-          label: "Do not include the person you named on the Form I-1 29",
-          required: true,
-          options: [
-            { value: "", label: "" },
-            { value: "1B1", label: "1B1" },
-            { value: "1B2", label: "1B2" },
-            { value: "1B3", label: "1B3" },
-            { value: "1B4", label: "1B4" },
-            { value: "1B5", label: "1B5" },
-            { value: "1BS", label: "1BS" },
-            { value: "A1", label: "A1" },
-            { value: "A2", label: "A2" },
-            { value: "A3", label: "A3" },
-            { value: "AS", label: "American Samoa" },
-            { value: "ASD", label: "ASD" },
-            { value: "AW", label: "AW" },
-            { value: "B1", label: "B1" },
-            { value: "B1A", label: "B1A" },
-            { value: "B1B", label: "B1B" },
-            { value: "B1C", label: "B1C" },
-            { value: "B1D", label: "B1D" },
-            { value: "B2", label: "B2" },
-            { value: "BE", label: "BE" },
-            { value: "C1", label: "C1" },
-            { value: "C2", label: "C2" },
-            { value: "C3", label: "C3" },
-            { value: "C4", label: "C4" },
-            { value: "CC", label: "CC" },
-            { value: "CH", label: "CH" },
-            { value: "CP", label: "CP" },
-            { value: "CW1", label: "CW1" },
-            { value: "CW2", label: "CW2" },
-            { value: "D1", label: "D1" },
-            { value: "D2", label: "D2" },
-            { value: "DA", label: "DA" },
-            { value: "DE", label: "Delaware" },
-            { value: "DT", label: "DT" },
-            { value: "DX", label: "DX" },
-            { value: "E1", label: "E1" },
-            { value: "E2", label: "E2" },
-            { value: "E2C", label: "E2C" },
-            { value: "E3", label: "E3" },
-            { value: "EAO", label: "EAO" },
-            { value: "EWI", label: "EWI" },
-            { value: "X", label: "X" },
-            { value: "F1", label: "F1" },
-            { value: "F2", label: "F2" },
-            { value: "FSM", label: "FSM" },
-            { value: "FUG", label: "FUG" },
-            { value: "G1", label: "G1" },
-            { value: "G2", label: "G2" },
-            { value: "G3", label: "G3" },
-            { value: "G4", label: "G4" },
-            { value: "G5", label: "G5" },
-            { value: "GB", label: "GB" },
-            { value: "GT", label: "GT" },
-            { value: "H1", label: "H1" },
-            { value: "H1A", label: "H1A" },
-            { value: "H1B", label: "H1B" },
-            { value: "H1C", label: "H1C" },
-            { value: "H2", label: "H2" },
-            { value: "H2A", label: "H2A" },
-            { value: "H2B", label: "H2B" },
-            { value: "H2R", label: "H2R" },
-            { value: "H3", label: "H3" },
-            { value: "H3A", label: "H3A" },
-            { value: "H3B", label: "H3B" },
-            { value: "H4", label: "H4" },
-            { value: "HSC", label: "HSC" },
-            { value: "I", label: "I" },
-            { value: "IMM", label: "IMM" },
-            { value: "IN", label: "Indiana" },
-            { value: "J1", label: "J1" },
-            { value: "J1S", label: "J1S" },
-            { value: "J2", label: "J2" },
-            { value: "J2S", label: "J2S" },
-            { value: "K1", label: "K1" },
-            { value: "K2", label: "K2" },
-            { value: "K3", label: "K3" },
-            { value: "K4", label: "K4" },
-            { value: "L1", label: "L1" },
-            { value: "L1A", label: "L1A" },
-            { value: "L1B", label: "L1B" },
-            { value: "L2", label: "L2" },
-            { value: "LZ", label: "LZ" },
-            { value: "M1", label: "M1" },
-            { value: "M2", label: "M2" },
-            { value: "MIS", label: "MIS" },
-            { value: "ML", label: "ML" },
-            { value: "N1", label: "N1" },
-            { value: "N2", label: "N2" },
-            { value: "N3", label: "N3" },
-            { value: "N4", label: "N4" },
-            { value: "N5", label: "N5" },
-            { value: "N6", label: "N6" },
-            { value: "N7", label: "N7" },
-            { value: "N8", label: "N8" },
-            { value: "N9", label: "N9" },
-            { value: "O1", label: "O1" },
-            { value: "O1A", label: "O1A" },
-            { value: "O1B", label: "O1B" },
-            { value: "O2", label: "O2" },
-            { value: "O3", label: "O3" },
-            { value: "OP", label: "OP" },
-            { value: "P1", label: "P1" },
-            { value: "P1A", label: "P1A" },
-            { value: "P1B", label: "P1B" },
-            { value: "P1S", label: "P1S" },
-            { value: "P2", label: "P2" },
-            { value: "P2S", label: "P2S" },
-            { value: "P3", label: "P3" },
-            { value: "P3S", label: "P3S" },
-            { value: "P4", label: "P4" },
-            { value: "PAL", label: "PAL" },
-            { value: "PAR", label: "PAR" },
-            { value: "PI", label: "PI" },
-            { value: "Q1", label: "Q1" },
-            { value: "Q2", label: "Q2" },
-            { value: "Q3", label: "Q3" },
-            { value: "R1", label: "R1" },
-            { value: "R2", label: "R2" },
-            { value: "RE", label: "RE" },
-            { value: "RE5", label: "RE5" },
-            { value: "RW", label: "RW" },
-            { value: "S1", label: "S1" },
-            { value: "S2", label: "S2" },
-            { value: "S9", label: "S9" },
-            { value: "SDF", label: "SDF" },
-            { value: "ST", label: "ST" },
-            { value: "T1", label: "T1" },
-            { value: "T2", label: "T2" },
-            { value: "T3", label: "T3" },
-            { value: "T4", label: "T4" },
-            { value: "T5", label: "T5" },
-            { value: "TB", label: "TB" },
-            { value: "TC", label: "TC" },
-            { value: "TD", label: "TD" },
-            { value: "TN1", label: "TN1" },
-            { value: "TN2", label: "TN2" },
-            { value: "TWO", label: "TWO" },
-            { value: "U1", label: "U1" },
-            { value: "U2", label: "U2" },
-            { value: "U3", label: "U3" },
-            { value: "U4", label: "U4" },
-            { value: "U5", label: "U5" },
-            { value: "UN", label: "UN" },
-            { value: "UU", label: "UU" },
-            { value: "V1", label: "V1" },
-            { value: "V2", label: "V2" },
-            { value: "V3", label: "V3" },
-            { value: "WB", label: "WB" },
-            { value: "WD", label: "WD" },
-            { value: "WI", label: "Wisconsin" },
-            { value: "WT", label: "WT" },
-          ],
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Current Nonimmigrant Status from list.",
-        },
-        {
-          id: "subform45DateStatusExpires1",
-          type: "date",
-          label: "Date the Status Expires",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Date the Status Expires.",
-        },
-        {
-          id: "subform45ExpDate3",
-          type: "date",
-          label: "Date the Passport or Travel Document was Issued",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Date the Passport or Travel Document was Issued.",
-        },
-        {
-          id: "subform45DateofArrival1",
-          type: "date",
-          label: "Date of Last Arrival",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Date of Last Arrival.",
-        },
-        {
-          id: "subform45SEVIS",
-          type: "text",
-          label:
-            "Student and Exchange Visitor Information System (S E V I S) Number (optional)",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Student and Exchange Visitor Information System (S E V I S) Number (optional)",
-        },
-        {
-          id: "subform45EAD",
-          type: "text",
-          label: "Employment Authorization Document (E A D) Number (optional)",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Employment Authorization Document (E A D) Number (optional)",
-        },
-        {
-          id: "subform45Passport3",
-          type: "text",
-          label: "Passport or Travel Document Number",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Passport or Travel Document Number.",
-        },
-        {
-          id: "subform45LineCountry7",
-          type: "text",
-          label: "Country of Issuance for Passport or Travel Document",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) If in the United States: Country of Issuance for Passport or Travel Document.",
         },
       ],
     },
     {
-      id: "part1",
-      title: "Information About You",
+      id: "section_3",
+      title: "Part 4. Processing Information",
       questions: [
         {
-          id: "part1.subformZipCode",
+          id: "line.country",
           type: "text",
-          label: "ZIP Code",
-          required: true,
-          helpText: "ZIP Code.",
+          label: "Line - Country",
+          required: false,
         },
         {
-          id: "part1.subformState",
-          type: "select",
-          label: "State",
-          required: true,
+          id: "line2b.streetNumberName",
+          type: "text",
+          label: "Line2b - Street Number Name",
+          required: false,
+        },
+        {
+          id: "line2b2.aptSteFlrNumber",
+          type: "text",
+          label: "Apt. / Ste. / Flr.",
+          required: false,
+        },
+        {
+          id: "line2b2.unit",
+          type: "checkbox",
+          label: "Line Unit",
+          required: false,
           options: [
-            { value: "", label: "" },
-            { value: "AA", label: "AA" },
-            { value: "AE", label: "AE" },
-            { value: "AK", label: "Alaska" },
-            { value: "AL", label: "Alabama" },
-            { value: "AP", label: "AP" },
-            { value: "AR", label: "Arkansas" },
-            { value: "AS", label: "American Samoa" },
-            { value: "AZ", label: "Arizona" },
-            { value: "CA", label: "California" },
-            { value: "CO", label: "Colorado" },
-            { value: "CT", label: "Connecticut" },
-            { value: "DC", label: "District of Columbia" },
-            { value: "DE", label: "Delaware" },
-            { value: "FL", label: "Florida" },
-            { value: "FM", label: "FM" },
-            { value: "GA", label: "Georgia" },
-            { value: "GU", label: "Guam" },
-            { value: "HI", label: "Hawaii" },
-            { value: "IA", label: "Iowa" },
-            { value: "ID", label: "Idaho" },
-            { value: "IL", label: "Illinois" },
-            { value: "IN", label: "Indiana" },
-            { value: "KS", label: "Kansas" },
-            { value: "KY", label: "Kentucky" },
-            { value: "LA", label: "Louisiana" },
-            { value: "MA", label: "Massachusetts" },
-            { value: "MD", label: "Maryland" },
-            { value: "ME", label: "Maine" },
-            { value: "MH", label: "MH" },
-            { value: "MI", label: "Michigan" },
-            { value: "MN", label: "Minnesota" },
-            { value: "MO", label: "Missouri" },
-            { value: "MP", label: "Northern Mariana Islands" },
-            { value: "MS", label: "Mississippi" },
-            { value: "MT", label: "Montana" },
-            { value: "NC", label: "North Carolina" },
-            { value: "ND", label: "North Dakota" },
-            { value: "NE", label: "Nebraska" },
-            { value: "NH", label: "New Hampshire" },
-            { value: "NJ", label: "New Jersey" },
-            { value: "NM", label: "New Mexico" },
-            { value: "NV", label: "Nevada" },
-            { value: "NY", label: "New York" },
-            { value: "OH", label: "Ohio" },
-            { value: "OK", label: "Oklahoma" },
-            { value: "OR", label: "Oregon" },
-            { value: "PA", label: "Pennsylvania" },
-            { value: "PR", label: "Puerto Rico" },
-            { value: "PW", label: "PW" },
-            { value: "RI", label: "Rhode Island" },
-            { value: "SC", label: "South Carolina" },
-            { value: "SD", label: "South Dakota" },
-            { value: "TN", label: "Tennessee" },
-            { value: "TX", label: "Texas" },
-            { value: "UT", label: "Utah" },
-            { value: "VA", label: "Virginia" },
-            { value: "VI", label: "U.S. Virgin Islands" },
-            { value: "VT", label: "Vermont" },
-            { value: "WA", label: "Washington" },
-            { value: "WI", label: "Wisconsin" },
-            { value: "WV", label: "West Virginia" },
-            { value: "WY", label: "Wyoming" },
+            { value: "STE", label: "Ste" },
+            { value: "APT", label: "Apt" },
+            { value: "FLR", label: "Flr" },
           ],
-          helpText: "State.",
         },
+
         {
-          id: "part1.subformPostalCode",
+          id: "line2c.cityTown",
           type: "text",
-          label: "Postal Code, if applicable",
-          required: true,
-          helpText: "Postal Code, if applicable.",
+          label: "Line2c - City Town",
+          required: false,
         },
         {
-          id: "part1.subformProvince",
+          id: "line2g2.province",
           type: "text",
-          label: "Province, if applicable",
-          required: true,
-          helpText: "Province, if applicable.",
+          label: "Line2g2 - Province",
+          required: false,
         },
         {
-          id: "part1.subformCountry",
+          id: "line2g2.province_2",
           type: "text",
-          label: "Country",
-          required: true,
-          helpText: "Country.",
+          label: "Line2g2 - Province_2",
+          required: false,
         },
         {
-          id: "part1.subformNo",
+          id: "line3f.postalCode",
+          type: "text",
+          label: "Line3f - Postal Code",
+          required: false,
+        },
+
+        {
+          id: "p4Line11a",
           type: "radio",
           label:
-            "Are you a nonprofit organized as tax exempt or a governmental research organization? No",
-          required: true,
+            "Has any beneficiary in this petition ever been a J-1 exchange visitor or J-2 dependent of a J-1 exchange visitor?",
+          required: false,
           options: [
             { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
+            { value: "N", label: "No" },
           ],
-          helpText:
-            "6. Are you a nonprofit organized as tax exempt or a governmental research organization? No.",
         },
+
         {
-          id: "part1.subformYes",
+          id: "p4.line11b",
+          type: "text",
+          label:
+            "P4 - If you checked yes in Item Number 11.a., provide the dates the beneficiary maintained status as a J-1 exchange visitor or J-2 dependent. Also, provide evidence of this status by attaching a copy of either a DS-2019, Certificate of Eligibility for Exchange Visitor (J-1) Status, a Form IAP-66, or a copy of the passport that includes the J visa stamp",
+          required: false,
+        },
+        // =====
+
+        // =====
+        {
+          id: "p4Line10",
           type: "radio",
           label:
-            "Are you a nonprofit organized as tax exempt or a governmental research organization? Yes",
-          required: true,
+            "If you are filing for an entertainment group, has any beneficiary in this petition not been with the group for at least one year?",
+          required: false,
+          options: [
+            {
+              value: "Y",
+              label:
+                "Yes. If yes, proceed to Part 9. and type or print your explanation.",
+            },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "p4Line2.checkbox",
+          type: "radio",
+          label: "Does each person in this petition have a valid passport?",
+          required: false,
           options: [
             { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
+            { value: "N", label: "No" },
           ],
-          helpText:
-            "6. Are you a nonprofit organized as tax exempt or a governmental research organization? Yes.",
         },
         {
-          id: "part1.subform33dmajorleague",
+          id: "p4Line3.",
           type: "radio",
-          label: "P-1 Major League Sports",
-          required: true,
+          label: "Are you filing any other petitions with this one?",
+          required: false,
           options: [
-            {
-              value: "1",
-              label:
-                "29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). D. P-1 Major League Sports.",
-            },
-            { value: "Off", label: "Off" },
+            { value: "Y", label: "If yes, how many" },
+            { value: "N", label: "No" },
           ],
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). D. P-1 Major League Sports.",
         },
+
         {
-          id: "part1.subform33e",
+          id: "p4Line3.howMany",
+          type: "text",
+          label: "P4 Line3 - How Many",
+          required: false,
+          conditional: { dependsOn: "p4Line3.", value: "Y" },
+        },
+
+        {
+          id: "p4Line4.",
           type: "radio",
           label:
-            "P-1 Athlete or Athletic/Entertainment Group (includes minor league sports not affiliated with Maj.",
-          required: true,
+            "Are you filing any applications for replacement/initial I-94, Arrival-Departure Records with this petition? Note that if the beneficiary was issued an electronic Form I-94 by CBP when he/she was admitted to the United States at an air or sea port, he/ she may be able to obtain the Form I-94 from the CBP Website at www.cbp.gov/i94 instead of filing an application for a replacement/initial I-94.",
+          required: false,
           options: [
-            {
-              value: "1",
-              label:
-                "29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). E. P-1 Athlete or Athletic/Entertainment Group (includes minor league sports not affiliated with Major League Sports).",
-            },
-            { value: "Off", label: "Off" },
+            { value: "Y", label: "If yes, how many" },
+            { value: "N", label: "No" },
           ],
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). E. P-1 Athlete or Athletic/Entertainment Group (includes minor league sports not affiliated with Major League Sports).",
         },
         {
-          id: "part1.subform33fS",
+          id: "p4Line4.howMany",
+          type: "text",
+          label: "P4 Line4 - How Many",
+          required: false,
+          conditional: { dependsOn: "p4Line4.", value: "Y" },
+        },
+
+        // {
+        //   id: "p4Line5.howMany_2",
+        //   type: "text",
+        //   label: "P4 Line5 - How Many_2",
+        //   required: false,
+        // },
+        {
+          id: "p4Line5.",
           type: "radio",
-          label: "P-1 S Essential Support Personnel for P-1",
-          required: true,
+          label:
+            "Are you filing any applications for dependents with this petition?",
+          required: false,
+          options: [
+            { value: "Y", label: "If yes, how many" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "p4Line5.howMany",
+          type: "text",
+          label: "P4 Line5 - How Many",
+          required: false,
+          conditional: { dependsOn: "p4Line5.", value: "Y" },
+        },
+
+        {
+          id: "p4Line6.",
+          type: "radio",
+          label: "Is any beneficiary in this petition in removal proceedings?",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "p4Line7",
+          type: "radio",
+          label:
+            "Have you ever filed an immigrant petition for any beneficiary in this petition?",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "p4Line8",
+          type: "radio",
+          label: "Did you indicate you were filing a new petition in Part 2.?",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "p4Line8a.",
+          type: "radio",
+          label:
+            "Has any beneficiary in this petition ever been given the classification you are now requesting within the last seven years?",
+          required: false,
           options: [
             {
-              value: "1",
+              value: "Y",
               label:
-                "29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). F. P-1 S Essential Support Personnel for P-1.",
+                "Yes. If yes, proceed to Part 9. and type or print your explanation.",
             },
-            { value: "Off", label: "Off" },
+            { value: "N", label: "No" },
           ],
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). F. P-1 S Essential Support Personnel for P-1.",
+        },
+
+        {
+          id: "p4Line8b.",
+          type: "radio",
+          label:
+            "Has any beneficiary in this petition ever been denied the classification you are now requesting within the last seven years?",
+          required: false,
+          options: [
+            {
+              value: "Y",
+              label:
+                "Yes. If yes, proceed to Part 9. and type or print your explanation.",
+            },
+            { value: "N", label: "No" },
+          ],
+        },
+        {
+          id: "p4Line9.",
+          type: "radio",
+          label:
+            "Have you ever previously filed a nonimmigrant petition for this beneficiary?",
+          required: false,
+          options: [
+            {
+              value: "Y",
+              label:
+                "Yes. If yes, proceed to Part 9. and type or print your explanation.",
+            },
+            { value: "N", label: "No" },
+          ],
         },
       ],
     },
     {
-      id: "part2",
-      title: "Information About the Beneficiary",
+      id: "section_4",
+      title: "Section 4",
       questions: [
         {
-          id: "part2.subform1ClassificationSymbol",
-          type: "radio",
-          label:
-            "Requested Nonimmigrant Classification (Write classification symbol)",
-          required: true,
-          helpText:
-            "1. Requested Nonimmigrant Classification (Write classification symbol).",
+          id: "line10.explanation",
+          type: "text",
+          label: "Line10 - Explanation",
+          required: false,
         },
         {
-          id: "part2.subform1Checkbox4",
-          type: "radio",
-          label:
-            "NOTE: A petition is not required for E-1, E-2, E-3, H-1 B 1 Chile/Singapore, or T N visa benefici.",
-          required: true,
-          options: [
-            {
-              value: "A",
-              label:
-                "visa or be admitted. NOTE: A petition is not required for E-1",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "4. Requested Action (only one box). A. Notify the office in Part 4 so each beneficiary can obtain a visa or be admitted. NOTE: A petition is not required for E-1, E-2, E-3, H-1 B 1 Chile/Singapore, or T N visa beneficiaries.",
+          id: "line8.per",
+          type: "text",
+          label: "Line8 - per (Specify hour, week, month, or year)",
+          required: false,
         },
         {
-          id: "part2.subform1Checkbox41",
+          id: "line8.wages",
+          type: "text",
+          label: "Line8 - Wages",
+          required: false,
+        },
+        // {
+        //   id: "p5Line3",
+        //   type: "checkbox",
+        //   label: "0",
+        //   required: false,
+        // },
+        // {
+        //   id: "p5Line3_2",
+        //   type: "checkbox",
+        //   label: "P5 Line3_2",
+        //   required: false,
+        // },
+        {
+          id: "p5Line3a.aptSteFlrNumber",
+          type: "text",
+          label: "Apt. / Ste. / Flr.",
+          required: false,
+        },
+        {
+          id: "p5Line3a.cityTown",
+          type: "text",
+          label: "P5 Line3a - City Town",
+          required: false,
+        },
+        {
+          id: "p5Line3a.state",
           type: "select",
+          label: "P5 Line3a - State",
+          required: false,
+          options: US_STATES,
+        },
+        {
+          id: "p5Line3a.streetNumberName",
+          type: "text",
+          label: "P5 Line3a - Street Number Name",
+          required: false,
+        },
+        {
+          id: "p5Line3a.thirdpartyOrganization",
+          type: "text",
+          label: "P5 Line3a - Thirdparty Organization",
+          required: false,
+        },
+        {
+          id: "p5Line3a.unit",
+          type: "checkbox",
+          label: "APT",
+          required: false,
+          options: [
+            { value: "STE", label: "Ste" },
+            { value: "APT", label: "Apt" },
+            { value: "FLR", label: "Flr" },
+          ],
+        },
+
+        {
+          id: "p5Line3a.zipCode",
+          type: "text",
+          label: "P5 Line3a - Zip Code",
+          required: false,
+        },
+        {
+          id: "p5Line3Add",
+          type: "radio",
+          label: "Is this a third-party location? ",
+          required: false,
+          options: [
+            { value: "0", label: "No" },
+            { value: "Y", label: "Yes" },
+          ],
+        },
+
+        {
+          id: "p5Line3b.aptSteFlrNumber2",
+          type: "text",
+          label: "Apt. / Ste. / Flr.",
+          required: false,
+        },
+        {
+          id: "p5Line3b.cityTown",
+          type: "text",
+          label: "P5 Line3b - City Town",
+          required: false,
+        },
+        {
+          id: "p5Line3b.state2",
+          type: "select",
+          label: "P5 Line3b - State2",
+          required: false,
+          options: US_STATES,
+        },
+        {
+          id: "p5Line3b.streetNumberName2",
+          type: "text",
+          label: "P5 Line3b - Street Number Name 2",
+          required: false,
+        },
+        {
+          id: "p5Line3b.thirdpartyOrganization2",
+          type: "text",
           label:
-            "This is available only when you &quot;New Employment&quot; in , above.",
-          required: true,
-          options: [
-            { value: "B", label: "B" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "4. Requested Action (only one box). B. Change the status and extend the stay of each beneficiary because the beneficiary or beneficiaries is/are now in the United States in another status. see instructions for limitations. This is available only when you &quot;New Employment&quot; in , above.",
+            "P5 Line3b - Provide the name of the third-party organization.",
+          required: false,
         },
         {
-          id: "part2.subform1Checkbox42",
+          id: "p5Line3b.unit2",
+          type: "checkbox",
+          label: "Unit",
+          required: false,
+          options: [
+            { value: "STE", label: "Ste" },
+            { value: "APT", label: "Apt" },
+            { value: "FLR", label: "Flr" },
+          ],
+        },
+
+        {
+          id: "p5Line3b.zipCode2",
+          type: "text",
+          label: "P5 Line3b - Zip Code 2",
+          required: false,
+        },
+        {
+          id: "p5Line4",
           type: "radio",
+          label: "Did you include an itinerary with the petition?",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "p5Line5",
+          type: "checkbox",
           label:
-            "Extend the stay of each beneficiary because the beneficiary or beneficiaries now hold or holds th.",
-          required: true,
+            "Will the beneficiary(ies) work for you off-site at another company or organization's location?",
+          required: false,
           options: [
-            {
-              value: "C",
-              label:
-                "Part2. Information About This Petition. 4. Requested Action (only one box). heck C. Extend the stay of each beneficiary because the beneficiary or beneficiaries now hold or holds this status.",
-            },
-            { value: "Off", label: "Off" },
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
           ],
-          helpText:
-            "4. Requested Action (only one box). C. Extend the stay of each beneficiary because the beneficiary or beneficiaries now hold or holds this status.",
         },
+
         {
-          id: "part2.subform1Checkbox43",
-          type: "radio",
+          id: "p5Line6",
+          type: "checkbox",
           label:
-            "Amend the stay of each beneficiary because the beneficiary(ies) now hold(s) this status and is/ar.",
-          required: true,
+            "Will the beneficiary(ies) work exclusively in the Commonwealth of the Northern Mariana Islands (CNMI)?",
+          required: false,
           options: [
-            {
-              value: "D",
-              label:
-                "Action (only one box). D. Amend the stay of each beneficiary because the beneficiary(ies) now hold(s) this status and is/are not seeking additional time from the current authorized period of stay.",
-            },
-            { value: "Off", label: "Off" },
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
           ],
-          helpText:
-            "4. Requested Action (only one box). D. Amend the stay of each beneficiary because the beneficiary(ies) now hold(s) this status and is/are not seeking additional time from the current authorized period of stay.",
+        },
+
+        {
+          id: "p5Line7",
+          type: "checkbox",
+          label: "Is this a full-time position?",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "p5Line9.hours",
+          type: "text",
+          label: "Wages per (Specify hour, week, month, or year)",
+          required: false,
         },
         {
-          id: "part2.subform1Checkbox44",
-          type: "radio",
-          label:
-            "See Trade Agreement Supplement to Form I-1 29 for T N and H-1 B 1",
-          required: true,
-          options: [
-            {
-              value: "E",
-              label:
-                "box). E. Extend the status of a nonimmigrant classification based on a free trade agreement. See Trade Agreement Supplement to Form I-1 29 for T N and H-1 B 1.",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "4. Requested Action (only one box). E. Extend the status of a nonimmigrant classification based on a free trade agreement. See Trade Agreement Supplement to Form I-1 29 for T N and H-1 B 1.",
+          id: "part5.q1.jobTitle",
+          type: "text",
+          label: "Part5 - Q1 - Job Title",
+          required: false,
         },
         {
-          id: "part2.subform1Checkbox45",
-          type: "radio",
-          label:
-            "See Trade Agreement Supplement to Form I-1 29 for T N and H-1 B 1",
-          required: true,
-          options: [
-            { value: "F", label: "Female" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "4. Requested Action (only one box). F. Change status to a nonimmigrant classification based on a free trade agreement. See Trade Agreement Supplement to Form I-1 29 for T N and H-1 B 1.",
+          id: "part5.q10.dateFrom",
+          type: "text",
+          label: "Part5 - Q10 - Date From",
+          required: false,
         },
         {
-          id: "part2.subform33g",
-          type: "radio",
-          label: "P-2 Artist or entertainer for reciprocal exchange program",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). G. P-2 Artist or entertainer for reciprocal exchange program.",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). G. P-2 Artist or entertainer for reciprocal exchange program.",
+          id: "part5.q10.dateTo",
+          type: "text",
+          label: "Part5 - Q10 - Date To",
+          required: false,
         },
         {
-          id: "part2.subform33hS",
-          type: "radio",
-          label: "P-2 S Essential Support Personnel for P-2",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). H. P-2 S Essential Support Personnel for P-2.",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). H. P-2 S Essential Support Personnel for P-2.",
+          id: "part5.q2.lCAorETA",
+          type: "text",
+          label: "Part5 - Q2 - L C Aor E T A",
+          required: false,
         },
       ],
     },
     {
-      id: "part3",
-      title: "Processing Information",
+      id: "section_5",
+      title: "Basic Information About the Proposed Employment and Employer",
       questions: [
         {
-          id: "part3.subform1MiddleName",
+          id: "line15.grossAnnualIncome",
           type: "text",
-          label: "Middle Name",
-          required: true,
-          helpText: "3. Name of Beneficiary. Middle Name.",
+          label: "Line15 - Gross Annual Income",
+          required: false,
         },
         {
-          id: "part3.subform1GivenName",
+          id: "line16.netAnnualIncome",
           type: "text",
-          label: "Given Name (First Name)",
-          required: true,
-          helpText: "3. Name of Beneficiary. Given Name (First Name).",
+          label: "Line16 - Net Annual Income",
+          required: false,
         },
         {
-          id: "part3.subform1FamilyName",
+          id: "line1a.petitionerLastName",
           type: "text",
-          label: "Family Name (Last Name)",
-          required: true,
-          helpText: "3. Name of Beneficiary. Family Name (Last Name).",
+          label: "Line1a - Petitioner Last Name",
+          required: false,
         },
         {
-          id: "part3.subform1Checkbox",
+          id: "line1a.petitionerLastName_2",
+          type: "text",
+          label: "Line1a - Petitioner Last Name_2",
+          required: false,
+        },
+        {
+          id: "line1b.petitionerFirstName",
+          type: "text",
+          label: "Line1b - Petitioner First Name",
+          required: false,
+        },
+
+        {
+          id: "p5Line13.yearEstablished",
+          type: "text",
+          label: "P5 Line13 - Year Established",
+          required: false,
+        },
+        {
+          id: "p5Line14.numberofEmployees",
+          type: "text",
+          label: "P5 Line14 - Number of Employees",
+          required: false,
+        },
+        {
+          id: "p5Line15.cB",
           type: "radio",
-          label: "Unnamed (for H-2 A or H-2 B petitions only).",
-          required: true,
+          label:
+            "Do you currently employ a total of 25 or fewer full-time equivalent employees in the United States, including all affiliates or subsidiaries of this company/organization?",
+          required: false,
           options: [
             { value: "N", label: "No" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "Use the Attachment-1 sheet to name each beneficiary included in this petition.) 1. Type of Beneficiaries Requested (only one box). Unnamed (for H-2 A or H-2 B petitions only).",
-        },
-        {
-          id: "part3.subform1Checkbox1",
-          type: "radio",
-          label: "Named.",
-          required: true,
-          options: [
             { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
           ],
-          helpText:
-            "Use the Attachment-1 sheet to name each beneficiary included in this petition.) 1. Type of Beneficiaries Requested (only one box). Named.",
         },
+
         {
-          id: "part3.subform2DateofArrival",
-          type: "date",
-          label: "Date of Last Arrival",
-          required: true,
-          helpText:
-            "6. If the beneficiary is in the United States, complete the following: Date of Last Arrival.",
-        },
-        {
-          id: "part3.subform2PassportorTravDoc",
+          id: "part5Line12.typeofBusiness",
           type: "text",
-          label: "Passport or Travel Document Number",
-          required: true,
-          helpText:
-            "6. If the beneficiary is in the United States, complete the following: Passport or Travel Document Number.",
-        },
-        {
-          id: "part3.subform2CountryOfBirth",
-          type: "text",
-          label: "Country of Birth",
-          required: true,
-          helpText: "5. Other Information. Country of Birth.",
-        },
-        {
-          id: "part3.subform2CountryOfCitizenship",
-          type: "text",
-          label: "Country of Citizenship or Nationality",
-          required: true,
-          helpText:
-            "5. Other Information. Country of Citizenship or Nationality.",
-        },
-        {
-          id: "part3.subform2ArrivalDeparture",
-          type: "text",
-          label: "I-94 Arrival-Departure Record Number",
-          required: true,
-          helpText:
-            "6. If the beneficiary is in the United States, complete the following: I-94 Arrival-Departure Record Number.",
-        },
-        {
-          id: "part3.subform2Gender",
-          type: "radio",
-          label: "Male",
-          required: true,
-          options: [
-            { value: "M", label: "Male" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText: "5. Other Information. Sex. Male.",
-        },
-        {
-          id: "part3.subform2Gender1",
-          type: "radio",
-          label: "Female",
-          required: true,
-          options: [
-            { value: "F", label: "Female" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText: "5. Other Information. Sex. Female.",
-        },
-        {
-          id: "part3.subform25City",
-          type: "text",
-          label: "City or Town",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 4 Address of employer abroad. City or Town.",
-        },
-        {
-          id: "part3.subform25State",
-          type: "select",
-          label: "State",
-          required: true,
-          options: [
-            { value: "", label: "" },
-            { value: "AA", label: "AA" },
-            { value: "AE", label: "AE" },
-            { value: "AK", label: "Alaska" },
-            { value: "AL", label: "Alabama" },
-            { value: "AP", label: "AP" },
-            { value: "AR", label: "Arkansas" },
-            { value: "AS", label: "American Samoa" },
-            { value: "AZ", label: "Arizona" },
-            { value: "CA", label: "California" },
-            { value: "CO", label: "Colorado" },
-            { value: "CT", label: "Connecticut" },
-            { value: "DC", label: "District of Columbia" },
-            { value: "DE", label: "Delaware" },
-            { value: "FL", label: "Florida" },
-            { value: "FM", label: "FM" },
-            { value: "GA", label: "Georgia" },
-            { value: "GU", label: "Guam" },
-            { value: "HI", label: "Hawaii" },
-            { value: "IA", label: "Iowa" },
-            { value: "ID", label: "Idaho" },
-            { value: "IL", label: "Illinois" },
-            { value: "IN", label: "Indiana" },
-            { value: "KS", label: "Kansas" },
-            { value: "KY", label: "Kentucky" },
-            { value: "LA", label: "Louisiana" },
-            { value: "MA", label: "Massachusetts" },
-            { value: "MD", label: "Maryland" },
-            { value: "ME", label: "Maine" },
-            { value: "MH", label: "MH" },
-            { value: "MI", label: "Michigan" },
-            { value: "MN", label: "Minnesota" },
-            { value: "MO", label: "Missouri" },
-            { value: "MP", label: "Northern Mariana Islands" },
-            { value: "MS", label: "Mississippi" },
-            { value: "MT", label: "Montana" },
-            { value: "NC", label: "North Carolina" },
-            { value: "ND", label: "North Dakota" },
-            { value: "NE", label: "Nebraska" },
-            { value: "NH", label: "New Hampshire" },
-            { value: "NJ", label: "New Jersey" },
-            { value: "NM", label: "New Mexico" },
-            { value: "NV", label: "Nevada" },
-            { value: "NY", label: "New York" },
-            { value: "OH", label: "Ohio" },
-            { value: "OK", label: "Oklahoma" },
-            { value: "OR", label: "Oregon" },
-            { value: "PA", label: "Pennsylvania" },
-            { value: "PR", label: "Puerto Rico" },
-            { value: "PW", label: "PW" },
-            { value: "RI", label: "Rhode Island" },
-            { value: "SC", label: "South Carolina" },
-            { value: "SD", label: "South Dakota" },
-            { value: "TN", label: "Tennessee" },
-            { value: "TX", label: "Texas" },
-            { value: "UT", label: "Utah" },
-            { value: "VA", label: "Virginia" },
-            { value: "VI", label: "U.S. Virgin Islands" },
-            { value: "VT", label: "Vermont" },
-            { value: "WA", label: "Washington" },
-            { value: "WI", label: "Wisconsin" },
-            { value: "WV", label: "West Virginia" },
-            { value: "WY", label: "Wyoming" },
-          ],
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 4 Address of employer abroad. State.",
-        },
-        {
-          id: "part3.subform25ZipCode",
-          type: "text",
-          label: "ZIP Code",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 4 Address of employer abroad. ZIP Code.",
-        },
-        {
-          id: "part3.subform25StreetName",
-          type: "text",
-          label: "Street Number and Name",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 4 Address of employer abroad. Street Number and Name.",
-        },
-        {
-          id: "part3.subform25Province",
-          type: "text",
-          label: "Province, if applicable",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 4 Address of employer abroad. Province, if applicable.",
-        },
-        {
-          id: "part3.subform25Country",
-          type: "text",
-          label: "Country",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 4 Address of employer abroad. Country.",
-        },
-        {
-          id: "part3.subform25PostalCode",
-          type: "text",
-          label: "Postal Code, if applicable",
-          required: true,
-          helpText:
-            "L Classification Supplement to Form I-1 29. Section 1. Complete This Section If Filing For An Individual Petition. 4 Address of employer abroad. Postal Code, if applicable.",
-        },
-        {
-          id: "part3.subform33i",
-          type: "select",
-          label:
-            "P-3 Artist/Entertainer coming to the United States to perform, teach, or coach under a program th.",
-          required: true,
-          options: [
-            { value: "Yes", label: "Yes" },
-            { value: "No", label: "No" },
-          ],
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). I. P-3 Artist/Entertainer coming to the United States to perform, teach, or coach under a program that is culturally unique.",
-        },
-        {
-          id: "part3.subform33jS",
-          type: "radio",
-          label: "P-3 S Essential Support Personnel for P-3",
-          required: true,
-          options: [
-            {
-              value: "1",
-              label:
-                "29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). J. P-3 S Essential Support Personnel for P-3.",
-            },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. 3. Classification sought (only one box). J. P-3 S Essential Support Personnel for P-3.",
+          label: "Part5 Line12 - Type of Business",
+          required: false,
         },
       ],
     },
     {
-      id: "part4",
+      id: "section_6",
+      title: "Section 6",
+      questions: [
+        {
+          id: "emailAddress",
+          type: "text",
+          label: "Email Address",
+          required: false,
+        },
+        {
+          id: "line.businessName",
+          type: "text",
+          label: "Line - Business Name",
+          required: false,
+        },
+        {
+          id: "line.cityTown_2",
+          type: "text",
+          label: "Line - City Town_2",
+          required: false,
+        },
+        {
+          id: "line.dateofSignature",
+          type: "text",
+          label: "Line - Dateof Signature",
+          required: false,
+        },
+        {
+          id: "line.preparerFamilyName",
+          type: "text",
+          label: "Line - Preparer Family Name",
+          required: false,
+        },
+        {
+          id: "line.preparerGivenName",
+          type: "text",
+          label: "Line - Preparer Given Name",
+          required: false,
+        },
+
+        {
+          id: "line7b.streetNumberName_2",
+          type: "text",
+          label: "Line7b - Street Number Name_2",
+          required: false,
+        },
+        {
+          id: "p5.line6a.signatureofApplicant",
+          type: "text",
+          label: "P5 - Line6a - Signature of Applicant",
+          required: false,
+        },
+        {
+          id: "p8.line3.country",
+          type: "text",
+          label: "P8 - Line3 - Country",
+          required: false,
+        },
+        {
+          id: "p8.line3.postalCode",
+          type: "text",
+          label: "P8 - Line3 - Postal Code",
+          required: false,
+        },
+        {
+          id: "p8.line3.province",
+          type: "text",
+          label: "P8 - Line3 - Province",
+          required: false,
+        },
+        {
+          id: "p8.line3.state",
+          type: "select",
+          label: "P8 - Line3 - State",
+          required: false,
+          options: US_STATES,
+        },
+        {
+          id: "p8.line3.zipCode",
+          type: "text",
+          label: "P8 - Line3 - Zip Code",
+          required: false,
+        },
+        {
+          id: "part8Line3.aptSteFlrNumber",
+          type: "text",
+          label: "Apt. / Ste. / Flr.",
+          required: false,
+        },
+        {
+          id: "part8Line3.unit",
+          type: "radio",
+          label: "Unit",
+          required: false,
+          options: [
+            { value: "STE", label: "Ste" },
+            { value: "APT", label: "Apt" },
+            { value: "FLR", label: "Flr" },
+          ],
+        },
+
+        {
+          id: "pt7Line3.daytimePhoneNumber1",
+          type: "text",
+          label: "Pt7 Line3 - Daytime Phone Number 1",
+          required: false,
+        },
+        {
+          id: "pt7Line3.emailAddress",
+          type: "text",
+          label: "Pt7 Line3 - Email Address",
+          required: false,
+        },
+        {
+          id: "pt8Line4.daytimePhoneNumber1",
+          type: "text",
+          label: "Pt8 Line4 - Daytime Phone Number 1",
+          required: false,
+        },
+        {
+          id: "pt8Line4.daytimePhoneNumber1_2",
+          type: "text",
+          label: "Pt8 Line4 - Daytime Phone Number1_2",
+          required: false,
+        },
+      ],
+    },
+    {
+      id: "section_7",
+      title: "Section 7",
+      questions: [
+        {
+          id: "line10.alienNumber",
+          type: "text",
+          label: "Line10 - Alien Number",
+          required: false,
+        },
+        {
+          id: "line2.additionalInfo",
+          type: "text",
+          label: "Line2 - Additional Info",
+          required: false,
+        },
+        {
+          id: "line2a.pageNumber",
+          type: "text",
+          label: "Line2a - Page Number",
+          required: false,
+        },
+        {
+          id: "line2b.partNumber",
+          type: "text",
+          label: "Line2b - Part Number",
+          required: false,
+        },
+        {
+          id: "line2c.itemNumber",
+          type: "text",
+          label: "Line2c - Item Number",
+          required: false,
+        },
+        {
+          id: "line3.additionalInfo",
+          type: "text",
+          label: "Line3 - Additional Info",
+          required: false,
+        },
+        {
+          id: "line4.additionalInfo",
+          type: "text",
+          label: "Line4 - Additional Info",
+          required: false,
+        },
+        {
+          id: "line4a.pageNumber",
+          type: "text",
+          label: "Line4a - Page Number",
+          required: false,
+        },
+        {
+          id: "line4a.pageNumber_2",
+          type: "text",
+          label: "Line4a - Page Number_2",
+          required: false,
+        },
+        {
+          id: "line4b.partNumber",
+          type: "text",
+          label: "Line4b - Part Number",
+          required: false,
+        },
+        {
+          id: "line4b.partNumber_2",
+          type: "text",
+          label: "Line4b - Part Number_2",
+          required: false,
+        },
+        {
+          id: "line4c.itemNumber",
+          type: "text",
+          label: "Line4c - Item Number",
+          required: false,
+        },
+        {
+          id: "line4c.itemNumber_2",
+          type: "text",
+          label: "Line4c - Item Number_2",
+          required: false,
+        },
+      ],
+    },
+    {
+      id: "section_8",
+      title: "Section 8",
+      questions: [
+        {
+          id: "e1.treatyTrader",
+          type: "checkbox",
+          label: "E1 - Treaty Trader",
+          required: false,
+        },
+        {
+          id: "e2.cNMI",
+          type: "checkbox",
+          label: "E2 - C N M I",
+          required: false,
+        },
+        {
+          id: "e2.treatyInvestor",
+          type: "checkbox",
+          label: "E2 - Treaty Investor",
+          required: false,
+        },
+        {
+          id: "line.cityTown_3",
+          type: "text",
+          label: "Line - City Town_3",
+          required: false,
+        },
+        {
+          id: "line.country_2",
+          type: "text",
+          label: "Line - Country_2",
+          required: false,
+        },
+        {
+          id: "line1.familyName_2",
+          type: "text",
+          label: "Line1 - Family Name_2",
+          required: false,
+        },
+        {
+          id: "line1.givenName_2",
+          type: "text",
+          label: "Line1 - Given Name_2",
+          required: false,
+        },
+        {
+          id: "line1.middleName_2",
+          type: "text",
+          label: "Line1 - Middle Name_2",
+          required: false,
+        },
+        {
+          id: "line2.ttlNumberofEmployees",
+          type: "text",
+          label: "Line2 - Ttl Numberof Employees",
+          required: false,
+        },
+        {
+          id: "line3.companyorOrgName_2",
+          type: "text",
+          label: "Line3 - Companyor Org Name_2",
+          required: false,
+        },
+        {
+          id: "line4.description",
+          type: "text",
+          label: "Line4 - Description",
+          required: false,
+        },
+        {
+          id: "line5.employeePositionDescription",
+          type: "text",
+          label: "Line5 - Employee Position Description",
+          required: false,
+        },
+        {
+          id: "line7b.streetNumberName_3",
+          type: "text",
+          label: "Line7b - Street Number Name_3",
+          required: false,
+        },
+        {
+          id: "s1.line3.country",
+          type: "text",
+          label: "S1 - Line3 - Country",
+          required: false,
+        },
+        {
+          id: "s1.line3.postalCode",
+          type: "text",
+          label: "S1 - Line3 - Postal Code",
+          required: false,
+        },
+        {
+          id: "s1.line3.province",
+          type: "text",
+          label: "S1 - Line3 - Province",
+          required: false,
+        },
+        {
+          id: "s1.line3.state",
+          type: "select",
+          label: "S1 - Line3 - State",
+          required: false,
+          options: US_STATES,
+        },
+        {
+          id: "s1.line3.zipCode",
+          type: "text",
+          label: "S1 - Line3 - Zip Code",
+          required: false,
+        },
+        {
+          id: "sec1Line3.aptSteFlrNumber",
+          type: "text",
+          label: "Apt. / Ste. / Flr.",
+          required: false,
+        },
+        {
+          id: "sec1Line3.unit",
+          type: "radio",
+          label: "Unit",
+          required: false,
+          options: [
+            { value: "STE", label: "Ste" },
+            { value: "APT", label: "Apt" },
+            { value: "FLR", label: "Flr" },
+          ],
+        },
+
+        {
+          id: "supELine1.nameofEmployer",
+          type: "text",
+          label: "Sup E Line1 - Nameof Employer",
+          required: false,
+        },
+        {
+          id: "supELine5",
+          type: "checkbox",
+          label:
+            "Are you seeking advice from USCIS to determine whether changes in the terms or conditions of E status for one or more employees are substantive?",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "section_9",
       title: "Additional Information",
       questions: [
         {
-          id: "part4.subform2DProvince",
+          id: "eSec3",
+          type: "radio",
+          label: " Section 3. Complete If Filing for an E-1 Treaty Trader",
+          required: false,
+        },
+        {
+          id: "eSec3Line1.ttlAnnualGross",
           type: "text",
-          label: "Province of Birth",
-          required: true,
-          helpText: "5. Other Information. Province of Birth.",
+          label: "E Sec3 Line1 - Ttl Annual Gross",
+          required: false,
         },
         {
-          id: "part4.subform21cStateorCountry",
+          id: "eSec3Line2.yearEnding",
+          type: "text",
+          label: "E Sec3 Line2 - Year Ending",
+          required: false,
+        },
+        {
+          id: "eSec3Line3.percentOfTtlGross",
+          type: "text",
+          label: "E Sec3 Line3 - Percent Of Ttl Gross",
+          required: false,
+        },
+        {
+          id: "eSec4",
           type: "radio",
-          label: "State or Foreign Country",
-          required: true,
-          helpText:
-            "If a beneficiary or beneficiaries named in S. Consulate or inspection facility you want notified if this petition is approved. C. U. S. State or Foreign Country.",
+          label: "Section 4. Complete If Filing for an E-2 Treaty Investor",
+          required: false,
         },
         {
-          id: "part4.subform3HowMany",
-          type: "radio",
-          label: "Number of Additional Applications",
-          required: true,
-          helpText:
-            "Are you filing any applications for replacement/initial I-94, Arrival-Departure Records with this petition? Note that if the beneficiary was issued an electronic Form I-94 by U. S. Customs and Border Protection (C B P) when he/she was admitted to the United States at an air or sea port, he/she may be able to obtain the Form I-94 from the U. S. Customs and Border Protection (C B P) Web site at www.c b p/i94 instead of filing an application for a replacement/initial I-94. If Yes is Checked, Number of Additional Applications.",
+          id: "eSec4.cash",
+          type: "text",
+          label: "E Sec4 - Cash",
+          required: false,
         },
         {
-          id: "part4.subform3No",
+          id: "eSec4.equipment",
+          type: "text",
+          label: "E Sec4 - Equipment",
+          required: false,
+        },
+        {
+          id: "eSec4.inventory",
+          type: "text",
+          label: "E Sec4 - Inventory",
+          required: false,
+        },
+        {
+          id: "eSec4.other",
+          type: "text",
+          label: "E Sec4 - Other",
+          required: false,
+        },
+        {
+          id: "eSec4.premises",
+          type: "text",
+          label: "E Sec4 - Premises",
+          required: false,
+        },
+        {
+          id: "eSec4.totla",
+          type: "text",
+          label: "E Sec4 - Total",
+          required: false,
+        },
+
+        {
+          id: "line2a.typeofBusiness",
+          type: "text",
+          label: "Line2a - Typeof Business",
+          required: false,
+        },
+        {
+          id: "line2b.dateEstablished",
+          type: "text",
+          label: "Line2b - Date Established",
+          required: false,
+        },
+        {
+          id: "line2d.grossAnnualIncome",
+          type: "text",
+          label: "Line2d - Gross Annual Income",
+          required: false,
+        },
+        {
+          id: "line2e.netAnnualIncome",
+          type: "text",
+          label: "Line2e - Net Annual Income",
+          required: false,
+        },
+        {
+          id: "line3.jobDescription",
+          type: "text",
+          label: "Line3 - Job Description",
+          required: false,
+        },
+        {
+          id: "p5Line.yearEstablished",
+          type: "text",
+          label: "P5 Line - Year Established",
+          required: false,
+        },
+        {
+          id: "sect2.affiliate",
+          type: "checkbox",
+          label: "Sect2 - Affiliate",
+          required: false,
+        },
+        {
+          id: "sect2.branch",
+          type: "checkbox",
+          label: "Sect2 - Branch",
+          required: false,
+        },
+        {
+          id: "sect2.jointVenture",
+          type: "checkbox",
+          label: "Sect2 - Joint Venture",
+          required: false,
+        },
+        {
+          id: "sect2.parent",
+          type: "checkbox",
+          label: "Sect2 - Parent",
+          required: false,
+        },
+        {
+          id: "sect2.subsidiary",
+          type: "checkbox",
+          label: "Sect2 - Subsidiary",
+          required: false,
+        },
+        {
+          id: "supELine7a.howMany",
+          type: "text",
+          label: "Sup E Line7a - How Many",
+          required: false,
+        },
+        {
+          id: "supELine7b.howMany",
+          type: "text",
+          label: "Sup E Line7b - How Many",
+          required: false,
+        },
+        {
+          id: "supELine7c.totalNumber",
+          type: "text",
+          label: "Sup E Line7c - Total Number",
+          required: false,
+        },
+        {
+          id: "supELine7d.totalNumber",
+          type: "text",
+          label: "Sup E Line7d - Total Number",
+          required: false,
+        },
+        {
+          id: "table1.row1.immigrationStatus.line1",
+          type: "text",
+          label: "Table1 - Row1 - Immigration Status - Line1",
+          required: false,
+        },
+        {
+          id: "table1.row1.nAME.line1",
+          type: "text",
+          label: "Table1 - Row1 - N A M E - Line1",
+          required: false,
+        },
+        {
+          id: "table1.row1.nationality.line1",
+          type: "text",
+          label: "Table1 - Row1 - Nationality - Line1",
+          required: false,
+        },
+        {
+          id: "table1.row1.percentOwnership.line1",
+          type: "text",
+          label: "Table1 - Row1 - Percent Ownership - Line1",
+          required: false,
+        },
+        {
+          id: "table1.row2.immigrationStatus.line2",
+          type: "text",
+          label: "Table1 - Row2 - Immigration Status - Line2",
+          required: false,
+        },
+        {
+          id: "table1.row2.nAME.line2",
+          type: "text",
+          label: "Table1 - Row2 - N A M E - Line2",
+          required: false,
+        },
+        {
+          id: "table1.row2.nationality.line2",
+          type: "text",
+          label: "Table1 - Row2 - Nationality - Line2",
+          required: false,
+        },
+        {
+          id: "table1.row2.percentOwnership.line2",
+          type: "text",
+          label: "Table1 - Row2 - Percent Ownership - Line2",
+          required: false,
+        },
+        {
+          id: "table1.row3.immigrationStatus.line3",
+          type: "text",
+          label: "Table1 - Row3 - Immigration Status - Line3",
+          required: false,
+        },
+        {
+          id: "table1.row3.nAME.line3",
+          type: "text",
+          label: "Table1 - Row3 - N A M E - Line3",
+          required: false,
+        },
+        {
+          id: "table1.row3.nationality.line3",
+          type: "text",
+          label: "Table1 - Row3 - Nationality - Line3",
+          required: false,
+        },
+        {
+          id: "table1.row3.percentOwnership.line3",
+          type: "text",
+          label: "Table1 - Row3 - Percent Ownership - Line3",
+          required: false,
+        },
+        {
+          id: "table1.row4.immigrationStatus.line4",
+          type: "text",
+          label: "Table1 - Row4 - Immigration Status - Line4",
+          required: false,
+        },
+        {
+          id: "table1.row4.nAME.line4",
+          type: "text",
+          label: "Table1 - Row4 - N A M E - Line4",
+          required: false,
+        },
+        {
+          id: "table1.row4.nationality.line4",
+          type: "text",
+          label: "Table1 - Row4 - Nationality - Line4",
+          required: false,
+        },
+        {
+          id: "table1.row4.percentOwnership.line4",
+          type: "text",
+          label: "Table1 - Row4 - Percent Ownership - Line4",
+          required: false,
+        },
+        {
+          id: "table1.row5.immigrationStatus.line5",
+          type: "text",
+          label: "Table1 - Row5 - Immigration Status - Line5",
+          required: false,
+        },
+        {
+          id: "table1.row5.immigrationStatus.line6",
+          type: "text",
+          label: "Table1 - Row5 - Immigration Status - Line6",
+          required: false,
+        },
+        {
+          id: "table1.row5.immigrationStatus.line7",
+          type: "text",
+          label: "Table1 - Row5 - Immigration Status - Line7",
+          required: false,
+        },
+        {
+          id: "table1.row5.nAME.line6",
+          type: "text",
+          label: "Table1 - Row5 - N A M E - Line6",
+          required: false,
+        },
+        {
+          id: "table1.row5.nAME.line7",
+          type: "text",
+          label: "Table1 - Row5 - N A M E - Line7",
+          required: false,
+        },
+        {
+          id: "table1.row5.nAME5",
+          type: "text",
+          label: "Table1 - Row5 - N A M E5",
+          required: false,
+        },
+        {
+          id: "table1.row5.nationality.line5",
+          type: "text",
+          label: "Table1 - Row5 - Nationality - Line5",
+          required: false,
+        },
+        {
+          id: "table1.row5.nationality.line6",
+          type: "text",
+          label: "Table1 - Row5 - Nationality - Line6",
+          required: false,
+        },
+        {
+          id: "table1.row5.nationality.line7",
+          type: "text",
+          label: "Table1 - Row5 - Nationality - Line7",
+          required: false,
+        },
+        {
+          id: "table1.row5.percentOwnership.line5",
+          type: "text",
+          label: "Table1 - Row5 - Percent Ownership - Line5",
+          required: false,
+        },
+        {
+          id: "table1.row5.percentOwnership.line6",
+          type: "text",
+          label: "Table1 - Row5 - Percent Ownership - Line6",
+          required: false,
+        },
+        {
+          id: "table1.row5.percentOwnership.line7",
+          type: "text",
+          label: "Table1 - Row5 - Percent Ownership - Line7",
+          required: false,
+        },
+      ],
+    },
+    {
+      id: "section_11",
+      title:
+        "Section 1. Information About Requested Extension or Change (See instructions attached to this form.)",
+      questions: [
+        {
+          id: "eSec3",
           type: "radio",
           label:
-            "Are you filing any applications for dependents with this petition? No",
-          required: true,
+            "This is a request for Free Trade status based on (select only one box):",
+          required: false,
+        },
+
+        {
+          id: "a.canada",
+          type: "checkbox",
+          label: "Free Trade, Canada (TN1)",
+          required: false,
+        },
+        {
+          id: "b.mexico",
+          type: "checkbox",
+          label: "Free Trade, Mexico (TN2)",
+          required: false,
+        },
+        {
+          id: "c.chile",
+          type: "checkbox",
+          label: "Free Trade, Chile (H-1B1)",
+          required: false,
+        },
+        {
+          id: "d.singapore",
+          type: "checkbox",
+          label: "Free Trade, Singapore (H-1B1)",
+          required: false,
+        },
+        {
+          id: "e.other",
+          type: "checkbox",
+          label: "Free Trade, Other",
+          required: false,
+        },
+        {
+          id: "f.chileOrSingapore",
+          type: "checkbox",
+          label:
+            "A sixth consecutive request for Free Trade, Chile or Singapore (H-1B1)",
+          required: false,
+        },
+        {
+          id: "employer",
+          type: "radio",
+          label: "Employer is a (select only one box):",
+          required: false,
           options: [
-            { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
+            { value: "F", label: "U.S. Employer" },
+            { value: "U", label: "Foreign Employer" },
           ],
-          helpText:
-            "Are you filing any applications for dependents with this petition? No.",
+        },
+
+        {
+          id: "line4.country",
+          type: "text",
+          label: "Line4 - Country",
+          required: false,
+        },
+
+        {
+          id: "tASupLine1.nameofBeneficiary",
+          type: "text",
+          label: "T A Sup Line1 - Name of Beneficiary",
+          required: false,
         },
         {
-          id: "part4.subform3Yes",
+          id: "tASupLine1.nameofPetitioner",
+          type: "text",
+          label: "T A Sup Line1 - Name of Petitioner",
+          required: false,
+        },
+        {
+          id: "tASupLine1a.petitionerLastName",
+          type: "text",
+          label: "T A Sup Line1a - Petitioner Last Name",
+          required: false,
+        },
+        {
+          id: "tASupLine1b.petitionerFirstName",
+          type: "text",
+          label: "T A Sup Line1b - Petitioner First Name",
+          required: false,
+        },
+        {
+          id: "tASupLine2.daytimePhoneNumber1",
+          type: "text",
+          label: "T A Sup Line2 - Daytime Phone Number 1",
+          required: false,
+        },
+
+        {
+          id: "tASupLine3.mobilePhoneNumber1",
+          type: "text",
+          label: "T A Sup Line3 - Mobile Phone Number1",
+          required: false,
+        },
+        {
+          id: "tASupLine5.email",
+          type: "text",
+          label: "T A Sup Line5 - Email",
+          required: false,
+        },
+      ],
+    },
+    {
+      id: "section_12",
+      title: "Section 12",
+      questions: [
+        {
+          id: "line.businessName_2",
+          type: "text",
+          label: "Line - Business Name_2",
+          required: false,
+        },
+        {
+          id: "line.cityTown_4",
+          type: "text",
+          label: "Line - City Town_4",
+          required: false,
+        },
+        {
+          id: "line.dateofSignature_2",
+          type: "text",
+          label: "Line - Dateof Signature_2",
+          required: false,
+        },
+        {
+          id: "line.preparerFamilyName_2",
+          type: "text",
+          label: "Line - Preparer Family Name_2",
+          required: false,
+        },
+        {
+          id: "line.preparerGivenName_2",
+          type: "text",
+          label: "Line - Preparer Given Name_2",
+          required: false,
+        },
+
+        {
+          id: "line7b.streetNumberName_4",
+          type: "text",
+          label: "Line7b - Street Number Name_4",
+          required: false,
+        },
+        {
+          id: "pt8Line4.daytimePhoneNumber1_3",
+          type: "text",
+          label: "Pt8 Line4 - Daytime Phone Number1_3",
+          required: false,
+        },
+        {
+          id: "s3.line3.country",
+          type: "text",
+          label: "S3 - Line3 - Country",
+          required: false,
+        },
+        {
+          id: "s3.line3.postalCode",
+          type: "text",
+          label: "S3 - Line3 - Postal Code",
+          required: false,
+        },
+        {
+          id: "s3.line3.province",
+          type: "text",
+          label: "S3 - Line3 - Province",
+          required: false,
+        },
+        {
+          id: "s3.line3.state",
+          type: "select",
+          label: "S3 - Line3 - State",
+          required: false,
+          options: US_STATES,
+        },
+        {
+          id: "s3.line3.zipCode",
+          type: "text",
+          label: "S3 - Line3 - Zip Code",
+          required: false,
+        },
+        {
+          id: "sec3Line3.aptSteFlrNumber",
+          type: "text",
+          label: "Apt. / Ste. / Flr.",
+          required: false,
+        },
+        {
+          id: "sec3Line3.unit",
           type: "radio",
-          label: "Processing Information",
-          required: true,
+          label: "APT",
+          required: false,
           options: [
-            { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
+            { value: "STE", label: "Ste" },
+            { value: "APT", label: "Apt" },
+            { value: "FLR", label: "Flr" },
           ],
-          helpText:
-            "A. Has any beneficiary in this petition ever been a J-1 exchange visitor or J-2 dependent of a J-1 exchange visitor? Yes. If yes, proceed to B.",
+        },
+
+        {
+          id: "tASupLine2.daytimePhoneNumber1_2",
+          type: "text",
+          label: "T A Sup Line2 - Daytime Phone Number1_2",
+          required: false,
         },
         {
-          id: "part4.subform3HowMany1",
-          type: "radio",
-          label: "Number of Applications",
-          required: true,
-          helpText:
-            "Have you ever filed an immigrant petition for any beneficiary in this petition? If Yes is Checked, Number of Applications.",
+          id: "tASupLine5.email_2",
+          type: "text",
+          label: "T A Sup Line5 - Email_2",
+          required: false,
+        },
+      ],
+    },
+    {
+      id: "section_13",
+      title: "Section 13",
+      questions: [
+        {
+          id: "line1.petitionerName",
+          type: "text",
+          label: "Line1 - Petitioner Name",
+          required: false,
         },
         {
-          id: "part4.subform3",
+          id: "line2.beneficiaryName",
+          type: "text",
+          label: "Line2 - Beneficiary Name",
+          required: false,
+        },
+        {
+          id: "line2.ttlNumberofBeneficiaries",
+          type: "text",
+          label: "Line2 - Ttl Number of Beneficiaries",
+          required: false,
+        },
+
+        {
+          id: "line2ies",
           type: "radio",
-          label: "If yes, answer the questions below",
-          required: true,
+          label: "Classification sought (select only one box):",
+          required: false,
+        },
+
+        {
+          id: "subHLine4.class",
+          type: "checkbox",
+          label: "H-1B Specialty Occupation",
+          required: false,
+        },
+        {
+          id: "subHLine4.class_2",
+          type: "checkbox",
+          label: "H-1B1 Chile and Singapore",
+          required: false,
+        },
+        {
+          id: "subHLine4.class_3",
+          type: "checkbox",
+          label:
+            "H-1B2 Exceptional services relating to a cooperative research and development project administered by the U.S. Department of Defense (DOD)",
+          required: false,
+        },
+        {
+          id: "subHLine4.class_4",
+          type: "checkbox",
+          label: "H-1B3 Fashion model of distinguished merit and ability",
+          required: false,
+        },
+        {
+          id: "subHLine4.class_5",
+          type: "checkbox",
+          label: "H-2A Agricultural worker",
+          required: false,
+        },
+        {
+          id: "subHLine4.class_6",
+          type: "checkbox",
+          label: "H-3 Trainee",
+          required: false,
+        },
+        {
+          id: "subHLine4.class_7",
+          type: "checkbox",
+          label: "H-3 Special education exchange visitor program",
+          required: false,
+        },
+        {
+          id: "subHLine4.class_8",
+          type: "checkbox",
+          label: "H-2B Non-agricultural worker",
+          required: false,
+        },
+        {
+          id: "subHLine5.confirmationNum",
+          type: "text",
+          label: "Sub H Line5 - Confirmation Num",
+          required: false,
+        },
+
+        {
+          id: "subHLine5.confirmationNum",
+          type: "radio",
+          label:
+            "NOTE: Submit photocopies of Forms I-94, I-797, and/or other USCIS issued documents noting these periods of stay in the H or L classification. (If more space is needed, attach an additional sheet.)",
+          required: false,
+        },
+        {
+          id: "table1.row2.dateFrom.line1",
+          type: "text",
+          label: "Table1 - Row2 - Date From - Line 1",
+          required: false,
+        },
+        {
+          id: "table1.row2.dateTo.line1",
+          type: "text",
+          label: "Table1 - Row2 - Date To - Line 1",
+          required: false,
+        },
+        {
+          id: "table1.row2.name.line1",
+          type: "text",
+          label: "Table1 - Row2 - Name - Line 1",
+          required: false,
+        },
+        {
+          id: "table1.row3.dateFrom.line2",
+          type: "text",
+          label: "Table1 - Row3 - Date From - Line 2",
+          required: false,
+        },
+        {
+          id: "table1.row3.dateTo.line2",
+          type: "text",
+          label: "Table1 - Row3 - Date To - Line 2",
+          required: false,
+        },
+        {
+          id: "table1.row3.name.line2",
+          type: "text",
+          label: "Table1 - Row3 - Name - Line 2",
+          required: false,
+        },
+        {
+          id: "table1.row4.dateFrom.line3",
+          type: "text",
+          label: "Table1 - Row4 - Date From - Line 3",
+          required: false,
+        },
+        {
+          id: "table1.row4.dateTo.line3",
+          type: "text",
+          label: "Table1 - Row4 - Date To - Line 3",
+          required: false,
+        },
+        {
+          id: "table1.row4.name.line3",
+          type: "text",
+          label: "Table1 - Row4 - Name - Line 3",
+          required: false,
+        },
+        {
+          id: "table1.row5.dateFrom.line4",
+          type: "text",
+          label: "Table1 - Row5 - Date From - Line 4",
+          required: false,
+        },
+        {
+          id: "table1.row5.dateTo.line4",
+          type: "text",
+          label: "Table1 - Row5 - Date To - Line 4",
+          required: false,
+        },
+        {
+          id: "table1.row5.name.line4",
+          type: "text",
+          label: "Table1 - Row5 - Name - Line 4",
+          required: false,
+        },
+        {
+          id: "table1.row6.dateFrom.line5",
+          type: "date",
+          label: "Table1 - Row6 - Date From - Line 5",
+          required: false,
+        },
+        {
+          id: "table1.row6.dateFrom.line6",
+          type: "date",
+          label: "Table1 - Row6 - Date From - Line 6",
+          required: false,
+        },
+        {
+          id: "table1.row6.dateTo.line5",
+          type: "date",
+          label: "Table1 - Row6 - Date To - Line 5",
+          required: false,
+        },
+        {
+          id: "table1.row6.dateTo.line6",
+          type: "date",
+          label: "Table1 - Row6 - Date To - Line 6",
+          required: false,
+        },
+        {
+          id: "table1.row6.name.line5",
+          type: "text",
+          label: "Table1 - Row6 - Name - Line 5",
+          required: false,
+        },
+        {
+          id: "table1.row6.name.line6",
+          type: "text",
+          label: "Table1 - Row6 - Name - Line 6",
+          required: false,
+        },
+      ],
+    },
+    {
+      id: "section_15",
+      title: "Section 15",
+      questions: [
+        {
+          id: "classHLine5b.countryOfIssuance",
+          type: "text",
+          label: "Class H Line5b - Country Of Issuance",
+          required: false,
+        },
+        {
+          id: "classHLine5b.expDate",
+          type: "date",
+          label: "Class H Line5b - Exp Date",
+          required: false,
+        },
+        {
+          id: "classHLine5b.passportorTravDoc",
+          type: "text",
+          label: "Class H Line5b - Passportor Trav Doc",
+          required: false,
+        },
+        {
+          id: "line1.duties",
+          type: "text",
+          label: "Line1 - Duties",
+          required: false,
+        },
+        {
+          id: "line2.summaryofWorkExperience",
+          type: "text",
+          label: "Line2 - Summaryo f Work Experience",
+          required: false,
+        },
+        {
+          id: "line8a.check",
+          type: "radio",
+          label:
+            "Does any beneficiary in this petition have a controlling interest in the petitioning organization, meaning the beneficiary owns more than 50 percent of the petitioner or has majority voting rights in the petitioner?",
+          required: false,
           options: [
-            { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
+            {
+              value: "Y",
+              label: "Yes. If yes, please explain in Item Number 8.b.",
+            },
+            { value: "N", label: "No" },
           ],
-          helpText:
-            "Did you you were filing a new petition in Part 2.? Yes. If yes, answer the questions below.",
+        },
+
+        {
+          id: "line8b.explain",
+          type: "text",
+          label: "Line8 b - Explanation",
+          required: false,
+        },
+
+        {
+          id: "sect1.petitionerPrintedName",
+          type: "text",
+          label: "Sect1 - Petitioner Printed Name",
+          required: false,
         },
         {
-          id: "part4.subform31",
-          type: "radio",
-          label: "If no, proceed to ",
-          required: true,
+          id: "supHLine5.no",
+          type: "checkbox",
+          label:
+            "Are you requesting a restarting of the 3-year maximum period of stay limit in H-2A/H-2B status for any of your named beneficiaries because they were absent from the United States for an uninterrupted period of at least 60 days? (See form Instructions for more information on “Period of Absence.”)",
+          required: false,
           options: [
             { value: "N", label: "No" },
-            { value: "Off", label: "Off" },
+            { value: "Y", label: "Yes" },
           ],
-          helpText:
-            "Did you you were filing a new petition in Part 2.? No. If no, proceed to",
+        },
+      ],
+    },
+    {
+      id: "section_16",
+      title: "Section 16",
+      questions: [
+        {
+          id: "a.seasonal",
+          type: "radio",
+          label: "Employment is: (select only one box)",
+          required: false,
+          options: [
+            { label: "a. Seasonal", value: "1" },
+            { label: "b. Peak load", value: "2" },
+            { label: "Intermittent", value: "3" },
+            { label: "d.One-time occurrence", value: "4" },
+          ],
         },
         {
-          id: "part4.subform3Checkbox",
+          id: "a.unpredictable",
+          type: "checkbox",
+          label: "2. Temporary need is: (select only one box),,,",
+          required: false,
+          options: [
+            { value: "1", label: "A - Unpredictable" },
+            { value: "2", label: "B - Periodic" },
+            { value: "3", label: "c. Recurrent annually" },
+          ],
+        },
+
+        {
+          id: "line3.explanation",
+          type: "text",
+          label:
+            "Explain your temporary need for the workers' services (Attach a separate sheet if additional space is needed).",
+          required: false,
+        },
+        {
+          id: "sect1.authorizedOfficialName",
+          type: "text",
+          label: "Sect1 - Authorized Official Name",
+          required: false,
+        },
+
+        {
+          id: "sect1.dateSignedByDODPM",
+          type: "text",
+          label: "Sect1 - Date Signed By D O D P M",
+          required: false,
+        },
+        {
+          id: "sect1.dODPMName",
+          type: "text",
+          label: "Sect1 - D O D P M Name",
+          required: false,
+        },
+
+        {
+          id: "supHLine5",
           type: "radio",
-          label: "If No, go to Part 9 and type or print your explanation",
-          required: true,
+          label:
+            "Within the last 3 years, have you been the subject of a final USCIS denial or revocation decision with respect to a prior H-2A or H-2B petition that included a finding of fraud or willful misrepresentation of a material fact? (A final USCIS denial or revocation decision means that there is no pending administrative appeal or that the time for filing a timely administrative appeal has elapsed.)",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+        {
+          id: "supHLine5_2",
+          type: "checkbox",
+          label: "N",
+          required: false,
+        },
+        {
+          id: "supHLine6",
+          type: "checkbox",
+          label:
+            "Did you or do you plan to use an agent, facilitator, staff, recruiter, or similar employment service (any person or entity that recruits or solicits prospective beneficiaries of the H-2 petition) to locate and/or recruit the H-2A/H-2B workers that you intend to hire by filing this petition?",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        // {
+        //   id: "supHLine6a",
+        //   type: "checkbox",
+        //   label: "N",
+        //   required: false,
+        // },
+        // {
+        //   id: "supHLine6a_2",
+        //   type: "checkbox",
+        //   label: "Y",
+        //   required: false,
+        // },
+      ],
+    },
+    {
+      id: "section_17",
+      title:
+        "Section 2. Complete This Section If Filing for H-2A or H-2B Classification (continued)",
+      questions: [
+        {
+          id: "line7.familyName",
+          type: "text",
+          label: "Line7 - Family Name",
+          required: false,
+        },
+        {
+          id: "line7.givenName",
+          type: "text",
+          label: "Line7 - Given Name",
+          required: false,
+        },
+        {
+          id: "line7.middleName",
+          type: "text",
+          label: "Line7 - Middle Name",
+          required: false,
+        },
+        {
+          id: "line7.recruitOrganization",
+          type: "text",
+          label: "Line7 - Recruit Organization",
+          required: false,
+        },
+        {
+          id: "sec2Line7c.aptSteFlrNumber",
+          type: "text",
+          label: "Apt. / Ste. / Flr.",
+          required: false,
+        },
+        {
+          id: "sec2Line7c.cityTown",
+          type: "text",
+          label: "Sec2 Line7c - City Town",
+          required: false,
+        },
+        {
+          id: "sec2Line7c.state",
+          type: "select",
+          label: "Sec2 Line7c - State",
+          required: false,
+          options: US_STATES,
+        },
+        {
+          id: "sec2Line7c.streetNumberName",
+          type: "text",
+          label: "Sec2 Line7c - Street Number Name",
+          required: false,
+        },
+        {
+          id: "sec2Line7c.unit",
+          type: "radio",
+          label: "7c. Unit",
+          required: false,
+          options: [
+            { value: "STE", label: "STE" },
+            { value: "APT", label: "APT" },
+            { value: "FLR", label: "FLR" },
+          ],
+        },
+
+        {
+          id: "sec2Line7c.zipCode",
+          type: "text",
+          label: "Sec2 Line7c - Zip Code",
+          required: false,
+        },
+        {
+          id: "supHLine11",
+          type: "radio",
+          label:
+            "11. If you answered “Yes” to Item Number 8., are you requesting an exception to the mandatory denial or revocation for prohibited fees (see form Instructions for information about exceptions)?",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+        {
+          id: "supHLine12",
+          type: "radio",
+          label:
+            "12. Within the last four years, have you ever had an H-2A or H-2B petition denied or revoked because an Yes No employee paid or agreed to pay a fee related to the employment or have you withdrawn an H-2A or H-2B petition after USCIS issued a notice of intent to deny or revoke on such basis?",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "supHLine13",
+          type: "checkbox",
+          label:
+            "13. If you answered “Yes” to Item Number 12., were the workers, or their designees (as appropriate), reimbursed for any fees paid and was any agreement to pay a fee terminated?",
+          required: false,
           options: [
             { value: "N", label: "No" },
-            { value: "Off", label: "Off" },
+            { value: "Y", label: "Yes" },
           ],
-          helpText:
-            "Does each person in this petition have a valid passport? No. If No, go to Part 9 and type or print your explanation.",
         },
+
+        // {
+        //   id: "supHLine8a",
+        //   type: "checkbox",
+        //   label: "Y",
+        //   required: false,
+        // },
+        // {
+        //   id: "supHLine8a_2",
+        //   type: "checkbox",
+        //   label: "N",
+        //   required: false,
+        // },
+        // {
+        //   id: "supHLine8a1.types",
+        //   type: "text",
+        //   label: "Sup H Line8a1 - Types",
+        //   required: false,
+        // },
+        // {
+        //   id: "supHLine8c",
+        //   type: "checkbox",
+        //   label: "N",
+        //   required: false,
+        // },
+        // {
+        //   id: "supHLine8c_2",
+        //   type: "checkbox",
+        //   label: "Y",
+        //   required: false,
+        // },
+      ],
+    },
+    {
+      id: "section_18",
+      title: "Section 18",
+      questions: [
         {
-          id: "part4.subform3Checkbox1",
+          id: "supHLine14",
           type: "radio",
-          label: "Does each person in this petition have a valid passport? Yes",
-          required: true,
+          label:
+            "Are you currently subject to any debarment order by the U.S. Department of Labor (or, if applicable, the Governor of Guam)?",
+          required: false,
           options: [
             { value: "Y", label: "Yes" },
-            { value: "Off", label: "Off" },
+            { value: "N", label: "Yes" },
           ],
-          helpText:
-            "Does each person in this petition have a valid passport? Yes.",
+        },
+
+        {
+          id: "supHLine15",
+          type: "radio",
+          label:
+            "15 Within the last 3 years, have you had an approved temporary labor certification revoked by the U.S. Department of Labor (or, if applicable, the Guam Department of Labor) or have you been the subject of any administrative sanction or remedy, including a debarment that has concluded or an assessment of civil money penalties?",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "supHLine16",
+          type: "radio",
+          label:
+            "Within the last 3 years, have you been the subject of a final USCIS denial or revocation decision with respect to a prior H-2A or H-2B petition that included a finding of fraud or willful misrepresentation of a material fact? (A final USCIS denial or revocation decision means that there is no pending administrative appeal or that the time for filing a timely administrative appeal has elapsed.)",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "supHLine17",
+          type: "radio",
+          label:
+            "Within the last 3 years, have you been the subject of a final USCIS decision revoking the approval of a prior petition that includes one or more of the following findings: the beneficiary was not employed by the petitioner in the capacity specified in the petition; the statement of facts contained in the petition or on the application for a temporary labor certification was not true and correct, or was inaccurate; the petitioner violated terms and conditions of the approved petition; or the petitioner violated requirements of the Immigration and Nationality Act (INA) section 101(a)(15)(H) or paragraph (h) of this section? (A final USCIS denial or revocation decision means that there is no pending administrative appeal and that the time for filing a timely administrative appeal has elapsed.)",
+          required: false,
+          options: [
+            { value: "N", label: "Yes" },
+            { value: "Y", label: "yes" },
+          ],
+        },
+
+        {
+          id: "supHLine18",
+          type: "radio",
+          label:
+            "Within the last 3 years, have you been the subject of a final determination of violation(s) under INA section 274(a), 8 U.S.C. 1324(a)? (“Bringing in and Harboring Certain Aliens,” “Criminal Penalties.”)",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "supHLine19",
+          label:
+            "19 Within the last 3 years, have you been the subject of any final administrative or judicial determination, other than ones described in Item Numbers 14. - 18. above, finding a violation of any applicable employment-related laws or regulations, including health and safety laws or regulations?",
+          type: "radio",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "supHLine20",
+          type: "checkbox",
+          label:
+            "20. The H-2A/H-2B petitioner and each employer consent to allow Government access to all sites where the labor is being or will be performed, as well as housing sites for H-2A workers, for the purpose of determining compliance with H-2A/H-2B requirements.",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
         },
       ],
     },
     {
-      id: "part5",
-      title: "Preparer Information",
+      id: "section_19",
+      title: "Section 19",
       questions: [
         {
-          id: "part5.subform4Yes",
-          type: "radio",
+          id: "date",
+          type: "text",
+          label: "Date",
+          required: false,
+        },
+        {
+          id: "line24.familyName",
+          type: "text",
+          label: "Line24 - Family Name",
+          required: false,
+        },
+        {
+          id: "line24.givenName",
+          type: "text",
+          label: "Line24 - Given Name",
+          required: false,
+        },
+        {
+          id: "line24.middleName",
+          type: "text",
+          label: "Line24 - Middle Name",
+          required: false,
+        },
+        {
+          id: "line24.petitionerName",
+          type: "text",
+          label: "Line24 - Petitioner Name",
+          required: false,
+        },
+
+        {
+          id: "sect3.partA.petitionerName",
+          type: "text",
+          label: "Sect3 - Part A - Petitioner Name",
+          required: false,
+        },
+
+        {
+          id: "supHLine21",
           label:
-            "Will the beneficiary or beneficiaries work for you off-site at another company or organization&apos",
-          required: true,
+            "The petitioner agrees to notify DHS beginning on a date and in a manner specified in a notice published in the Federal Register within 2 workdays if: an H-2A/H-2B worker does not report for work within 5 within 5 workdays of the start date established by the petitioner, whichever is later; the agricultural labor or workdays after the employment start date stated on the petition or, applicable to H-2A petitioners only, services for which H-2A/H-2B workers were hired is completed more than 30 days early; or the H-2A/ H-2B worker does not report for work for a period of 5 consecutive workdays without the consent of the employer or is terminated prior to the completion of agricultural labor or services for which he or she was hired.",
+          type: "radio",
+          required: false,
           options: [
             { value: "Y", label: "Yes" },
-            {
-              value: "Off",
-              label: "site at another company or organization&apos",
-            },
+            { value: "N", label: "Yes" },
           ],
-          helpText:
-            "Attach the Form I-1 29 supplement relevant to the classification of the worker or workers you are requesting. 5. Will the beneficiary or beneficiaries work for you off-site at another company or organization&apos;s location? Yes.",
         },
+
         {
-          id: "part5.subform4No",
+          id: "supHLine22",
           type: "radio",
           label:
-            "Will the beneficiary or beneficiaries work for you off-site at another company or organization&apos",
-          required: true,
+            "The petitioner agrees to retain evidence of such notification and make it available for inspection by DHS officers for a one-year period.",
+          required: false,
           options: [
-            { value: "Y", label: "Yes" },
-            {
-              value: "Off",
-              label: "site at another company or organization&apos",
-            },
+            { value: "N", label: "No" },
+            { value: "Y", label: "yes" },
           ],
-          helpText:
-            "Attach the Form I-1 29 supplement relevant to the classification of the worker or workers you are requesting. 5. Will the beneficiary or beneficiaries work for you off-site at another company or organization&apos;s location? No.",
         },
+
         {
-          id: "part5.subform4Q10DateFrom",
-          type: "date",
-          label: "Employed From Date",
-          required: true,
-          helpText:
-            "Attach the Form I-1 29 supplement relevant to the classification of the worker or workers you are requesting. 11. Dates of intended employment. Employed From Date.",
-        },
-        {
-          id: "part5.subform4Q10DateTo",
-          type: "date",
-          label: "Employed To Date",
-          required: true,
-          helpText:
-            "Attach the Form I-1 29 supplement relevant to the classification of the worker or workers you are requesting. 11. Dates of intended employment. Employed To Date.",
-        },
-        {
-          id: "part5.subform4Hours",
+          id: "supHLine23",
           type: "radio",
-          label: "Number of Hours",
-          required: true,
-          helpText:
-            "Attach the Form I-1 29 supplement relevant to the classification of the worker or workers you are requesting. 8. If the answer to is no, how many hours per week for the position? Number of Hours.",
+          label:
+            "For H-2A petitioners only: The petitioner agrees to pay $10 in liquidated damages for each instance where it cannot demonstrate it is in compliance with the notification requirement",
+          required: false,
+          options: [
+            { value: "N", label: "No" },
+            { value: "Y", label: "yes" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "section_20",
+      title: "Part C. Joint Employers",
+      questions: [
+        {
+          id: "line24.aptSteFlrNumber",
+          type: "text",
+          label: "Apt. / Ste. / Flr.",
+          required: false,
         },
         {
-          id: "part5.subform4State",
+          id: "line24.cityTown",
+          type: "text",
+          label: "Line24 - City Town",
+          required: false,
+        },
+        {
+          id: "line24.country",
+          type: "text",
+          label: "Line24 - Country",
+          required: false,
+        },
+        {
+          id: "line24.daytimePhoneNumber1",
+          type: "text",
+          label: "Line24 - Daytime Phone Number1",
+          required: false,
+        },
+        {
+          id: "line24.emailAddress",
+          type: "text",
+          label: "Line24 - Email Address",
+          required: false,
+        },
+        {
+          id: "line24.inCareofName",
+          type: "text",
+          label: "Line24 - In Care of Name",
+          required: false,
+        },
+        {
+          id: "line24.mobilePhoneNumber1",
+          type: "text",
+          label: "Line24 - Mobile Phone Number1",
+          required: false,
+        },
+        {
+          id: "line24.postalCode",
+          type: "text",
+          label: "Line24 - Postal Code",
+          required: false,
+        },
+        {
+          id: "line24.province",
+          type: "text",
+          label: "Line24 - Province",
+          required: false,
+        },
+        {
+          id: "line24.state",
           type: "select",
-          label: "State",
-          required: true,
-          options: [
-            { value: "", label: "" },
-            { value: "AA", label: "AA" },
-            { value: "AE", label: "AE" },
-            { value: "AK", label: "Alaska" },
-            { value: "AL", label: "Alabama" },
-            { value: "AP", label: "AP" },
-            { value: "AR", label: "Arkansas" },
-            { value: "AS", label: "American Samoa" },
-            { value: "AZ", label: "Arizona" },
-            { value: "CA", label: "California" },
-            { value: "CO", label: "Colorado" },
-            { value: "CT", label: "Connecticut" },
-            { value: "DC", label: "District of Columbia" },
-            { value: "DE", label: "Delaware" },
-            { value: "FL", label: "Florida" },
-            { value: "FM", label: "FM" },
-            { value: "GA", label: "Georgia" },
-            { value: "GU", label: "Guam" },
-            { value: "HI", label: "Hawaii" },
-            { value: "IA", label: "Iowa" },
-            { value: "ID", label: "Idaho" },
-            { value: "IL", label: "Illinois" },
-            { value: "IN", label: "Indiana" },
-            { value: "KS", label: "Kansas" },
-            { value: "KY", label: "Kentucky" },
-            { value: "LA", label: "Louisiana" },
-            { value: "MA", label: "Massachusetts" },
-            { value: "MD", label: "Maryland" },
-            { value: "ME", label: "Maine" },
-            { value: "MH", label: "MH" },
-            { value: "MI", label: "Michigan" },
-            { value: "MN", label: "Minnesota" },
-            { value: "MO", label: "Missouri" },
-            { value: "MP", label: "Northern Mariana Islands" },
-            { value: "MS", label: "Mississippi" },
-            { value: "MT", label: "Montana" },
-            { value: "NC", label: "North Carolina" },
-            { value: "ND", label: "North Dakota" },
-            { value: "NE", label: "Nebraska" },
-            { value: "NH", label: "New Hampshire" },
-            { value: "NJ", label: "New Jersey" },
-            { value: "NM", label: "New Mexico" },
-            { value: "NV", label: "Nevada" },
-            { value: "NY", label: "New York" },
-            { value: "OH", label: "Ohio" },
-            { value: "OK", label: "Oklahoma" },
-            { value: "OR", label: "Oregon" },
-            { value: "PA", label: "Pennsylvania" },
-            { value: "PR", label: "Puerto Rico" },
-            { value: "PW", label: "PW" },
-            { value: "RI", label: "Rhode Island" },
-            { value: "SC", label: "South Carolina" },
-            { value: "SD", label: "South Dakota" },
-            { value: "TN", label: "Tennessee" },
-            { value: "TX", label: "Texas" },
-            { value: "UT", label: "Utah" },
-            { value: "VA", label: "Virginia" },
-            { value: "VI", label: "U.S. Virgin Islands" },
-            { value: "VT", label: "Vermont" },
-            { value: "WA", label: "Washington" },
-            { value: "WI", label: "Wisconsin" },
-            { value: "WV", label: "West Virginia" },
-            { value: "WY", label: "Wyoming" },
-          ],
-          helpText:
-            "3. Address(es) where the beneficiary(ies) will work if different from address in Address 1. State.",
+          label: "Line24 - State",
+          required: false,
+          options: US_STATES,
         },
         {
-          id: "part5.subform4ZipCode",
-          type: "radio",
-          label: "ZIP Code",
-          required: true,
-          helpText:
-            "3. Address(es) where the beneficiary(ies) will work if different from address in Address 1. ZIP Code.",
-        },
-        {
-          id: "part5.subform4Unit",
-          type: "radio",
-          label: "Apartment",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "apt", label: "Apt." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "3. Address(es) where the beneficiary(ies) will work if different from address in Address 1. Apartment.",
-        },
-        {
-          id: "part5.subform4AptSteFlrNumber",
-          type: "radio",
-          label: "Apartment, Suite or Floor Number",
-          required: true,
-          helpText:
-            "3. Address(es) where the beneficiary(ies) will work if different from address in Address 1. If Apartment, Suite or Floor is Checked, Apartment, Suite or Floor Number.",
-        },
-        {
-          id: "part5.subform4Unit1",
-          type: "radio",
-          label: "Floor",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "flr", label: "Flr." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "3. Address(es) where the beneficiary(ies) will work if different from address in Address 1. Floor.",
-        },
-        {
-          id: "part5.subform4Unit2",
-          type: "radio",
-          label: "Suite",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "ste", label: "Ste." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "3. Address(es) where the beneficiary(ies) will work if different from address in Address 1. Suite.",
-        },
-        {
-          id: "part5.subform4StreetNumberName",
+          id: "line24.streetNumberName",
           type: "text",
-          label: "Street Number and Name",
-          required: true,
-          helpText:
-            "3. Address(es) where the beneficiary(ies) will work if different from address in Address 1. Street Number and Name.",
+          label: "Line24 - Street Number Name",
+          required: false,
         },
         {
-          id: "part5.subform4CityTown",
+          id: "line24.unit",
+          type: "radio",
+          label: "24. unit",
+          required: false,
+          options: [
+            { value: "STE", label: "STE" },
+            { value: "APT", label: "APT" },
+            { value: "FLR", label: "FLR" },
+          ],
+        },
+
+        {
+          id: "line24.zipCode",
           type: "text",
-          label: "City or Town",
-          required: true,
-          helpText:
-            "3. Address(es) where the beneficiary(ies) will work if different from address in Address 1. City or Town.",
+          label: "Line24 - Zip Code",
+          required: false,
         },
         {
-          id: "part5.subform4Q2LCAorETA",
+          id: "line25.eIN",
+          type: "text",
+          label: "Line25 - E I N",
+          required: false,
+        },
+        {
+          id: "line25.sSN",
+          type: "text",
+          label: "Line25 - S S N",
+          required: false,
+        },
+        {
+          id: "line25.taxNumber",
+          type: "text",
+          label: "Line25 - Tax Number",
+          required: false,
+        },
+        {
+          id: "line26.grossAnnualIncome",
+          type: "text",
+          label: "Line26 - Gross Annual Income",
+          required: false,
+        },
+        {
+          id: "line26.netAnnualIncome",
+          type: "text",
+          label: "Line26 - Net Annual Income",
+          required: false,
+        },
+        {
+          id: "line26.numberofEmployees",
+          type: "text",
+          label: "Line26 - Numberof Employees",
+          required: false,
+        },
+        {
+          id: "line26.typeofBusiness",
+          type: "text",
+          label: "Line26 - Type of Business",
+          required: false,
+        },
+        {
+          id: "line26.yearEstablished",
+          type: "text",
+          label: "Line26 - Year Established",
+          required: false,
+        },
+        {
+          id: "line27.familyName",
+          type: "text",
+          label: "Line27 - Family Name",
+          required: false,
+        },
+        {
+          id: "line27.givenName",
+          type: "text",
+          label: "Line27 - Given Name",
+          required: false,
+        },
+        {
+          id: "line27.title",
+          type: "text",
+          label: "Line27 - Title",
+          required: false,
+        },
+      ],
+    },
+    {
+      id: "section_21",
+      title: "Section 21",
+      questions: [
+        {
+          id: "hSec3Line1a.",
+          type: "radio",
+          label:
+            "Is the training you intend to provide, or similar training, available in the beneficiary's country?",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "hSec3Line1b.",
+          type: "radio",
+          label:
+            "Will the training benefit the beneficiary in pursuing a career abroad?",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "hSec3Line1c.",
+          type: "radio",
+          label:
+            "Does the training involve productive employment incidental to the training? If yes, explain the amount of compensation employment versus the classroom in Part 9. of Form I-129.",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "hSec3Line1d.",
+          type: "radio",
+          label:
+            "Does the beneficiary already have skills related to the training?",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "hSec3Line1e.",
+          type: "radio",
+          label: "Is this training an effort to overcome a labor shortage?",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "hSec3Line7.check",
+          type: "radio",
+          label:
+            "Do you intend to employ the beneficiary abroad at the end of this training?",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "line2.explanation",
           type: "text",
           label:
-            "Labor Condition Application (L C A) or Employment and Training Administration (E T A) Case Number",
-          required: true,
-          helpText:
-            "Attach the Form I-1 29 supplement relevant to the classification of the worker or workers you are requesting. 2. Labor Condition Application (L C A) or Employment and Training Administration (E T A) Case Number.",
+            "Line2 - If you do not intend to employ the beneficiary abroad at the end of this training, explain why you wish to incur the cost of providing this training and your expected return from this training.",
+          required: false,
         },
+      ],
+    },
+    {
+      id: "section_22",
+      title:
+        "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement Department of Homeland Security U.S. Citizenship and Immigration Services",
+      questions: [
         {
-          id: "part5.subform4Q1JobTitle",
+          id: "a.no.diploma",
           type: "radio",
-          label: "Job Title",
-          required: true,
-          helpText:
-            "Attach the Form I-1 29 supplement relevant to the classification of the worker or workers you are requesting. 1. Job Title.",
-        },
-        {
-          id: "part5.subform4",
-          type: "radio",
-          label: "Is this a third-party location? No",
-          required: true,
+          label:
+            "Beneficiary's Highest Level of Education (select only one box)",
+          required: false,
           options: [
-            { value: "0", label: "Option 0" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "3. Address(es) where the beneficiary(ies) will work if different from address in Is this a third-party location? No.",
-        },
-        {
-          id: "part5.subform41",
-          type: "radio",
-          label: "Is this a third-party location? Yes",
-          required: true,
-          options: [
+            { value: "1", label: "a. NO DIPLOMA" },
             {
-              value: "1",
+              value: "2",
               label:
-                "Part5. Basic Information About the Proposed Employment and Employer. 3. Address(es) where the beneficiary(ies) will work if different from address in Part . If you need to more than two additional addresses",
+                "HIGH SCHOOL GRADUATE DIPLOMA or he equivalent (for example: GED)",
             },
-            { value: "Off", label: "Off" },
+            {
+              value: "3",
+              label: "c. Some college credit, but less than 1 year",
+            },
+            { value: "4", label: "d. One or more years of college, no degree" },
+
+            {
+              value: "5",
+              label: "e. Associate's degree (for example: AA, AS)",
+            },
+            {
+              value: "6",
+              label: "f. Bachelor's degree (for example: BA, AB, BS)",
+            },
+
+            //
+            {
+              value: "7",
+              label:
+                "g. Master's degree (for example: MA, MS, MEng, MEd, MSW, MBA)",
+            },
+
+            {
+              value: "8",
+              label:
+                "h. Professional degree (for example: MD, DDS, DVM, LLB, JD)",
+            },
+            {
+              value: "9",
+              label: "i. Doctorate degree (for example: PhD, EdD)",
+            },
           ],
-          helpText:
-            "3. Address(es) where the beneficiary(ies) will work if different from address in Is this a third-party location? Yes.",
+        },
+
+        //  it will use
+
+        {
+          id: "h1BSecALine1a.",
+          type: "checkbox",
+          label: "Is the petitioner an H-1B dependent employer?",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "h1BSecALine1b.",
+          type: "checkbox",
+          label: "Has the petitioner ever been found to be a willful violator?",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "h1BSecALine1c.",
+          type: "checkbox",
+          label:
+            "Is the beneficiary an H-1B nonimmigrant exempt from the Department of Labor attestation requirements?",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "h1BSecALine1c1.",
+          type: "checkbox",
+          label:
+            "c.1. If yes, is it because the beneficiary's annual rate of pay is equal to at least $60,000?",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
         },
         {
-          id: "part5.subform4ThirdpartyOrganization",
+          id: "h1BSecALine1c2.",
+          type: "checkbox",
+          label:
+            "Or is it because the beneficiary has a master's degree or higher degree in a specialty related to the employment?",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "h1BSecALine1d.",
+          type: "checkbox",
+          label:
+            "Does the petitioner employ 50 or more individuals in the United States?",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "h1BSecALine1d1.",
+          type: "checkbox",
+          label:
+            "d.1. If yes, are more than 50 percent of those employees in H-1B, L-1A, or L-1B nonimmigrant status",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "i.doctorateDegree",
+          type: "checkbox",
+          label: "I - Doctorate Degree",
+          required: false,
+        },
+        {
+          id: "line1.familyName_3",
           type: "text",
-          label: "Name",
-          required: true,
-          helpText:
-            "3. Address(es) where the beneficiary(ies) will work if different from address in Is this a third-party location? If you answered &quot;Yes,&quot; name of the third-party organization. name.",
+          label: "Line1 - Family Name_3",
+          required: false,
         },
         {
-          id: "part5.subform4State2",
+          id: "line1.familyName_4",
+          type: "text",
+          label: "Line1 - Family Name_4",
+          required: false,
+        },
+        {
+          id: "line2f.line5.dOTCode",
+          type: "text",
+          label: "Line2f - Line5 - D O T Code",
+          required: false,
+        },
+        {
+          id: "line2f.line6.nAICSCode",
+          type: "text",
+          label: "Line2f - Line6 - N A I C S Code",
+          required: false,
+        },
+        {
+          id: "line4.rateofPayPerYear",
+          type: "text",
+          label: "Line4 - Rateof Pay Per Year",
+          required: false,
+        },
+        {
+          id: "partA.q3.field.of.study",
+          type: "text",
+          label: "Part A - Q3 - Field - Of - Study",
+          required: false,
+        },
+      ],
+    },
+    {
+      id: "section_23",
+      title: "Fee Exemption and/or Determination (",
+      questions: [
+        {
+          id: "h1BSecALine1d1.",
+          type: "checkbox",
+          label: "Numerical Limitation Information",
+          required: false,
+          helpText: "Numerical Limitation Information",
+          options: [
+            { value: "A", label: "a. Cap H-1B Bachelor's Degree" },
+            { value: "B", label: "b. Cap H-1B U.S. Master's Degree or Higher" },
+            { value: "C", label: "c. Cap H-1B1 Chile/Singapore" },
+            { value: "D", label: "d. Cap Exempt" },
+          ],
+        },
+        {
+          id: "h1BSec2Line1.",
+          type: "radio",
+          label:
+            "Are you an institution of higher education as defined in section 101(a) of the Higher Education Act of 1965, 20 U.S.C. 1001(a)?",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "h1BSec2Line2.",
+          type: "checkbox",
+          label:
+            "Are you a nonprofit organization or entity related to or affiliated with an institution of higher education, as defined in 8 CFR 214.2(h)(19)(iii)(B)?",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "h1BSec2Line3.",
+          type: "radio",
+          label:
+            "Are you a nonprofit research organization or a governmental research organization, as defined in 8 CFR 214.2(h)(19)(iii)(C)?",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "h1BSec2Line4.",
+          type: "radio",
+          label:
+            "Is this the second or subsequent request for an extension of stay that this petitioner has filed for this alien?",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "h1BSec2Line5.",
+          type: "radio",
+          label:
+            "5. Is this an amended petition that does not contain any request for extensions of stay?",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "h1BSec2Line6.no",
+          type: "radio",
+          label: "Are you filing this petition to correct a USCIS error?",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "h1BSec2Line7.",
+          type: "radio",
+          label:
+            "Is the petitioner a primary or secondary education institution?",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "h1BSec2Line8.",
+          type: "radio",
+          label:
+            "8. Is the petitioner a nonprofit entity that engages in an established curriculum-related clinical training of students registered at such an institution?",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "h1BSec2Line9.",
+          type: "radio",
+          label:
+            "9. Do you currently employ a total of 25 or fewer full-time equivalent employees in the United States, including all affiliates or subsidiaries of this company/organization?",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "h1bSec3Line2a.name",
+          type: "text",
+          label: "H1b Sec3 Line2a - Name",
+          required: false,
+        },
+        {
+          id: "h1bSec3Line2b.dateDegreeAwarded",
+          type: "text",
+          label: "H1b Sec3 Line2b - Date Degree Awarded",
+          required: false,
+        },
+        {
+          id: "h1bSec3Line2c.typeofDegree",
+          type: "text",
+          label: "H1b Sec3 Line2c - Type of Degree",
+          required: false,
+        },
+        {
+          id: "h1bSec3Line2d.streetName",
+          type: "text",
+          label: "H1b Sec3 Line2d - Street Name",
+          required: false,
+        },
+        {
+          id: "lineb.unit",
           type: "select",
-          label: "State",
-          required: true,
+
+          label: "24. unit",
+          required: false,
           options: [
-            { value: "", label: "" },
-            { value: "AA", label: "AA" },
-            { value: "AE", label: "AE" },
-            { value: "AK", label: "Alaska" },
-            { value: "AL", label: "Alabama" },
-            { value: "AP", label: "AP" },
-            { value: "AR", label: "Arkansas" },
-            { value: "AS", label: "American Samoa" },
-            { value: "AZ", label: "Arizona" },
-            { value: "CA", label: "California" },
-            { value: "CO", label: "Colorado" },
-            { value: "CT", label: "Connecticut" },
-            { value: "DC", label: "District of Columbia" },
-            { value: "DE", label: "Delaware" },
-            { value: "FL", label: "Florida" },
-            { value: "FM", label: "FM" },
-            { value: "GA", label: "Georgia" },
-            { value: "GU", label: "Guam" },
-            { value: "HI", label: "Hawaii" },
-            { value: "IA", label: "Iowa" },
-            { value: "ID", label: "Idaho" },
-            { value: "IL", label: "Illinois" },
-            { value: "IN", label: "Indiana" },
-            { value: "KS", label: "Kansas" },
-            { value: "KY", label: "Kentucky" },
-            { value: "LA", label: "Louisiana" },
-            { value: "MA", label: "Massachusetts" },
-            { value: "MD", label: "Maryland" },
-            { value: "ME", label: "Maine" },
-            { value: "MH", label: "MH" },
-            { value: "MI", label: "Michigan" },
-            { value: "MN", label: "Minnesota" },
-            { value: "MO", label: "Missouri" },
-            { value: "MP", label: "Northern Mariana Islands" },
-            { value: "MS", label: "Mississippi" },
-            { value: "MT", label: "Montana" },
-            { value: "NC", label: "North Carolina" },
-            { value: "ND", label: "North Dakota" },
-            { value: "NE", label: "Nebraska" },
-            { value: "NH", label: "New Hampshire" },
-            { value: "NJ", label: "New Jersey" },
-            { value: "NM", label: "New Mexico" },
-            { value: "NV", label: "Nevada" },
-            { value: "NY", label: "New York" },
-            { value: "OH", label: "Ohio" },
-            { value: "OK", label: "Oklahoma" },
-            { value: "OR", label: "Oregon" },
-            { value: "PA", label: "Pennsylvania" },
-            { value: "PR", label: "Puerto Rico" },
-            { value: "PW", label: "PW" },
-            { value: "RI", label: "Rhode Island" },
-            { value: "SC", label: "South Carolina" },
-            { value: "SD", label: "South Dakota" },
-            { value: "TN", label: "Tennessee" },
-            { value: "TX", label: "Texas" },
-            { value: "UT", label: "Utah" },
-            { value: "VA", label: "Virginia" },
-            { value: "VI", label: "U.S. Virgin Islands" },
-            { value: "VT", label: "Vermont" },
-            { value: "WA", label: "Washington" },
-            { value: "WI", label: "Wisconsin" },
-            { value: "WV", label: "West Virginia" },
-            { value: "WY", label: "Wyoming" },
+            { value: "STE", label: "STE" },
+            { value: "APT", label: "APT" },
+            { value: "FLR", label: "FLR" },
           ],
-          helpText:
-            "3. Address(es) where the beneficiary(ies) will work if different from address in Address 2. State.",
         },
+
         {
-          id: "part5.subform4ZipCode2",
-          type: "radio",
-          label: "ZIP Code",
-          required: true,
-          helpText:
-            "3. Address(es) where the beneficiary(ies) will work if different from address in Address 2. ZIP Code.",
-        },
-        {
-          id: "part5.subform4AptSteFlrNumber2",
-          type: "radio",
-          label: "Apartment, Suite or Floor Number",
-          required: true,
-          helpText:
-            "3. Address(es) where the beneficiary(ies) will work if different from address in Address 2. If Apartment, Suite or Floor is Checked, Apartment, Suite or Floor Number.",
-        },
-        {
-          id: "part5.subform4Unit21",
-          type: "radio",
-          label: "Floor",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "flr", label: "Flr." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "3. Address(es) where the beneficiary(ies) will work if different from address in Address 2. Floor.",
-        },
-        {
-          id: "part5.subform4Unit22",
-          type: "radio",
-          label: "Suite",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "ste", label: "Ste." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "3. Address(es) where the beneficiary(ies) will work if different from address in Address 2. Suite",
-        },
-        {
-          id: "part5.subform4StreetNumberName2",
+          id: "part7LineB.bEmp1City",
           type: "text",
-          label: "Street Number and Name",
-          required: true,
-          helpText:
-            "3. Address(es) where the beneficiary(ies) will work if different from address in Address 2. Street Number and Name.",
+          label: "Part7 Line B - B Emp1 City",
+          required: false,
         },
         {
-          id: "part5.subform4dd",
+          id: "part7LineB.bEmp1State",
+          type: "select",
+          label: "Part7 Line B - B Emp1 State",
+          required: false,
+          options: US_STATES,
+        },
+        {
+          id: "part7LineB.bEmp1ZipCode",
+          type: "text",
+          label: "Part7 Line B - B Emp1 Zip Code",
+          required: false,
+        },
+        {
+          id: "sec3.aptSteFlrNumber",
+          type: "text",
+          label: "Apt. / Ste. / Flr.",
+          required: false,
+        },
+      ],
+    },
+
+    {
+      id: "section_24",
+      title: "Off-Site Assignment of H-1B Beneficiaries",
+      questions: [
+        {
+          id: "h1BSec4Line1a.no",
           type: "radio",
-          label: "Is this a third-party location? No",
-          required: true,
+          label:
+            "The beneficiary of this petition will be assigned to work at an off-site location for all or part of thenperiod for which H-1B classification sought",
+          required: false,
           options: [
-            { value: "0", label: "Option 0" },
-            { value: "Off", label: "Off" },
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
           ],
-          helpText:
-            "3. Address(es) where the beneficiary(ies) will work if different from address in Is this a third-party location? No.",
+        },
+
+        {
+          id: "h1BSec4Line1b.",
+          type: "radio",
+          label:
+            "Placement of the beneficiary off-site during the period of employment will comply with the statutory and regulatory requirements of the H-1B nonimmigrant classification.",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "h1BSec4Line1c.",
+          type: "radio",
+          label:
+            "The beneficiary will be paid the higher of the prevailing or actual wage at any and all off-site locations.",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
         },
         {
-          id: "part5.subform4dd1",
+          id: "partC.heckbox",
+          type: "button",
+          required: false,
+          label:
+            'If you answered Item Number 1.d. "CAP Exempt," you must specify the reason(s) this petition is exempt from the numerical limitation for H-1B classification:',
+        },
+        {
+          id: "partC.3aCheckbox",
+          type: "checkbox",
+          label:
+            "Part C - 3a The petitioner is an institution of higher education as defined in section 101(a) of the Higher Education Act of 1965, 20 U.S.C. 1001(a)",
+          required: false,
+        },
+        {
+          id: "partC.3bCheckbox",
+          type: "checkbox",
+          label:
+            "Part C - 3b The petitioner is a nonprofit research organization or a governmental research organization as defined in 8 CFR 214.2h)(8)(iii)(F)(3)",
+          required: false,
+        },
+        {
+          id: "partC.3cCheckbox",
+          type: "checkbox",
+          label:
+            "Part C - 3c The petitioner is a nonprofit research organization or a governmental research organization as defined in 8 CFR 214.2(h)(8)(iii)(F)(3)",
+          required: false,
+        },
+        {
+          id: "partC.3dCheckbox",
+          type: "checkbox",
+          label:
+            "Part C - 3d The beneficiary will be employed at a qualifying cap exempt institution, organization, or entity pursuant to 8 CFR 214.2(h)(8)(iii)(F)(4)",
+          required: false,
+        },
+        {
+          id: "partC.3eCheckbox",
+          type: "checkbox",
+          label:
+            "Part C - 3e The beneficiary is currently employed at a cap-exempt institution, organization, or entity, and the petitioner seeks to concurrently employ the H-1B beneficiary.",
+          required: false,
+        },
+        {
+          id: "partC.3fCheckbox",
+          type: "checkbox",
+          label:
+            "Part C - 3f The beneficiary of this petition is a J-1 nonimmigrant physician who has received a waiver based on section 214(l)of the Act.",
+          required: false,
+        },
+        {
+          id: "partC.3gCheckbox",
+          type: "checkbox",
+          label:
+            "The beneficiary of this petition has been counted against the cap and (1) is applying for the remaining portion of the 6 year period of admission, (2) is seeking an extension beyond the 6-year limitation based upon sections 104(c) or 106(a) of the American Competitiveness in the Twenty-First Century Act (AC21), or (3) is seeking an amendment to a petition that was part of the beneficiary's 6-year period of admission or an extension beyond the 6-year limitation based upon sections 104(c) or 106(a) of AC21.",
+          required: false,
+        },
+        {
+          id: "partC.3hCheckbox",
+          type: "checkbox",
+          label:
+            "Part C - 3h The petitioner is an employer subject to the Guam-CNMI cap exemption pursuant to Public Law 110-229.",
+          required: false,
+        },
+      ],
+    },
+
+    {
+      id: "section_25",
+      title: "Section 25",
+      questions: [
+        {
+          id: "b.blanket",
           type: "radio",
-          label: "Is this a third-party location? Yes",
-          required: true,
+          label: "This petition is (select only one box):",
+          required: false,
+          options: [
+            { value: "1", label: "a. An individual petition " },
+            { label: "b. A blanket petition", value: "2" },
+          ],
+        },
+        {
+          id: "a.l1A",
+          type: "checkbox",
+          label: "A - L1 A",
+          required: false,
+          options: [
+            { value: "1", label: "a. L-1A manager or executive " },
+            { value: "2", label: "b. L-1B specialized knowledge" },
+          ],
+        },
+
+        {
+          id: "hSupLine2.familyName",
+          type: "text",
+          label: "H Sup Line2 - Family Name",
+          required: false,
+        },
+        {
+          id: "lClassLine4.unit",
+          type: "select",
+          label: "Line 4 Unit",
+          required: false,
+          options: [
+            { value: "STE", label: "STE" },
+            { value: "APT", label: "APT" },
+            { value: "FLR", label: "FLR" },
+          ],
+        },
+
+        {
+          id: "line1.familyName_5",
+          type: "text",
+          label: "Line1 - Family Name_5",
+          required: false,
+        },
+        {
+          id: "line2.aptSteFlrNumber",
+          type: "text",
+          label: "Apt. / Ste. / Flr.",
+          required: false,
+        },
+        {
+          id: "lSuppLine3.nameofEmployerAbroad",
+          type: "text",
+          label: "L Supp Line3 - Nameof Employer Abroad",
+          required: false,
+        },
+        {
+          id: "lSuppLine4a",
+          type: "radio",
+          label:
+            "Does the petitioner employ 50 or more individuals in the U.S.?",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "lSuppLine4b.",
+          type: "checkbox",
+          label:
+            "If yes, are more than 50 percent of those employee in H-1B, L-1A, or L-1B nonimmigrant status?",
+          required: false,
+          options: [
+            { value: "Y", label: "Yes" },
+            { value: "N", label: "No" },
+          ],
+        },
+
+        {
+          id: "part3Line2.city",
+          type: "text",
+          label: "Part3 Line2 - City",
+          required: false,
+        },
+        {
+          id: "part3Line2.country",
+          type: "text",
+          label: "Part3 Line2 - Country",
+          required: false,
+        },
+        {
+          id: "part3Line2.postalCode",
+          type: "text",
+          label: "Part3 Line2 - Postal Code",
+          required: false,
+        },
+        {
+          id: "part3Line2.province",
+          type: "text",
+          label: "Part3 Line2 - Province",
+          required: false,
+        },
+        {
+          id: "part3Line2.state",
+          type: "select",
+          label: "Part3 Line2 - State",
+          required: false,
+          options: US_STATES,
+        },
+        {
+          id: "part3Line2.streetName",
+          type: "text",
+          label: "Part3 Line2 - Street Name",
+          required: false,
+        },
+        {
+          id: "part3Line2.zipCode",
+          type: "text",
+          label: "Part3 Line2 - Zip Code",
+          required: false,
+        },
+        {
+          id: "table2.row1.dateFrom.line1",
+          type: "date",
+          label: "Table2 - Row1 - Date From - Line1",
+          required: false,
+        },
+        {
+          id: "table2.row1.dateTo.line1",
+          type: "date",
+          label: "Table2 - Row1 - Date To - Line1",
+          required: false,
+        },
+        {
+          id: "table2.row1.sect1.name.line1",
+          type: "date",
+          label: "Table2 - Row1 - Sect1 - Name - Line1",
+          required: false,
+        },
+        {
+          id: "table2.row2.dateFrom.line2",
+          type: "date",
+          label: "Table2 - Row2 - Date From - Line2",
+          required: false,
+        },
+        {
+          id: "table2.row2.dateTo.line2",
+          type: "date",
+          label: "Table2 - Row2 - Date To - Line2",
+          required: false,
+        },
+        {
+          id: "table2.row2.sect1.name.line2",
+          type: "text",
+          label: "Table2 - Row2 - Sect1 - Name - Line2",
+          required: false,
+        },
+        {
+          id: "table2.row3.dateFrom.line3",
+          type: "date",
+          label: "Table2 - Row3 - Date From - Line3",
+          required: false,
+        },
+        {
+          id: "table2.row3.dateTo.line3",
+          type: "date",
+          label: "Table2 - Row3 - Date To - Line3",
+          required: false,
+        },
+        {
+          id: "table2.row3.sect1.name.line3",
+          type: "text",
+          label: "Table2 - Row3 - Sect1 - Name - Line3",
+          required: false,
+        },
+        {
+          id: "table2.row4.dateFrom.line3",
+          type: "date",
+          label: "Table2 - Row4 - Date From - Line3",
+          required: false,
+        },
+        {
+          id: "table2.row4.dateFrom.line3_2",
+          type: "date",
+          label: "Table2 - Row4 - Date From - Line3_2",
+          required: false,
+        },
+        {
+          id: "table2.row4.dateFrom.line3_3",
+          type: "date",
+          label: "Table2 - Row4 - Date From - Line3_3",
+          required: false,
+        },
+        {
+          id: "table2.row4.dateFrom.line3_4",
+          type: "date",
+          label: "Table2 - Row4 - Date From - Line3_4",
+          required: false,
+        },
+        {
+          id: "table2.row4.dateTo.line3",
+          type: "date",
+          label: "Table2 - Row4 - Date To - Line3",
+          required: false,
+        },
+        {
+          id: "table2.row4.dateTo.line3_2",
+          type: "date",
+          label: "Table2 - Row4 - Date To - Line3_2",
+          required: false,
+        },
+        {
+          id: "table2.row4.dateTo.line3_3",
+          type: "date",
+          label: "Table2 - Row4 - Date To - Line3_3",
+          required: false,
+        },
+        {
+          id: "table2.row4.dateTo.line3_4",
+          type: "date",
+          label: "Table2 - Row4 - Date To - Line3_4",
+          required: false,
+        },
+        {
+          id: "table2.row4.sect1.name.line3",
+          type: "text",
+          label: "Table2 - Row4 - Sect1 - Name - Line3",
+          required: false,
+        },
+        {
+          id: "table2.row4.sect1.name.line3_2",
+          type: "text",
+          label: "Table2 - Row4 - Sect1 - Name - Line3_2",
+          required: false,
+        },
+        {
+          id: "table2.row4.sect1.name.line3_3",
+          type: "text",
+          label: "Table2 - Row4 - Sect1 - Name - Line3_3",
+          required: false,
+        },
+        {
+          id: "table2.row4.sect1.name.line3_4",
+          type: "text",
+          label: "Table2 - Row4 - Sect1 - Name - Line3_4",
+          required: false,
+        },
+      ],
+    },
+    {
+      id: "section_27",
+      title: "Section 27",
+      questions: [
+        {
+          id: "a.pa",
+          type: "radio",
+          label:
+            "How is the U.S. company related to the company abroad? (select only one box)",
+          required: false,
+          options: [
+            { value: "1", label: "a. Parent" },
+            { value: "2", label: "b. Branch" },
+            { value: "3", label: "c. Subsidiary" },
+            { value: "4", label: "d. Affiliate" },
+            { value: "", label: "e. Joint Venture" },
+          ],
+        },
+
+        {
+          id: "line3.jobDescription_2",
+          type: "text",
+          label: "Line3 - Job Description_2",
+          required: false,
+        },
+        {
+          id: "line3.jobDescription_3",
+          type: "text",
+          label: "Line3 - Job Description_3",
+          required: false,
+        },
+        {
+          id: "line3.jobDescription_4",
+          type: "text",
+          label: "Line3 - Job Description_4",
+          required: false,
+        },
+        {
+          id: "table3.row1.q5.dateFrom.line1",
+          type: "date",
+          label: "Table3 - Row1 - Q5 - Date From - Line 1",
+          required: false,
+        },
+        {
+          id: "table3.row1.q5.dateTo.line1",
+          type: "date",
+          label: "Table3 - Row1 - Q5 - Date To - Line 1",
+          required: false,
+        },
+        {
+          id: "table3.row1.q5.explanation.line1",
+          type: "text",
+          label: "Table3 - Row1 - Q5 - Explanation - Line1",
+          required: false,
+        },
+        {
+          id: "table3.row2.q5.dateFrom.line2",
+          type: "date",
+          label: "Table3 - Row2 - Q5 - Date From - Line 2",
+          required: false,
+        },
+        {
+          id: "table3.row2.q5.dateTo.line2",
+          type: "date",
+          label: "Table3 - Row2 - Q5 - Date To - Line 2",
+          required: false,
+        },
+        {
+          id: "table3.row2.q5.explanation.line2",
+          type: "text",
+          label: "Table3 - Row2 - Q5 - Explanation - Line2",
+          required: false,
+        },
+        {
+          id: "table3.row3.q5.dateFrom.line3",
+          type: "date",
+          label: "Table3 - Row3 - Q5 - Date From - Line 3",
+          required: false,
+        },
+        {
+          id: "table3.row3.q5.dateTo.line3",
+          type: "date",
+          label: "Table3 - Row3 - Q5 - Date To - Line 3",
+          required: false,
+        },
+        {
+          id: "table3.row3.q5.explanation.line3",
+          type: "text",
+          label: "Table3 - Row3 - Q5 - Explanation - Line 3",
+          required: false,
+        },
+        {
+          id: "table3.row4.q5.dateFrom.line4",
+          type: "date",
+          label: "Table3 - Row4 - Q5 - Date From - Line 4",
+          required: false,
+        },
+        {
+          id: "table3.row4.q5.dateFrom.line5",
+          type: "date",
+          label: "Table3 - Row4 - Q5 - Date From - Line5",
+          required: false,
+        },
+        {
+          id: "table3.row4.q5.dateFrom.line6",
+          type: "date",
+          label: "Table3 - Row4 - Q5 - Date From - Line6",
+          required: false,
+        },
+        {
+          id: "table3.row4.q5.dateTo.line4",
+          type: "date",
+          label: "Table3 - Row4 - Q5 - Date To - Line4",
+          required: false,
+        },
+        {
+          id: "table3.row4.q5.dateTo.line5",
+          type: "date",
+          label: "Table3 - Row4 - Q5 - Date To - Line5",
+          required: false,
+        },
+        {
+          id: "table3.row4.q5.dateTo.line6",
+          type: "date",
+          label: "Table3 - Row4 - Q5 - Date To - Line6",
+          required: false,
+        },
+        {
+          id: "table3.row4.q5.explanation.line4",
+          type: "text",
+          label: "Table3 - Row4 - Q5 - Explanation - Line4",
+          required: false,
+        },
+        {
+          id: "table3.row4.q5.explanation.line5",
+          type: "text",
+          label: "Table3 - Row4 - Q5 - Explanation - Line5",
+          required: false,
+        },
+        {
+          id: "table3.row4.q5.explanation.line6",
+          type: "text",
+          label: "Table3 - Row4 - Q5 - Explanation - Line6",
+          required: false,
+        },
+      ],
+    },
+    {
+      id: "section_29",
+      title: "Section 29",
+      questions: [
+        {
+          id: "line3.jobDescription_5",
+          type: "text",
+          label: "Line3 - Job Description 5",
+          required: false,
+        },
+        {
+          id: "line3.jobDescription_6",
+          type: "text",
+          label: "Line3 - Job Description_6",
+          required: false,
+        },
+        {
+          id: "lSec1Line11.no",
+          type: "checkbox",
+          label: "Y",
+          required: false,
+        },
+        {
+          id: "lSec1Line11.yes",
+          type: "checkbox",
+          label: "Y",
+          required: false,
+        },
+        {
+          id: "lSec1Line12",
+          type: "checkbox",
+          label: "N",
+          required: false,
+        },
+        {
+          id: "lSec1Line12_2",
+          type: "checkbox",
+          label: "Y",
+          required: false,
+        },
+        {
+          id: "lSec1Line12.no",
+          type: "checkbox",
+          label: "Y",
+          required: false,
+        },
+        {
+          id: "lSec1Line12.yes",
+          type: "checkbox",
+          label: "Y",
+          required: false,
+        },
+        {
+          id: "table4.row1.fEIN.line1",
+          type: "text",
+          label: "Table4 - Row1 - F E I N - Line1",
+          required: false,
+        },
+        {
+          id: "table4.row1.line1",
+          type: "text",
+          label: "Table4 - Row1 - Line1",
+          required: false,
+        },
+        {
+          id: "table4.row2.fEIN.line2",
+          type: "text",
+          label: "Table4 - Row2 - F E I N - Line 2",
+          required: false,
+        },
+        {
+          id: "table4.row2.line2",
+          type: "text",
+          label: "Table4 - Row2 - Line 2",
+          required: false,
+        },
+        {
+          id: "table4.row3.fEIN.line3",
+          type: "text",
+          label: "Table4 - Row3 - F E I N - Line 3",
+          required: false,
+        },
+        {
+          id: "table4.row3.line3",
+          type: "text",
+          label: "Table4 - Row3 - Line 3",
+          required: false,
+        },
+        {
+          id: "table4.row4.fEIN.line4",
+          type: "text",
+          label: "Table4 - Row4 - F E I N - Line 4",
+          required: false,
+        },
+        {
+          id: "table4.row4.fEIN.line5",
+          type: "text",
+          label: "Table4 - Row4 - F E I N - Line 5",
+          required: false,
+        },
+        {
+          id: "table4.row4.line4",
+          type: "text",
+          label: "Table4 - Row4 - Line4",
+          required: false,
+        },
+        {
+          id: "table4.row4.line5",
+          type: "text",
+          label: "Table4 - Row4 - Line5",
+          required: false,
+        },
+      ],
+    },
+
+    {
+      id: "section_31",
+      title: "Section 31",
+      questions: [
+        {
+          id: "table5.row1.cell1",
+          type: "text",
+          label: "Table5 - Row1 - Cell1",
+          required: false,
+        },
+        {
+          id: "table5.row1.cell2",
+          type: "text",
+          label: "Table5 - Row1 - Cell2",
+          required: false,
+        },
+        {
+          id: "table5.row2.cell1",
+          type: "text",
+          label: "Table5 - Row2 - Cell1",
+          required: false,
+        },
+        {
+          id: "table5.row2.cell2",
+          type: "text",
+          label: "Table5 - Row2 - Cell2",
+          required: false,
+        },
+        {
+          id: "table5.row3.cell1",
+          type: "text",
+          label: "Table5 - Row3 - Cell1",
+          required: false,
+        },
+        {
+          id: "table5.row3.cell2",
+          type: "text",
+          label: "Table5 - Row3 - Cell2",
+          required: false,
+        },
+        {
+          id: "table5.row4.cell1",
+          type: "text",
+          label: "Table5 - Row4 - Cell1",
+          required: false,
+        },
+        {
+          id: "table5.row4.cell1_2",
+          type: "text",
+          label: "Table5 - Row4 - Cell1_2",
+          required: false,
+        },
+        {
+          id: "table5.row4.cell1_3",
+          type: "text",
+          label: "Table5 - Row4 - Cell1_3",
+          required: false,
+        },
+        {
+          id: "table5.row4.cell1_4",
+          type: "text",
+          label: "Table5 - Row4 - Cell1_4",
+          required: false,
+        },
+        {
+          id: "table5.row4.cell1_5",
+          type: "text",
+          label: "Table5 - Row4 - Cell1_5",
+          required: false,
+        },
+        {
+          id: "table5.row4.cell2",
+          type: "text",
+          label: "Table5 - Row4 - Cell2",
+          required: false,
+        },
+        {
+          id: "table5.row4.cell2_2",
+          type: "text",
+          label: "Table5 - Row4 - Cell2_2",
+          required: false,
+        },
+        {
+          id: "table5.row4.cell2_3",
+          type: "text",
+          label: "Table5 - Row4 - Cell2_3",
+          required: false,
+        },
+        {
+          id: "table5.row4.cell2_4",
+          type: "text",
+          label: "Table5 - Row4 - Cell2_4",
+          required: false,
+        },
+        {
+          id: "table5.row4.cell2_5",
+          type: "text",
+          label: "Table5 - Row4 - Cell2_5",
+          required: false,
+        },
+      ],
+    },
+    {
+      id: "section_33",
+      title: "Section 33",
+      questions: [
+        {
+          id: "a.o1A",
+          type: "checkbox",
+          label: "A - O1 A",
+          required: false,
+        },
+        {
+          id: "b.o1B",
+          type: "checkbox",
+          label: "B - O1 B",
+          required: false,
+        },
+        {
+          id: "c.o2",
+          type: "checkbox",
+          label: "C - O2",
+          required: false,
+        },
+        {
+          id: "d.p1.majorleague",
+          type: "checkbox",
+          label: "D - P1 - Majorleague",
+          required: false,
+        },
+        {
+          id: "e.p1",
+          type: "checkbox",
+          label: "E - P1",
+          required: false,
+        },
+        {
+          id: "f.p1S",
+          type: "checkbox",
+          label: "F - P1 S",
+          required: false,
+        },
+        {
+          id: "g.p2",
+          type: "checkbox",
+          label: "G - P2",
+          required: false,
+        },
+        {
+          id: "h.p2S",
+          type: "checkbox",
+          label: "H - P2 S",
+          required: false,
+        },
+        {
+          id: "hSupLine2.familyName_2",
+          type: "text",
+          label: "H Sup Line2 - Family Name_2",
+          required: false,
+        },
+        {
+          id: "i.p3",
+          type: "checkbox",
+          label: "I - P3",
+          required: false,
+        },
+        {
+          id: "j.p3S",
+          type: "checkbox",
+          label: "J - P3 S",
+          required: false,
+        },
+        {
+          id: "line1.familyName_6",
+          type: "text",
+          label: "Line1 - Family Name_6",
+          required: false,
+        },
+        {
+          id: "line2.ttlNumberofBeneficiaries_2",
+          type: "text",
+          label: "Line2 - Ttl Numberof Beneficiaries_2",
+          required: false,
+        },
+        {
+          id: "line3.jobDescription_7",
+          type: "text",
+          label: "Line3 - Job Description_7",
+          required: false,
+        },
+        {
+          id: "line3.jobDescription_8",
+          type: "text",
+          label: "Line3 - Job Description_8",
+          required: false,
+        },
+        {
+          id: "line3.jobDescription_9",
+          type: "text",
+          label: "Line3 - Job Description_9",
+          required: false,
+        },
+        {
+          id: "oandPSuppLine7",
+          type: "checkbox",
+          label: "Y",
+          required: false,
+        },
+        {
+          id: "oandPSuppLine7_2",
+          type: "checkbox",
+          label: "N",
+          required: false,
+        },
+      ],
+    },
+    {
+      id: "section_34",
+      title: "Section 34",
+      questions: [
+        {
+          id: "line1.duties_2",
+          type: "text",
+          label: "Line1 - Duties 2",
+          required: false,
+        },
+        {
+          id: "line10b.aptSteFlrNumber",
+          type: "text",
+          label: "Apt. / Ste. / Flr.",
+          required: false,
+        },
+        {
+          id: "line10b.unit",
+          type: "radio",
+          label: "Unit",
+          required: false,
+          options: [
+            { value: "STE", label: "STE" },
+            { value: "APT", label: "APT" },
+            { value: "FLR", label: "FLR" },
+          ],
+        },
+
+        {
+          id: "line11b.aptSteFlrNumber",
+          type: "text",
+          label: "Apt. / Ste. / Flr.",
+          required: false,
+        },
+
+        {
+          id: "line11b.unit",
+          type: "radio",
+          label: "Unit 2",
+          required: false,
+          options: [
+            { value: "FLR", label: "FLR" },
+            { value: "APT", label: "APT" },
+            { value: "STE", label: "STE" },
+          ],
+        },
+
+        {
+          id: "line12b.aptSteFlrNumber",
+          type: "text",
+          label: "Apt. / Ste. / Flr.",
+          required: false,
+        },
+
+        {
+          id: "lSuppLine10a.nameofPeer",
+          type: "text",
+          label: "L Supp Line10a - Nameof Peer",
+          required: false,
+        },
+        {
+          id: "lSuppLine11a.nameofPeer",
+          type: "text",
+          label: "L Supp Line11a - Nameof Peer",
+          required: false,
+        },
+        {
+          id: "lSuppLine12a.nameofPeer",
+          type: "text",
+          label: "L Supp Line12a - Nameof Peer",
+          required: false,
+        },
+        {
+          id: "oandPSuppLine7.no",
+          type: "checkbox",
+          label: "Y",
+          required: false,
+        },
+        {
+          id: "oandPSuppLine7.yes",
+          type: "checkbox",
+          label: "Y",
+          required: false,
+        },
+        {
+          id: "oandPSuppLine8",
+          type: "checkbox",
+          label: "N",
+          required: false,
+        },
+        {
+          id: "oandPSuppLine8_2",
+          type: "checkbox",
+          label: "Y",
+          required: false,
+        },
+        {
+          id: "oandPSuppLine8_3",
+          type: "checkbox",
+          label: "A",
+          required: false,
+        },
+        {
+          id: "part7Lin11c.emp1FromDate",
+          type: "text",
+          label: "Part7 Lin11c - Emp1 From Date",
+          required: false,
+        },
+        {
+          id: "part7Line10b.emp1State",
+          type: "select",
+          label: "Part7 Line10b - Emp1 State",
+          required: false,
           options: [
             {
-              value: "1",
-              label:
-                "Part5. Basic Information About the Proposed Employment and Employer. 3. Address(es) where the beneficiary(ies) will work if different from address in Part . If you need to more than two additional addresses",
+              label: " ",
+              value: " ",
             },
-            { value: "Off", label: "Off" },
+            {
+              label: "AA",
+              value: "AA",
+            },
+            {
+              label: "AE",
+              value: "AE",
+            },
+            {
+              label: "AK",
+              value: "AK",
+            },
+            {
+              label: "AL",
+              value: "AL",
+            },
+            {
+              label: "AP",
+              value: "AP",
+            },
+            {
+              label: "AR",
+              value: "AR",
+            },
+            {
+              label: "AS",
+              value: "AS",
+            },
+            {
+              label: "AZ",
+              value: "AZ",
+            },
+            {
+              label: "CA",
+              value: "CA",
+            },
+            {
+              label: "CO",
+              value: "CO",
+            },
+            {
+              label: "CT",
+              value: "CT",
+            },
+            {
+              label: "DC",
+              value: "DC",
+            },
+            {
+              label: "DE",
+              value: "DE",
+            },
+            {
+              label: "FL",
+              value: "FL",
+            },
+            {
+              label: "FM",
+              value: "FM",
+            },
+            {
+              label: "GA",
+              value: "GA",
+            },
+            {
+              label: "GU",
+              value: "GU",
+            },
+            {
+              label: "HI",
+              value: "HI",
+            },
+            {
+              label: "IA",
+              value: "IA",
+            },
+            {
+              label: "ID",
+              value: "ID",
+            },
+            {
+              label: "IL",
+              value: "IL",
+            },
+            {
+              label: "IN",
+              value: "IN",
+            },
+            {
+              label: "KS",
+              value: "KS",
+            },
+            {
+              label: "KY",
+              value: "KY",
+            },
+            {
+              label: "LA",
+              value: "LA",
+            },
+            {
+              label: "MA",
+              value: "MA",
+            },
+            {
+              label: "MD",
+              value: "MD",
+            },
+            {
+              label: "ME",
+              value: "ME",
+            },
+            {
+              label: "MH",
+              value: "MH",
+            },
+            {
+              label: "MI",
+              value: "MI",
+            },
+            {
+              label: "MN",
+              value: "MN",
+            },
+            {
+              label: "MO",
+              value: "MO",
+            },
+            {
+              label: "MP",
+              value: "MP",
+            },
+            {
+              label: "MS",
+              value: "MS",
+            },
+            {
+              label: "MT",
+              value: "MT",
+            },
+            {
+              label: "NC",
+              value: "NC",
+            },
+            {
+              label: "ND",
+              value: "ND",
+            },
+            {
+              label: "NE",
+              value: "NE",
+            },
+            {
+              label: "NH",
+              value: "NH",
+            },
+            {
+              label: "NJ",
+              value: "NJ",
+            },
+            {
+              label: "NM",
+              value: "NM",
+            },
+            {
+              label: "NV",
+              value: "NV",
+            },
+            {
+              label: "NY",
+              value: "NY",
+            },
+            {
+              label: "OH",
+              value: "OH",
+            },
+            {
+              label: "OK",
+              value: "OK",
+            },
+            {
+              label: "OR",
+              value: "OR",
+            },
+            {
+              label: "PA",
+              value: "PA",
+            },
+            {
+              label: "PR",
+              value: "PR",
+            },
+            {
+              label: "PW",
+              value: "PW",
+            },
+            {
+              label: "RI",
+              value: "RI",
+            },
+            {
+              label: "SC",
+              value: "SC",
+            },
+            {
+              label: "SD",
+              value: "SD",
+            },
+            {
+              label: "TN",
+              value: "TN",
+            },
+            {
+              label: "TX",
+              value: "TX",
+            },
+            {
+              label: "UT",
+              value: "UT",
+            },
+            {
+              label: "UT",
+              value: "UT",
+            },
+            {
+              label: "VA",
+              value: "VA",
+            },
+            {
+              label: "VI",
+              value: "VI",
+            },
+            {
+              label: "VT",
+              value: "VT",
+            },
+            {
+              label: "WA",
+              value: "WA",
+            },
+            {
+              label: "WI",
+              value: "WI",
+            },
+            {
+              label: "WV",
+              value: "WV",
+            },
+            {
+              label: "WY",
+              value: "WY",
+            },
           ],
-          helpText:
-            "3. Address(es) where the beneficiary(ies) will work if different from address in Is this a third-party location? Yes.",
         },
         {
-          id: "part5.subform4ThirdpartyOrganization2",
+          id: "part7Line10b.emp1StreetName",
           type: "text",
-          label: "Name",
-          required: true,
-          helpText:
-            "3. Address(es) where the beneficiary(ies) will work if different from address in Is this a third-party location? If you answered &quot;Yes,&quot; name of the third-party organization. name.",
+          label: "Part7 Line10b - Emp1 Street Name",
+          required: false,
         },
         {
-          id: "part5.subform5TypeofBusiness",
+          id: "part7Line10b.emp1ZipCode",
           type: "text",
-          label: "Type of Business",
-          required: true,
-          helpText:
-            "Attach the Form I-1 29 supplement relevant to the classification of the worker or workers you are requesting. 12. Type of Business.",
+          label: "Part7 Line10b - Emp1 Zip Code",
+          required: false,
         },
         {
-          id: "part5.subform5YearEstablished",
+          id: "part7Line10b.empCity",
           type: "text",
-          label: "Year Established",
-          required: true,
-          helpText:
-            "Attach the Form I-1 29 supplement relevant to the classification of the worker or workers you are requesting. 12. Year Established.",
+          label: "Part7 Line10b - Emp City",
+          required: false,
         },
         {
-          id: "part5.subform5NumberofEmployees",
+          id: "part7Line10c.emp1FromDate",
           type: "text",
-          label: "Current Number of Employees in the United States",
-          required: true,
-          helpText:
-            "Attach the Form I-1 29 supplement relevant to the classification of the worker or workers you are requesting. 14. Current Number of Employees in the United States.",
+          label: "Part7 Line10c - Emp1 From Date",
+          required: false,
         },
         {
-          id: "part5.subform5CB",
+          id: "part7Line11b.emp1State",
           type: "select",
-          label:
-            "Do you currently employ a total of 25 or fewer full-time equivalent employees in the United State.",
-          required: true,
+          label: "Part7 Line11b - Emp1 State",
+          required: false,
           options: [
-            { value: "Y", label: "Y" },
-            { value: "Off", label: "Off" },
+            {
+              label: " ",
+              value: " ",
+            },
+            {
+              label: "AA",
+              value: "AA",
+            },
+            {
+              label: "AE",
+              value: "AE",
+            },
+            {
+              label: "AK",
+              value: "AK",
+            },
+            {
+              label: "AL",
+              value: "AL",
+            },
+            {
+              label: "AP",
+              value: "AP",
+            },
+            {
+              label: "AR",
+              value: "AR",
+            },
+            {
+              label: "AS",
+              value: "AS",
+            },
+            {
+              label: "AZ",
+              value: "AZ",
+            },
+            {
+              label: "CA",
+              value: "CA",
+            },
+            {
+              label: "CO",
+              value: "CO",
+            },
+            {
+              label: "CT",
+              value: "CT",
+            },
+            {
+              label: "DC",
+              value: "DC",
+            },
+            {
+              label: "DE",
+              value: "DE",
+            },
+            {
+              label: "FL",
+              value: "FL",
+            },
+            {
+              label: "FM",
+              value: "FM",
+            },
+            {
+              label: "GA",
+              value: "GA",
+            },
+            {
+              label: "GU",
+              value: "GU",
+            },
+            {
+              label: "HI",
+              value: "HI",
+            },
+            {
+              label: "IA",
+              value: "IA",
+            },
+            {
+              label: "ID",
+              value: "ID",
+            },
+            {
+              label: "IL",
+              value: "IL",
+            },
+            {
+              label: "IN",
+              value: "IN",
+            },
+            {
+              label: "KS",
+              value: "KS",
+            },
+            {
+              label: "KY",
+              value: "KY",
+            },
+            {
+              label: "LA",
+              value: "LA",
+            },
+            {
+              label: "MA",
+              value: "MA",
+            },
+            {
+              label: "MD",
+              value: "MD",
+            },
+            {
+              label: "ME",
+              value: "ME",
+            },
+            {
+              label: "MH",
+              value: "MH",
+            },
+            {
+              label: "MI",
+              value: "MI",
+            },
+            {
+              label: "MN",
+              value: "MN",
+            },
+            {
+              label: "MO",
+              value: "MO",
+            },
+            {
+              label: "MP",
+              value: "MP",
+            },
+            {
+              label: "MS",
+              value: "MS",
+            },
+            {
+              label: "MT",
+              value: "MT",
+            },
+            {
+              label: "NC",
+              value: "NC",
+            },
+            {
+              label: "ND",
+              value: "ND",
+            },
+            {
+              label: "NE",
+              value: "NE",
+            },
+            {
+              label: "NH",
+              value: "NH",
+            },
+            {
+              label: "NJ",
+              value: "NJ",
+            },
+            {
+              label: "NM",
+              value: "NM",
+            },
+            {
+              label: "NV",
+              value: "NV",
+            },
+            {
+              label: "NY",
+              value: "NY",
+            },
+            {
+              label: "OH",
+              value: "OH",
+            },
+            {
+              label: "OK",
+              value: "OK",
+            },
+            {
+              label: "OR",
+              value: "OR",
+            },
+            {
+              label: "PA",
+              value: "PA",
+            },
+            {
+              label: "PR",
+              value: "PR",
+            },
+            {
+              label: "PW",
+              value: "PW",
+            },
+            {
+              label: "RI",
+              value: "RI",
+            },
+            {
+              label: "SC",
+              value: "SC",
+            },
+            {
+              label: "SD",
+              value: "SD",
+            },
+            {
+              label: "TN",
+              value: "TN",
+            },
+            {
+              label: "TX",
+              value: "TX",
+            },
+            {
+              label: "UT",
+              value: "UT",
+            },
+            {
+              label: "VA",
+              value: "VA",
+            },
+            {
+              label: "VI",
+              value: "VI",
+            },
+            {
+              label: "VT",
+              value: "VT",
+            },
+            {
+              label: "WA",
+              value: "WA",
+            },
+            {
+              label: "WI",
+              value: "WI",
+            },
+            {
+              label: "WV",
+              value: "WV",
+            },
+            {
+              label: "WY",
+              value: "WY",
+            },
           ],
-          helpText:
-            "15. Do you currently employ a total of 25 or fewer full-time equivalent employees in the United States, including all affiliates or subsidiaries of this company/organization? Yes.",
         },
         {
-          id: "part5.subform5CB1",
+          id: "part7Line11b.emp1StreetName",
+          type: "text",
+          label: "Part7 Line11b - Emp1 Street Name",
+          required: false,
+        },
+        {
+          id: "part7Line11b.emp1ZipCode",
+          type: "text",
+          label: "Part7 Line11b - Emp1 Zip Code",
+          required: false,
+        },
+        {
+          id: "part7Line11b.empCity",
+          type: "text",
+          label: "Part7 Line11b - Emp City",
+          required: false,
+        },
+        {
+          id: "part7Line12b.emp1State",
           type: "select",
-          label:
-            "Do you currently employ a total of 25 or fewer full-time equivalent employees in the United State.",
-          required: true,
-          options: [
-            { value: "N", label: "N" },
-            { value: "Off", label: "Off" },
-          ],
-          helpText:
-            "15. Do you currently employ a total of 25 or fewer full-time equivalent employees in the United States, including all affiliates or subsidiaries of this company/organization? No.",
+          label: "Part7 Line12b - Emp1 State",
+          required: false,
+          options: US_STATES,
         },
         {
-          id: "part5.subform6SignatureofApplicant",
-          type: "date",
-          label: "This is a protected field",
-          required: true,
-          helpText:
-            "Part 7. Declaration, Signature, and Contact Information of Petitioner or Authorized Signatory (Read the information on penalties in the instructions before completing this section.) 2. Signature and Date. Signature of Authorized Signatory. This is a protected field.",
-        },
-        {
-          id: "part5.subform9LineYearEstablished",
+          id: "part7Line12b.emp1StreetName",
           type: "text",
-          label: "Assets",
-          required: true,
-          helpText:
-            "E-1/E-2 Classification Supplement to Form I-1 29. Section 2. Additional Information About the U. S. Employer. 4. Assets.",
+          label: "Part7 Line12b - Emp1 Street Name",
+          required: false,
         },
         {
-          id: "part5.subform11SignatureofApplicant1",
+          id: "part7Line12b.emp1ZipCode",
           type: "text",
-          label:
-            "The name of the applicant can not be typewritten into this space",
-          required: true,
-          helpText:
-            "NOTE: Read the information on penalties in the Form I-90 instructions before completing this part. You must file Form I-90 while in the United States. Applicant&apos;s Statement. NOTE: box for either A. or 1. B. box for , 6 . A . Signature of Applicant. This form can not be signed electronically. The name of the applicant can not be typewritten into this space.",
+          label: "Part7 Line12b - Emp1 Zip Code",
+          required: false,
         },
         {
-          id: "part5.subform15SignatureofApplicant2",
+          id: "part7Line12b.empCity",
           type: "text",
-          label:
-            "The name of the applicant can not be typewritten into this space",
-          required: true,
-          helpText:
-            "NOTE: Read the information on penalties in the Form I-90 instructions before completing this part. You must file Form I-90 while in the United States. Applicant&apos;s Statement. NOTE: box for either A. or 1. B. box for , 6 . A . Signature of Applicant. This form can not be signed electronically. The name of the applicant can not be typewritten into this space.",
+          label: "Part7 Line12b - Emp City",
+          required: false,
         },
         {
-          id: "part5.subform19SignatureofApplicant3",
+          id: "part7Line12c.emp1FromDate",
           type: "text",
-          label:
-            "The name of the applicant can not be typewritten into this space",
-          required: true,
-          helpText:
-            "NOTE: Read the information on penalties in the Form I-90 instructions before completing this part. You must file Form I-90 while in the United States. Applicant&apos;s Statement. NOTE: box for either A. or 1. B. box for , 6 . A . Signature of Applicant. This form can not be signed electronically. The name of the applicant can not be typewritten into this space.",
+          label: "Part7 Line12c - Emp1 From Date",
+          required: false,
         },
         {
-          id: "part5.subform35SignatureofApplicant4",
+          id: "preparer.daytimePhoneNumber1.10d",
           type: "text",
-          label:
-            "The name of the applicant can not be typewritten into this space",
-          required: true,
-          helpText:
-            "NOTE: Read the information on penalties in the Form I-90 instructions before completing this part. You must file Form I-90 while in the United States. Applicant&apos;s Statement. NOTE: box for either A. or 1. B. box for , 6 . A . Signature of Applicant. This form can not be signed electronically. The name of the applicant can not be typewritten into this space.",
+          label: "Preparer - Daytime Phone Number1 - 10d",
+          required: false,
         },
         {
-          id: "part5.subform36SignatureofApplicant5",
+          id: "preparer.daytimePhoneNumber1.11d",
           type: "text",
-          label:
-            "The name of the applicant can not be typewritten into this space",
-          required: true,
-          helpText:
-            "NOTE: Read the information on penalties in the Form I-90 instructions before completing this part. You must file Form I-90 while in the United States. Applicant&apos;s Statement. NOTE: box for either A. or 1. B. box for , 6 . A . Signature of Applicant. This form can not be signed electronically. The name of the applicant can not be typewritten into this space.",
+          label: "Preparer - Daytime Phone Number1 - 11d",
+          required: false,
         },
         {
-          id: "part5.subform42SignatureofApplicant6",
+          id: "preparer.daytimePhoneNumber1.12d",
           type: "text",
-          label:
-            "The name of the applicant can not be typewritten into this space",
-          required: true,
-          helpText:
-            "NOTE: Read the information on penalties in the Form I-90 instructions before completing this part. You must file Form I-90 while in the United States. Applicant&apos;s Statement. NOTE: box for either A. or 1. B. box for , 6 . A . Signature of Applicant. This form can not be signed electronically. The name of the applicant can not be typewritten into this space.",
+          label: "Preparer - Daytime Phone Number1 - 12d",
+          required: false,
         },
       ],
     },
     {
-      id: "part7",
-      title: "Contact Information",
+      id: "section_35",
+      title: "Section 35",
       questions: [
         {
-          id: "part7.subform1LineDEmp1Name",
+          id: "line1.familyName_7",
           type: "text",
-          label: "Group Name",
-          required: true,
-          helpText: "2. If an Entertainment Group, Group Name. Group Name.",
+          label: "Line1 - Family Name_7",
+          required: false,
         },
         {
-          id: "part7.subform23LineBBEmp1City",
+          id: "line1.givenName_3",
           type: "text",
-          label: "City or Town",
-          required: true,
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 2. If you answered B. &quot;CAP H-1B U. S. Master&apos;s Degree or Higher,&quot; following information regarding the master&apos;s or higher degree the beneficiary has earned from a U. S. institution as defined in 20 United States Code 10 0 1(A): D. Address of the United States institution of higher education. City or Town.",
+          label: "Line1 - Given Name_3",
+          required: false,
         },
         {
-          id: "part7.subform23LineBBEmp1State",
+          id: "line1.middleName_3",
+          type: "text",
+          label: "Line1 - Middle Name_3",
+          required: false,
+        },
+        {
+          id: "line13b.aptSteFlrNumber",
+          type: "text",
+          label: "Apt. / Ste. / Flr.",
+          required: false,
+        },
+        {
+          id: "line13b.unit",
+          type: "checkbox",
+          label: "FLR",
+          required: false,
+        },
+        {
+          id: "line13b.unit_2",
+          type: "checkbox",
+          label: "STE",
+          required: false,
+        },
+        {
+          id: "line13b.unit_3",
+          type: "checkbox",
+          label: "APT",
+          required: false,
+        },
+        {
+          id: "line1b.dateofSignature_2",
+          type: "text",
+          label: "Line1b - Dateof Signature_2",
+          required: false,
+        },
+        {
+          id: "lSuppLine13a.nameofPeer",
+          type: "text",
+          label: "L Supp Line13a - Nameof Peer",
+          required: false,
+        },
+        {
+          id: "p5.line6a.signatureofApplicant_5",
+          type: "text",
+          label: "P5 - Line6a - Signatureof Applicant_5",
+          required: false,
+        },
+        {
+          id: "part7Line13b.emp1State",
           type: "select",
-          label: "State",
-          required: true,
+          label: "Part7 Line13b - Emp1 State",
+          required: false,
           options: [
-            { value: "", label: "" },
-            { value: "AA", label: "AA" },
-            { value: "AE", label: "AE" },
-            { value: "AK", label: "Alaska" },
-            { value: "AL", label: "Alabama" },
-            { value: "AP", label: "AP" },
-            { value: "AR", label: "Arkansas" },
-            { value: "AS", label: "American Samoa" },
-            { value: "AZ", label: "Arizona" },
-            { value: "CA", label: "California" },
-            { value: "CO", label: "Colorado" },
-            { value: "CT", label: "Connecticut" },
-            { value: "DC", label: "District of Columbia" },
-            { value: "DE", label: "Delaware" },
-            { value: "FL", label: "Florida" },
-            { value: "FM", label: "FM" },
-            { value: "GA", label: "Georgia" },
-            { value: "GU", label: "Guam" },
-            { value: "HI", label: "Hawaii" },
-            { value: "IA", label: "Iowa" },
-            { value: "ID", label: "Idaho" },
-            { value: "IL", label: "Illinois" },
-            { value: "IN", label: "Indiana" },
-            { value: "KS", label: "Kansas" },
-            { value: "KY", label: "Kentucky" },
-            { value: "LA", label: "Louisiana" },
-            { value: "MA", label: "Massachusetts" },
-            { value: "MD", label: "Maryland" },
-            { value: "ME", label: "Maine" },
-            { value: "MH", label: "MH" },
-            { value: "MI", label: "Michigan" },
-            { value: "MN", label: "Minnesota" },
-            { value: "MO", label: "Missouri" },
-            { value: "MP", label: "Northern Mariana Islands" },
-            { value: "MS", label: "Mississippi" },
-            { value: "MT", label: "Montana" },
-            { value: "NC", label: "North Carolina" },
-            { value: "ND", label: "North Dakota" },
-            { value: "NE", label: "Nebraska" },
-            { value: "NH", label: "New Hampshire" },
-            { value: "NJ", label: "New Jersey" },
-            { value: "NM", label: "New Mexico" },
-            { value: "NV", label: "Nevada" },
-            { value: "NY", label: "New York" },
-            { value: "OH", label: "Ohio" },
-            { value: "OK", label: "Oklahoma" },
-            { value: "OR", label: "Oregon" },
-            { value: "PA", label: "Pennsylvania" },
-            { value: "PR", label: "Puerto Rico" },
-            { value: "PW", label: "PW" },
-            { value: "RI", label: "Rhode Island" },
-            { value: "SC", label: "South Carolina" },
-            { value: "SD", label: "South Dakota" },
-            { value: "TN", label: "Tennessee" },
-            { value: "TX", label: "Texas" },
-            { value: "UT", label: "Utah" },
-            { value: "VA", label: "Virginia" },
-            { value: "VI", label: "U.S. Virgin Islands" },
-            { value: "VT", label: "Vermont" },
-            { value: "WA", label: "Washington" },
-            { value: "WI", label: "Wisconsin" },
-            { value: "WV", label: "West Virginia" },
-            { value: "WY", label: "Wyoming" },
+            {
+              label: " ",
+              value: " ",
+            },
+            {
+              label: "AA",
+              value: "AA",
+            },
+            {
+              label: "AE",
+              value: "AE",
+            },
+            {
+              label: "AK",
+              value: "AK",
+            },
+            {
+              label: "AL",
+              value: "AL",
+            },
+            {
+              label: "AP",
+              value: "AP",
+            },
+            {
+              label: "AR",
+              value: "AR",
+            },
+            {
+              label: "AS",
+              value: "AS",
+            },
+            {
+              label: "AZ",
+              value: "AZ",
+            },
+            {
+              label: "CA",
+              value: "CA",
+            },
+            {
+              label: "CO",
+              value: "CO",
+            },
+            {
+              label: "CT",
+              value: "CT",
+            },
+            {
+              label: "DC",
+              value: "DC",
+            },
+            {
+              label: "DE",
+              value: "DE",
+            },
+            {
+              label: "FL",
+              value: "FL",
+            },
+            {
+              label: "FM",
+              value: "FM",
+            },
+            {
+              label: "GA",
+              value: "GA",
+            },
+            {
+              label: "GU",
+              value: "GU",
+            },
+            {
+              label: "HI",
+              value: "HI",
+            },
+            {
+              label: "IA",
+              value: "IA",
+            },
+            {
+              label: "ID",
+              value: "ID",
+            },
+            {
+              label: "IL",
+              value: "IL",
+            },
+            {
+              label: "IN",
+              value: "IN",
+            },
+            {
+              label: "KS",
+              value: "KS",
+            },
+            {
+              label: "KY",
+              value: "KY",
+            },
+            {
+              label: "LA",
+              value: "LA",
+            },
+            {
+              label: "MA",
+              value: "MA",
+            },
+            {
+              label: "MD",
+              value: "MD",
+            },
+            {
+              label: "ME",
+              value: "ME",
+            },
+            {
+              label: "MH",
+              value: "MH",
+            },
+            {
+              label: "MI",
+              value: "MI",
+            },
+            {
+              label: "MN",
+              value: "MN",
+            },
+            {
+              label: "MO",
+              value: "MO",
+            },
+            {
+              label: "MP",
+              value: "MP",
+            },
+            {
+              label: "MS",
+              value: "MS",
+            },
+            {
+              label: "MT",
+              value: "MT",
+            },
+            {
+              label: "NC",
+              value: "NC",
+            },
+            {
+              label: "ND",
+              value: "ND",
+            },
+            {
+              label: "NE",
+              value: "NE",
+            },
+            {
+              label: "NH",
+              value: "NH",
+            },
+            {
+              label: "NJ",
+              value: "NJ",
+            },
+            {
+              label: "NM",
+              value: "NM",
+            },
+            {
+              label: "NV",
+              value: "NV",
+            },
+            {
+              label: "NY",
+              value: "NY",
+            },
+            {
+              label: "OH",
+              value: "OH",
+            },
+            {
+              label: "OK",
+              value: "OK",
+            },
+            {
+              label: "OR",
+              value: "OR",
+            },
+            {
+              label: "PA",
+              value: "PA",
+            },
+            {
+              label: "PR",
+              value: "PR",
+            },
+            {
+              label: "PW",
+              value: "PW",
+            },
+            {
+              label: "RI",
+              value: "RI",
+            },
+            {
+              label: "SC",
+              value: "SC",
+            },
+            {
+              label: "SD",
+              value: "SD",
+            },
+            {
+              label: "TN",
+              value: "TN",
+            },
+            {
+              label: "TX",
+              value: "TX",
+            },
+            {
+              label: "UT",
+              value: "UT",
+            },
+            {
+              label: "UT",
+              value: "UT",
+            },
+            {
+              label: "VA",
+              value: "VA",
+            },
+            {
+              label: "VI",
+              value: "VI",
+            },
+            {
+              label: "VT",
+              value: "VT",
+            },
+            {
+              label: "WA",
+              value: "WA",
+            },
+            {
+              label: "WI",
+              value: "WI",
+            },
+            {
+              label: "WV",
+              value: "WV",
+            },
+            {
+              label: "WY",
+              value: "WY",
+            },
           ],
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 2. If you answered B. &quot;CAP H-1B U. S. Master&apos;s Degree or Higher,&quot; following information regarding the master&apos;s or higher degree the beneficiary has earned from a U. S. institution as defined in 20 United States Code 10 0 1(A): D. Address of the United States institution of higher education. State.",
         },
         {
-          id: "part7.subform23LineBBEmp1ZipCode",
+          id: "part7Line13b.emp1StreetName",
           type: "text",
-          label: "ZIP Code",
-          required: true,
-          helpText:
-            "H-1B and H-1B1 Data Collection and Filing Fee Exemption Supplement. Section 3. Numerical Limitation Information. 2. If you answered B. &quot;CAP H-1B U. S. Master&apos;s Degree or Higher,&quot; following information regarding the master&apos;s or higher degree the beneficiary has earned from a U. S. institution as defined in 20 United States Code 10 0 1(A): D. Address of the United States institution of higher education. ZIP Code.",
+          label: "Part7 Line13b - Emp1 Street Name",
+          required: false,
         },
         {
-          id: "part7.subform34EmpCity",
+          id: "part7Line13b.emp1ZipCode",
           type: "text",
-          label: "City or Town",
-          required: true,
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary Ability. 10. B. address. City or Town.",
+          label: "Part7 Line13b - Emp1 Zip Code",
+          required: false,
         },
         {
-          id: "part7.subform34Emp1State",
-          type: "select",
-          label: "State",
-          required: true,
-          options: [
-            { value: "", label: "" },
-            { value: "AA", label: "AA" },
-            { value: "AE", label: "AE" },
-            { value: "AK", label: "Alaska" },
-            { value: "AL", label: "Alabama" },
-            { value: "AP", label: "AP" },
-            { value: "AR", label: "Arkansas" },
-            { value: "AS", label: "American Samoa" },
-            { value: "AZ", label: "Arizona" },
-            { value: "CA", label: "California" },
-            { value: "CO", label: "Colorado" },
-            { value: "CT", label: "Connecticut" },
-            { value: "DC", label: "District of Columbia" },
-            { value: "DE", label: "Delaware" },
-            { value: "FL", label: "Florida" },
-            { value: "FM", label: "FM" },
-            { value: "GA", label: "Georgia" },
-            { value: "GU", label: "Guam" },
-            { value: "HI", label: "Hawaii" },
-            { value: "IA", label: "Iowa" },
-            { value: "ID", label: "Idaho" },
-            { value: "IL", label: "Illinois" },
-            { value: "IN", label: "Indiana" },
-            { value: "KS", label: "Kansas" },
-            { value: "KY", label: "Kentucky" },
-            { value: "LA", label: "Louisiana" },
-            { value: "MA", label: "Massachusetts" },
-            { value: "MD", label: "Maryland" },
-            { value: "ME", label: "Maine" },
-            { value: "MH", label: "MH" },
-            { value: "MI", label: "Michigan" },
-            { value: "MN", label: "Minnesota" },
-            { value: "MO", label: "Missouri" },
-            { value: "MP", label: "Northern Mariana Islands" },
-            { value: "MS", label: "Mississippi" },
-            { value: "MT", label: "Montana" },
-            { value: "NC", label: "North Carolina" },
-            { value: "ND", label: "North Dakota" },
-            { value: "NE", label: "Nebraska" },
-            { value: "NH", label: "New Hampshire" },
-            { value: "NJ", label: "New Jersey" },
-            { value: "NM", label: "New Mexico" },
-            { value: "NV", label: "Nevada" },
-            { value: "NY", label: "New York" },
-            { value: "OH", label: "Ohio" },
-            { value: "OK", label: "Oklahoma" },
-            { value: "OR", label: "Oregon" },
-            { value: "PA", label: "Pennsylvania" },
-            { value: "PR", label: "Puerto Rico" },
-            { value: "PW", label: "PW" },
-            { value: "RI", label: "Rhode Island" },
-            { value: "SC", label: "South Carolina" },
-            { value: "SD", label: "South Dakota" },
-            { value: "TN", label: "Tennessee" },
-            { value: "TX", label: "Texas" },
-            { value: "UT", label: "Utah" },
-            { value: "VA", label: "Virginia" },
-            { value: "VI", label: "U.S. Virgin Islands" },
-            { value: "VT", label: "Vermont" },
-            { value: "WA", label: "Washington" },
-            { value: "WI", label: "Wisconsin" },
-            { value: "WV", label: "West Virginia" },
-            { value: "WY", label: "Wyoming" },
-          ],
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary Ability. 10. B. address. State.",
-        },
-        {
-          id: "part7.subform34Emp1ZipCode",
+          id: "part7Line13b.empCity",
           type: "text",
-          label: "ZIP Code",
-          required: true,
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary Ability. 10. B. address. ZIP Code.",
+          label: "Part7 Line13b - Emp City",
+          required: false,
         },
         {
-          id: "part7.subform34Emp1StreetName",
+          id: "part7Line13c.emp1FromDate",
           type: "text",
-          label: "Street Number and Name",
-          required: true,
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary Ability. 10. B. address. Street Number and Name.",
+          label: "Part7 Line13c - Emp1 From Date",
+          required: false,
         },
         {
-          id: "part7.subform34Emp1FromDate",
-          type: "date",
-          label: "Date Sent",
-          required: true,
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary Ability. 10. C. Date Sent.",
-        },
-        {
-          id: "part7.subform34Lin11cEmp1FromDate",
-          type: "date",
-          label: "Date Sent",
-          required: true,
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-1 Extraordinary achievement in motion pictures or television. 11. C. Date Sent.",
-        },
-        {
-          id: "part7.subform35EmpCity",
+          id: "preparer.daytimePhoneNumber1.13d",
           type: "text",
-          label: "City or Town",
-          required: true,
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-2 or P alien. 13. B. Complete Address. City or Town.",
+          label: "Preparer - Daytime Phone Number1 - 13d",
+          required: false,
         },
         {
-          id: "part7.subform35Emp1State",
-          type: "select",
-          label: "State",
-          required: true,
-          options: [
-            { value: "", label: "" },
-            { value: "AA", label: "AA" },
-            { value: "AE", label: "AE" },
-            { value: "AK", label: "Alaska" },
-            { value: "AL", label: "Alabama" },
-            { value: "AP", label: "AP" },
-            { value: "AR", label: "Arkansas" },
-            { value: "AS", label: "American Samoa" },
-            { value: "AZ", label: "Arizona" },
-            { value: "CA", label: "California" },
-            { value: "CO", label: "Colorado" },
-            { value: "CT", label: "Connecticut" },
-            { value: "DC", label: "District of Columbia" },
-            { value: "DE", label: "Delaware" },
-            { value: "FL", label: "Florida" },
-            { value: "FM", label: "FM" },
-            { value: "GA", label: "Georgia" },
-            { value: "GU", label: "Guam" },
-            { value: "HI", label: "Hawaii" },
-            { value: "IA", label: "Iowa" },
-            { value: "ID", label: "Idaho" },
-            { value: "IL", label: "Illinois" },
-            { value: "IN", label: "Indiana" },
-            { value: "KS", label: "Kansas" },
-            { value: "KY", label: "Kentucky" },
-            { value: "LA", label: "Louisiana" },
-            { value: "MA", label: "Massachusetts" },
-            { value: "MD", label: "Maryland" },
-            { value: "ME", label: "Maine" },
-            { value: "MH", label: "MH" },
-            { value: "MI", label: "Michigan" },
-            { value: "MN", label: "Minnesota" },
-            { value: "MO", label: "Missouri" },
-            { value: "MP", label: "Northern Mariana Islands" },
-            { value: "MS", label: "Mississippi" },
-            { value: "MT", label: "Montana" },
-            { value: "NC", label: "North Carolina" },
-            { value: "ND", label: "North Dakota" },
-            { value: "NE", label: "Nebraska" },
-            { value: "NH", label: "New Hampshire" },
-            { value: "NJ", label: "New Jersey" },
-            { value: "NM", label: "New Mexico" },
-            { value: "NV", label: "Nevada" },
-            { value: "NY", label: "New York" },
-            { value: "OH", label: "Ohio" },
-            { value: "OK", label: "Oklahoma" },
-            { value: "OR", label: "Oregon" },
-            { value: "PA", label: "Pennsylvania" },
-            { value: "PR", label: "Puerto Rico" },
-            { value: "PW", label: "PW" },
-            { value: "RI", label: "Rhode Island" },
-            { value: "SC", label: "South Carolina" },
-            { value: "SD", label: "South Dakota" },
-            { value: "TN", label: "Tennessee" },
-            { value: "TX", label: "Texas" },
-            { value: "UT", label: "Utah" },
-            { value: "VA", label: "Virginia" },
-            { value: "VI", label: "U.S. Virgin Islands" },
-            { value: "VT", label: "Vermont" },
-            { value: "WA", label: "Washington" },
-            { value: "WI", label: "Wisconsin" },
-            { value: "WV", label: "West Virginia" },
-            { value: "WY", label: "Wyoming" },
-          ],
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-2 or P alien. 13. B. Complete Address. State.",
-        },
-        {
-          id: "part7.subform35Emp1ZipCode",
+          id: "pt7Line3.daytimePhoneNumber1_2",
           type: "text",
-          label: "ZIP Code",
-          required: true,
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-2 or P alien. 13. B. Complete Address. ZIP Code.",
+          label: "Pt7 Line3 - Daytime Phone Number1_2",
+          required: false,
         },
         {
-          id: "part7.subform35Emp1StreetName",
+          id: "pt7Line3.emailAddress_2",
           type: "text",
-          label: "Street Number and Name",
-          required: true,
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-2 or P alien. 13. B. Complete Address. Street Number and Name.",
-        },
-        {
-          id: "part7.subform35Emp1FromDate",
-          type: "date",
-          label: "Date Sent",
-          required: true,
-          helpText:
-            "O and P Classifications Supplement to Form I-1 29. Section 1. Complete This Section if Filing for O or P Classification. O-2 or P alien. 13. C. Date Sent.",
-        },
-        {
-          id: "part7.subform44LineAEmpCity",
-          type: "text",
-          label: "City or Town",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). City or Town.",
-        },
-        {
-          id: "part7.subform44LineAEmp1State",
-          type: "select",
-          label: "State.",
-          required: true,
-          options: [
-            { value: "", label: "" },
-            { value: "AA", label: "AA" },
-            { value: "AE", label: "AE" },
-            { value: "AK", label: "Alaska" },
-            { value: "AL", label: "Alabama" },
-            { value: "AP", label: "AP" },
-            { value: "AR", label: "Arkansas" },
-            { value: "AS", label: "American Samoa" },
-            { value: "AZ", label: "Arizona" },
-            { value: "CA", label: "California" },
-            { value: "CO", label: "Colorado" },
-            { value: "CT", label: "Connecticut" },
-            { value: "DC", label: "District of Columbia" },
-            { value: "DE", label: "Delaware" },
-            { value: "FL", label: "Florida" },
-            { value: "FM", label: "FM" },
-            { value: "GA", label: "Georgia" },
-            { value: "GU", label: "Guam" },
-            { value: "HI", label: "Hawaii" },
-            { value: "IA", label: "Iowa" },
-            { value: "ID", label: "Idaho" },
-            { value: "IL", label: "Illinois" },
-            { value: "IN", label: "Indiana" },
-            { value: "KS", label: "Kansas" },
-            { value: "KY", label: "Kentucky" },
-            { value: "LA", label: "Louisiana" },
-            { value: "MA", label: "Massachusetts" },
-            { value: "MD", label: "Maryland" },
-            { value: "ME", label: "Maine" },
-            { value: "MH", label: "MH" },
-            { value: "MI", label: "Michigan" },
-            { value: "MN", label: "Minnesota" },
-            { value: "MO", label: "Missouri" },
-            { value: "MP", label: "Northern Mariana Islands" },
-            { value: "MS", label: "Mississippi" },
-            { value: "MT", label: "Montana" },
-            { value: "NC", label: "North Carolina" },
-            { value: "ND", label: "North Dakota" },
-            { value: "NE", label: "Nebraska" },
-            { value: "NH", label: "New Hampshire" },
-            { value: "NJ", label: "New Jersey" },
-            { value: "NM", label: "New Mexico" },
-            { value: "NV", label: "Nevada" },
-            { value: "NY", label: "New York" },
-            { value: "OH", label: "Ohio" },
-            { value: "OK", label: "Oklahoma" },
-            { value: "OR", label: "Oregon" },
-            { value: "PA", label: "Pennsylvania" },
-            { value: "PR", label: "Puerto Rico" },
-            { value: "PW", label: "PW" },
-            { value: "RI", label: "Rhode Island" },
-            { value: "SC", label: "South Carolina" },
-            { value: "SD", label: "South Dakota" },
-            { value: "TN", label: "Tennessee" },
-            { value: "TX", label: "Texas" },
-            { value: "UT", label: "Utah" },
-            { value: "VA", label: "Virginia" },
-            { value: "VI", label: "U.S. Virgin Islands" },
-            { value: "VT", label: "Vermont" },
-            { value: "WA", label: "Washington" },
-            { value: "WI", label: "Wisconsin" },
-            { value: "WV", label: "West Virginia" },
-            { value: "WY", label: "Wyoming" },
-          ],
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). State.",
-        },
-        {
-          id: "part7.subform44LineAEmp1ZipCode",
-          type: "text",
-          label: "ZIP Code",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). ZIP Code.",
-        },
-        {
-          id: "part7.subform44LineAEmp1StreetName",
-          type: "text",
-          label: "Street Number and Name",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). Street Number and Name.",
-        },
-        {
-          id: "part7.subform45LineAEmpCity1",
-          type: "text",
-          label: "City or Town",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). City or Town.",
-        },
-        {
-          id: "part7.subform45LineAEmp1State1",
-          type: "select",
-          label: "State.",
-          required: true,
-          options: [
-            { value: "", label: "" },
-            { value: "AA", label: "AA" },
-            { value: "AE", label: "AE" },
-            { value: "AK", label: "Alaska" },
-            { value: "AL", label: "Alabama" },
-            { value: "AP", label: "AP" },
-            { value: "AR", label: "Arkansas" },
-            { value: "AS", label: "American Samoa" },
-            { value: "AZ", label: "Arizona" },
-            { value: "CA", label: "California" },
-            { value: "CO", label: "Colorado" },
-            { value: "CT", label: "Connecticut" },
-            { value: "DC", label: "District of Columbia" },
-            { value: "DE", label: "Delaware" },
-            { value: "FL", label: "Florida" },
-            { value: "FM", label: "FM" },
-            { value: "GA", label: "Georgia" },
-            { value: "GU", label: "Guam" },
-            { value: "HI", label: "Hawaii" },
-            { value: "IA", label: "Iowa" },
-            { value: "ID", label: "Idaho" },
-            { value: "IL", label: "Illinois" },
-            { value: "IN", label: "Indiana" },
-            { value: "KS", label: "Kansas" },
-            { value: "KY", label: "Kentucky" },
-            { value: "LA", label: "Louisiana" },
-            { value: "MA", label: "Massachusetts" },
-            { value: "MD", label: "Maryland" },
-            { value: "ME", label: "Maine" },
-            { value: "MH", label: "MH" },
-            { value: "MI", label: "Michigan" },
-            { value: "MN", label: "Minnesota" },
-            { value: "MO", label: "Missouri" },
-            { value: "MP", label: "Northern Mariana Islands" },
-            { value: "MS", label: "Mississippi" },
-            { value: "MT", label: "Montana" },
-            { value: "NC", label: "North Carolina" },
-            { value: "ND", label: "North Dakota" },
-            { value: "NE", label: "Nebraska" },
-            { value: "NH", label: "New Hampshire" },
-            { value: "NJ", label: "New Jersey" },
-            { value: "NM", label: "New Mexico" },
-            { value: "NV", label: "Nevada" },
-            { value: "NY", label: "New York" },
-            { value: "OH", label: "Ohio" },
-            { value: "OK", label: "Oklahoma" },
-            { value: "OR", label: "Oregon" },
-            { value: "PA", label: "Pennsylvania" },
-            { value: "PR", label: "Puerto Rico" },
-            { value: "PW", label: "PW" },
-            { value: "RI", label: "Rhode Island" },
-            { value: "SC", label: "South Carolina" },
-            { value: "SD", label: "South Dakota" },
-            { value: "TN", label: "Tennessee" },
-            { value: "TX", label: "Texas" },
-            { value: "UT", label: "Utah" },
-            { value: "VA", label: "Virginia" },
-            { value: "VI", label: "U.S. Virgin Islands" },
-            { value: "VT", label: "Vermont" },
-            { value: "WA", label: "Washington" },
-            { value: "WI", label: "Wisconsin" },
-            { value: "WV", label: "West Virginia" },
-            { value: "WY", label: "Wyoming" },
-          ],
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). State.",
-        },
-        {
-          id: "part7.subform45LineAEmp1ZipCode1",
-          type: "text",
-          label: "ZIP Code",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). ZIP Code.",
-        },
-        {
-          id: "part7.subform45LineAEmp1StreetName1",
-          type: "text",
-          label: "Street Number and Name",
-          required: true,
-          helpText:
-            "Attachment-1. Attach to Form I-1 29 when more than one person is included in the petition. (List each person separately. Do not include the person you named on the Form I-1 29.) Address in the United States Where You Intend to Live (Complete Address). Street Number and Name.",
+          label: "Pt7 Line3 - Email Address_2",
+          required: false,
         },
       ],
     },
     {
-      id: "part8",
-      title: "Signature",
+      id: "section_36",
+      title: "Section 36",
       questions: [
         {
-          id: "part8.subformDaytimePhoneNumber1",
-          type: "tel",
-          label: "Daytime Telephone Number",
-          required: true,
-          helpText: "Part 1. Daytime Telephone Number.",
-        },
-        {
-          id: "part8.subformMobilePhoneNumber1",
-          type: "tel",
-          label: "Mobile Telephone Number",
-          required: true,
-          helpText: "Part 1. Mobile Telephone Number.",
-        },
-        {
-          id: "part8.subform6ZipCode",
+          id: "hSupLine2.familyName_3",
           type: "text",
-          label: "ZIP Code",
-          required: true,
-          helpText:
-            "following information concerning the preparer. 3. Preparer&apos;s address. ZIP Code.",
+          label: "H Sup Line2 - Family Name_3",
+          required: false,
         },
         {
-          id: "part8.subform6State",
-          type: "select",
-          label: "State",
-          required: true,
-          options: [
-            { value: "", label: "" },
-            { value: "AA", label: "AA" },
-            { value: "AE", label: "AE" },
-            { value: "AK", label: "Alaska" },
-            { value: "AL", label: "Alabama" },
-            { value: "AP", label: "AP" },
-            { value: "AR", label: "Arkansas" },
-            { value: "AS", label: "American Samoa" },
-            { value: "AZ", label: "Arizona" },
-            { value: "CA", label: "California" },
-            { value: "CO", label: "Colorado" },
-            { value: "CT", label: "Connecticut" },
-            { value: "DC", label: "District of Columbia" },
-            { value: "DE", label: "Delaware" },
-            { value: "FL", label: "Florida" },
-            { value: "FM", label: "FM" },
-            { value: "GA", label: "Georgia" },
-            { value: "GU", label: "Guam" },
-            { value: "HI", label: "Hawaii" },
-            { value: "IA", label: "Iowa" },
-            { value: "ID", label: "Idaho" },
-            { value: "IL", label: "Illinois" },
-            { value: "IN", label: "Indiana" },
-            { value: "KS", label: "Kansas" },
-            { value: "KY", label: "Kentucky" },
-            { value: "LA", label: "Louisiana" },
-            { value: "MA", label: "Massachusetts" },
-            { value: "MD", label: "Maryland" },
-            { value: "ME", label: "Maine" },
-            { value: "MH", label: "MH" },
-            { value: "MI", label: "Michigan" },
-            { value: "MN", label: "Minnesota" },
-            { value: "MO", label: "Missouri" },
-            { value: "MP", label: "Northern Mariana Islands" },
-            { value: "MS", label: "Mississippi" },
-            { value: "MT", label: "Montana" },
-            { value: "NC", label: "North Carolina" },
-            { value: "ND", label: "North Dakota" },
-            { value: "NE", label: "Nebraska" },
-            { value: "NH", label: "New Hampshire" },
-            { value: "NJ", label: "New Jersey" },
-            { value: "NM", label: "New Mexico" },
-            { value: "NV", label: "Nevada" },
-            { value: "NY", label: "New York" },
-            { value: "OH", label: "Ohio" },
-            { value: "OK", label: "Oklahoma" },
-            { value: "OR", label: "Oregon" },
-            { value: "PA", label: "Pennsylvania" },
-            { value: "PR", label: "Puerto Rico" },
-            { value: "PW", label: "PW" },
-            { value: "RI", label: "Rhode Island" },
-            { value: "SC", label: "South Carolina" },
-            { value: "SD", label: "South Dakota" },
-            { value: "TN", label: "Tennessee" },
-            { value: "TX", label: "Texas" },
-            { value: "UT", label: "Utah" },
-            { value: "VA", label: "Virginia" },
-            { value: "VI", label: "U.S. Virgin Islands" },
-            { value: "VT", label: "Vermont" },
-            { value: "WA", label: "Washington" },
-            { value: "WI", label: "Wisconsin" },
-            { value: "WV", label: "West Virginia" },
-            { value: "WY", label: "Wyoming" },
-          ],
-          helpText:
-            "following information concerning the preparer. 3. Preparer&apos;s address. State.",
-        },
-        {
-          id: "part8.subform6Unit",
-          type: "radio",
-          label: "Apartment",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "apt", label: "Apt." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "following information concerning the preparer. 3. Preparer&apos;s address. Apartment.",
-        },
-        {
-          id: "part8.subform6Unit1",
-          type: "radio",
-          label: "Suite",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "ste", label: "Ste." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "following information concerning the preparer. 3. Preparer&apos;s address. Suite.",
-        },
-        {
-          id: "part8.subform6Unit2",
-          type: "radio",
-          label: "Floor",
-          required: true,
-          options: [
-            { value: "", label: "None" },
-            { value: "flr", label: "Flr." },
-            { value: "off", label: "Off" },
-          ],
-          helpText:
-            "following information concerning the preparer. 3. Preparer&apos;s address. Floor.",
-        },
-        {
-          id: "part8.subform6AptSteFlrNumber",
+          id: "line1.familyName_8",
           type: "text",
-          label: "Apartment, Suite or Floor Number",
-          required: true,
-          helpText:
-            "following information concerning the preparer. If Apartment, Suite or Floor is Checked, Apartment, Suite or Floor Number.",
+          label: "Line1 - Family Name_8",
+          required: false,
         },
         {
-          id: "part8.subform6Province",
+          id: "line1.familyName_9",
           type: "text",
-          label: "Province, if applicable",
-          required: true,
-          helpText:
-            "following information concerning the preparer. 3. Preparer&apos;s address. Province, if applicable.",
+          label: "Line1 - Family Name_9",
+          required: false,
         },
         {
-          id: "part8.subform6PostalCode",
+          id: "line1.givenName_4",
           type: "text",
-          label: "Postal Code, if applicable",
-          required: true,
-          helpText:
-            "following information concerning the preparer. 3. Preparer&apos;s address. Postal Code, if applicable.",
+          label: "Line1 - Given Name_4",
+          required: false,
         },
         {
-          id: "part8.subform6Country",
+          id: "line1.middleName_4",
           type: "text",
-          label: "Country",
-          required: true,
-          helpText:
-            "following information concerning the preparer. 3. Preparer&apos;s address. Country.",
+          label: "Line1 - Middle Name_4",
+          required: false,
+        },
+        {
+          id: "line1b.dateofSignature_3",
+          type: "text",
+          label: "Line1b - Dateof Signature_3",
+          required: false,
+        },
+        {
+          id: "p5.line6a.signatureofApplicant_6",
+          type: "text",
+          label: "P5 - Line6a - Signatureof Applicant_6",
+          required: false,
+        },
+        {
+          id: "pt7Line3.daytimePhoneNumber1_3",
+          type: "text",
+          label: "Pt7 Line3 - Daytime Phone Number1_3",
+          required: false,
+        },
+        {
+          id: "pt7Line3.emailAddress_3",
+          type: "text",
+          label: "Pt7 Line3 - Email Address_3",
+          required: false,
         },
       ],
     },
     {
-      id: "part14",
-      title: "Part 14",
+      id: "section_37",
+      title: "Section 37",
       questions: [
         {
-          id: "part14.subform42PreparerPrintedName",
+          id: "line1.petitionerName_2",
           type: "text",
-          label: "Name of the Petitioner",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Attestation. I certify, under penalty of perjury, that the contents of this attestation and the evidence submitted with it are true and correct. Name of the Petitioner.",
+          label: "Line1 - Petitioner Name_2",
+          required: false,
         },
         {
-          id: "part14.subform42FirmName",
+          id: "line2.beneficiaryName_2",
           type: "text",
-          label: "Employer or Organization Name",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Attestation. Employer or Organization Name.",
+          label: "Line2 - Beneficiary Name_2",
+          required: false,
         },
         {
-          id: "part14.subform43City",
+          id: "r1Sec1Line2",
+          type: "checkbox",
+          label: "N",
+          required: false,
+        },
+        {
+          id: "r1Sec1Line2_2",
+          type: "checkbox",
+          label: "Y",
+          required: false,
+        },
+        {
+          id: "table2.row1.familyMemberName.line1",
           type: "text",
-          label: "City or Town",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Employer or Organization Address . City or Town.",
+          label: "Table2 - Row1 - Family Member Name - Line1",
+          required: false,
         },
         {
-          id: "part14.subform43ZipCode",
+          id: "table2.row1.fromDate1",
           type: "text",
-          label: "ZIP Code",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Employer or Organization Address . ZIP Code.",
+          label: "Table2 - Row1 - From Date1",
+          required: false,
         },
         {
-          id: "part14.subform43StreetName",
+          id: "table2.row1.toDate1",
           type: "text",
-          label: "Street Number and Name",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Employer or Organization Address . Street Number and Name.",
+          label: "Table2 - Row1 - To Date1",
+          required: false,
         },
         {
-          id: "part14.subform43EmailAddress",
-          type: "email",
-          label: "E-Mail Address (optional)",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 1. Complete This Section If You Are Filing For An R-1 Religious Worker. Petitioner Attestations. Employer or Organization&apos;s Contact Information. E-Mail Address (optional)",
+          id: "table2.row2.familyMemberName2",
+          type: "text",
+          label: "Table2 - Row2 - Family Member Name2",
+          required: false,
         },
         {
-          id: "part14.subform43DateofSignature1",
+          id: "table2.row2.fromDate2",
+          type: "text",
+          label: "Table2 - Row2 - From Date2",
+          required: false,
+        },
+        {
+          id: "table2.row2.toDate2",
+          type: "text",
+          label: "Table2 - Row2 - To Date2",
+          required: false,
+        },
+        {
+          id: "table2.row3.familyMemberName3",
+          type: "text",
+          label: "Table2 - Row3 - Family Member Name3",
+          required: false,
+        },
+        {
+          id: "table2.row3.familyMemberName4",
+          type: "text",
+          label: "Table2 - Row3 - Family Member Name4",
+          required: false,
+        },
+        {
+          id: "table2.row3.familyMemberName5",
+          type: "text",
+          label: "Table2 - Row3 - Family Member Name5",
+          required: false,
+        },
+        {
+          id: "table2.row3.familyMemberName6",
+          type: "text",
+          label: "Table2 - Row3 - Family Member Name6",
+          required: false,
+        },
+        {
+          id: "table2.row3.familyMemberName7",
+          type: "text",
+          label: "Table2 - Row3 - Family Member Name7",
+          required: false,
+        },
+        {
+          id: "table2.row3.fromDate3",
+          type: "text",
+          label: "Table2 - Row3 - From Date3",
+          required: false,
+        },
+        {
+          id: "table2.row3.fromDate4",
+          type: "text",
+          label: "Table2 - Row3 - From Date4",
+          required: false,
+        },
+        {
+          id: "table2.row3.fromDate5",
+          type: "text",
+          label: "Table2 - Row3 - From Date5",
+          required: false,
+        },
+        {
+          id: "table2.row3.fromDate6",
+          type: "text",
+          label: "Table2 - Row3 - From Date6",
+          required: false,
+        },
+        {
+          id: "table2.row3.fromDate7",
+          type: "text",
+          label: "Table2 - Row3 - From Date7",
+          required: false,
+        },
+        {
+          id: "table2.row3.toDate3",
+          type: "text",
+          label: "Table2 - Row3 - To Date3",
+          required: false,
+        },
+        {
+          id: "table2.row3.toDate4",
+          type: "text",
+          label: "Table2 - Row3 - To Date4",
+          required: false,
+        },
+        {
+          id: "table2.row3.toDate5",
+          type: "text",
+          label: "Table2 - Row3 - To Date5",
+          required: false,
+        },
+        {
+          id: "table2.row3.toDate6",
+          type: "text",
+          label: "Table2 - Row3 - To Date6",
+          required: false,
+        },
+        {
+          id: "table2.row3.toDate7",
+          type: "text",
+          label: "Table2 - Row3 - To Date7",
+          required: false,
+        },
+        {
+          id: "ttlNumbersofWorker_2",
+          type: "text",
+          label: "Ttl Numbersof Worker_2",
+          required: false,
+        },
+        {
+          id: "ttlNumbersofWorker_3",
+          type: "text",
+          label: "Ttl Numbersof Worker_3",
+          required: false,
+        },
+        {
+          id: "ttlNumbersofWorker_4",
+          type: "text",
+          label: "Ttl Numbersof Worker_4",
+          required: false,
+        },
+        {
+          id: "ttlNumbersofWorker_5",
+          type: "text",
+          label: "Ttl Numbersof Worker_5",
+          required: false,
+        },
+      ],
+    },
+    {
+      id: "section_39",
+      title: "Section 39",
+      questions: [
+        {
+          id: "line3.jobDescription_10",
+          type: "text",
+          label: "Line3 - Job Description_10",
+          required: false,
+        },
+        {
+          id: "line3.jobDescription_11",
+          type: "text",
+          label: "Line3 - Job Description_11",
+          required: false,
+        },
+        {
+          id: "line3.jobDescription_12",
+          type: "text",
+          label: "Line3 - Job Description_12",
+          required: false,
+        },
+        {
+          id: "line3.jobDescription_13",
+          type: "text",
+          label: "Line3 - Job Description_13",
+          required: false,
+        },
+        {
+          id: "line3.jobDescription_14",
+          type: "text",
+          label: "Line3 - Job Description_14",
+          required: false,
+        },
+        {
+          id: "table3.row1.position1",
+          type: "text",
+          label: "Table3 - Row1 - Position1",
+          required: false,
+        },
+        {
+          id: "table3.row1.summary1",
+          type: "text",
+          label: "Table3 - Row1 - Summary1",
+          required: false,
+        },
+        {
+          id: "table3.row2.position2",
+          type: "text",
+          label: "Table3 - Row2 - Position2",
+          required: false,
+        },
+        {
+          id: "table3.row2.position3",
+          type: "text",
+          label: "Table3 - Row2 - Position3",
+          required: false,
+        },
+        {
+          id: "table3.row2.position4",
+          type: "text",
+          label: "Table3 - Row2 - Position4",
+          required: false,
+        },
+        {
+          id: "table3.row2.position5",
+          type: "text",
+          label: "Table3 - Row2 - Position5",
+          required: false,
+        },
+        {
+          id: "table3.row2.position6",
+          type: "text",
+          label: "Table3 - Row2 - Position6",
+          required: false,
+        },
+        {
+          id: "table3.row2.summary2",
+          type: "text",
+          label: "Table3 - Row2 - Summary2",
+          required: false,
+        },
+        {
+          id: "table3.row2.summary3",
+          type: "text",
+          label: "Table3 - Row2 - Summary3",
+          required: false,
+        },
+        {
+          id: "table3.row2.summary4",
+          type: "text",
+          label: "Table3 - Row2 - Summary4",
+          required: false,
+        },
+        {
+          id: "table3.row2.summary5",
+          type: "text",
+          label: "Table3 - Row2 - Summary5",
+          required: false,
+        },
+        {
+          id: "table3.row2.summary6",
+          type: "text",
+          label: "Table3 - Row2 - Summary6",
+          required: false,
+        },
+      ],
+    },
+    {
+      id: "section_41",
+      title: "Section 41",
+      questions: [
+        {
+          id: "line3.jobDescription_15",
+          type: "text",
+          label: "Line3 - Job Description_15",
+          required: false,
+        },
+        {
+          id: "r1Sec1Line6a",
+          type: "checkbox",
+          label: "N",
+          required: false,
+        },
+        {
+          id: "r1Sec1Line6a_2",
+          type: "checkbox",
+          label: "Y",
+          required: false,
+        },
+        {
+          id: "r1Sec1Line6a1.explanation",
+          type: "text",
+          label: "R1 Sec1 Line6a1 - Explanation",
+          required: false,
+        },
+        {
+          id: "r1Sec1Line7a",
+          type: "checkbox",
+          label: "Y",
+          required: false,
+        },
+        {
+          id: "r1Sec1Line7a_2",
+          type: "checkbox",
+          label: "N",
+          required: false,
+        },
+        {
+          id: "r1Sec1Line7a1.explanation",
+          type: "text",
+          label: "R1 Sec1 Line7a1 - Explanation",
+          required: false,
+        },
+        {
+          id: "r1Sec1Line8a",
+          type: "checkbox",
+          label: "Y",
+          required: false,
+        },
+        {
+          id: "r1Sec1Line8a_2",
+          type: "checkbox",
+          label: "N",
+          required: false,
+        },
+        {
+          id: "r1Sec1Line8a1.explanation",
+          type: "text",
+          label: "R1 Sec1 Line8a1 - Explanation",
+          required: false,
+        },
+        {
+          id: "r1Sec1Line9a",
+          type: "checkbox",
+          label: "Y",
+          required: false,
+        },
+        {
+          id: "r1Sec1Line9a_2",
+          type: "checkbox",
+          label: "N",
+          required: false,
+        },
+        {
+          id: "r1Sec1Line9a1.explanation",
+          type: "text",
+          label: "R1 Sec1 Line9a1 - Explanation",
+          required: false,
+        },
+      ],
+    },
+    {
+      id: "section_42",
+      title: "Section 42",
+      questions: [
+        {
+          id: "line5.jobTitle",
+          type: "text",
+          label: "Line5 - Job Title",
+          required: false,
+        },
+        {
+          id: "p5.line6a.signatureofApplicant_7",
+          type: "text",
+          label: "P5 - Line6a - Signatureof Applicant_7",
+          required: false,
+        },
+        {
+          id: "part14.dateofSignature",
+          type: "text",
+          label: "Part14 - Dateof Signature",
+          required: false,
+        },
+        {
+          id: "part14.firmName",
+          type: "text",
+          label: "Part14 - Firm Name",
+          required: false,
+        },
+        {
+          id: "part14.preparerPrintedName",
+          type: "text",
+          label: "Part14 - Preparer Printed Name",
+          required: false,
+        },
+        {
+          id: "r1Sec1Line10a",
+          type: "checkbox",
+          label: "Y",
+          required: false,
+        },
+        {
+          id: "r1Sec1Line10a_2",
+          type: "checkbox",
+          label: "N",
+          required: false,
+        },
+        {
+          id: "r1Sec1Line10a1.explanation",
+          type: "text",
+          label: "R1 Sec1 Line10a1 - Explanation",
+          required: false,
+        },
+        {
+          id: "r1Sec1Line11a.no",
+          type: "checkbox",
+          label: "N",
+          required: false,
+        },
+        {
+          id: "r1Sec1Line11a.yes",
+          type: "checkbox",
+          label: "Y",
+          required: false,
+        },
+        {
+          id: "r1Sec1Line11a1.explanation",
+          type: "text",
+          label: "R1 Sec1 Line11a1 - Explanation",
+          required: false,
+        },
+        {
+          id: "r1Sec1Line12a",
+          type: "checkbox",
+          label: "Y",
+          required: false,
+        },
+        {
+          id: "r1Sec1Line12a_2",
+          type: "checkbox",
+          label: "N",
+          required: false,
+        },
+        {
+          id: "r1Sec1Line12a1.explanation",
+          type: "text",
+          label: "R1 Sec1 Line12a1 - Explanation",
+          required: false,
+        },
+      ],
+    },
+    {
+      id: "section_43",
+      title: "Section 43",
+      questions: [
+        {
+          id: "attest.aptSteFlrNumber",
+          type: "text",
+          label: "Apt. / Ste. / Flr.",
+          required: false,
+        },
+        {
+          id: "attest.unit",
+          type: "checkbox",
+          label: "FLR",
+          required: false,
+        },
+        {
+          id: "attest.unit",
+          type: "checkbox",
+          label: "STE",
+          required: false,
+        },
+        {
+          id: "attest.unit",
+          type: "checkbox",
+          label: "APT",
+          required: false,
+        },
+        {
+          id: "employingOrgName",
+          type: "text",
+          label: "Employing Org Name",
+          required: false,
+        },
+        {
+          id: "line2.state",
+          type: "select",
+          label: "Line2 - State",
+          required: false,
+          options: US_STATES,
+        },
+        {
+          id: "line2.state_2",
+          type: "select",
+          label: "Line2 - State_2",
+          required: false,
+          options: US_STATES,
+        },
+        {
+          id: "line5.jobTitle_2",
+          type: "text",
+          label: "Line5 - Job Title 2",
+          required: false,
+        },
+        {
+          id: "nameOfReligiousDenomination",
+          type: "text",
+          label: "Name Of Religious Denomination",
+          required: false,
+        },
+        {
+          id: "part14.city",
+          type: "text",
+          label: "Part14 - City",
+          required: false,
+        },
+        {
+          id: "part14.city_2",
+          type: "text",
+          label: "Part14 - City_2",
+          required: false,
+        },
+        {
+          id: "part14.dateofSignature_2",
+          type: "text",
+          label: "Part14 - Dateof Signature_2",
+          required: false,
+        },
+        {
+          id: "part14.emailAddress",
+          type: "text",
+          label: "Part14 - Email Address",
+          required: false,
+        },
+        {
+          id: "part14.emailAddress_2",
+          type: "text",
+          label: "Part14 - Email Address 2",
+          required: false,
+        },
+        {
+          id: "part14.firmName_2",
+          type: "text",
+          label: "Part14 - Firm Name 2",
+          required: false,
+        },
+        {
+          id: "part14.preparerPrintedName_2",
+          type: "text",
+          label: "Part14 - Preparer Printed Name 2",
+          required: false,
+        },
+        {
+          id: "part14.streetName",
+          type: "text",
+          label: "Part14 - Street Name",
+          required: false,
+        },
+        {
+          id: "part14.streetName_2",
+          type: "text",
+          label: "Part14 - Street Name 2",
+          required: false,
+        },
+        {
+          id: "part14.zipCode",
+          type: "text",
+          label: "Part14 - Zip Code",
+          required: false,
+        },
+        {
+          id: "part14.zipCode_2",
+          type: "text",
+          label: "Part14 - Zip Code_2",
+          required: false,
+        },
+        {
+          id: "preparer.daytimePhoneNumber1",
+          type: "text",
+          label: "Preparer - Daytime Phone Number1",
+          required: false,
+        },
+        {
+          id: "preparer.daytimePhoneNumber1_2",
+          type: "text",
+          label: "Preparer - Daytime Phone Number1_2",
+          required: false,
+        },
+        {
+          id: "preparers.faxPhoneNumber1",
+          type: "text",
+          label: "Preparers - Fax Phone Number1",
+          required: false,
+        },
+        {
+          id: "preparers.faxPhoneNumber1_2",
+          type: "text",
+          label: "Preparers - Fax Phone Number1_2",
+          required: false,
+        },
+
+        {
+          id: "sec1.aptSteFlrNumber",
+          type: "text",
+          label: "Apt. / Ste. / Flr.",
+          required: false,
+        },
+        {
+          id: "sec1.unit",
+          type: "checkbox",
+          label: "SEC 1 Unit",
+          required: false,
+          options: [
+            { value: "FLR", label: "FLR" },
+            { value: "STE", label: "STE" },
+            { value: "APT", label: "APT" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "section_44",
+      title: "Section 44",
+      questions: [
+        {
+          id: "a1.country",
+          type: "text",
+          label: "A1 - Country",
+          required: false,
+        },
+        {
+          id: "a1.postalCode",
+          type: "text",
+          label: "A1 - Postal Code",
+          required: false,
+        },
+        {
+          id: "a1.province",
+          type: "text",
+          label: "A1 - Province",
+          required: false,
+        },
+        {
+          id: "a1.state",
+          type: "select",
+          label: "A1 - State",
+          required: false,
+          options: US_STATES,
+        },
+        {
+          id: "a1.zipCode",
+          type: "text",
+          label: "A1 - Zip Code",
+          required: false,
+        },
+        {
+          id: "att1.aptSteFlrNumber",
+          type: "text",
+          label: "Apt. / Ste. / Flr.",
+          required: false,
+        },
+        {
+          id: "att1.unit",
+          type: "checkbox",
+          label: "FLR",
+          required: false,
+        },
+        {
+          id: "att1.unit_2",
+          type: "checkbox",
+          label: "STE",
+          required: false,
+        },
+        {
+          id: "att1.unit_3",
+          type: "checkbox",
+          label: "APT",
+          required: false,
+        },
+        {
+          id: "for.aptSteFlrNumber",
+          type: "text",
+          label: "Apt. / Ste. / Flr.",
+          required: false,
+        },
+        {
+          id: "for.unit",
+          type: "checkbox",
+          label: "Foreign Address ",
+          required: false,
+        },
+
+        {
+          id: "line.cityTown_5",
+          type: "text",
+          label: "Line - City Town_5",
+          required: false,
+        },
+        {
+          id: "line.country_3",
+          type: "text",
+          label: "Line - Country_3",
+          required: false,
+        },
+        {
+          id: "line.country_4",
+          type: "text",
+          label: "Line - Country_4",
+          required: false,
+        },
+        {
+          id: "line.country_5",
+          type: "text",
+          label: "Line - Country_5",
+          required: false,
+        },
+        {
+          id: "line1.alienNumber_2",
+          type: "text",
+          label: "Line1 - Alien Number_2",
+          required: false,
+        },
+        {
+          id: "line1.gender",
+          type: "checkbox",
+          label: "Male",
+          required: false,
+          options: [
+            { value: "M", label: "Male" },
+            { value: "F", label: "Female" },
+          ],
+        },
+
+        {
+          id: "line11a.dateofArrival",
           type: "date",
-          label: "Date of Signature",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. I certify, under penalty of perjury, that the Employing Organization named above is affiliated with the Religious Denomination named above and that the attesting organization within the religious denomination is tax-exempt as described in section 5 0 1(C)(3) of the Internal Revenue Code of 19 86 (codified at 26 United States Code 5 01(C)(3)), any subsequent amendment or amendments, subsequent amendment, or equivalent sections of prior enactments of the Internal Revenue Code. The contents of this certification are true and correct to the best of my knowledge. Date of Signature.",
+          label: "Line11a - Date of Arrival",
+          required: false,
         },
         {
-          id: "part14.subform43City1",
+          id: "line14a.arrivalDeparture",
           type: "text",
-          label: "City or Town",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization Name and Address . City or Town.",
+          label: "Line14a - Arrival Departure",
+          required: false,
         },
         {
-          id: "part14.subform43ZipCode1",
+          id: "line14b.passport",
           type: "text",
-          label: "ZIP Code",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization Name and Address . ZIP Code.",
+          label: "Line14b - Passport",
+          required: false,
         },
         {
-          id: "part14.subform43StreetName1",
+          id: "line14b.passport_2",
           type: "text",
-          label: "Street Number and Name",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization Name and Address . Street Number and Name.",
+          label: "Line14b - Passport_2",
+          required: false,
         },
         {
-          id: "part14.subform43FirmName1",
+          id: "line14b.passport_3",
           type: "text",
-          label: "Attesting Organization Name",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization Name and Address . Attesting Organization Name.",
+          label: "Line14b - Passport_3",
+          required: false,
         },
         {
-          id: "part14.subform43EmailAddress1",
-          type: "email",
-          label: "EMail Address (optional)",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. Attesting Organization&apos;s Contact Information. EMail Address (optional)",
+          id: "line14e.expDate",
+          type: "date",
+          label: "Line14e - Exp Date",
+          required: false,
         },
         {
-          id: "part14.subform43PreparerPrintedName1",
+          id: "line14e.expDate_2",
+          type: "date",
+          label: "Line14e - Exp Date_2",
+          required: false,
+        },
+        {
+          id: "line15.currentNon",
+          type: "select",
+          label: "Line15 - Current Non",
+          required: false,
+          options: US_STATES,
+        },
+        {
+          id: "line16.dateStatusExpires",
+          type: "date",
+          label: "Line16 - Date Status Expires",
+          required: false,
+        },
+        {
+          id: "line3.familyName1_2",
           type: "text",
-          label: "Name of Authorized Representative of Attesting Organization",
-          required: true,
-          helpText:
-            "R-1 Classification Supplement to Form I-1 29. Section 2. This Section Is Required For Petitioners Affiliated With The Religious Denomination. Religious Denomination Certification. I certify, under penalty of perjury, that the Employing Organization named above is affiliated with the Religious Denomination named above and that the attesting organization within the religious denomination is tax-exempt as described in section 5 0 1(C)(3) of the Internal Revenue Code of 19 86 (codified at 26 United States Code 5 01(C)(3)), any subsequent amendment or amendments, subsequent amendment, or equivalent sections of prior enactments of the Internal Revenue Code. The contents of this certification are true and correct to the best of my knowledge. Name of Authorized Representative of Attesting Organization.",
+          label: "Line3 - Family Name1_2",
+          required: false,
+        },
+        {
+          id: "line3.familyName1_3",
+          type: "text",
+          label: "Line3 - Family Name1_3",
+          required: false,
+        },
+        {
+          id: "line3.givenName1_2",
+          type: "text",
+          label: "Line3 - Given Name1_2",
+          required: false,
+        },
+        {
+          id: "line3.givenName1_3",
+          type: "text",
+          label: "Line3 - Given Name1_3",
+          required: false,
+        },
+        {
+          id: "line3.middleName1_2",
+          type: "text",
+          label: "Line3 - Middle Name1_2",
+          required: false,
+        },
+        {
+          id: "line3.middleName1_3",
+          type: "text",
+          label: "Line3 - Middle Name1_3",
+          required: false,
+        },
+        {
+          id: "line5.sSN_2",
+          type: "text",
+          label: "Line5 - S S N_2",
+          required: false,
+        },
+        {
+          id: "line6.dateOfBirth_2",
+          type: "date",
+          label: "Line6 - Employer or Organization Date Of Birth 2",
+          required: false,
+        },
+        {
+          id: "line7b.streetNumberName_5",
+          type: "text",
+          label: "Line7b - Employer or Organization Street Number Name 5",
+          required: false,
+        },
+        {
+          id: "part7LineA.emp1State",
+          type: "select",
+          label:
+            "Part7 Line A - Employer or Organization's Contact Information -  State",
+          required: false,
+          options: US_STATES,
+        },
+        {
+          id: "part7LineA.emp1StreetName",
+          type: "text",
+          label: "Part7 Line A - Emp1 Street Name",
+          required: false,
+        },
+        {
+          id: "part7LineA.emp1ZipCode",
+          type: "text",
+          label: "Part7 Line A - Emp1 Zip Code",
+          required: false,
+        },
+        {
+          id: "part7LineA.empCity",
+          type: "text",
+          label: "Part7 Line A - Emp City",
+          required: false,
+        },
+      ],
+    },
+    {
+      id: "section_45",
+      title:
+        "Address in the United States Where You Intend to Live (Complete Address). / Foreign Address (Complete Address)",
+      questions: [
+        {
+          id: "for2.aptSteFlrNumber",
+          type: "text",
+          label: "Foreign Address 2 Apt. / Ste. / Flr.",
+          required: false,
+        },
+        {
+          id: "for2.unit",
+          type: "radio",
+          label: "Foreign Address 2 Unit",
+          required: false,
+          options: [
+            { value: "APT", label: "Apt." },
+            { value: "STE", label: "Ste." },
+            { value: "FLR", label: "Flr." },
+          ],
+        },
+
+        {
+          id: "fR.country",
+          type: "text",
+          label: "Foreign Address 2 - Country",
+          required: false,
+        },
+        {
+          id: "fR.postalCode",
+          type: "text",
+          label: "Foreign Address 2 - Postal Code",
+          required: false,
+        },
+        {
+          id: "fR.province",
+          type: "text",
+          label: "Foreign Address 2 - Province",
+          required: false,
+        },
+        {
+          id: "fR.state",
+          type: "select",
+          label: "Foreign Address 2 - State",
+          required: false,
+          options: US_STATES,
+        },
+        {
+          id: "fR.zipCode",
+          type: "text",
+          label: "F R - Zip Code",
+          required: false,
+        },
+        {
+          id: "line.cityTown_6",
+          type: "text",
+          label: "Line - City Town_6",
+          required: false,
+        },
+        {
+          id: "line.country_6",
+          type: "text",
+          label: "Line - Country_6",
+          required: false,
+        },
+        {
+          id: "line.country_7",
+          type: "text",
+          label: "Line - Country_7",
+          required: false,
+        },
+        {
+          id: "line.country_8",
+          type: "text",
+          label: "Line - Country_8",
+          required: false,
+        },
+        {
+          id: "line1.alienNumber_3",
+          type: "text",
+          label: "Line1 - Alien Number_3",
+          required: false,
+        },
+        {
+          id: "line11a.dateofArrival_2",
+          type: "text",
+          label: "Line11a - Dateof Arrival_2",
+          required: false,
+        },
+        {
+          id: "line14a.arrivalDeparture_2",
+          type: "text",
+          label: "Line14a - Arrival Departure_2",
+          required: false,
+        },
+        {
+          id: "line14b.eAD",
+          type: "text",
+          label: "Line14b - E A D",
+          required: false,
+        },
+        {
+          id: "line14b.passport_4",
+          type: "text",
+          label: "Line14b - Passport_4",
+          required: false,
+        },
+        {
+          id: "line14b.sEVIS",
+          type: "text",
+          label: "Line14b - S E V I S",
+          required: false,
+        },
+        {
+          id: "line14e.expDate_3",
+          type: "text",
+          label: "Line14e - Exp Date_3",
+          required: false,
+        },
+        {
+          id: "line14e.expDate_4",
+          type: "text",
+          label: "Line14e - Exp Date_4",
+          required: false,
+        },
+        {
+          id: "line15.currentNon_2",
+          type: "select",
+          label: "Line15 - Current Non_2",
+          required: false,
+          options: US_STATES,
+        },
+        {
+          id: "line16.dateStatusExpires_2",
+          type: "text",
+          label: "Line16 - Date Status Expires_2",
+          required: false,
+        },
+        {
+          id: "line2.gender",
+          type: "checkbox",
+          label: "Male",
+          required: false,
+        },
+        {
+          id: "line2.gender_2",
+          type: "checkbox",
+          label: "Female",
+          required: false,
+        },
+        {
+          id: "line3.familyName1_4",
+          type: "text",
+          label: "Line3 - Family Name1_4",
+          required: false,
+        },
+        {
+          id: "line3.familyName1_5",
+          type: "text",
+          label: "Line3 - Family Name1_5",
+          required: false,
+        },
+        {
+          id: "line3.givenName1_4",
+          type: "text",
+          label: "Line3 - Given Name1_4",
+          required: false,
+        },
+        {
+          id: "line3.givenName1_5",
+          type: "text",
+          label: "Line3 - Given Name1_5",
+          required: false,
+        },
+        {
+          id: "line3.middleName1_4",
+          type: "text",
+          label: "Line3 - Middle Name1_4",
+          required: false,
+        },
+        {
+          id: "line3.middleName1_5",
+          type: "text",
+          label: "Line3 - Middle Name1_5",
+          required: false,
+        },
+        {
+          id: "line5.sSN_3",
+          type: "text",
+          label: "Line5 - S S N_3",
+          required: false,
+        },
+        {
+          id: "line6.dateOfBirth_3",
+          type: "text",
+          label: "Line6 - Date Of Birth_3",
+          required: false,
+        },
+        {
+          id: "line7b.streetNumberName_6",
+          type: "text",
+          label: "Line7b - Street Number Name_6",
+          required: false,
+        },
+        {
+          id: "part7LineA.emp1State_2",
+          type: "select",
+          label: "Part7 Line A - Emp1 State_2",
+          required: false,
+          options: US_STATES,
+        },
+        {
+          id: "part7LineA.emp1StreetName_2",
+          type: "text",
+          label: "Part7 Line A - Emp1 Street Name_2",
+          required: false,
+        },
+        {
+          id: "part7LineA.emp1ZipCode_2",
+          type: "text",
+          label: "Part7 Line A - Emp1 Zip Code_2",
+          required: false,
+        },
+        {
+          id: "part7LineA.empCity_2",
+          type: "text",
+          label: "Part7 Line A - Emp City_2",
+          required: false,
+        },
+      ],
+    },
+
+    {
+      id: "section_46",
+      title:
+        "Address in the United States Where You Intend to Live (Complete Address). / Foreign Address (Complete Address)",
+      questions: [
+        {
+          id: "att2.aptSteFlrNumber",
+          type: "text",
+          label: "Address in the United States Apt. / Ste. / Flr.",
+          required: false,
+        },
+        {
+          id: "att2.unit",
+          type: "radio",
+          label: "Unit in United States",
+          required: false,
+          options: [
+            { value: "APT", label: "Apt." },
+            { value: "STE", label: "Ste." },
+            { value: "FLR", label: "Flr." },
+          ],
         },
       ],
     },

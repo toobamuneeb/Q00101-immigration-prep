@@ -1,0 +1,1769 @@
+{
+  "formId": "i-129",
+  "formCode": "I-129",
+  "formName": "Petition for a Nonimmigrant Worker",
+  "category": "work_authorization",
+  "filingFee": 460,
+  "price": 60,
+  "estimatedTime": "90-120 minutes",
+  "totalFields": 343,
+  "fieldMappings": [
+    {
+      "questionId": "part1_petitioner_type",
+      "pdfField": "form1[0].#subform[0].PetitionerType[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "part1_individual_last_name",
+      "pdfField": "form1[0].#subform[0].IndividualLastName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "part1_individual_first_name",
+      "pdfField": "form1[0].#subform[0].IndividualFirstName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "part1_individual_middle_name",
+      "pdfField": "form1[0].#subform[0].IndividualMiddleName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "part1_company_name",
+      "pdfField": "form1[0].#subform[0].CompanyName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "part1_mailing_care_of",
+      "pdfField": "form1[0].#subform[0].CareOfName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "part1_mailing_street",
+      "pdfField": "form1[0].#subform[0].StreetNumberName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "part1_mailing_unit_type",
+      "pdfField": "form1[0].#subform[0].UnitType[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "part1_mailing_unit_number",
+      "pdfField": "form1[0].#subform[0].UnitNumber[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "part1_mailing_city",
+      "pdfField": "form1[0].#subform[0].CityTown[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "part1_mailing_state",
+      "pdfField": "form1[0].#subform[0].State[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "part1_mailing_zip",
+      "pdfField": "form1[0].#subform[0].ZIPCode[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "part1_mailing_province",
+      "pdfField": "form1[0].#subform[0].Province[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "part1_mailing_postal_code",
+      "pdfField": "form1[0].#subform[0].PostalCode[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "part1_mailing_country",
+      "pdfField": "form1[0].#subform[0].Country[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "part1_daytime_phone",
+      "pdfField": "form1[0].#subform[0].DaytimePhone[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "part1_mobile_phone",
+      "pdfField": "form1[0].#subform[0].MobilePhone[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "part1_email_address",
+      "pdfField": "form1[0].#subform[0].EmailAddress[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "part1_fein",
+      "pdfField": "form1[0].#subform[0].FEIN[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "part1_nonprofit_status",
+      "pdfField": "form1[0].#subform[0].NonprofitStatus[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "part1_individual_tax_number",
+      "pdfField": "form1[0].#subform[0].IndividualTaxNumber[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "part1_petitioner_ssn",
+      "pdfField": "form1[0].#subform[0].PetitionerSSN[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "petitioner_type",
+      "pdfField": "form1[0].#subform[0].PetitionerType[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "individual_last_name",
+      "pdfField": "form1[0].#subform[0].IndividualLastName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "individual_first_name",
+      "pdfField": "form1[0].#subform[0].IndividualFirstName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "individual_middle_name",
+      "pdfField": "form1[0].#subform[0].IndividualMiddleName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "company_name",
+      "pdfField": "form1[0].#subform[0].CompanyName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "mailing_care_of",
+      "pdfField": "form1[0].#subform[0].CareOfName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "mailing_street",
+      "pdfField": "form1[0].#subform[0].StreettextName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "mailing_unit_type",
+      "pdfField": "form1[0].#subform[0].UnitType[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "mailing_unit_number",
+      "pdfField": "form1[0].#subform[0].Unittext[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "mailing_city",
+      "pdfField": "form1[0].#subform[0].CityTown[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "mailing_state",
+      "pdfField": "form1[0].#subform[0].State[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "mailing_zip",
+      "pdfField": "form1[0].#subform[0].ZIPCode[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "mailing_province",
+      "pdfField": "form1[0].#subform[0].Province[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "mailing_postal_code",
+      "pdfField": "form1[0].#subform[0].PostalCode[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "mailing_country",
+      "pdfField": "form1[0].#subform[0].Country[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "daytime_phone",
+      "pdfField": "form1[0].#subform[0].DaytimePhone[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "mobile_phone",
+      "pdfField": "form1[0].#subform[0].MobilePhone[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "email_address",
+      "pdfField": "form1[0].#subform[0].EmailAddress[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "fein",
+      "pdfField": "form1[0].#subform[0].FEIN[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "nonprofit_question",
+      "pdfField": "form1[0].#subform[0].NonprofitQuestion[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "individual_tax_number",
+      "pdfField": "form1[0].#subform[0].IndividualIRSTax[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "petitioner_ssn",
+      "pdfField": "form1[0].#subform[0].PetitionerSSN[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "requested_classification",
+      "pdfField": "form1[0].#subform[0].RequestedClassification[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "basis_classification",
+      "pdfField": "form1[0].#subform[0].BasisClassification[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "previous_receipt",
+      "pdfField": "form1[0].#subform[0].PreviousReceipt[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "requested_action",
+      "pdfField": "form1[0].#subform[0].RequestedAction[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "total_workers",
+      "pdfField": "form1[0].#subform[0].TotalWorkers[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "beneficiary_type",
+      "pdfField": "form1[0].#subform[0].BeneficiaryType[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "group_name",
+      "pdfField": "form1[0].#subform[0].GroupName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "beneficiary_last_name",
+      "pdfField": "form1[0].#subform[0].BeneficiaryLastName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "beneficiary_first_name",
+      "pdfField": "form1[0].#subform[0].BeneficiaryFirstName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "beneficiary_middle_name",
+      "pdfField": "form1[0].#subform[0].BeneficiaryMiddleName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "other_names",
+      "pdfField": "form1[0].#subform[0].OtherNames[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "date_of_birth",
+      "pdfField": "form1[0].#subform[0].DateOfBirth[0]",
+      "type": "date"
+    },
+    {
+      "questionId": "sex",
+      "pdfField": "form1[0].#subform[0].Sex[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "beneficiary_ssn",
+      "pdfField": "form1[0].#subform[0].BeneficiarySSN[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "a_number",
+      "pdfField": "form1[0].#subform[0].ANumber[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "country_of_birth",
+      "pdfField": "form1[0].#subform[0].CountryOfBirth[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "province_of_birth",
+      "pdfField": "form1[0].#subform[0].ProvinceOfBirth[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "country_of_citizenship",
+      "pdfField": "form1[0].#subform[0].CountryOfCitizenship[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "in_us",
+      "pdfField": "form1[0].#subform[0].InUS[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "i94_number",
+      "pdfField": "form1[0].#subform[0].I94Number[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "last_arrival_date",
+      "pdfField": "form1[0].#subform[0].LastArrivalDate[0]",
+      "type": "date"
+    },
+    {
+      "questionId": "passport_number",
+      "pdfField": "form1[0].#subform[0].PassportNumber[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "passport_issue_date",
+      "pdfField": "form1[0].#subform[0].PassportIssueDate[0]",
+      "type": "date"
+    },
+    {
+      "questionId": "passport_expiry_date",
+      "pdfField": "form1[0].#subform[0].PassportExpiryDate[0]",
+      "type": "date"
+    },
+    {
+      "questionId": "passport_country",
+      "pdfField": "form1[0].#subform[0].PassportCountry[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "current_status",
+      "pdfField": "form1[0].#subform[0].CurrentStatus[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "status_expires",
+      "pdfField": "form1[0].#subform[0].StatusExpires[0]",
+      "type": "date"
+    },
+    {
+      "questionId": "us_address_street",
+      "pdfField": "form1[0].#subform[0].USAddressStreet[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "us_address_unit_type",
+      "pdfField": "form1[0].#subform[0].USAddressUnitType[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "us_address_unit_number",
+      "pdfField": "form1[0].#subform[0].USAddressUnitNumber[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "us_address_city",
+      "pdfField": "form1[0].#subform[0].USAddressCity[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "us_address_state",
+      "pdfField": "form1[0].#subform[0].USAddressState[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "us_address_zip",
+      "pdfField": "form1[0].#subform[0].USAddressZIP[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "sevis_number",
+      "pdfField": "form1[0].#subform[0].SEVISNumber[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "ead_number",
+      "pdfField": "form1[0].#subform[0].EADNumber[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "office_type",
+      "pdfField": "form1[0].#subform[0].OfficeType[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "office_city",
+      "pdfField": "form1[0].#subform[0].OfficeCity[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "office_state_country",
+      "pdfField": "form1[0].#subform[0].OfficeStateCountry[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "valid_passport",
+      "pdfField": "form1[0].#subform[0].ValidPassport[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "other_petitions",
+      "pdfField": "form1[0].#subform[0].OtherPetitions[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "other_petitions_count",
+      "pdfField": "form1[0].#subform[0].OtherPetitionsCount[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "replacement_i94",
+      "pdfField": "form1[0].#subform[0].ReplacementI94[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "replacement_i94_count",
+      "pdfField": "form1[0].#subform[0].ReplacementI94Count[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "filing_dependents",
+      "pdfField": "form1[0].#subform[0].FilingDependents[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "dependents_count",
+      "pdfField": "form1[0].#subform[0].DependentsCount[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "removal_proceedings",
+      "pdfField": "form1[0].#subform[0].RemovalProceedings[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "immigrant_petition",
+      "pdfField": "form1[0].#subform[0].ImmigrantPetition[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "previous_nonimmigrant",
+      "pdfField": "form1[0].#subform[0].PreviousNonimmigrant[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "filing_new",
+      "pdfField": "form1[0].#subform[0].FilingNew[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "given_classification",
+      "pdfField": "form1[0].#subform[0].GivenClassification[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "denied_classification",
+      "pdfField": "form1[0].#subform[0].DeniedClassification[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "group_year",
+      "pdfField": "form1[0].#subform[0].GroupYear[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "j1_exchange",
+      "pdfField": "form1[0].#subform[0].J1Exchange[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "j1_dates",
+      "pdfField": "form1[0].#subform[0].J1Dates[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "foreign_address_street",
+      "pdfField": "form1[0].#subform[0].ForeignAddressStreet[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "foreign_unit_type",
+      "pdfField": "form1[0].#subform[0].ForeignUnitType[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "foreign_unit_number",
+      "pdfField": "form1[0].#subform[0].ForeignUnitNumber[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "foreign_city",
+      "pdfField": "form1[0].#subform[0].ForeignCity[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "foreign_state",
+      "pdfField": "form1[0].#subform[0].ForeignState[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "foreign_country",
+      "pdfField": "form1[0].#subform[0].ForeignCountry[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "foreign_postal_code",
+      "pdfField": "form1[0].#subform[0].ForeignPostalCode[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "foreign_province",
+      "pdfField": "form1[0].#subform[0].ForeignProvince[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "job_title",
+      "pdfField": "form1[0].#subform[0].JobTitle[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "lca_case_number",
+      "pdfField": "form1[0].#subform[0].LCACaseNumber[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "address1_street",
+      "pdfField": "form1[0].#subform[0].Address1Street[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "address1_unit_type",
+      "pdfField": "form1[0].#subform[0].Address1UnitType[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "address1_unit_number",
+      "pdfField": "form1[0].#subform[0].Address1UnitNumber[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "address1_city",
+      "pdfField": "form1[0].#subform[0].Address1City[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "address1_state",
+      "pdfField": "form1[0].#subform[0].Address1State[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "address1_zip",
+      "pdfField": "form1[0].#subform[0].Address1ZIP[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "address1_third_party",
+      "pdfField": "form1[0].#subform[0].Address1ThirdParty[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "address1_third_party_name",
+      "pdfField": "form1[0].#subform[0].Address1ThirdPartyName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "address2_street",
+      "pdfField": "form1[0].#subform[0].Address2Street[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "address2_unit_type",
+      "pdfField": "form1[0].#subform[0].Address2UnitType[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "address2_unit_number",
+      "pdfField": "form1[0].#subform[0].Address2UnitNumber[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "address2_city",
+      "pdfField": "form1[0].#subform[0].Address2City[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "address2_state",
+      "pdfField": "form1[0].#subform[0].Address2State[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "address2_zip",
+      "pdfField": "form1[0].#subform[0].Address2ZIP[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "address2_third_party",
+      "pdfField": "form1[0].#subform[0].Address2ThirdParty[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "address2_third_party_name",
+      "pdfField": "form1[0].#subform[0].Address2ThirdPartyName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "include_itinerary",
+      "pdfField": "form1[0].#subform[0].IncludeItinerary[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "work_off_site",
+      "pdfField": "form1[0].#subform[0].WorkOffSite[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "work_cnmi",
+      "pdfField": "form1[0].#subform[0].WorkCNMI[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "full_time",
+      "pdfField": "form1[0].#subform[0].FullTime[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "hours_per_week",
+      "pdfField": "form1[0].#subform[0].HoursPerWeek[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "wages_amount",
+      "pdfField": "form1[0].#subform[0].WagesAmount[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "wages_period",
+      "pdfField": "form1[0].#subform[0].WagesPeriod[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "other_compensation",
+      "pdfField": "form1[0].#subform[0].OtherCompensation[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "employment_start",
+      "pdfField": "form1[0].#subform[0].EmploymentStart[0]",
+      "type": "date"
+    },
+    {
+      "questionId": "employment_end",
+      "pdfField": "form1[0].#subform[0].EmploymentEnd[0]",
+      "type": "date"
+    },
+    {
+      "questionId": "business_type",
+      "pdfField": "form1[0].#subform[0].BusinessType[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "year_established",
+      "pdfField": "form1[0].#subform[0].YearEstablished[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "employees_us",
+      "pdfField": "form1[0].#subform[0].EmployeesUS[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "small_business",
+      "pdfField": "form1[0].#subform[0].SmallBusiness[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "gross_income",
+      "pdfField": "form1[0].#subform[0].GrossIncome[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "net_income",
+      "pdfField": "form1[0].#subform[0].NetIncome[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "export_certification",
+      "pdfField": "form1[0].#subform[0].ExportCertification[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "signatory_last_name",
+      "pdfField": "form1[0].#subform[0].SignatoryLastName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "signatory_first_name",
+      "pdfField": "form1[0].#subform[0].SignatoryFirstName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "signatory_title",
+      "pdfField": "form1[0].#subform[0].SignatoryTitle[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "signatory_signature",
+      "pdfField": "form1[0].#subform[0].SignatorySignature[0]",
+      "type": "Signature"
+    },
+    {
+      "questionId": "signatory_date",
+      "pdfField": "form1[0].#subform[0].SignatoryDate[0]",
+      "type": "date"
+    },
+    {
+      "questionId": "signatory_phone",
+      "pdfField": "form1[0].#subform[0].SignatoryPhone[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "signatory_email",
+      "pdfField": "form1[0].#subform[0].SignatoryEmail[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "preparer_last_name",
+      "pdfField": "form1[0].#subform[0].PreparerLastName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "preparer_first_name",
+      "pdfField": "form1[0].#subform[0].PreparerFirstName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "preparer_business",
+      "pdfField": "form1[0].#subform[0].PreparerBusiness[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "preparer_street",
+      "pdfField": "form1[0].#subform[0].PreparerStreet[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "preparer_unit_type",
+      "pdfField": "form1[0].#subform[0].PreparerUnitType[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "preparer_unit_number",
+      "pdfField": "form1[0].#subform[0].PreparerUnitNumber[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "preparer_city",
+      "pdfField": "form1[0].#subform[0].PreparerCity[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "preparer_state",
+      "pdfField": "form1[0].#subform[0].PreparerState[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "preparer_zip",
+      "pdfField": "form1[0].#subform[0].PreparerZIP[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "preparer_province",
+      "pdfField": "form1[0].#subform[0].PreparerProvince[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "preparer_postal_code",
+      "pdfField": "form1[0].#subform[0].PreparerPostalCode[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "preparer_country",
+      "pdfField": "form1[0].#subform[0].PreparerCountry[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "preparer_phone",
+      "pdfField": "form1[0].#subform[0].PreparerPhone[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "preparer_fax",
+      "pdfField": "form1[0].#subform[0].PreparerFax[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "preparer_email",
+      "pdfField": "form1[0].#subform[0].PreparerEmail[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "preparer_signature",
+      "pdfField": "form1[0].#subform[0].PreparerSignature[0]",
+      "type": "Signature"
+    },
+    {
+      "questionId": "preparer_signature_date",
+      "pdfField": "form1[0].#subform[0].PreparerSignatureDate[0]",
+      "type": "date"
+    },
+    {
+      "questionId": "additional_a_number",
+      "pdfField": "form1[0].#subform[0].AdditionalANumber[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "info1_page",
+      "pdfField": "form1[0].#subform[0].Info1Page[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "info1_part",
+      "pdfField": "form1[0].#subform[0].Info1Part[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "info1_item",
+      "pdfField": "form1[0].#subform[0].Info1Item[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "info1_text",
+      "pdfField": "form1[0].#subform[0].Info1Text[0]",
+      "type": "TextArea"
+    },
+    {
+      "questionId": "info2_page",
+      "pdfField": "form1[0].#subform[0].Info2Page[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "info2_part",
+      "pdfField": "form1[0].#subform[0].Info2Part[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "info2_item",
+      "pdfField": "form1[0].#subform[0].Info2Item[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "info2_text",
+      "pdfField": "form1[0].#subform[0].Info2Text[0]",
+      "type": "TextArea"
+    },
+    {
+      "questionId": "info3_page",
+      "pdfField": "form1[0].#subform[0].Info3Page[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "info3_part",
+      "pdfField": "form1[0].#subform[0].Info3Part[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "info3_item",
+      "pdfField": "form1[0].#subform[0].Info3Item[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "info3_text",
+      "pdfField": "form1[0].#subform[0].Info3Text[0]",
+      "type": "TextArea"
+    },
+    {
+      "questionId": "info4_page",
+      "pdfField": "form1[0].#subform[0].Info4Page[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "info4_part",
+      "pdfField": "form1[0].#subform[0].Info4Part[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "info4_item",
+      "pdfField": "form1[0].#subform[0].Info4Item[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "info4_text",
+      "pdfField": "form1[0].#subform[0].Info4Text[0]",
+      "type": "TextArea"
+    },
+    {
+      "questionId": "e_petitioner_name",
+      "pdfField": "form1[0].#subform[1].EPetitionerName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "e_beneficiary_name",
+      "pdfField": "form1[0].#subform[1].EBeneficiaryName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "e_classification",
+      "pdfField": "form1[0].#subform[1].EClassification[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "e_treaty_country",
+      "pdfField": "form1[0].#subform[1].ETreatyCountry[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "e_substantive_changes",
+      "pdfField": "form1[0].#subform[1].ESubstantiveChanges[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "e_employer_abroad_name",
+      "pdfField": "form1[0].#subform[1].EEmployerAbroadName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "e_employer_total_employees",
+      "pdfField": "form1[0].#subform[1].EEmployerTotalEmployees[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "e_employer_address_street",
+      "pdfField": "form1[0].#subform[1].EEmployerAddressStreet[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "e_employer_address_unit_type",
+      "pdfField": "form1[0].#subform[1].EEmployerAddressUnitType[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "e_employer_address_unit_number",
+      "pdfField": "form1[0].#subform[1].EEmployerAddressUnitNumber[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "e_employer_address_city",
+      "pdfField": "form1[0].#subform[1].EEmployerAddressCity[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "e_employer_address_state",
+      "pdfField": "form1[0].#subform[1].EEmployerAddressState[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "e_employer_address_zip",
+      "pdfField": "form1[0].#subform[1].EEmployerAddressZIP[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "e_employer_province",
+      "pdfField": "form1[0].#subform[1].EEmployerProvince[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "e_employer_postal_code",
+      "pdfField": "form1[0].#subform[1].EEmployerPostalCode[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "e_employer_country",
+      "pdfField": "form1[0].#subform[1].EEmployerCountry[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "e_principal_product",
+      "pdfField": "form1[0].#subform[1].EPrincipalProduct[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "e_employee_position",
+      "pdfField": "form1[0].#subform[1].EEmployeePosition[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "e_company_relationship",
+      "pdfField": "form1[0].#subform[1].ECompanyRelationship[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "e_incorporation_place",
+      "pdfField": "form1[0].#subform[1].EIncorporationPlace[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "e_incorporation_date",
+      "pdfField": "form1[0].#subform[1].EIncorporationDate[0]",
+      "type": "date"
+    },
+    {
+      "questionId": "e_nationality_ownership",
+      "pdfField": "form1[0].#subform[1].ENationalityOwnership[0]",
+      "type": "Table"
+    },
+    {
+      "questionId": "e_assets",
+      "pdfField": "form1[0].#subform[1].EAssets[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "e_net_worth",
+      "pdfField": "form1[0].#subform[1].ENetWorth[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "e_net_annual_income",
+      "pdfField": "form1[0].#subform[1].ENetAnnualIncome[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "e_executive_employees",
+      "pdfField": "form1[0].#subform[1].EExecutiveEmployees[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "e_special_qualifications",
+      "pdfField": "form1[0].#subform[1].ESpecialQualifications[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "e_total_executives",
+      "pdfField": "form1[0].#subform[1].ETotalExecutives[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "e_total_special_positions",
+      "pdfField": "form1[0].#subform[1].ETotalSpecialPositions[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "e_supervision_count",
+      "pdfField": "form1[0].#subform[1].ESupervisionCount[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "e_special_qualifications_explanation",
+      "pdfField": "form1[0].#subform[1].ESpecialQualificationsExplanation[0]",
+      "type": "TextArea"
+    },
+    {
+      "questionId": "e1_gross_trade",
+      "pdfField": "form1[0].#subform[1].E1GrossTrade[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "e1_year_ending",
+      "pdfField": "form1[0].#subform[1].E1YearEnding[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "e1_percent_trade",
+      "pdfField": "form1[0].#subform[1].E1PercentTrade[0]",
+      "type": "Percentage"
+    },
+    {
+      "questionId": "e2_investment_cash",
+      "pdfField": "form1[0].#subform[1].E2InvestmentCash[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "e2_investment_equipment",
+      "pdfField": "form1[0].#subform[1].E2InvestmentEquipment[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "e2_investment_inventory",
+      "pdfField": "form1[0].#subform[1].E2InvestmentInventory[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "e2_investment_premises",
+      "pdfField": "form1[0].#subform[1].E2InvestmentPremises[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "e2_investment_other",
+      "pdfField": "form1[0].#subform[1].E2InvestmentOther[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "e2_investment_total",
+      "pdfField": "form1[0].#subform[1].E2InvestmentTotal[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "trade_petitioner_name",
+      "pdfField": "form1[0].#subform[2].TradePetitionerName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "trade_beneficiary_name",
+      "pdfField": "form1[0].#subform[2].TradeBeneficiaryName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "trade_employer_type",
+      "pdfField": "form1[0].#subform[2].TradeEmployerType[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "trade_foreign_country",
+      "pdfField": "form1[0].#subform[2].TradeForeignCountry[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "trade_request_type",
+      "pdfField": "form1[0].#subform[2].TradeRequestType[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "trade_petitioner_name_full",
+      "pdfField": "form1[0].#subform[2].TradePetitionerNameFull[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "trade_petitioner_signature",
+      "pdfField": "form1[0].#subform[2].TradePetitionerSignature[0]",
+      "type": "Signature"
+    },
+    {
+      "questionId": "trade_petitioner_date",
+      "pdfField": "form1[0].#subform[2].TradePetitionerDate[0]",
+      "type": "date"
+    },
+    {
+      "questionId": "trade_petitioner_phone",
+      "pdfField": "form1[0].#subform[2].TradePetitionerPhone[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "trade_petitioner_mobile",
+      "pdfField": "form1[0].#subform[2].TradePetitionerMobile[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "trade_petitioner_email",
+      "pdfField": "form1[0].#subform[2].TradePetitionerEmail[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "h_petitioner_name",
+      "pdfField": "form1[0].#subform[3].HPetitionerName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "h_beneficiary_name",
+      "pdfField": "form1[0].#subform[3].HBeneficiaryName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "h_total_beneficiaries",
+      "pdfField": "form1[0].#subform[3].HTotalBeneficiaries[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "h_classification",
+      "pdfField": "form1[0].#subform[3].HClassification[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "h_prior_stays",
+      "pdfField": "form1[0].#subform[3].HPriorStays[0]",
+      "type": "Table"
+    },
+    {
+      "questionId": "h_confirmation_number",
+      "pdfField": "form1[0].#subform[3].HConfirmationNumber[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "h_registration_passport",
+      "pdfField": "form1[0].#subform[3].HRegistrationPassport[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "h_registration_country",
+      "pdfField": "form1[0].#subform[3].HRegistrationCountry[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "h_registration_expiry",
+      "pdfField": "form1[0].#subform[3].HRegistrationExpiry[0]",
+      "type": "date"
+    },
+    {
+      "questionId": "h_guam_cnmi",
+      "pdfField": "form1[0].#subform[3].HGuamCNMI[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "h_change_employer_guam",
+      "pdfField": "form1[0].#subform[3].HChangeEmployerGuam[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "h_controlling_interest",
+      "pdfField": "form1[0].#subform[3].HControllingInterest[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "h_controlling_explanation",
+      "pdfField": "form1[0].#subform[3].HControllingExplanation[0]",
+      "type": "TextArea"
+    },
+    {
+      "questionId": "h1b_proposed_duties",
+      "pdfField": "form1[0].#subform[3].H1BProposedDuties[0]",
+      "type": "TextArea"
+    },
+    {
+      "questionId": "h1b_present_occupation",
+      "pdfField": "form1[0].#subform[3].H1BPresentOccupation[0]",
+      "type": "TextArea"
+    },
+    {
+      "questionId": "h1b_data_petitioner",
+      "pdfField": "form1[0].#subform[4].H1BDataPetitioner[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "h1b_data_beneficiary",
+      "pdfField": "form1[0].#subform[4].H1BDataBeneficiary[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "h1b_dependent_employer",
+      "pdfField": "form1[0].#subform[4].H1BDependentEmployer[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "h1b_willful_violator",
+      "pdfField": "form1[0].#subform[4].H1BWillfulViolator[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "h1b_exempt_attestation",
+      "pdfField": "form1[0].#subform[4].H1BExemptAttestation[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "l_petitioner_name",
+      "pdfField": "form1[0].#subform[5].LPetitionerName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "l_beneficiary_name",
+      "pdfField": "form1[0].#subform[5].LBeneficiaryName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "l_petition_type",
+      "pdfField": "form1[0].#subform[5].LPetitionType[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "l_50_employees",
+      "pdfField": "form1[0].#subform[5].L50Employees[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "op_petitioner_name",
+      "pdfField": "form1[0].#subform[6].OPPetitionerName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "op_beneficiary_name",
+      "pdfField": "form1[0].#subform[6].OPBeneficiaryName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "op_classification",
+      "pdfField": "form1[0].#subform[6].OPClassification[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "q_petitioner_name",
+      "pdfField": "form1[0].#subform[7].QPetitionerName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "q_beneficiary_name",
+      "pdfField": "form1[0].#subform[7].QBeneficiaryName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "r_petitioner_name",
+      "pdfField": "form1[0].#subform[8].RPetitionerName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "r_beneficiary_name",
+      "pdfField": "form1[0].#subform[8].RBeneficiaryName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "attach1_last_name",
+      "pdfField": "form1[0].#subform[9].Attach1LastName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "attach1_first_name",
+      "pdfField": "form1[0].#subform[9].Attach1FirstName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "attach1_middle_name",
+      "pdfField": "form1[0].#subform[9].Attach1MiddleName[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "attach1_dob",
+      "pdfField": "form1[0].#subform[9].Attach1DOB[0]",
+      "type": "date"
+    },
+    {
+      "questionId": "attach1_sex",
+      "pdfField": "form1[0].#subform[9].Attach1Sex[0]",
+      "type": "radio"
+    },
+    {
+      "questionId": "uscis_class",
+      "pdfField": "form1[0].#subform[0].USCISClass[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "uscis_no_of_workers",
+      "pdfField": "form1[0].#subform[0].USCISNoOfWorkers[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "uscis_job_code",
+      "pdfField": "form1[0].#subform[0].USCISJobCode[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "uscis_validity_from",
+      "pdfField": "form1[0].#subform[0].USCISValidityFrom[0]",
+      "type": "date"
+    },
+    {
+      "questionId": "uscis_validity_to",
+      "pdfField": "form1[0].#subform[0].USCISValidityTo[0]",
+      "type": "date"
+    },
+    {
+      "questionId": "uscis_receipt",
+      "pdfField": "form1[0].#subform[0].USCISReceipt[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "uscis_partial_approval",
+      "pdfField": "form1[0].#subform[0].USCISPartialApproval[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "uscis_action_block",
+      "pdfField": "form1[0].#subform[0].USCISActionBlock[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "uscis_classification_approved",
+      "pdfField": "form1[0].#subform[0].USCISClassificationApproved[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "uscis_consulate_notified",
+      "pdfField": "form1[0].#subform[0].USCISConsulateNotified[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "uscis_extension_granted",
+      "pdfField": "form1[0].#subform[0].USCISExtensionGranted[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "uscis_cos_extension_granted",
+      "pdfField": "form1[0].#subform[0].USCISCOSExtensionGranted[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "page2_line1a",
+      "pdfField": "form1[0].#subform[0].Page2Line1A[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "page2_line1b",
+      "pdfField": "form1[0].#subform[0].Page2Line1B[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "page2_line1c",
+      "pdfField": "form1[0].#subform[0].Page2Line1C[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "page2_line1d",
+      "pdfField": "form1[0].#subform[0].Page2Line1D[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "page2_line1e",
+      "pdfField": "form1[0].#subform[0].Page2Line1E[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "page2_line1f",
+      "pdfField": "form1[0].#subform[0].Page2Line1F[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "page3_line6a",
+      "pdfField": "form1[0].#subform[0].Page3Line6A[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "page3_line6b",
+      "pdfField": "form1[0].#subform[0].Page3Line6B[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "page4_line4a",
+      "pdfField": "form1[0].#subform[0].Page4Line4A[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "page4_line4b",
+      "pdfField": "form1[0].#subform[0].Page4Line4B[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "page4_line5",
+      "pdfField": "form1[0].#subform[0].Page4Line5[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "page4_line6",
+      "pdfField": "form1[0].#subform[0].Page4Line6[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "page4_line7",
+      "pdfField": "form1[0].#subform[0].Page4Line7[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "page4_line8",
+      "pdfField": "form1[0].#subform[0].Page4Line8[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "page4_line9",
+      "pdfField": "form1[0].#subform[0].Page4Line9[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "page4_line10",
+      "pdfField": "form1[0].#subform[0].Page4Line10[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "page4_line11a",
+      "pdfField": "form1[0].#subform[0].Page4Line11A[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "page4_line11b",
+      "pdfField": "form1[0].#subform[0].Page4Line11B[0]",
+      "type": "TextArea"
+    },
+    {
+      "questionId": "h_supplement_line4a",
+      "pdfField": "form1[0].#subform[3].HSupplementLine4A[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "h_supplement_line4b",
+      "pdfField": "form1[0].#subform[3].HSupplementLine4B[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "h_supplement_line4c",
+      "pdfField": "form1[0].#subform[3].HSupplementLine4C[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "h_supplement_line4d",
+      "pdfField": "form1[0].#subform[3].HSupplementLine4D[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "h_supplement_line4e",
+      "pdfField": "form1[0].#subform[3].HSupplementLine4E[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "h_supplement_line4f",
+      "pdfField": "form1[0].#subform[3].HSupplementLine4F[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "h_supplement_line4g",
+      "pdfField": "form1[0].#subform[3].HSupplementLine4G[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "h_supplement_line4h",
+      "pdfField": "form1[0].#subform[3].HSupplementLine4H[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "h1b_data_line1a",
+      "pdfField": "form1[0].#subform[4].H1BDataLine1A[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "h1b_data_line1b",
+      "pdfField": "form1[0].#subform[4].H1BDataLine1B[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "h1b_data_line1c",
+      "pdfField": "form1[0].#subform[4].H1BDataLine1C[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "h1b_data_line1d",
+      "pdfField": "form1[0].#subform[4].H1BDataLine1D[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "h1b_data_line1e",
+      "pdfField": "form1[0].#subform[4].H1BDataLine1E[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "l_supplement_line3a",
+      "pdfField": "form1[0].#subform[5].LSupplementLine3A[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "l_supplement_line3b",
+      "pdfField": "form1[0].#subform[5].LSupplementLine3B[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "l_supplement_line4a",
+      "pdfField": "form1[0].#subform[5].LSupplementLine4A[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "l_supplement_line4b",
+      "pdfField": "form1[0].#subform[5].LSupplementLine4B[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "op_supplement_line3a",
+      "pdfField": "form1[0].#subform[6].OPSupplementLine3A[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "op_supplement_line3b",
+      "pdfField": "form1[0].#subform[6].OPSupplementLine3B[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "op_supplement_line3c",
+      "pdfField": "form1[0].#subform[6].OPSupplementLine3C[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "op_supplement_line3d",
+      "pdfField": "form1[0].#subform[6].OPSupplementLine3D[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "op_supplement_line3e",
+      "pdfField": "form1[0].#subform[6].OPSupplementLine3E[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "op_supplement_line3f",
+      "pdfField": "form1[0].#subform[6].OPSupplementLine3F[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "op_supplement_line3g",
+      "pdfField": "form1[0].#subform[6].OPSupplementLine3G[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "op_supplement_line3h",
+      "pdfField": "form1[0].#subform[6].OPSupplementLine3H[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "op_supplement_line3i",
+      "pdfField": "form1[0].#subform[6].OPSupplementLine3I[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "op_supplement_line3j",
+      "pdfField": "form1[0].#subform[6].OPSupplementLine3J[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "q_supplement_cert_a",
+      "pdfField": "form1[0].#subform[7].QSupplementCertA[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "q_supplement_cert_b",
+      "pdfField": "form1[0].#subform[7].QSupplementCertB[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "q_supplement_cert_c",
+      "pdfField": "form1[0].#subform[7].QSupplementCertC[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "q_supplement_cert_d",
+      "pdfField": "form1[0].#subform[7].QSupplementCertD[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "r_supplement_line6",
+      "pdfField": "form1[0].#subform[8].RSupplementLine6[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "r_supplement_line7",
+      "pdfField": "form1[0].#subform[8].RSupplementLine7[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "r_supplement_line8",
+      "pdfField": "form1[0].#subform[8].RSupplementLine8[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "r_supplement_line9",
+      "pdfField": "form1[0].#subform[8].RSupplementLine9[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "r_supplement_line10",
+      "pdfField": "form1[0].#subform[8].RSupplementLine10[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "r_supplement_line11",
+      "pdfField": "form1[0].#subform[8].RSupplementLine11[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "r_supplement_line12",
+      "pdfField": "form1[0].#subform[8].RSupplementLine12[0]",
+      "type": "Checkbox"
+    },
+    {
+      "questionId": "attach1_us_address_complete",
+      "pdfField": "form1[0].#subform[9].Attach1USAddressComplete[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "attach1_foreign_address_complete",
+      "pdfField": "form1[0].#subform[9].Attach1ForeignAddressComplete[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "attach1_if_in_us_section",
+      "pdfField": "form1[0].#subform[9].Attach1IfInUS[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "form_edition",
+      "pdfField": "form1[0].#subform[0].FormEdition[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "omb_number",
+      "pdfField": "form1[0].#subform[0].OMBtext[0]",
+      "type": "text"
+    },
+    {
+      "questionId": "expiration_date",
+      "pdfField": "form1[0].#subform[0].ExpirationDate[0]",
+      "type": "date"
+    }
+  ],
+  "sections": {
+    "part1": {
+      "title": "Petitioner Information",
+      "fieldCount": 22
+    },
+    "part2": {
+      "title": "Petition Information",
+      "fieldCount": 6
+    },
+    "part3": {
+      "title": "Beneficiary Information",
+      "fieldCount": 13
+    },
+    "part4": {
+      "title": "Processing Information",
+      "fieldCount": 29
+    },
+    "part5": {
+      "title": "Employment Information",
+      "fieldCount": 34
+    },
+    "part6": {
+      "title": "Export Control",
+      "fieldCount": 1
+    },
+    "part7": {
+      "title": "Petitioner Declaration",
+      "fieldCount": 7
+    },
+    "part8": {
+      "title": "Preparer Information",
+      "fieldCount": 17
+    },
+    "part9": {
+      "title": "Additional Information",
+      "fieldCount": 17
+    },
+    "supplements": {
+      "title": "Classification Supplements",
+      "fieldCount": 128
+    }
+  }
+}

@@ -22,10 +22,6 @@ export const I_751_FIELD_MAPPINGS: FieldMapping[] = [
     pdfField: "form1[0].#subform[0].AttorneyStateBarNumber[0]",
   },
   {
-    questionId: "part1.uscisElisAccountNumber",
-    pdfField: "form1[0].#subform[0].USCISELISAcctNumber[0]",
-  },
-  {
     questionId: "part1.familyName",
     pdfField: "form1[0].#subform[0].Pt1Line1a_FamilyName[0]",
   },
@@ -258,17 +254,17 @@ export const I_751_FIELD_MAPPINGS: FieldMapping[] = [
   },
 
   {
-    questionId: "part1.physicalAddress.u",
+    questionId: "part1.physicalAddress.unit",
     pdfField: "form1[0].#subform[1].Pt1Line17_Unit[0]",
     value: "apt",
   },
   {
-    questionId: "part1.physicalAddress.u",
+    questionId: "part1.physicalAddress.unit",
     pdfField: "form1[0].#subform[1].Pt1Line17_Unit[1]",
     value: "ste",
   },
   {
-    questionId: "part1.physicalAddress.u",
+    questionId: "part1.physicalAddress.unit",
     pdfField: "form1[0].#subform[1].Pt1Line17_Unit[2]",
     value: "flr",
   },

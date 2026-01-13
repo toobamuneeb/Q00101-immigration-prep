@@ -1,9 +1,8 @@
-
 // Load environment variables from .env file manually
-const envPath = require('path').join(__dirname, '..', '.env');
-if (require('fs').existsSync(envPath)) {
-  const envContent = require('fs').readFileSync(envPath, 'utf-8');
-  envContent.split('\n').forEach(line => {
+const envPath = require("path").join(__dirname, "..", ".env");
+if (require("fs").existsSync(envPath)) {
+  const envContent = require("fs").readFileSync(envPath, "utf-8");
+  envContent.split("\n").forEach((line) => {
     const match = line.match(/^([^=:#]+)=(.*)$/);
     if (match) {
       const key = match[1].trim();
@@ -21,7 +20,8 @@ const path = require("path");
 const https = require("https");
 
 // Check for API key
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+const OPENAI_API_KEY =
+  "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";
 
 if (!OPENAI_API_KEY) {
   console.error("❌ Error: OPENAI_API_KEY environment variable not set");
@@ -256,20 +256,22 @@ Generate EXACTLY ${
     // STEP 2: Analyze mappings to extract values for each questionId
     const questionIdToValues = new Map();
     const questionIdToFieldInfo = new Map();
-    
+
     // Extract values and field info from mappings
-    const idMatches2 = mappingCode.matchAll(/\{\s*questionId:\s*["']([^"']+)["'][^}]*pdfField:\s*["']([^"']+)["'][^}]*(?:value:\s*["']([^"']+)["'])?\s*\}/g);
+    const idMatches2 = mappingCode.matchAll(
+      /\{\s*questionId:\s*["']([^"']+)["'][^}]*pdfField:\s*["']([^"']+)["'][^}]*(?:value:\s*["']([^"']+)["'])?\s*\}/g
+    );
     for (const match of idMatches2) {
       const qid = match[1];
       const pdfField = match[2];
       const val = match[3];
-      
+
       // Store field info
       if (!questionIdToFieldInfo.has(qid)) {
         questionIdToFieldInfo.set(qid, { pdfFields: [], hasValues: false });
       }
       questionIdToFieldInfo.get(qid).pdfFields.push(pdfField);
-      
+
       // Store values if present
       if (val) {
         if (!questionIdToValues.has(qid)) {
@@ -284,53 +286,70 @@ Generate EXACTLY ${
 
     // Build mapping context with values and field type hints
     const uniqueQuestionIds = [...new Set(batchQuestionIds)]; // Remove duplicates
-    const mappingContext = uniqueQuestionIds.map(qid => {
-      const values = questionIdToValues.get(qid) || [];
-      const fieldInfo = questionIdToFieldInfo.get(qid);
-      const pdfFields = fieldInfo?.pdfFields || [];
-      
-      // Detect field type based on PDF field name patterns
-      const fieldNameLower = pdfFields.join(' ').toLowerCase();
-      
-      // Check for dropdown indicators
-      const isState = fieldNameLower.includes('state') && !fieldNameLower.includes('statement');
-      const isCountry = fieldNameLower.includes('country');
-      const isProvince = fieldNameLower.includes('province');
-      const isCity = fieldNameLower.includes('city') || fieldNameLower.includes('town');
-      const isZipCode = fieldNameLower.includes('zip') || fieldNameLower.includes('postal');
-      
-      // Check for unit type fields (APT, STE, FLR)
-      const isUnitType = fieldNameLower.includes('unit') && 
-                        (fieldNameLower.includes('apt') || 
-                         fieldNameLower.includes('ste') || 
-                         fieldNameLower.includes('flr') ||
-                         values.some(v => ['APT', 'STE', 'FLR', 'apt', 'ste', 'flr'].includes(v)));
-      
-      // Determine field type
-      let typeHint = '';
-      if (values.length > 0) {
-        if (isState || isCountry || isProvince) {
-          typeHint = ' [DROPDOWN-LOCATION]';
-        } else if (isUnitType) {
-          typeHint = ' [RADIO-UNIT]';
-        } else if (values.length === 2 && (values.includes('Y') || values.includes('N') || values.includes('yes') || values.includes('no'))) {
-          typeHint = ' [RADIO-YESNO]';
-        } else if (values.length === 2) {
-          typeHint = ' [RADIO]';
-        } else if (values.length >= 3 && values.length <= 5) {
-          typeHint = ' [RADIO-MULTI]';
-        } else {
-          typeHint = ' [CHECKBOX]';
+    const mappingContext = uniqueQuestionIds
+      .map((qid) => {
+        const values = questionIdToValues.get(qid) || [];
+        const fieldInfo = questionIdToFieldInfo.get(qid);
+        const pdfFields = fieldInfo?.pdfFields || [];
+
+        // Detect field type based on PDF field name patterns
+        const fieldNameLower = pdfFields.join(" ").toLowerCase();
+
+        // Check for dropdown indicators
+        const isState =
+          fieldNameLower.includes("state") &&
+          !fieldNameLower.includes("statement");
+        const isCountry = fieldNameLower.includes("country");
+        const isProvince = fieldNameLower.includes("province");
+        const isCity =
+          fieldNameLower.includes("city") || fieldNameLower.includes("town");
+        const isZipCode =
+          fieldNameLower.includes("zip") || fieldNameLower.includes("postal");
+
+        // Check for unit type fields (APT, STE, FLR)
+        const isUnitType =
+          fieldNameLower.includes("unit") &&
+          (fieldNameLower.includes("apt") ||
+            fieldNameLower.includes("ste") ||
+            fieldNameLower.includes("flr") ||
+            values.some((v) =>
+              ["APT", "STE", "FLR", "apt", "ste", "flr"].includes(v)
+            ));
+
+        // Determine field type
+        let typeHint = "";
+        if (values.length > 0) {
+          if (isState || isCountry || isProvince) {
+            typeHint = " [DROPDOWN-LOCATION]";
+          } else if (isUnitType) {
+            typeHint = " [RADIO-UNIT]";
+          } else if (
+            values.length === 2 &&
+            (values.includes("Y") ||
+              values.includes("N") ||
+              values.includes("yes") ||
+              values.includes("no"))
+          ) {
+            typeHint = " [RADIO-YESNO]";
+          } else if (values.length === 2) {
+            typeHint = " [RADIO]";
+          } else if (values.length >= 3 && values.length <= 5) {
+            typeHint = " [RADIO-MULTI]";
+          } else {
+            typeHint = " [CHECKBOX]";
+          }
+          return `${qid} → values: [${values
+            .map((v) => `"${v}"`)
+            .join(", ")}]${typeHint}`;
         }
-        return `${qid} → values: [${values.map(v => `"${v}"`).join(', ')}]${typeHint}`;
-      }
-      
-      // For fields without values, detect type from name
-      if (isZipCode) return `${qid} [TEXT-ZIP]`;
-      if (isCity) return `${qid} [TEXT-CITY]`;
-      
-      return qid;
-    }).join('\n');
+
+        // For fields without values, detect type from name
+        if (isZipCode) return `${qid} [TEXT-ZIP]`;
+        if (isCity) return `${qid} [TEXT-CITY]`;
+
+        return qid;
+      })
+      .join("\n");
 
     // STEP 2: Generate definition for these mappings IMMEDIATELY
     console.log(
@@ -340,46 +359,60 @@ Generate EXACTLY ${
     const defPrompt = `Generate form sections for ${formCode.toUpperCase()}.
 
 QUESTION IDs WITH VALUES AND PDF LABELS:
-${uniqueQuestionIds.map(qid => {
-  const values = questionIdToValues.get(qid) || [];
-  const fieldInfo = questionIdToFieldInfo.get(qid);
-  const pdfFields = fieldInfo?.pdfFields || [];
-  
-  // Find the original field data to get the alt name (label)
-  const originalField = fieldData.find(f => pdfFields.includes(f.pdfField));
-  const pdfLabel = originalField?.altName || '';
-  
-  // Detect field type
-  const fieldNameLower = pdfFields.join(' ').toLowerCase();
-  const isState = fieldNameLower.includes('state') && !fieldNameLower.includes('statement');
-  const isCountry = fieldNameLower.includes('country');
-  const isProvince = fieldNameLower.includes('province');
-  const isUnitType = fieldNameLower.includes('unit') && 
-                    (fieldNameLower.includes('apt') || 
-                     fieldNameLower.includes('ste') || 
-                     fieldNameLower.includes('flr') ||
-                     values.some(v => ['APT', 'STE', 'FLR', 'apt', 'ste', 'flr'].includes(v)));
-  
-  let typeHint = '';
-  if (values.length > 0) {
-    if (isState || isCountry || isProvince) {
-      typeHint = ' [DROPDOWN-LOCATION]';
-    } else if (isUnitType) {
-      typeHint = ' [RADIO-UNIT]';
-    } else if (values.length === 2 && (values.includes('Y') || values.includes('N') || values.includes('yes') || values.includes('no'))) {
-      typeHint = ' [RADIO-YESNO]';
-    } else if (values.length === 2) {
-      typeHint = ' [RADIO]';
-    } else if (values.length >= 3 && values.length <= 5) {
-      typeHint = ' [RADIO-MULTI]';
-    } else {
-      typeHint = ' [CHECKBOX]';
+${uniqueQuestionIds
+  .map((qid) => {
+    const values = questionIdToValues.get(qid) || [];
+    const fieldInfo = questionIdToFieldInfo.get(qid);
+    const pdfFields = fieldInfo?.pdfFields || [];
+
+    // Find the original field data to get the alt name (label)
+    const originalField = fieldData.find((f) => pdfFields.includes(f.pdfField));
+    const pdfLabel = originalField?.altName || "";
+
+    // Detect field type
+    const fieldNameLower = pdfFields.join(" ").toLowerCase();
+    const isState =
+      fieldNameLower.includes("state") && !fieldNameLower.includes("statement");
+    const isCountry = fieldNameLower.includes("country");
+    const isProvince = fieldNameLower.includes("province");
+    const isUnitType =
+      fieldNameLower.includes("unit") &&
+      (fieldNameLower.includes("apt") ||
+        fieldNameLower.includes("ste") ||
+        fieldNameLower.includes("flr") ||
+        values.some((v) =>
+          ["APT", "STE", "FLR", "apt", "ste", "flr"].includes(v)
+        ));
+
+    let typeHint = "";
+    if (values.length > 0) {
+      if (isState || isCountry || isProvince) {
+        typeHint = " [DROPDOWN-LOCATION]";
+      } else if (isUnitType) {
+        typeHint = " [RADIO-UNIT]";
+      } else if (
+        values.length === 2 &&
+        (values.includes("Y") ||
+          values.includes("N") ||
+          values.includes("yes") ||
+          values.includes("no"))
+      ) {
+        typeHint = " [RADIO-YESNO]";
+      } else if (values.length === 2) {
+        typeHint = " [RADIO]";
+      } else if (values.length >= 3 && values.length <= 5) {
+        typeHint = " [RADIO-MULTI]";
+      } else {
+        typeHint = " [CHECKBOX]";
+      }
+      return `${qid} → PDF Label: "${pdfLabel}" → values: [${values
+        .map((v) => `"${v}"`)
+        .join(", ")}]${typeHint}`;
     }
-    return `${qid} → PDF Label: "${pdfLabel}" → values: [${values.map(v => `"${v}"`).join(', ')}]${typeHint}`;
-  }
-  
-  return `${qid} → PDF Label: "${pdfLabel}"`;
-}).join('\n')}
+
+    return `${qid} → PDF Label: "${pdfLabel}"`;
+  })
+  .join("\n")}
 
 FULL MAPPINGS (for reference):
 ${mappingCode.substring(0, 2000)}
@@ -392,7 +425,9 @@ ${mappingCode.substring(0, 2000)}
 
 2. **NO DUPLICATES**: Each questionId must appear ONLY ONCE in the output
 
-3. **Process ALL questions**: Create question for ALL ${uniqueQuestionIds.length} unique questionIds
+3. **Process ALL questions**: Create question for ALL ${
+      uniqueQuestionIds.length
+    } unique questionIds
 
 4. **Field Type Detection** - Use the [TYPE HINT] to determine the correct type:
    - [DROPDOWN-LOCATION]: Use type "select" for state/country/province dropdowns
@@ -527,10 +562,10 @@ EXAMPLES:
     }
 
     let defCode = extractCode(defResponse);
-    
+
     // Remove "sections: [" wrapper if present
-    defCode = defCode.replace(/^sections:\s*\[/i, '').replace(/\]$/, '');
-    
+    defCode = defCode.replace(/^sections:\s*\[/i, "").replace(/\]$/, "");
+
     const questionCount = (defCode.match(/\bid:\s*["'][^"']+["']/g) || [])
       .length;
 
@@ -546,18 +581,20 @@ EXAMPLES:
 
     // Add the section code
     allSections.push(defCode.trim());
-    
+
     // Track which questionIds were included in this batch
     const batchQuestionsInDef = new Set();
     const defIdMatches = defCode.matchAll(/\bid:\s*["']([^"']+)["']/g);
     for (const match of defIdMatches) {
       batchQuestionsInDef.add(match[1]);
     }
-    
+
     // Check for missing questions
-    const missingInDef = batchQuestionIds.filter(qid => !batchQuestionsInDef.has(qid));
+    const missingInDef = batchQuestionIds.filter(
+      (qid) => !batchQuestionsInDef.has(qid)
+    );
     if (missingInDef.length > 0) {
-      console.log(`   ⚠️  Missing in definition: ${missingInDef.join(', ')}`);
+      console.log(`   ⚠️  Missing in definition: ${missingInDef.join(", ")}`);
     }
 
     console.log(`   ✅ Batch ${i + 1} complete!\n`);
@@ -626,9 +663,9 @@ ${formattedMappings}
 
   // Format sections properly
   const formattedSections = allSections
-    .map(section => section.trim())
-    .filter(section => section.length > 0)
-    .join(',\n');
+    .map((section) => section.trim())
+    .filter((section) => section.length > 0)
+    .join(",\n");
 
   const fullDefinition = `const ${upperCode}_DEFINITION: FormDefinition = {
   id: "${formCode.toLowerCase()}",
