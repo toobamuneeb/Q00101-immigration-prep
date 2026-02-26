@@ -53,12 +53,17 @@ function PurchaseSuccessContent() {
 
   if (isVerifying) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-background to-muted/20">
-        <Card className="w-full max-w-md">
-          <CardContent className="pt-6 text-center">
-            <Loader2 className="h-12 w-12 animate-spin mx-auto mb-4 text-primary" />
-            <p className="text-lg font-medium">Verifying your purchase...</p>
-            <p className="text-sm text-muted-foreground mt-2">
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <Card className="w-full max-w-md border-2 border-slate-200 shadow-xl">
+          <CardContent className="pt-8 pb-8 text-center">
+            <div className="relative mb-6">
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-16 h-16 bg-gradient-to-br from-[rgb(0,102,204)] to-[rgb(0,76,153)] rounded-full opacity-20 animate-ping"></div>
+              </div>
+              <Loader2 className="h-16 w-16 animate-spin mx-auto text-[rgb(0,102,204)] relative" />
+            </div>
+            <p className="text-xl font-bold text-slate-900 mb-2">Verifying your purchase...</p>
+            <p className="text-sm text-slate-600 font-medium">
               {retryCount > 0 
                 ? `Processing payment... (${retryCount}/10)` 
                 : 'This will only take a moment.'}
@@ -71,15 +76,20 @@ function PurchaseSuccessContent() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-background to-muted/20 px-4">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle className="text-destructive">Verification Error</CardTitle>
-            <CardDescription>{error}</CardDescription>
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">
+        <Card className="w-full max-w-md border-2 border-red-200 shadow-xl">
+          <CardHeader className="text-center pb-4">
+            <div className="mx-auto mb-4 w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
+              <CheckCircle className="h-10 w-10 text-red-600" />
+            </div>
+            <CardTitle className="text-red-900 text-2xl font-bold">Verification Error</CardTitle>
+            <CardDescription className="text-red-700 font-medium">{error}</CardDescription>
           </CardHeader>
           <CardContent>
             <Link href="/dashboard">
-              <Button className="w-full">Return to Dashboard</Button>
+              <Button className="w-full h-12 bg-gradient-to-r from-[rgb(0,102,204)] to-[rgb(0,76,153)] hover:from-[rgb(0,76,153)] hover:to-[rgb(0,102,204)] text-white font-bold shadow-lg hover:shadow-xl transition-all">
+                Return to Dashboard
+              </Button>
             </Link>
           </CardContent>
         </Card>
@@ -88,46 +98,46 @@ function PurchaseSuccessContent() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-background to-muted/20 px-4">
-      <Card className="w-full max-w-2xl">
-        <CardHeader className="text-center">
-          <div className="mx-auto mb-4 w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-            <CheckCircle className="h-10 w-10 text-green-600" />
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4 py-12">
+      <Card className="w-full max-w-2xl border-2 border-slate-200 shadow-2xl bg-white">
+        <CardHeader className="text-center pb-6 pt-8">
+          <div className="mx-auto mb-6 w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center shadow-lg">
+            <CheckCircle className="h-12 w-12 text-white" />
           </div>
-          <CardTitle className="text-3xl">Purchase Successful!</CardTitle>
-          <CardDescription className="text-base">
+          <CardTitle className="text-4xl font-bold text-slate-900 mb-3">Purchase Successful!</CardTitle>
+          <CardDescription className="text-lg text-slate-600">
             Thank you for your purchase. Your forms are now ready to use.
           </CardDescription>
         </CardHeader>
 
         <CardContent className="space-y-6">
           {/* Purchase Details */}
-          <div className="bg-muted/50 rounded-lg p-6 space-y-3">
-            <h3 className="font-semibold text-lg">Purchase Details</h3>
+          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 space-y-3 border-2 border-blue-200">
+            <h3 className="font-bold text-lg text-slate-900">Purchase Details</h3>
             <div className="space-y-2 text-sm">
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Package:</span>
-                <span className="font-medium">{purchase?.packageName}</span>
+              <div className="flex justify-between items-center py-2 border-b border-blue-200">
+                <span className="text-slate-600 font-medium">Package:</span>
+                <span className="font-bold text-slate-900">{purchase?.packageName}</span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Forms Included:</span>
-                <span className="font-medium">{purchase?.formsIncluded?.length || 0}</span>
+              <div className="flex justify-between items-center py-2">
+                <span className="text-slate-600 font-medium">Forms Included:</span>
+                <span className="font-bold text-[rgb(0,102,204)]">{purchase?.formsIncluded?.length || 0} Forms</span>
               </div>
             </div>
           </div>
 
           {/* Forms List */}
           <div>
-            <h3 className="font-semibold mb-3">Your Forms</h3>
-            <div className="grid gap-2">
+            <h3 className="font-bold text-lg text-slate-900 mb-4">Your Forms</h3>
+            <div className="grid gap-3">
               {purchase?.formsIncluded?.map((formId: string) => (
                 <div
                   key={formId}
-                  className="flex items-center justify-between p-3 border rounded-lg"
+                  className="flex items-center justify-between p-4 border-2 border-slate-200 rounded-xl hover:border-[rgb(0,102,204)] hover:shadow-md transition-all bg-white"
                 >
-                  <span className="font-medium">{formId.toUpperCase()}</span>
+                  <span className="font-bold text-slate-900 text-lg">{formId.toUpperCase()}</span>
                   <Link href={`/dashboard/forms/${formId}`}>
-                    <Button size="sm" variant="outline">
+                    <Button size="sm" className="bg-gradient-to-r from-[rgb(0,102,204)] to-[rgb(0,76,153)] hover:from-[rgb(0,76,153)] hover:to-[rgb(0,102,204)] text-white font-semibold shadow-md hover:shadow-lg transition-all">
                       Start Form
                     </Button>
                   </Link>
@@ -137,25 +147,39 @@ function PurchaseSuccessContent() {
           </div>
 
           {/* Next Steps */}
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <h3 className="font-semibold text-blue-900 mb-2">What's Next?</h3>
-            <ul className="space-y-1 text-sm text-blue-900">
-              <li>• Fill out your forms at your own pace</li>
-              <li>• Your progress is automatically saved</li>
-              <li>• Download completed PDFs when ready</li>
-              <li>• Access your forms anytime from "My Purchases"</li>
+          <div className="bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-200 rounded-xl p-6">
+            <h3 className="font-bold text-green-900 mb-3 text-lg">What's Next?</h3>
+            <ul className="space-y-2 text-sm text-green-900">
+              <li className="flex items-start gap-2">
+                <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
+                <span className="font-medium">Fill out your forms at your own pace</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
+                <span className="font-medium">Your progress is automatically saved</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
+                <span className="font-medium">Download completed PDFs when ready</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
+                <span className="font-medium">Access your forms anytime from "My Purchases"</span>
+              </li>
             </ul>
           </div>
 
           {/* Action Buttons */}
-          <div className="flex gap-3">
+          <div className="flex gap-3 pt-4">
             <Link href="/dashboard" className="flex-1">
-              <Button variant="outline" className="w-full">
+              <Button variant="outline" className="w-full h-12 border-2 border-slate-300 hover:border-[rgb(0,102,204)] hover:bg-blue-50 font-semibold text-slate-700 hover:text-[rgb(0,102,204)] transition-all">
                 Go to Dashboard
               </Button>
             </Link>
             <Link href="/dashboard/my-purchases" className="flex-1">
-              <Button className="w-full">View My Purchases</Button>
+              <Button className="w-full h-12 bg-gradient-to-r from-[rgb(0,102,204)] to-[rgb(0,76,153)] hover:from-[rgb(0,76,153)] hover:to-[rgb(0,102,204)] text-white font-bold shadow-lg hover:shadow-xl transition-all">
+                View My Purchases
+              </Button>
             </Link>
           </div>
         </CardContent>

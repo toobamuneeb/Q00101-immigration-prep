@@ -92,25 +92,25 @@ export function LoginForm() {
   return (
     <form onSubmit={handleLogin} className="space-y-4">
       {success && (
-        <Alert>
-          <AlertTitle>Success</AlertTitle>
+        <Alert className="border-green-200 bg-green-50">
+          <AlertTitle className="text-green-900 font-semibold">Success</AlertTitle>
           <AlertDescription>
-            <p className="text-sm">{success}</p>
+            <p className="text-sm text-green-800">{success}</p>
           </AlertDescription>
         </Alert>
       )}
       
       {error && (
-        <Alert variant="destructive">
-          <AlertTitle>Error</AlertTitle>
+        <Alert variant="destructive" className="border-red-200 bg-red-50">
+          <AlertTitle className="text-red-900 font-semibold">Error</AlertTitle>
           <AlertDescription>
-            <p className="text-sm">{error}</p>
+            <p className="text-sm text-red-800">{error}</p>
           </AlertDescription>
         </Alert>
       )}
 
       <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email" className="text-slate-700 font-medium">Email</Label>
         <Input
           id="email"
           type="email"
@@ -119,11 +119,12 @@ export function LoginForm() {
           required
           placeholder="you@example.com"
           disabled={loading}
+          className="h-11 border-slate-300 focus:border-[rgb(0,102,204)] focus:ring-[rgb(0,102,204)]"
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
+        <Label htmlFor="password" className="text-slate-700 font-medium">Password</Label>
         <Input
           id="password"
           type="password"
@@ -132,20 +133,21 @@ export function LoginForm() {
           required
           placeholder="••••••••"
           disabled={loading}
+          className="h-11 border-slate-300 focus:border-[rgb(0,102,204)] focus:ring-[rgb(0,102,204)]"
         />
       </div>
 
-      <Button type="submit" className="w-full" disabled={loading}>
+      <Button type="submit" className="w-full bg-[rgb(0,102,204)] hover:bg-[rgb(0,76,153)] text-white font-semibold py-6 shadow-md hover:shadow-lg transition-all" disabled={loading}>
         {loading ? 'Signing in...' : 'Sign In'}
       </Button>
 
-      <div className="flex items-center justify-between text-sm">
-        <Link href="/auth/forgot-password" className="text-primary hover:underline">
+      <div className="flex items-center justify-between text-sm pt-2">
+        <Link href="/auth/forgot-password" className="text-[rgb(0,102,204)] hover:underline font-medium">
           Forgot password?
         </Link>
-        <p className="text-muted-foreground">
+        <p className="text-slate-600">
           Don't have an account?{' '}
-          <Link href="/auth/signup" className="text-primary hover:underline">
+          <Link href="/auth/signup" className="text-[rgb(0,102,204)] hover:underline font-semibold">
             Sign up
           </Link>
         </p>

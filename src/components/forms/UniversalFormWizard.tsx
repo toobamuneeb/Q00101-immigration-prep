@@ -564,107 +564,121 @@ export function UniversalFormWizard({
   };
 
   return (
-    <div className="max-w-4xl mx-auto py-8 px-4">
-      {/* Progress Bar */}
-      <div className="mb-8">
-        <div className="flex justify-between items-center mb-2">
-          <span className="text-sm font-medium">
-            Step {currentSectionIndex + 1} of {totalSections}
-          </span>
-          {!applicationId && (
-            <span className="text-sm text-muted-foreground">Preview Mode</span>
-          )}
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-4xl mx-auto py-8 px-4">
+        {/* Progress Bar */}
+        <div className="mb-6">
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-sm font-medium text-gray-700">
+              Step {currentSectionIndex + 1} of {totalSections}
+            </span>
+            {!applicationId && (
+              <span className="text-sm text-gray-500">Preview Mode</span>
+            )}
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-1.5">
+            <div 
+              className="bg-gray-900 h-1.5 rounded-full transition-all duration-300" 
+              style={{ width: `${progress}%` }}
+            />
+          </div>
         </div>
-        <Progress value={progress} className="h-2" />
-      </div>
 
-      {/* Section Card */}
-      <Card>
-        <CardHeader>
-          <CardTitle>{currentSection.title}</CardTitle>
-          {currentSection.description && (
-            <CardDescription>{currentSection.description}</CardDescription>
-          )}
-        </CardHeader>
+        {/* Section Card - Clean white background */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+          <div className="mb-6">
+            <h2 className="text-xl font-semibold text-gray-900">{currentSection.title}</h2>
+            {currentSection.description && (
+              <p className="text-sm text-gray-600 mt-1">{currentSection.description}</p>
+            )}
+          </div>
 
-        <CardContent className="space-y-6">
-          {currentSection.questions
-            ?.filter((question) => shouldShowQuestion(question))
-            .map((question) => renderQuestion(question))}
-        </CardContent>
+          <div className="space-y-6">
+            {currentSection.questions
+              ?.filter((question) => shouldShowQuestion(question))
+              .map((question) => renderQuestion(question))}
+          </div>
 
-        <CardFooter className="flex justify-between border-t pt-6">
-          {!isSubmitting ? (
-            <>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handlePrevious}
-                disabled={currentSectionIndex === 0}
-              >
-                <ChevronLeft className="mr-2 h-4 w-4" />
-                Previous
-              </Button>
+          <div className="flex justify-between items-center mt-8 pt-6 border-t border-gray-200">
+            {!isSubmitting ? (
+              <>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handlePrevious}
+                  disabled={currentSectionIndex === 0}
+                  className="text-gray-700 border-gray-300"
+                >
+                  <ChevronLeft className="mr-2 h-4 w-4" />
+                  Previous
+                </Button>
 
-              <Button type="button" onClick={handleNext}>
-                {isLastSection ? (
-                  <>
-                    <Check className="mr-2 h-4 w-4" />
-                    Complete
-                  </>
-                ) : (
-                  <>
-                    Next
-                    <ChevronRight className="ml-2 h-4 w-4" />
-                  </>
-                )}
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setIsSubmitting(false)}
-              >
-                Edit Form
-              </Button>
+                <Button 
+                  type="button" 
+                  onClick={handleNext}
+                  className="bg-gray-900 hover:bg-gray-800 text-white"
+                >
+                  {isLastSection ? (
+                    <>
+                      <Check className="mr-2 h-4 w-4" />
+                      Complete
+                    </>
+                  ) : (
+                    <>
+                      Next
+                      <ChevronRight className="ml-2 h-4 w-4" />
+                    </>
+                  )}
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setIsSubmitting(false)}
+                  className="text-gray-700 border-gray-300"
+                >
+                  Edit Form
+                </Button>
 
-              <Button
-                type="button"
-                onClick={handleDownloadPDF}
-                disabled={isDownloading}
-              >
-                {isDownloading ? (
-                  <>
-                    <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                    Generating...
-                  </>
-                ) : (
-                  <>📥 Download PDF</>
-                )}
-              </Button>
-            </>
-          )}
-        </CardFooter>
-      </Card>
+                <Button
+                  type="button"
+                  onClick={handleDownloadPDF}
+                  disabled={isDownloading}
+                  className="bg-gray-900 hover:bg-gray-800 text-white"
+                >
+                  {isDownloading ? (
+                    <>
+                      <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                      Generating...
+                    </>
+                  ) : (
+                    <>📥 Download PDF</>
+                  )}
+                </Button>
+              </>
+            )}
+          </div>
+        </div>
 
-      {/* Section Navigation Dots */}
-      <div className="mt-6 flex justify-center gap-2">
-        {formDefinition.sections.map((section, index) => (
-          <button
-            key={section.id}
-            onClick={() => setCurrentSectionIndex(index)}
-            className={`h-2 w-2 rounded-full transition-all ${
-              index === currentSectionIndex
-                ? "bg-primary w-8"
-                : index < currentSectionIndex
-                ? "bg-primary/50"
-                : "bg-muted"
-            }`}
-            aria-label={`Go to ${section.title}`}
-          />
-        ))}
+        {/* Section Navigation Dots */}
+        <div className="mt-6 flex justify-center gap-2">
+          {formDefinition.sections.map((section, index) => (
+            <button
+              key={section.id}
+              onClick={() => setCurrentSectionIndex(index)}
+              className={`h-2 rounded-full transition-all ${
+                index === currentSectionIndex
+                  ? "bg-gray-900 w-8"
+                  : index < currentSectionIndex
+                  ? "bg-gray-400 w-2"
+                  : "bg-gray-300 w-2"
+              }`}
+              aria-label={`Go to ${section.title}`}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

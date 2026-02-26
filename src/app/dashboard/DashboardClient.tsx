@@ -19,9 +19,12 @@ import {
   Clock,
   CheckCircle2,
   AlertCircle,
+  Shield,
+  Check,
 } from "lucide-react";
 import Link from "next/link";
 import { User } from "@supabase/supabase-js";
+import { ProgressIllustration } from "@/components/ui/illustrations";
 import { AuthButton } from "@/components/auth/AuthButton";
 
 interface DashboardClientProps {
@@ -128,17 +131,22 @@ export function DashboardClient({
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
+    <div className="min-h-screen bg-slate-50">
       {/* Navigation */}
-      <nav className="border-b bg-background">
+      <nav className="border-b bg-white shadow-sm sticky top-0 z-50">
         <div className="container mx-auto px-4">
           <div className="flex justify-between h-16 items-center">
-            <Link href="/" className="font-bold text-xl">
-              ImmigrationPrep
+            <Link href="/" className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-gradient-to-br from-[rgb(0,102,204)] to-[rgb(0,76,153)] rounded-lg flex items-center justify-center">
+                <Shield className="w-5 h-5 text-white" />
+              </div>
+              <span className="font-bold text-xl text-slate-900">ImmigrationPrep</span>
             </Link>
             <div className="flex items-center gap-4">
               <Link href="/browse">
-                <Button variant="ghost">Browse Forms</Button>
+                <Button variant="ghost" className="font-medium text-slate-700 hover:text-[rgb(0,102,204)] hover:bg-blue-50">
+                  Browse Forms
+                </Button>
               </Link>
               <AuthButton />
             </div>
@@ -147,16 +155,25 @@ export function DashboardClient({
       </nav>
 
       {/* Hero Section */}
-      <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="border-b bg-white">
         <div className="container mx-auto px-4 py-12">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl font-bold tracking-tight mb-3">
-              Prepare Your Immigration Forms
-            </h1>
-            <p className="text-xl text-muted-foreground">
-              Access all 18 USCIS forms with guided assistance and auto-save.
-              Start your application today.
-            </p>
+          <div className="grid lg:grid-cols-2 gap-8 items-center max-w-6xl mx-auto">
+            {/* Left: Text Content */}
+            <div>
+              <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3">
+                Prepare Your Immigration Forms
+              </h1>
+              <p className="text-lg text-slate-600">
+                Complete your immigration forms with confidence. Step-by-step guidance, automatic progress saving, and instant PDF generation.
+              </p>
+            </div>
+            
+            {/* Right: Progress Illustration */}
+            <div className="hidden lg:block">
+              <div className="relative h-80">
+                <ProgressIllustration />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -167,14 +184,14 @@ export function DashboardClient({
           <section className="mb-12">
             <div className="flex items-center justify-between mb-6">
               <div>
-                <h2 className="text-2xl font-bold tracking-tight">
+                <h2 className="text-2xl font-bold text-slate-900">
                   Your Applications
                 </h2>
-                <p className="text-muted-foreground">
+                <p className="text-slate-600">
                   Continue where you left off
                 </p>
               </div>
-              <Button asChild variant="outline">
+              <Button asChild variant="outline" className="border-slate-300 hover:border-[rgb(0,102,204)] hover:bg-blue-50">
                 <Link href="/dashboard/forms">
                   View All
                   <ArrowRight className="ml-2 h-4 w-4" />
@@ -182,7 +199,7 @@ export function DashboardClient({
               </Button>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {applications.slice(0, 6).map((app) => {
                 const form = FORM_REGISTRY[app.form_id];
                 if (!form) return null;
@@ -190,19 +207,32 @@ export function DashboardClient({
                 return (
                   <Card
                     key={app.id}
-                    className="hover:shadow-md transition-shadow"
+                    className="group relative hover:shadow-2xl transition-all duration-300 border-2 border-slate-200 hover:border-[rgb(0,102,204)] bg-white overflow-hidden"
                   >
-                    <CardHeader className="pb-3">
-                      <div className="flex items-start justify-between gap-2">
+                    {/* Top accent bar */}
+                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-green-500 to-emerald-600 group-hover:from-[rgb(0,102,204)] group-hover:to-[rgb(0,76,153)] transition-all duration-300"></div>
+                    
+                    <CardHeader className="pb-3 pt-6">
+                      <div className="flex items-start justify-between gap-3">
                         <div className="flex-1">
-                          <CardTitle className="text-lg">{form.id}</CardTitle>
-                          <CardDescription className="line-clamp-1">
-                            {form.name}
-                          </CardDescription>
+                          <div className="flex items-center gap-3 mb-2">
+                            <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-[rgb(0,102,204)] to-[rgb(0,76,153)] flex items-center justify-center shadow-md">
+                              <FileText className="h-5 w-5 text-white" />
+                            </div>
+                            <div>
+                              <CardTitle className="text-lg text-slate-900 font-bold">{form.id}</CardTitle>
+                              <CardDescription className="line-clamp-1 text-slate-600 text-sm">
+                                {form.name}
+                              </CardDescription>
+                            </div>
+                          </div>
                         </div>
-                        {getStatusIcon(app.status)}
+                        <div className="flex-shrink-0">
+                          {getStatusIcon(app.status)}
+                        </div>
                       </div>
                     </CardHeader>
+                    
                     <CardContent>
                       <div className="space-y-3">
                         <Badge
@@ -211,11 +241,11 @@ export function DashboardClient({
                         >
                           {getStatusLabel(app.status)}
                         </Badge>
-                        <div className="text-sm text-muted-foreground">
-                          Last updated:{" "}
+                        <div className="text-sm text-slate-500 bg-slate-50 px-3 py-2 rounded-lg border border-slate-200">
+                          <span className="font-medium">Last updated:</span>{" "}
                           {new Date(app.updated_at).toLocaleDateString()}
                         </div>
-                        <Button asChild className="w-full" size="sm">
+                        <Button asChild className="w-full h-11 bg-gradient-to-r from-[rgb(0,102,204)] to-[rgb(0,76,153)] hover:from-[rgb(0,76,153)] hover:to-[rgb(0,102,204)] text-white font-bold shadow-md hover:shadow-lg transition-all" size="sm">
                           <Link
                             href={
                               app.status === "completed"
@@ -237,38 +267,37 @@ export function DashboardClient({
 
         {/* Pricing Info */}
         <section className="mb-12">
-          <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
+          <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 shadow-lg">
             <CardHeader>
-              <CardTitle className="text-2xl">Simple Pricing</CardTitle>
-              <CardDescription className="text-base">
-                All forms are $60 each. Buy multiple forms and save
-                automatically!
+              <CardTitle className="text-2xl text-slate-900">Simple, Transparent Pricing</CardTitle>
+              <CardDescription className="text-base text-slate-700">
+                All forms are $60 each. Buy multiple forms and save automatically!
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid md:grid-cols-4 gap-4">
-                <div className="text-center p-4 bg-white rounded-lg shadow-sm">
-                  <div className="text-3xl font-bold text-blue-600">$60</div>
-                  <div className="text-sm text-gray-600 mt-1">1 Form</div>
+                <div className="text-center p-6 bg-white rounded-xl shadow-md border-2 border-slate-200">
+                  <div className="text-4xl font-bold text-[rgb(0,102,204)] mb-2">$60</div>
+                  <div className="text-sm text-slate-600 font-medium">1 Form</div>
                 </div>
-                <div className="text-center p-4 bg-white rounded-lg shadow-sm">
-                  <div className="text-3xl font-bold text-blue-600">$100</div>
-                  <div className="text-sm text-gray-600 mt-1">2 Forms</div>
-                  <div className="text-xs text-green-600 font-medium mt-1">
+                <div className="text-center p-6 bg-white rounded-xl shadow-md border-2 border-green-200">
+                  <div className="text-4xl font-bold text-[rgb(0,102,204)] mb-2">$100</div>
+                  <div className="text-sm text-slate-600 font-medium mb-1">2 Forms</div>
+                  <div className="text-xs text-green-600 font-bold bg-green-50 px-2 py-1 rounded-full inline-block">
                     Save $20
                   </div>
                 </div>
-                <div className="text-center p-4 bg-white rounded-lg shadow-sm">
-                  <div className="text-3xl font-bold text-blue-600">$140</div>
-                  <div className="text-sm text-gray-600 mt-1">3 Forms</div>
-                  <div className="text-xs text-green-600 font-medium mt-1">
+                <div className="text-center p-6 bg-white rounded-xl shadow-md border-2 border-green-200">
+                  <div className="text-4xl font-bold text-[rgb(0,102,204)] mb-2">$140</div>
+                  <div className="text-sm text-slate-600 font-medium mb-1">3 Forms</div>
+                  <div className="text-xs text-green-600 font-bold bg-green-50 px-2 py-1 rounded-full inline-block">
                     Save $40
                   </div>
                 </div>
-                <div className="text-center p-4 bg-white rounded-lg shadow-sm">
-                  <div className="text-3xl font-bold text-blue-600">$200</div>
-                  <div className="text-sm text-gray-600 mt-1">4+ Forms</div>
-                  <div className="text-xs text-green-600 font-medium mt-1">
+                <div className="text-center p-6 bg-white rounded-xl shadow-md border-2 border-green-200">
+                  <div className="text-4xl font-bold text-[rgb(0,102,204)] mb-2">$200</div>
+                  <div className="text-sm text-slate-600 font-medium mb-1">4+ Forms</div>
+                  <div className="text-xs text-green-600 font-bold bg-green-50 px-2 py-1 rounded-full inline-block">
                     Save $40+
                   </div>
                 </div>
@@ -280,10 +309,10 @@ export function DashboardClient({
         {/* Individual Forms */}
         <section>
           <div className="mb-6">
-            <h2 className="text-2xl font-bold tracking-tight mb-2">
+            <h2 className="text-2xl font-bold text-slate-900 mb-2">
               Individual Forms
             </h2>
-            <p className="text-muted-foreground">
+            <p className="text-slate-600">
               Or start with a single form application
             </p>
           </div>
@@ -294,15 +323,15 @@ export function DashboardClient({
             onValueChange={setSelectedCategory}
             className="mb-6"
           >
-            <TabsList className="w-full justify-start flex-wrap h-auto gap-2 p-2">
+            <TabsList className="w-full justify-start flex-wrap h-auto gap-2 p-2 bg-white border border-slate-200 shadow-sm">
               {categories.map((category) => (
                 <TabsTrigger
                   key={category}
                   value={category}
-                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                  className="data-[state=active]:bg-[rgb(0,102,204)] data-[state=active]:text-white font-medium"
                 >
                   {categoryLabels[category] || category}
-                  <Badge variant="secondary" className="ml-2">
+                  <Badge variant="secondary" className="ml-2 bg-slate-100 text-slate-700">
                     {getCategoryCount(category)}
                   </Badge>
                 </TabsTrigger>
@@ -310,7 +339,7 @@ export function DashboardClient({
             </TabsList>
           </Tabs>
 
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {filteredForms.map((form) => (
               <div
                 key={form.id}
@@ -323,8 +352,8 @@ export function DashboardClient({
           </div>
 
           {filteredForms.length === 0 && (
-            <Card className="p-12 text-center">
-              <p className="text-muted-foreground">
+            <Card className="p-12 text-center bg-white border-2 border-slate-200">
+              <p className="text-slate-500 text-lg">
                 No forms found in this category
               </p>
             </Card>

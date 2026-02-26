@@ -96,22 +96,22 @@ export function SignupForm() {
 
   if (success) {
     return (
-      <Alert>
-        <AlertTitle>Check your email!</AlertTitle>
+      <Alert className="border-green-200 bg-green-50">
+        <AlertTitle className="text-green-900 font-semibold">Check your email!</AlertTitle>
         <AlertDescription>
           <div className="space-y-3">
-            <p className="text-sm">
+            <p className="text-sm text-green-800">
               We've sent a confirmation link to <strong>{email}</strong>.
             </p>
-            <p className="text-sm">
+            <p className="text-sm text-green-800">
               Please check your email and click the link to verify your account. 
               After verification, you'll be automatically redirected back to the app and logged in.
             </p>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-green-700">
               Don't see the email? Check your spam folder.
             </p>
             <Link href="/auth/login" className="block mt-4">
-              <Button variant="outline" className="w-full">
+              <Button variant="outline" className="w-full border-green-300 hover:bg-green-100 text-green-900 font-semibold">
                 Go to Login
               </Button>
             </Link>
@@ -124,16 +124,16 @@ export function SignupForm() {
   return (
     <form onSubmit={handleSignup} className="space-y-4">
       {error && (
-        <Alert variant="destructive">
-          <AlertTitle>Error</AlertTitle>
+        <Alert variant="destructive" className="border-red-200 bg-red-50">
+          <AlertTitle className="text-red-900 font-semibold">Error</AlertTitle>
           <AlertDescription>
-            <p className="text-sm">{error}</p>
+            <p className="text-sm text-red-800">{error}</p>
           </AlertDescription>
         </Alert>
       )}
 
       <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email" className="text-slate-700 font-medium">Email</Label>
         <Input
           id="email"
           type="email"
@@ -142,11 +142,12 @@ export function SignupForm() {
           required
           placeholder="you@example.com"
           disabled={loading}
+          className="h-11 border-slate-300 focus:border-[rgb(0,102,204)] focus:ring-[rgb(0,102,204)]"
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
+        <Label htmlFor="password" className="text-slate-700 font-medium">Password</Label>
         <Input
           id="password"
           type="password"
@@ -156,14 +157,15 @@ export function SignupForm() {
           placeholder="••••••••"
           minLength={6}
           disabled={loading}
+          className="h-11 border-slate-300 focus:border-[rgb(0,102,204)] focus:ring-[rgb(0,102,204)]"
         />
-        <p className="text-xs text-muted-foreground">
+        <p className="text-xs text-slate-500">
           Must be at least 6 characters
         </p>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="confirmPassword">Confirm Password</Label>
+        <Label htmlFor="confirmPassword" className="text-slate-700 font-medium">Confirm Password</Label>
         <Input
           id="confirmPassword"
           type="password"
@@ -172,16 +174,17 @@ export function SignupForm() {
           required
           placeholder="••••••••"
           disabled={loading}
+          className="h-11 border-slate-300 focus:border-[rgb(0,102,204)] focus:ring-[rgb(0,102,204)]"
         />
       </div>
 
-      <Button type="submit" className="w-full" disabled={loading}>
+      <Button type="submit" className="w-full bg-[rgb(0,102,204)] hover:bg-[rgb(0,76,153)] text-white font-semibold py-6 shadow-md hover:shadow-lg transition-all" disabled={loading}>
         {loading ? 'Creating account...' : 'Sign Up'}
       </Button>
 
-      <p className="text-center text-sm text-muted-foreground">
+      <p className="text-center text-sm text-slate-600 pt-2">
         Already have an account?{' '}
-        <Link href="/auth/login" className="text-primary hover:underline">
+        <Link href="/auth/login" className="text-[rgb(0,102,204)] hover:underline font-semibold">
           Sign in
         </Link>
       </p>
