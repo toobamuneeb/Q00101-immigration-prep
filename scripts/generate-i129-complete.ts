@@ -25,7 +25,7 @@ const mappingObjects = mappingsText.split('},').map(m => m.trim() + '}').filter(
 console.log(`Found ${mappingObjects.length} field mappings`);
 
 // Group mappings by section
-const sections = {
+const sections: Record<string, string[]> = {
   part1: [],
   part2: [],
   part3: [],
@@ -47,7 +47,7 @@ const sections = {
   other: []
 };
 
-mappingObjects.forEach(mapping => {
+mappingObjects.forEach((mapping: string) => {
   const questionIdMatch = mapping.match(/questionId:\s*"([^"]+)"/);
   if (!questionIdMatch) return;
   
