@@ -4,39 +4,39 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: 255 255 255;
+  --color-foreground: 15 23 42;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
-  --color-card: var(--card);
+  --color-sidebar-ring: 0 102 204;
+  --color-sidebar-border: 226 232 240;
+  --color-sidebar-accent-foreground: 0 102 204;
+  --color-sidebar-accent: 240 249 255;
+  --color-sidebar-primary-foreground: 255 255 255;
+  --color-sidebar-primary: 0 102 204;
+  --color-sidebar-foreground: 15 23 42;
+  --color-sidebar: 248 250 252;
+  --color-chart-5: 236 72 153;
+  --color-chart-4: 139 92 246;
+  --color-chart-3: 245 158 11;
+  --color-chart-2: 16 185 129;
+  --color-chart-1: 0 102 204;
+  --color-ring: 0 102 204;
+  --color-input: 226 232 240;
+  --color-border: 226 232 240;
+  --color-destructive: 239 68 68;
+  --color-accent-foreground: 0 102 204;
+  --color-accent: 240 249 255;
+  --color-muted-foreground: 100 116 139;
+  --color-muted: 248 250 252;
+  --color-secondary-foreground: 15 23 42;
+  --color-secondary: 241 245 249;
+  --color-primary-foreground: 255 255 255;
+  --color-primary: 0 102 204;
+  --color-popover-foreground: 15 23 42;
+  --color-popover: 255 255 255;
+  --color-card-foreground: 15 23 42;
+  --color-card: 255 255 255;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -44,38 +44,39 @@
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.984 0.003 247.858);
-  --sidebar-foreground: oklch(0.129 0.042 264.695);
-  --sidebar-primary: oklch(0.208 0.042 265.755);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.968 0.007 247.896);
-  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-border: oklch(0.929 0.013 255.508);
-  --sidebar-ring: oklch(0.704 0.04 256.788);
+  --radius: 0.5rem;
+  /* TurboTax-inspired professional color scheme */
+  --background: 255 255 255;
+  --foreground: 15 23 42;
+  --card: 255 255 255;
+  --card-foreground: 15 23 42;
+  --popover: 255 255 255;
+  --popover-foreground: 15 23 42;
+  --primary: 0 102 204; /* Professional blue */
+  --primary-foreground: 255 255 255;
+  --secondary: 241 245 249;
+  --secondary-foreground: 15 23 42;
+  --muted: 248 250 252;
+  --muted-foreground: 100 116 139;
+  --accent: 240 249 255;
+  --accent-foreground: 0 102 204;
+  --destructive: 239 68 68;
+  --border: 226 232 240;
+  --input: 226 232 240;
+  --ring: 0 102 204;
+  --chart-1: 0 102 204;
+  --chart-2: 16 185 129;
+  --chart-3: 245 158 11;
+  --chart-4: 139 92 246;
+  --chart-5: 236 72 153;
+  --sidebar: 248 250 252;
+  --sidebar-foreground: 15 23 42;
+  --sidebar-primary: 0 102 204;
+  --sidebar-primary-foreground: 255 255 255;
+  --sidebar-accent: 240 249 255;
+  --sidebar-accent-foreground: 0 102 204;
+  --sidebar-border: 226 232 240;
+  --sidebar-ring: 0 102 204;
 }
 
 .dark {
@@ -118,5 +119,57 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  /* TurboTax-inspired smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Professional button styles */
+  button {
+    @apply transition-all duration-200;
+  }
+  
+  /* Card hover effects */
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+  }
+  
+  /* Trust badge styles */
+  .trust-badge {
+    @apply inline-flex items-center gap-2 px-4 py-2 bg-green-50 text-green-700 rounded-full text-sm font-medium border border-green-200;
+  }
+  
+  /* Professional gradient backgrounds */
+  .gradient-blue {
+    background: linear-gradient(135deg, #0066cc 0%, #004c99 100%);
+  }
+  
+  .gradient-light {
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  }
+  
+  /* Subtle dot pattern for cards */
+  .card-pattern {
+    background-image: radial-gradient(circle at 1px 1px, rgb(148 163 184 / 0.1) 1px, transparent 0);
+    background-size: 20px 20px;
+  }
+  
+  /* Animated gradient border */
+  @keyframes gradient-shift {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+  
+  .gradient-border {
+    background: linear-gradient(90deg, #0066cc, #004c99, #0066cc);
+    background-size: 200% 100%;
+    animation: gradient-shift 3s ease infinite;
   }
 }

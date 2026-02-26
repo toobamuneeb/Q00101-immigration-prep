@@ -1,5 +1,6 @@
 import { BrowseClient } from './BrowseClient';
 import { createClient } from '@/lib/supabase/server';
+import { Navigation } from '@/components/Navigation';
 
 interface BrowsePageProps {
   searchParams: Promise<{
@@ -16,10 +17,13 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps) {
   const { data: { user } } = await supabase.auth.getUser();
 
   return (
-    <BrowseClient
-      highlightCategory={params.category}
-      highlightForm={params.form}
-      isAuthenticated={!!user}
-    />
+    <>
+      <Navigation />
+      <BrowseClient
+        highlightCategory={params.category}
+        highlightForm={params.form}
+        isAuthenticated={!!user}
+      />
+    </>
   );
 }
