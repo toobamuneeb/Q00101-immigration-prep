@@ -204,7 +204,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part1.attorneyStateBarNumber",
           type: "text",
           label: "Attorney State Bar Number",
-          required: true,
           helpText:
             "Enter the state bar number of your attorney, if applicable.",
         },
@@ -295,14 +294,12 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part1.alienNumber",
           type: "text",
           label: "7. Alien Registration Number (A-Number)",
-          required: true,
           helpText: "Enter your A-Number, if you have one.",
         },
         {
           id: "part1.ssn",
           type: "ssn",
           label: "8. U.S. Social Security Number (if any)",
-          required: false,
           placeholder: "###-##-####",
           helpText: "Enter your SSN, if you have one.",
         },
@@ -428,7 +425,7 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part1.physicalAddress.streetNumberAndName",
           type: "text",
           label: "18.b. Street Number and Name",
-          required: false,
+          required: true,
         },
         {
           id: "part1.physicalAddress.aptSteFlrNumber",
@@ -797,7 +794,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part4.ssn",
           type: "ssn",
           label: "4. U.S. Social Security Number (if any)",
-          required: false,
           placeholder: "###-##-####",
           helpText: "Leave blank if you do not have one.",
         },
@@ -805,7 +801,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part4.alienNumber",
           type: "text",
           label: "5. Alien Registration Number (A-Number)",
-          required: true,
           helpText: "Enter your A-Number if you have one.",
         },
       ],
@@ -866,7 +861,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part4.postalCode",
           type: "text",
           label: "6.h. Postal Code",
-          required: true,
           helpText:
             "Complete this field if you live outside the United States.",
         },
@@ -888,13 +882,11 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part5.child1.givenName",
           type: "text",
           label: "1.b. Given Name (First Name)",
-          required: true,
         },
         {
           id: "part5.child1.familyName",
           type: "text",
           label: "1.a. Family Name (Last Name)",
-          required: true,
         },
         {
           id: "part5.child1.middleName",
@@ -905,7 +897,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part5.child1.dateOfBirth",
           type: "date",
           label: "2. Date of Birth (mm/dd/yyyy)",
-          required: true,
 
           placeholder: "MM/DD/YYYY",
         },
@@ -913,7 +904,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part5.child1.alienNumber",
           type: "text",
           label: "3. Alien Registration Number (A-Number)",
-          required: true,
           helpText: "Enter the A-Number if applicable.",
         },
         {
@@ -940,7 +930,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part5.child1.streetNumberName",
           type: "text",
           label: "7.a. Street Number and Name",
-          required: true,
         },
         {
           id: "part5.child1.unit",
@@ -962,26 +951,22 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part5.child1.cityOrTown",
           type: "text",
           label: "7.d. City or Town",
-          required: true,
         },
         {
           id: "part5.child1.state",
           type: "select",
           label: "7.e. State",
-          required: true,
           options: US_STATES,
         },
         {
           id: "part5.child1.zipCode",
           type: "text",
           label: "7.f. ZIP Code",
-          required: true,
         },
         {
           id: "part5.child1.postalCode",
           type: "text",
           label: "7.g. Postal Code",
-          required: true,
         },
         {
           id: "part5.child1.country",
@@ -1006,13 +991,11 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part5.child2.givenName",
           type: "text",
           label: "1.b. Given Name (First Name)",
-          required: true,
         },
         {
           id: "part5.child2.familyName",
           type: "text",
           label: "1.a. Family Name (Last Name)",
-          required: true,
         },
         {
           id: "part5.child2.middleName",
@@ -1023,7 +1006,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part5.child2.dateOfBirth",
           type: "date",
           label: "2. Date of Birth (mm/dd/yyyy)",
-          required: true,
 
           placeholder: "MM/DD/YYYY",
         },
@@ -1031,7 +1013,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part5.child2.alienNumber",
           type: "text",
           label: "3. Alien Registration Number (A-Number)",
-          required: true,
           helpText: "Enter the A-Number if applicable.",
         },
         {
@@ -1058,7 +1039,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part5.child2.streetNumberName",
           type: "text",
           label: "7.a. Street Number and Name",
-          required: true,
         },
         {
           id: "part5.child2.unit",
@@ -1080,26 +1060,22 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part5.child2.cityOrTown",
           type: "text",
           label: "7.d. City or Town",
-          required: true,
         },
         {
           id: "part5.child2.state",
           type: "select",
           label: "7.e. State",
-          required: true,
           options: US_STATES,
         },
         {
           id: "part5.child2.zipCode",
           type: "text",
           label: "7.f. ZIP Code",
-          required: true,
         },
         {
           id: "part5.child2.postalCode",
           type: "text",
           label: "7.g. Postal Code",
-          required: true,
         },
         {
           id: "part5.child2.country",
@@ -1123,13 +1099,11 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part5.child3.givenName",
           type: "text",
           label: "1.b. Given Name (First Name)",
-          required: true,
         },
         {
           id: "part5.child3.familyName",
           type: "text",
           label: "1.a. Family Name (Last Name)",
-          required: true,
         },
         {
           id: "part5.child3.middleName",
@@ -1140,7 +1114,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part5.child3.dateOfBirth",
           type: "date",
           label: "2. Date of Birth (mm/dd/yyyy)",
-          required: true,
 
           placeholder: "MM/DD/YYYY",
         },
@@ -1148,7 +1121,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part5.child3.alienNumber",
           type: "text",
           label: "3. Alien Registration Number (A-Number)",
-          required: true,
           helpText: "Enter the A-Number if applicable.",
         },
         {
@@ -1175,7 +1147,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part5.child3.streetNumberName",
           type: "text",
           label: "7.a. Street Number and Name",
-          required: true,
         },
         {
           id: "part5.child3.unit",
@@ -1197,26 +1168,22 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part5.child3.cityOrTown",
           type: "text",
           label: "7.d. City or Town",
-          required: true,
         },
         {
           id: "part5.child3.state",
           type: "select",
           label: "7.e. State",
-          required: true,
           options: US_STATES,
         },
         {
           id: "part5.child3.zipCode",
           type: "text",
           label: "7.f. ZIP Code",
-          required: true,
         },
         {
           id: "part5.child3.postalCode",
           type: "text",
           label: "7.g. Postal Code",
-          required: true,
         },
         {
           id: "part5.child3.country",
@@ -1240,13 +1207,11 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part5.child4.givenName",
           type: "text",
           label: "1.b. Given Name (First Name)",
-          required: true,
         },
         {
           id: "part5.child4.familyName",
           type: "text",
           label: "1.a. Family Name (Last Name)",
-          required: true,
         },
         {
           id: "part5.child4.middleName",
@@ -1257,7 +1222,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part5.child4.dateOfBirth",
           type: "date",
           label: "2. Date of Birth (mm/dd/yyyy)",
-          required: true,
 
           placeholder: "MM/DD/YYYY",
         },
@@ -1265,7 +1229,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part5.child4.alienNumber",
           type: "text",
           label: "3. Alien Registration Number (A-Number)",
-          required: true,
           helpText: "Enter the A-Number if applicable.",
         },
         {
@@ -1292,7 +1255,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part5.child4.streetNumberName",
           type: "text",
           label: "7.a. Street Number and Name",
-          required: true,
         },
         {
           id: "part5.child4.unit",
@@ -1314,26 +1276,22 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part5.child4.cityOrTown",
           type: "text",
           label: "7.d. City or Town",
-          required: true,
         },
         {
           id: "part5.child4.state",
           type: "select",
           label: "7.e. State",
-          required: true,
           options: US_STATES,
         },
         {
           id: "part5.child4.zipCode",
           type: "text",
           label: "7.f. ZIP Code",
-          required: true,
         },
         {
           id: "part5.child4.postalCode",
           type: "text",
           label: "7.g. Postal Code",
-          required: true,
         },
         {
           id: "part5.child4.country",
@@ -1357,13 +1315,11 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part5.child5.givenName",
           type: "text",
           label: "1.b. Given Name (First Name)",
-          required: true,
         },
         {
           id: "part5.child5.familyName",
           type: "text",
           label: "1.a. Family Name (Last Name)",
-          required: true,
         },
         {
           id: "part5.child5.middleName",
@@ -1374,7 +1330,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part5.child5.dateOfBirth",
           type: "date",
           label: "2. Date of Birth (mm/dd/yyyy)",
-          required: true,
 
           placeholder: "MM/DD/YYYY",
         },
@@ -1382,7 +1337,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part5.child5.alienNumber",
           type: "text",
           label: "3. Alien Registration Number (A-Number)",
-          required: true,
           helpText: "Enter the A-Number if applicable.",
         },
         {
@@ -1409,7 +1363,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part5.child5.streetNumberName",
           type: "text",
           label: "7.a. Street Number and Name",
-          required: true,
         },
         {
           id: "part5.child5.unit",
@@ -1431,26 +1384,22 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part5.child5.cityOrTown",
           type: "text",
           label: "7.d. City or Town",
-          required: true,
         },
         {
           id: "part5.child5.state",
           type: "select",
           label: "7.e. State",
-          required: true,
           options: US_STATES,
         },
         {
           id: "part5.child5.zipCode",
           type: "text",
           label: "7.f. ZIP Code",
-          required: true,
         },
         {
           id: "part5.child5.postalCode",
           type: "text",
           label: "7.g. Postal Code",
-          required: true,
         },
         {
           id: "part5.child5.country",
@@ -1602,7 +1551,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part7.petitionersContactInformation.emailAddress",
           type: "email",
           label: "Email Address",
-          required: true,
           placeholder: "example@email.com",
           helpText: "Provide a valid email address where you can be reached.",
         },
@@ -1610,7 +1558,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part7.petitionersContactInformation.daytimePhoneNumber",
           type: "tel",
           label: "Daytime Phone Number",
-          required: true,
           placeholder: "(555) 123-4567",
           helpText:
             "Provide a phone number where you can be reached during the day.",
@@ -1619,7 +1566,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part7.petitionersContactInformation.mobilePhoneNumber",
           type: "tel",
           label: "Mobile Phone Number",
-          required: true,
           placeholder: "(555) 123-4567",
           helpText: "Provide your mobile phone number.",
         },
@@ -1737,7 +1683,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part8.spousesContactInformation.emailAddress",
           type: "email",
           label: "Email Address",
-          required: true,
           placeholder: "example@email.com",
           helpText: "Provide a valid email address for correspondence.",
         },
@@ -1745,7 +1690,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part8.spousesContactInformation.mobilePhoneNumber",
           type: "tel",
           label: "Mobile Phone Number",
-          required: true,
           placeholder: "(555) 123-4567",
           helpText: "Enter the mobile phone number including area code.",
         },
@@ -1753,7 +1697,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part8.spousesContactInformation.daytimePhoneNumber",
           type: "tel",
           label: "Daytime Phone Number",
-          required: true,
           placeholder: "(555) 123-4567",
           helpText: "Provide a daytime phone number where you can be reached.",
         },
@@ -1889,7 +1832,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part9.interpretersMailingAddress.postalCode",
           type: "text",
           label: "3.h. Postal Code",
-          required: true,
           helpText: "Enter the postal code if applicable.",
         },
         {
@@ -1918,7 +1860,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part9.interpretersContactInformation.emailAddress",
           type: "email",
           label: "5. Email Address",
-          required: true,
           placeholder: "example@email.com",
           helpText: "Provide an email address for the interpreter.",
         },
@@ -2001,7 +1942,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part10.preparersContactInformation.emailAddress",
           type: "email",
           label: "6. Email Address",
-          required: true,
           helpText: "Enter the preparer's email address.",
           placeholder: "example@email.com",
         },
@@ -2009,7 +1949,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part10.preparersContactInformation.daytimePhoneNumber",
           type: "tel",
           label: "4. Daytime Telephone Number",
-          required: true,
           helpText: "Enter the preparer's daytime phone number.",
           placeholder: "(555) 123-4567",
         },
@@ -2082,7 +2021,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part10.preparersMailingAddress.postalCode",
           type: "text",
           label: "3.h. Postal Code",
-          required: true,
           helpText: "Enter the postal code, if applicable.",
         },
         {
@@ -2334,7 +2272,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part11.alienRegistrationNumber",
           type: "text",
           label: "Alien Registration Number (A-Number)",
-          required: true,
           helpText:
             "Enter your A-Number if you have one. It is an 8 or 9 digit number.",
         },
@@ -3116,7 +3053,6 @@ const I_485_DEFINITION: FormDefinition = {
           id: "part1.recentPostalCode",
           type: "text",
           label: "18.h. Postal Code",
-          required: true,
         },
         {
           id: "part1.recentCountry",
@@ -3157,7 +3093,6 @@ const I_485_DEFINITION: FormDefinition = {
           id: "part1.socialSecurityNumber",
           type: "ssn",
           label: "19.a. Social Security Number",
-          required: true,
           helpText: "Provide your SSN if you have one.",
         },
         {
@@ -3830,7 +3765,6 @@ const I_485_DEFINITION: FormDefinition = {
           id: "part4.employerAddress.postalCode",
           type: "text",
           label: "7.g. Postal Code",
-          required: true,
         },
         {
           id: "part4.employerAddress.province",
@@ -6917,13 +6851,11 @@ const I_765_DEFINITION: FormDefinition = {
           id: "part2.otherNamesUsed.familyName",
           type: "text",
           label: "2.a. Family Name (Last Name)",
-          required: true,
         },
         {
           id: "part2.otherNamesUsed.givenName",
           type: "text",
           label: "2.b. Given Name (First Name)",
-          required: true,
         },
         {
           id: "part2.otherNamesUsed.middleName",
@@ -7082,7 +7014,6 @@ const I_765_DEFINITION: FormDefinition = {
           id: "part2.otherInformation.maritalStatus",
           type: "select",
           label: "11. Marital Status",
-          required: true,
           options: [
             { value: "single", label: "Single" },
             { value: "married", label: "Married" },
@@ -7138,7 +7069,6 @@ const I_765_DEFINITION: FormDefinition = {
           id: "part2.otherInformation.ssn",
           type: "ssn",
           label: "17. U.S. Social Security Number (if any)",
-          required: false,
           placeholder: "###-##-####",
           helpText: "Leave blank if you do not have one.",
         },
@@ -7195,7 +7125,6 @@ const I_765_DEFINITION: FormDefinition = {
           id: "part2.lastArrival.currentStatus",
           type: "text",
           label: "25. Current Immigration Status",
-          required: true,
         },
         {
           id: "part2.lastArrival.sevisNumber",
@@ -7281,13 +7210,11 @@ const I_765_DEFINITION: FormDefinition = {
           id: "part2.placeOfBirth.cityTownOfBirth",
           type: "text",
           label: "37. City or Town of Birth",
-          required: true,
         },
         {
           id: "part2.placeOfBirth.stateProvinceOfBirth",
           type: "text",
           label: "38. State or Province of Birth",
-          required: true,
         },
       ],
     },
@@ -7398,7 +7325,6 @@ const I_765_DEFINITION: FormDefinition = {
           id: "part3.contactInformation.daytimePhoneNumber",
           type: "tel",
           label: "3. Daytime Phone Number",
-          required: true,
           placeholder: "(555) 123-4567",
           helpText:
             "Enter a phone number where you can be reached during the day.",
@@ -7407,7 +7333,6 @@ const I_765_DEFINITION: FormDefinition = {
           id: "part3.contactInformation.mobileNumber",
           type: "tel",
           label: "4. Mobile Phone Number",
-          required: true,
           placeholder: "(555) 123-4567",
           helpText:
             "Enter your mobile phone number, if different from your daytime number.",
@@ -7416,7 +7341,6 @@ const I_765_DEFINITION: FormDefinition = {
           id: "part3.contactInformation.email",
           type: "email",
           label: "5. Email Address",
-          required: true,
           placeholder: "example@email.com",
           helpText: "Provide your email address for electronic communication.",
         },
@@ -7477,14 +7401,12 @@ const I_765_DEFINITION: FormDefinition = {
           id: "part4.interpreterMobileTelephoneNumber",
           type: "tel",
           label: "5. Mobile Telephone Number",
-          required: true,
           placeholder: "(555) 123-4567",
         },
         {
           id: "part4.interpreterEmailAddress",
           type: "email",
           label: "6. Email Address",
-          required: true,
           placeholder: "example@email.com",
         },
         {
@@ -7553,7 +7475,6 @@ const I_765_DEFINITION: FormDefinition = {
           id: "part4.interpreterPostalCode",
           type: "text",
           label: "3.g. Postal Code",
-          required: true,
           helpText: "Enter the postal code if outside the U.S.",
         },
         {
@@ -7658,7 +7579,6 @@ const I_765_DEFINITION: FormDefinition = {
           id: "part5.preparerPostalCode",
           type: "text",
           label: "3.h. Postal Code",
-          required: true,
           helpText: "Complete if outside the U.S.",
         },
         {
@@ -8817,14 +8737,12 @@ const N_400_DEFINITION: FormDefinition = {
           id: "part5.employerState1",
           type: "select",
           label: "4. Employer State (1)",
-          required: true,
           options: US_STATES,
         },
         {
           id: "part5.employerState2",
           type: "select",
           label: "5. Employer State (2)",
-          required: true,
           options: US_STATES,
         },
 
@@ -8832,26 +8750,22 @@ const N_400_DEFINITION: FormDefinition = {
           id: "part5.employerState3",
           type: "select",
           label: "6. Employer State (3)",
-          required: true,
           options: US_STATES,
         },
         {
           id: "part5.employerZipCode1",
           type: "text",
           label: "7. Employer Zip Code (1)",
-          required: true,
         },
         {
           id: "part5.employerZipCode2",
           type: "text",
           label: "8. Employer Zip Code (2)",
-          required: true,
         },
         {
           id: "part5.employerZipCode3",
           type: "text",
           label: "9. Employer Zip Code (3)",
-          required: true,
         },
         {
           id: "part5.country1",
@@ -10429,7 +10343,6 @@ const I_129F_DEFINITION: FormDefinition = {
           id: "part1.socialSecurityNumber",
           type: "ssn",
           label: "4. U.S. Social Security Number (if any)",
-          required: true,
           placeholder: "###-##-####",
           helpText: "Leave blank if you do not have one.",
         },
@@ -10545,7 +10458,6 @@ const I_129F_DEFINITION: FormDefinition = {
           id: "part1.mailingAddress.postalCode",
           type: "text",
           label: "9.h. Postal Code",
-          required: true,
           helpText: "If applicable, enter your postal code.",
         },
         {
@@ -10618,7 +10530,6 @@ const I_129F_DEFINITION: FormDefinition = {
           id: "part1.addressHistory.physicalAddressOne.postalCode",
           type: "text",
           label: "10.h. Postal Code",
-          required: true,
           helpText: "If applicable, enter your postal code.",
         },
         {
@@ -10645,7 +10556,6 @@ const I_129F_DEFINITION: FormDefinition = {
           id: "part1.addressHistory.physicalAddressTwo.streetNumberName",
           type: "text",
           label: "11.a. Street Number and Name",
-          required: true,
         },
         {
           id: "part1.addressHistory.physicalAddressTwo.unit",
@@ -10667,20 +10577,17 @@ const I_129F_DEFINITION: FormDefinition = {
           id: "part1.addressHistory.physicalAddressTwo.cityOrTown",
           type: "text",
           label: "11.d. City or Town",
-          required: true,
         },
         {
           id: "part1.addressHistory.physicalAddressTwo.state",
           type: "select",
           label: "11.e. State",
-          required: true,
           options: US_STATES,
         },
         {
           id: "part1.addressHistory.physicalAddressTwo.zipCode",
           type: "text",
           label: "11.f. ZIP Code",
-          required: true,
         },
         {
           id: "part1.addressHistory.physicalAddressTwo.province",
@@ -10692,7 +10599,6 @@ const I_129F_DEFINITION: FormDefinition = {
           id: "part1.addressHistory.physicalAddressTwo.postalCode",
           type: "text",
           label: "11.h. Postal Code",
-          required: true,
           helpText: "If applicable, enter your postal code.",
         },
         {
@@ -10776,7 +10682,6 @@ const I_129F_DEFINITION: FormDefinition = {
           id: "part1.employmentHistory.employerOne.postalCode",
           type: "text",
           label: "12.i. Postal Code",
-          required: true,
           helpText: "If applicable, enter your postal code.",
         },
         {
@@ -10813,7 +10718,6 @@ const I_129F_DEFINITION: FormDefinition = {
           id: "part1.employmentHistory.employerTwo.streetNumberName",
           type: "text",
           label: "13.b. Street Number and Name",
-          required: true,
         },
         {
           id: "part1.employmentHistory.employerTwo.unit",
@@ -10835,20 +10739,17 @@ const I_129F_DEFINITION: FormDefinition = {
           id: "part1.employmentHistory.employerTwo.cityOrTown",
           type: "text",
           label: "13.e. City or Town",
-          required: true,
         },
         {
           id: "part1.employmentHistory.employerTwo.state",
           type: "select",
           label: "13.f. State",
-          required: true,
           options: US_STATES,
         },
         {
           id: "part1.employmentHistory.employerTwo.zipCode",
           type: "text",
           label: "13.g. ZIP Code",
-          required: true,
         },
         {
           id: "part1.employmentHistory.employerTwo.province",
@@ -10860,7 +10761,6 @@ const I_129F_DEFINITION: FormDefinition = {
           id: "part1.employmentHistory.employerTwo.postalCode",
           type: "text",
           label: "13.i. Postal Code",
-          required: true,
           helpText: "If applicable, enter your postal code.",
         },
         {
@@ -10902,7 +10802,6 @@ const I_129F_DEFINITION: FormDefinition = {
           id: "part1.otherInformation.provinceOrStateOfBirth",
           type: "text",
           label: "14.b. Province or State of Birth",
-          required: true,
         },
         {
           id: "part1.otherInformation.countryOfBirth",
@@ -11531,7 +11430,6 @@ const I_129F_DEFINITION: FormDefinition = {
           id: "part2.beneficiaryMailingPostalCode",
           type: "text",
           label: "Mailing Address - Postal Code",
-          required: true,
         },
         {
           id: "part2.beneficiaryAptSteFlrNumber",
@@ -11542,19 +11440,16 @@ const I_129F_DEFINITION: FormDefinition = {
           id: "part2.beneficiaryStreetNumberName",
           type: "text",
           label: "Street Number and Name",
-          required: true,
         },
         {
           id: "part2.beneficiaryCityOrTown",
           type: "text",
           label: "City or Town",
-          required: true,
         },
         {
           id: "part2.beneficiaryPostalCode",
           type: "text",
           label: "Postal Code",
-          required: true,
         },
         {
           id: "part2.beneficiaryCountry",
@@ -11641,7 +11536,6 @@ const I_129F_DEFINITION: FormDefinition = {
           id: "part2.beneficiarySSN",
           type: "ssn",
           label: "3. U.S. Social Security Number (if any)",
-          required: true,
           placeholder: "###-##-####",
           helpText: "Leave blank if you do not have one.",
         },
@@ -12373,7 +12267,6 @@ const I_129F_DEFINITION: FormDefinition = {
           id: "part2.beneficiaryAddressInUS.daytimeTelephoneNumber",
           type: "tel",
           label: "Daytime Telephone Number",
-          required: true,
           placeholder: "(555) 123-4567",
         },
       ],
@@ -12421,7 +12314,6 @@ const I_129F_DEFINITION: FormDefinition = {
           id: "part2.beneficiaryPhysicalAddressAbroad.postalCode",
           type: "text",
           label: "Postal Code",
-          required: true,
         },
         {
           id: "part2.beneficiaryPhysicalAddressAbroad.country",
@@ -12433,7 +12325,6 @@ const I_129F_DEFINITION: FormDefinition = {
           id: "part2.beneficiaryPhysicalAddressAbroad.daytimeTelephoneNumber",
           type: "tel",
           label: "Daytime Telephone Number",
-          required: true,
           placeholder: "(555) 123-4567",
         },
       ],
@@ -12688,7 +12579,6 @@ const I_129F_DEFINITION: FormDefinition = {
           id: "part5.petitionerMobileNumber",
           type: "tel",
           label: "2. Mobile Telephone Number",
-          required: true,
           placeholder: "(555) 123-4567",
           helpText:
             "Enter your mobile phone number, if different from your daytime number.",
@@ -12697,7 +12587,6 @@ const I_129F_DEFINITION: FormDefinition = {
           id: "part5.petitionerEmail",
           type: "email",
           label: "3. Email Address",
-          required: true,
           placeholder: "example@email.com",
           helpText:
             "Provide an email address where you can receive correspondence.",
@@ -13137,7 +13026,6 @@ const I600_DEFINITION: FormDefinition = {
           id: "part1.13.email",
           type: "email",
           label: "13. Email Address (if any)",
-          required: true,
         },
       ],
     },
@@ -13186,7 +13074,6 @@ const I600_DEFINITION: FormDefinition = {
           id: "part2.7.placeOfMarriage",
           type: "text",
           label: "7. Place of Marriage (City, State/Province, Country)",
-          required: true,
           helpText: "If married",
         },
       ],
@@ -13421,7 +13308,6 @@ const I600_DEFINITION: FormDefinition = {
           id: "part6.6.preAdoptionRequirements",
           type: "radio",
           label: "6. Have pre-adoption requirements of the state been met?",
-          required: true,
           options: [
             { value: "yes", label: "Yes" },
             { value: "will-meet", label: "Will be met" },
@@ -13653,7 +13539,6 @@ const I589_DEFINITION: FormDefinition = {
           id: "partA1.2.ssn",
           type: "ssn",
           label: "2. U.S. Social Security Number (if any)",
-          required: false,
         },
         {
           id: "partA1.3.familyName",
@@ -13764,7 +13649,6 @@ const I589_DEFINITION: FormDefinition = {
           id: "partA1.19.i94Number",
           type: "text",
           label: "19. I-94 Number (if any)",
-          required: true,
           helpText: "Find at https://i94.cbp.dhs.gov",
         },
         {
@@ -13886,8 +13770,6 @@ const I589_DEFINITION: FormDefinition = {
           required: true,
           options: [
             { value: "race", label: "Race" },
-       
-   
             { value: "religion", label: "Religion" },
             { value: "nationality", label: "Nationality" },
             { value: "political-opinion", label: "Political Opinion" },
@@ -16019,7 +15901,6 @@ const I9_DEFINITION: FormDefinition = {
           id: "section1.ssn",
           type: "ssn",
           label: "U.S. Social Security Number",
-          required: true,
           helpText: "Optional unless employer participates in E-Verify",
         },
         {
@@ -16259,23 +16140,19 @@ const I9_DEFINITION: FormDefinition = {
           id: "preparer1.streetAddress",
           type: "text",
           label: "Preparer 1 Address (Street Number and Name)",
-          required: true,
         },
         {
           id: "preparer1.city",
           type: "text",
           label: "Preparer 1 City or Town",
-          required: true,
         },
         {
           id: "preparer1.state",
           type: "select",
           label: "Preparer 1 State",
-          required: true,
           options: US_STATES,
         },
         { id: "preparer1.zipCode", type: "text", label: "Preparer 1 ZIP Code" },
-  
         { id: "preparer1.date", type: "date", label: "Preparer 1 Date" },
         {
           id: "preparer2.lastName",
@@ -16296,23 +16173,19 @@ const I9_DEFINITION: FormDefinition = {
           id: "preparer2.streetAddress",
           type: "text",
           label: "Preparer 2 Address (Street Number and Name)",
-          required: true,
         },
         {
           id: "preparer2.city",
           type: "text",
           label: "Preparer 2 City or Town",
-          required: true,
         },
         {
           id: "preparer2.state",
           type: "select",
           label: "Preparer 2 State",
-          required: true,
           options: US_STATES,
         },
         { id: "preparer2.zipCode", type: "text", label: "Preparer 2 ZIP Code" },
- 
         { id: "preparer2.date", type: "date", label: "Preparer 2 Date" },
         {
           id: "preparer3.lastName",
@@ -16333,23 +16206,19 @@ const I9_DEFINITION: FormDefinition = {
           id: "preparer3.streetAddress",
           type: "text",
           label: "Preparer 3 Address (Street Number and Name)",
-          required: true,
         },
         {
           id: "preparer3.city",
           type: "text",
           label: "Preparer 3 City or Town",
-          required: true,
         },
         {
           id: "preparer3.state",
           type: "select",
           label: "Preparer 3 State",
-          required: true,
           options: US_STATES,
         },
         { id: "preparer3.zipCode", type: "text", label: "Preparer 3 ZIP Code" },
- 
         { id: "preparer3.date", type: "date", label: "Preparer 3 Date" },
         {
           id: "preparer4.lastName",
@@ -16370,23 +16239,19 @@ const I9_DEFINITION: FormDefinition = {
           id: "preparer4.streetAddress",
           type: "text",
           label: "Preparer 4 Address (Street Number and Name)",
-          required: true,
         },
         {
           id: "preparer4.city",
           type: "text",
           label: "Preparer 4 City or Town",
-          required: true,
         },
         {
           id: "preparer4.state",
           type: "select",
           label: "Preparer 4 State",
-          required: true,
           options: US_STATES,
         },
         { id: "preparer4.zipCode", type: "text", label: "Preparer 4 ZIP Code" },
-    
         { id: "preparer4.date", type: "date", label: "Preparer 4 Date" },
       ],
     },
@@ -16600,8 +16465,6 @@ const I_90_DEFINITION: FormDefinition = {
           required: true,
           options: [
             { value: "", label: "Select State" },
-    
-    
             { value: "AL", label: "Alabama" },
             { value: "AK", label: "Alaska" },
             { value: "AZ", label: "Arizona" },
@@ -16739,11 +16602,9 @@ const I_90_DEFINITION: FormDefinition = {
           id: "part1.line7d.state",
           type: "select",
           label: "State",
-     required: true,
+          required: false,
           options: [
             { value: "", label: "Select State" },
-     
-           
             { value: "AL", label: "Alabama" },
             { value: "AK", label: "Alaska" },
             { value: "AZ", label: "Arizona" },
@@ -17320,10 +17181,9 @@ const I_90_DEFINITION: FormDefinition = {
           id: "part6.line3d.state",
           type: "select",
           label: "State",
-       required: true,
+          required: false,
           options: [
             { value: "", label: "Select State" },
-       
             { value: "AL", label: "Alabama" },
             { value: "AK", label: "Alaska" },
             { value: "AZ", label: "Arizona" },
@@ -17503,7 +17363,7 @@ const I_90_DEFINITION: FormDefinition = {
           id: "part7.line3d.state",
           type: "select",
           label: "State",
-         required: true,
+          required: false,
           options: [
             { value: "", label: "Select State" },
             { value: "AL", label: "Alabama" },
@@ -20522,7 +20382,6 @@ const I_212_DEFINITION: FormDefinition = {
           id: "part1.attorneyStateBarNumber",
           type: "text",
           label: "Attorney State Bar Number",
-          required: true,
           helpText: "Enter the state bar number of your attorney.",
         },
         {
@@ -20659,7 +20518,6 @@ const I_212_DEFINITION: FormDefinition = {
           id: "part1.mailingAddress.postalcode",
           type: "text",
           label: "Postal Code",
-          required: true,
           helpText: "If applicable, enter the postal code.",
         },
         {
@@ -20735,7 +20593,6 @@ const I_212_DEFINITION: FormDefinition = {
           id: "part1.physicalAddress.postalcode",
           type: "text",
           label: "Postal Code",
-          required: true,
           helpText: "If applicable, enter the postal code.",
         },
         {
@@ -20783,7 +20640,6 @@ const I_212_DEFINITION: FormDefinition = {
           id: "part1.otherInformation.ssn",
           type: "ssn",
           label: "U.S. Social Security Number (if any)",
-          required: false,
           placeholder: "###-##-####",
           helpText: "Leave blank if you do not have one.",
         },
@@ -20821,7 +20677,6 @@ const I_212_DEFINITION: FormDefinition = {
           id: "part1.otherInformation.stateProvinceOfBirth",
           type: "text",
           label: "State/Province of Birth",
-          required: true,
           helpText: "Enter the state or province of your birth, if applicable.",
         },
         {
@@ -21350,7 +21205,6 @@ const I_212_DEFINITION: FormDefinition = {
           id: "part5.addressHistory1.postalcode",
           type: "text",
           label: "1.h. Postal Code",
-          required: true,
         },
         {
           id: "part5.addressHistory1.country",
@@ -21376,7 +21230,6 @@ const I_212_DEFINITION: FormDefinition = {
           id: "part5.addressHistory2.streetnumbername",
           type: "text",
           label: "2.a. Street Number and Name",
-          required: true,
         },
         {
           id: "part5.addressHistory2.unitType",
@@ -21397,20 +21250,17 @@ const I_212_DEFINITION: FormDefinition = {
           id: "part5.addressHistory2.cityortown",
           type: "text",
           label: "2.d. City or Town",
-          required: true,
         },
         {
           id: "part5.addressHistory2.state",
           type: "select",
           label: "2.e. State",
-          required: true,
           options: US_STATES,
         },
         {
           id: "part5.addressHistory2.zipcode",
           type: "text",
           label: "2.f. ZIP Code",
-          required: true,
         },
         {
           id: "part5.addressHistory2.province",
@@ -21421,7 +21271,6 @@ const I_212_DEFINITION: FormDefinition = {
           id: "part5.addressHistory2.postalcode",
           type: "text",
           label: "2.h. Postal Code",
-          required: true,
         },
         {
           id: "part5.addressHistory2.country",
@@ -21502,7 +21351,6 @@ const I_212_DEFINITION: FormDefinition = {
           id: "part5.employmentHistory1.postalcode",
           type: "text",
           label: "3.i. Postal Code",
-          required: true,
         },
         {
           id: "part5.employmentHistory1.country",
@@ -21539,7 +21387,6 @@ const I_212_DEFINITION: FormDefinition = {
           id: "part5.employmentHistory2.streetnumbername",
           type: "text",
           label: "4.b. Street Number and Name",
-          required: true,
         },
         {
           id: "part5.employmentHistory2.unitType",
@@ -21560,20 +21407,17 @@ const I_212_DEFINITION: FormDefinition = {
           id: "part5.employmentHistory2.cityortown",
           type: "text",
           label: "4.e. City or Town",
-          required: true,
         },
         {
           id: "part5.employmentHistory2.state",
           type: "select",
           label: "4.f. State",
-          required: true,
           options: US_STATES,
         },
         {
           id: "part5.employmentHistory2.zipcode",
           type: "text",
           label: "4.g. ZIP Code",
-          required: true,
         },
         {
           id: "part5.employmentHistory2.province",
@@ -21584,7 +21428,6 @@ const I_212_DEFINITION: FormDefinition = {
           id: "part5.employmentHistory2.postalcode",
           type: "text",
           label: "4.i. Postal Code",
-          required: true,
         },
         {
           id: "part5.employmentHistory2.country",
@@ -21912,7 +21755,6 @@ const I_212_DEFINITION: FormDefinition = {
           id: "part6.applicantMobilePhoneNumber",
           type: "tel",
           label: "4. Mobile Phone Number",
-          required: true,
           placeholder: "(555) 123-4567",
           helpText:
             "Enter your mobile phone number if different from your daytime phone number.",
@@ -21921,7 +21763,6 @@ const I_212_DEFINITION: FormDefinition = {
           id: "part6.applicantEmailAddress",
           type: "email",
           label: "5. Email Address",
-          required: true,
           placeholder: "example@email.com",
           helpText:
             "Provide a valid email address for electronic correspondence.",

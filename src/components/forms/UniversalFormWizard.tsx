@@ -71,9 +71,204 @@ export function UniversalFormWizard({
     return null;
   }
 
+  // Helper function to determine if a field should be required based on USCIS patterns
+  const isFieldRequired = (question: Question): boolean => {
+    // If explicitly marked as required in definition, respect that
+    if (question.required !== undefined) {
+      return question.required;
+    }
+
+    // Auto-detect required fields based on USCIS common patterns
+    const label = question.label.toLowerCase();
+    
+    // Name fields are always required
+    if (
+      label.includes('family name') ||
+      label.includes('last name') ||
+      label.includes('given name') ||
+      label.includes('first name') ||
+      label.includes('full name') ||
+      label.includes('surname')
+    ) {
+      return true;
+    }
+
+    // Date of birth is always required
+    if (label.includes('date of birth') || label.includes('dob')) {
+      return true;
+    }
+
+    // Address fields (street, city, state, zip) are typically required
+    if (
+      label.includes('street number') ||
+      label.includes('street name') ||
+      label.includes('street address') ||
+      label.includes('city or town') ||
+      label.includes('city/town') ||
+      (label.includes('state') && question.type === 'select') ||
+      label.includes('zip code') ||
+      label.includes('postal code') ||
+      label.includes('province')
+    ) {
+      return true;
+    }
+
+    // Country fields are typically required
+    if (
+      label.includes('country of birth') ||
+      label.includes('country of citizenship') ||
+      label.includes('country of residence') ||
+      (label.includes('country') && !label.includes('foreign'))
+    ) {
+      return true;
+    }
+
+    // Contact information
+    if (
+      label.includes('phone number') ||
+      label.includes('telephone') ||
+      label.includes('daytime phone') ||
+      label.includes('mobile number') ||
+      label.includes('email address')
+    ) {
+      return true;
+    }
+
+    // Marital status
+    if (label.includes('marital status')) {
+      return true;
+    }
+
+    // Gender/Sex
+    if (
+      label.includes('gender') || 
+      label.includes('sex') ||
+      (label.includes('male') && label.includes('female'))
+    ) {
+      return true;
+    }
+
+    // Physical characteristics (for forms that require them)
+    if (
+      label.includes('height') ||
+      label.includes('weight') ||
+      label.includes('eye color') ||
+      label.includes('hair color') ||
+      label.includes('race') ||
+      label.includes('ethnicity')
+    ) {
+      return true;
+    }
+
+    // Immigration-specific required fields
+    if (
+      label.includes('class of admission') ||
+      label.includes('visa number') ||
+      label.includes('passport number') ||
+      label.includes('i-94 number') ||
+      label.includes('date of entry') ||
+      label.includes('port of entry') ||
+      label.includes('expires on') ||
+      label.includes('expiration date')
+    ) {
+      return true;
+    }
+
+    // Relationship fields
+    if (
+      label.includes('relationship to') ||
+      label.includes('type of relationship')
+    ) {
+      return true;
+    }
+
+    // Employment fields (when present)
+    if (
+      label.includes('employer name') ||
+      label.includes('occupation') ||
+      label.includes('job title') ||
+      label.includes('current employer')
+    ) {
+      return true;
+    }
+
+    // Petition/Application type questions
+    if (
+      label.includes('are you filing') ||
+      label.includes('type of petition') ||
+      label.includes('type of application') ||
+      label.includes('requesting')
+    ) {
+      return true;
+    }
+
+    // Yes/No questions that are typically required
+    if (
+      question.type === 'radio' && 
+      question.options?.some(opt => 
+        opt.value === 'Y' || opt.value === 'N' || 
+        opt.value === 'Yes' || opt.value === 'No'
+      )
+    ) {
+      // Most yes/no questions in USCIS forms are required
+      return true;
+    }
+
+    // Signature and date fields
+    if (
+      label.includes('signature') || 
+      label.includes('date of signature') ||
+      (label.includes('date') && label.includes('sign'))
+    ) {
+      return true;
+    }
+
+    // Social Security Number (when applicable)
+    if (label.includes('social security') || label.includes('ssn')) {
+      return true;
+    }
+
+    // Receipt/Case numbers
+    if (
+      label.includes('receipt number') ||
+      label.includes('case number') ||
+      label.includes('uscis online account')
+    ) {
+      return false; // These are optional for most forms
+    }
+
+    // A-Number is optional for many forms
+    if (label.includes('a-number') || label.includes('alien registration')) {
+      return false;
+    }
+
+    // Middle name is typically optional
+    if (label.includes('middle name') || label.includes('middle initial')) {
+      return false;
+    }
+
+    // Apartment/Unit/Floor are optional
+    if (
+      label.includes('apt.') ||
+      label.includes('ste.') ||
+      label.includes('flr.') ||
+      label.includes('apartment') ||
+      label.includes('suite') ||
+      label.includes('floor') ||
+      label.includes('unit')
+    ) {
+      return false;
+    }
+
+    // Default: not required unless explicitly stated
+    return false;
+  };
+
   // Validate a single field
   const validateField = (question: Question, value: any): string | null => {
-    if (question.required) {
+    const required = isFieldRequired(question);
+    
+    if (required) {
       if (!value || (typeof value === "string" && value.trim() === "")) {
         return `${question.label} is required`;
       }
@@ -395,7 +590,7 @@ export function UniversalFormWizard({
       <div key={question.id} id={question.id} className="space-y-2">
         <Label className="text-base font-medium">
           {translateLabel(question.label)}
-          {question.required && (
+          {isFieldRequired(question) && (
             <span className="text-destructive ml-1">*</span>
           )}
         </Label>

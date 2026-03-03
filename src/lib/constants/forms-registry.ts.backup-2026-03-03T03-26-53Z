@@ -295,14 +295,13 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part1.alienNumber",
           type: "text",
           label: "7. Alien Registration Number (A-Number)",
-          required: true,
           helpText: "Enter your A-Number, if you have one.",
         },
         {
           id: "part1.ssn",
           type: "ssn",
           label: "8. U.S. Social Security Number (if any)",
-          required: false,
+          required: true,
           placeholder: "###-##-####",
           helpText: "Enter your SSN, if you have one.",
         },
@@ -428,7 +427,7 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part1.physicalAddress.streetNumberAndName",
           type: "text",
           label: "18.b. Street Number and Name",
-          required: false,
+          required: true,
         },
         {
           id: "part1.physicalAddress.aptSteFlrNumber",
@@ -797,7 +796,7 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part4.ssn",
           type: "ssn",
           label: "4. U.S. Social Security Number (if any)",
-          required: false,
+          required: true,
           placeholder: "###-##-####",
           helpText: "Leave blank if you do not have one.",
         },
@@ -805,7 +804,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part4.alienNumber",
           type: "text",
           label: "5. Alien Registration Number (A-Number)",
-          required: true,
           helpText: "Enter your A-Number if you have one.",
         },
       ],
@@ -913,7 +911,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part5.child1.alienNumber",
           type: "text",
           label: "3. Alien Registration Number (A-Number)",
-          required: true,
           helpText: "Enter the A-Number if applicable.",
         },
         {
@@ -1031,7 +1028,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part5.child2.alienNumber",
           type: "text",
           label: "3. Alien Registration Number (A-Number)",
-          required: true,
           helpText: "Enter the A-Number if applicable.",
         },
         {
@@ -1148,7 +1144,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part5.child3.alienNumber",
           type: "text",
           label: "3. Alien Registration Number (A-Number)",
-          required: true,
           helpText: "Enter the A-Number if applicable.",
         },
         {
@@ -1265,7 +1260,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part5.child4.alienNumber",
           type: "text",
           label: "3. Alien Registration Number (A-Number)",
-          required: true,
           helpText: "Enter the A-Number if applicable.",
         },
         {
@@ -1382,7 +1376,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part5.child5.alienNumber",
           type: "text",
           label: "3. Alien Registration Number (A-Number)",
-          required: true,
           helpText: "Enter the A-Number if applicable.",
         },
         {
@@ -1619,7 +1612,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part7.petitionersContactInformation.mobilePhoneNumber",
           type: "tel",
           label: "Mobile Phone Number",
-          required: true,
           placeholder: "(555) 123-4567",
           helpText: "Provide your mobile phone number.",
         },
@@ -1745,7 +1737,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part8.spousesContactInformation.mobilePhoneNumber",
           type: "tel",
           label: "Mobile Phone Number",
-          required: true,
           placeholder: "(555) 123-4567",
           helpText: "Enter the mobile phone number including area code.",
         },
@@ -2009,7 +2000,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part10.preparersContactInformation.daytimePhoneNumber",
           type: "tel",
           label: "4. Daytime Telephone Number",
-          required: true,
           helpText: "Enter the preparer's daytime phone number.",
           placeholder: "(555) 123-4567",
         },
@@ -2334,7 +2324,6 @@ const I_751_DEFINITION: FormDefinition = {
           id: "part11.alienRegistrationNumber",
           type: "text",
           label: "Alien Registration Number (A-Number)",
-          required: true,
           helpText:
             "Enter your A-Number if you have one. It is an 8 or 9 digit number.",
         },
@@ -7138,7 +7127,7 @@ const I_765_DEFINITION: FormDefinition = {
           id: "part2.otherInformation.ssn",
           type: "ssn",
           label: "17. U.S. Social Security Number (if any)",
-          required: false,
+          required: true,
           placeholder: "###-##-####",
           helpText: "Leave blank if you do not have one.",
         },
@@ -7195,7 +7184,6 @@ const I_765_DEFINITION: FormDefinition = {
           id: "part2.lastArrival.currentStatus",
           type: "text",
           label: "25. Current Immigration Status",
-          required: true,
         },
         {
           id: "part2.lastArrival.sevisNumber",
@@ -7407,7 +7395,6 @@ const I_765_DEFINITION: FormDefinition = {
           id: "part3.contactInformation.mobileNumber",
           type: "tel",
           label: "4. Mobile Phone Number",
-          required: true,
           placeholder: "(555) 123-4567",
           helpText:
             "Enter your mobile phone number, if different from your daytime number.",
@@ -7477,7 +7464,6 @@ const I_765_DEFINITION: FormDefinition = {
           id: "part4.interpreterMobileTelephoneNumber",
           type: "tel",
           label: "5. Mobile Telephone Number",
-          required: true,
           placeholder: "(555) 123-4567",
         },
         {
@@ -12373,7 +12359,6 @@ const I_129F_DEFINITION: FormDefinition = {
           id: "part2.beneficiaryAddressInUS.daytimeTelephoneNumber",
           type: "tel",
           label: "Daytime Telephone Number",
-          required: true,
           placeholder: "(555) 123-4567",
         },
       ],
@@ -12433,7 +12418,6 @@ const I_129F_DEFINITION: FormDefinition = {
           id: "part2.beneficiaryPhysicalAddressAbroad.daytimeTelephoneNumber",
           type: "tel",
           label: "Daytime Telephone Number",
-          required: true,
           placeholder: "(555) 123-4567",
         },
       ],
@@ -12688,7 +12672,6 @@ const I_129F_DEFINITION: FormDefinition = {
           id: "part5.petitionerMobileNumber",
           type: "tel",
           label: "2. Mobile Telephone Number",
-          required: true,
           placeholder: "(555) 123-4567",
           helpText:
             "Enter your mobile phone number, if different from your daytime number.",
@@ -13653,7 +13636,7 @@ const I589_DEFINITION: FormDefinition = {
           id: "partA1.2.ssn",
           type: "ssn",
           label: "2. U.S. Social Security Number (if any)",
-          required: false,
+          required: true,
         },
         {
           id: "partA1.3.familyName",
@@ -13886,7 +13869,6 @@ const I589_DEFINITION: FormDefinition = {
           required: true,
           options: [
             { value: "race", label: "Race" },
-       
    
             { value: "religion", label: "Religion" },
             { value: "nationality", label: "Nationality" },
@@ -16601,7 +16583,6 @@ const I_90_DEFINITION: FormDefinition = {
           options: [
             { value: "", label: "Select State" },
     
-    
             { value: "AL", label: "Alabama" },
             { value: "AK", label: "Alaska" },
             { value: "AZ", label: "Arizona" },
@@ -16742,7 +16723,6 @@ const I_90_DEFINITION: FormDefinition = {
      required: true,
           options: [
             { value: "", label: "Select State" },
-     
            
             { value: "AL", label: "Alabama" },
             { value: "AK", label: "Alaska" },
@@ -17503,9 +17483,10 @@ const I_90_DEFINITION: FormDefinition = {
           id: "part7.line3d.state",
           type: "select",
           label: "State",
-         required: true,
+          required: false,
           options: [
             { value: "", label: "Select State" },
+  
             { value: "AL", label: "Alabama" },
             { value: "AK", label: "Alaska" },
             { value: "AZ", label: "Arizona" },
@@ -20783,7 +20764,7 @@ const I_212_DEFINITION: FormDefinition = {
           id: "part1.otherInformation.ssn",
           type: "ssn",
           label: "U.S. Social Security Number (if any)",
-          required: false,
+          required: true,
           placeholder: "###-##-####",
           helpText: "Leave blank if you do not have one.",
         },
@@ -21912,7 +21893,6 @@ const I_212_DEFINITION: FormDefinition = {
           id: "part6.applicantMobilePhoneNumber",
           type: "tel",
           label: "4. Mobile Phone Number",
-          required: true,
           placeholder: "(555) 123-4567",
           helpText:
             "Enter your mobile phone number if different from your daytime phone number.",
