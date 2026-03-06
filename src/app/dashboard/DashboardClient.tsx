@@ -134,17 +134,17 @@ export function DashboardClient({
     <div className="min-h-screen bg-slate-50">
       {/* Navigation */}
       <nav className="border-b bg-white shadow-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4">
-          <div className="flex justify-between h-16 items-center">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-[rgb(0,102,204)] to-[rgb(0,76,153)] rounded-lg flex items-center justify-center">
-                <Shield className="w-5 h-5 text-white" />
+        <div className="container mx-auto px-3 sm:px-4">
+          <div className="flex justify-between h-14 sm:h-16 items-center gap-2">
+            <Link href="/" className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+              <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-[rgb(0,102,204)] to-[rgb(0,76,153)] rounded-lg flex items-center justify-center flex-shrink-0">
+                <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </div>
-              <span className="font-bold text-xl text-slate-900">ImmigrationPrep</span>
+              <span className="font-bold text-sm sm:text-base lg:text-xl text-slate-900 hidden min-[400px]:inline truncate">ImmigrationPrep</span>
             </Link>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1 sm:gap-2 lg:gap-4 flex-shrink-0">
               <Link href="/browse">
-                <Button variant="ghost" className="font-medium text-slate-700 hover:text-[rgb(0,102,204)] hover:bg-blue-50">
+                <Button variant="ghost" className="font-medium text-slate-700 hover:text-[rgb(0,102,204)] hover:bg-blue-50 text-xs sm:text-sm lg:text-base px-2 sm:px-3 lg:px-4 h-9 sm:h-10">
                   Browse Forms
                 </Button>
               </Link>
@@ -156,14 +156,14 @@ export function DashboardClient({
 
       {/* Hero Section */}
       <div className="border-b bg-white">
-        <div className="container mx-auto px-4 py-12">
-          <div className="grid lg:grid-cols-2 gap-8 items-center max-w-6xl mx-auto">
+        <div className="container mx-auto px-3 sm:px-4 py-8 sm:py-12">
+          <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 items-center max-w-6xl mx-auto">
             {/* Left: Text Content */}
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 mb-2 sm:mb-3">
                 Prepare Your Immigration Forms
               </h1>
-              <p className="text-lg text-slate-600">
+              <p className="text-base sm:text-lg text-slate-600">
                 Complete your immigration forms with confidence. Step-by-step guidance, automatic progress saving, and instant PDF generation.
               </p>
             </div>
@@ -178,28 +178,28 @@ export function DashboardClient({
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-3 sm:px-4 py-6 sm:py-8">
         {/* In-Progress Applications */}
         {applications.length > 0 && (
-          <section className="mb-12">
-            <div className="flex items-center justify-between mb-6">
+          <section className="mb-8 sm:mb-12">
+            <div className="flex items-center justify-between mb-4 sm:mb-6">
               <div>
-                <h2 className="text-2xl font-bold text-slate-900">
+                <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
                   Your Applications
                 </h2>
-                <p className="text-slate-600">
+                <p className="text-sm sm:text-base text-slate-600">
                   Continue where you left off
                 </p>
               </div>
-              <Button asChild variant="outline" className="border-slate-300 hover:border-[rgb(0,102,204)] hover:bg-blue-50">
+              <Button asChild variant="outline" className="border-slate-300 hover:border-[rgb(0,102,204)] hover:bg-blue-50 text-xs sm:text-sm px-2 sm:px-4">
                 <Link href="/dashboard/forms">
                   View All
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  <ArrowRight className="ml-1 sm:ml-2 h-3 w-3 sm:h-4 sm:w-4" />
                 </Link>
               </Button>
             </div>
 
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
               {applications.slice(0, 6).map((app) => {
                 const form = FORM_REGISTRY[app.form_id];
                 if (!form) return null;
@@ -266,38 +266,38 @@ export function DashboardClient({
         )}
 
         {/* Pricing Info */}
-        <section className="mb-12">
+        <section className="mb-8 sm:mb-12">
           <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 shadow-lg">
             <CardHeader>
-              <CardTitle className="text-2xl text-slate-900">Simple, Transparent Pricing</CardTitle>
-              <CardDescription className="text-base text-slate-700">
+              <CardTitle className="text-xl sm:text-2xl text-slate-900">Simple, Transparent Pricing</CardTitle>
+              <CardDescription className="text-sm sm:text-base text-slate-700">
                 All forms are $60 each. Buy multiple forms and save automatically!
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid md:grid-cols-4 gap-4">
-                <div className="text-center p-6 bg-white rounded-xl shadow-md border-2 border-slate-200">
-                  <div className="text-4xl font-bold text-[rgb(0,102,204)] mb-2">$60</div>
-                  <div className="text-sm text-slate-600 font-medium">1 Form</div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+                <div className="text-center p-3 sm:p-6 bg-white rounded-xl shadow-md border-2 border-slate-200">
+                  <div className="text-2xl sm:text-4xl font-bold text-[rgb(0,102,204)] mb-1 sm:mb-2">$60</div>
+                  <div className="text-xs sm:text-sm text-slate-600 font-medium">1 Form</div>
                 </div>
-                <div className="text-center p-6 bg-white rounded-xl shadow-md border-2 border-green-200">
-                  <div className="text-4xl font-bold text-[rgb(0,102,204)] mb-2">$100</div>
-                  <div className="text-sm text-slate-600 font-medium mb-1">2 Forms</div>
-                  <div className="text-xs text-green-600 font-bold bg-green-50 px-2 py-1 rounded-full inline-block">
+                <div className="text-center p-3 sm:p-6 bg-white rounded-xl shadow-md border-2 border-green-200">
+                  <div className="text-2xl sm:text-4xl font-bold text-[rgb(0,102,204)] mb-1 sm:mb-2">$100</div>
+                  <div className="text-xs sm:text-sm text-slate-600 font-medium mb-1">2 Forms</div>
+                  <div className="text-[10px] sm:text-xs text-green-600 font-bold bg-green-50 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full inline-block">
                     Save $20
                   </div>
                 </div>
-                <div className="text-center p-6 bg-white rounded-xl shadow-md border-2 border-green-200">
-                  <div className="text-4xl font-bold text-[rgb(0,102,204)] mb-2">$140</div>
-                  <div className="text-sm text-slate-600 font-medium mb-1">3 Forms</div>
-                  <div className="text-xs text-green-600 font-bold bg-green-50 px-2 py-1 rounded-full inline-block">
+                <div className="text-center p-3 sm:p-6 bg-white rounded-xl shadow-md border-2 border-green-200">
+                  <div className="text-2xl sm:text-4xl font-bold text-[rgb(0,102,204)] mb-1 sm:mb-2">$140</div>
+                  <div className="text-xs sm:text-sm text-slate-600 font-medium mb-1">3 Forms</div>
+                  <div className="text-[10px] sm:text-xs text-green-600 font-bold bg-green-50 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full inline-block">
                     Save $40
                   </div>
                 </div>
-                <div className="text-center p-6 bg-white rounded-xl shadow-md border-2 border-green-200">
-                  <div className="text-4xl font-bold text-[rgb(0,102,204)] mb-2">$200</div>
-                  <div className="text-sm text-slate-600 font-medium mb-1">4+ Forms</div>
-                  <div className="text-xs text-green-600 font-bold bg-green-50 px-2 py-1 rounded-full inline-block">
+                <div className="text-center p-3 sm:p-6 bg-white rounded-xl shadow-md border-2 border-green-200">
+                  <div className="text-2xl sm:text-4xl font-bold text-[rgb(0,102,204)] mb-1 sm:mb-2">$200</div>
+                  <div className="text-xs sm:text-sm text-slate-600 font-medium mb-1">4+ Forms</div>
+                  <div className="text-[10px] sm:text-xs text-green-600 font-bold bg-green-50 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full inline-block">
                     Save $40+
                   </div>
                 </div>
@@ -308,11 +308,11 @@ export function DashboardClient({
 
         {/* Individual Forms */}
         <section>
-          <div className="mb-6">
-            <h2 className="text-2xl font-bold text-slate-900 mb-2">
+          <div className="mb-4 sm:mb-6">
+            <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-1 sm:mb-2">
               Individual Forms
             </h2>
-            <p className="text-slate-600">
+            <p className="text-sm sm:text-base text-slate-600">
               Or start with a single form application
             </p>
           </div>
@@ -321,25 +321,32 @@ export function DashboardClient({
           <Tabs
             value={selectedCategory}
             onValueChange={setSelectedCategory}
-            className="mb-6"
+            className="mb-4 sm:mb-6"
           >
-            <TabsList className="w-full justify-start flex-wrap h-auto gap-2 p-2 bg-white border border-slate-200 shadow-sm">
-              {categories.map((category) => (
-                <TabsTrigger
-                  key={category}
-                  value={category}
-                  className="data-[state=active]:bg-[rgb(0,102,204)] data-[state=active]:text-white font-medium"
-                >
-                  {categoryLabels[category] || category}
-                  <Badge variant="secondary" className="ml-2 bg-slate-100 text-slate-700">
-                    {getCategoryCount(category)}
-                  </Badge>
-                </TabsTrigger>
-              ))}
-            </TabsList>
+            <div className="relative">
+              {/* Scrollable container for mobile */}
+              <div className="overflow-x-auto scrollbar-hide -mx-3 px-3 sm:mx-0 sm:px-0">
+                <TabsList className="inline-flex w-auto min-w-full sm:w-full justify-start h-auto gap-2 sm:gap-3 p-2 sm:p-2.5 bg-white border border-slate-200 shadow-sm">
+                  {categories.map((category) => (
+                    <TabsTrigger
+                      key={category}
+                      value={category}
+                      className="data-[state=active]:bg-[rgb(0,102,204)] data-[state=active]:text-white font-medium text-xs sm:text-sm px-4 sm:px-6 py-2 sm:py-2.5 whitespace-nowrap flex-shrink-0 rounded-md group"
+                    >
+                      <span className="flex items-center gap-2 sm:gap-3">
+                        <span>{categoryLabels[category] || category}</span>
+                        <span className="inline-flex items-center justify-center min-w-[24px] px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold bg-slate-200 text-slate-700 group-data-[state=active]:bg-white/20 group-data-[state=active]:text-white group-data-[state=active]:border group-data-[state=active]:border-white/30 flex-shrink-0">
+                          {getCategoryCount(category)}
+                        </span>
+                      </span>
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </div>
+            </div>
           </Tabs>
 
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {filteredForms.map((form) => (
               <div
                 key={form.id}
@@ -352,8 +359,8 @@ export function DashboardClient({
           </div>
 
           {filteredForms.length === 0 && (
-            <Card className="p-12 text-center bg-white border-2 border-slate-200">
-              <p className="text-slate-500 text-lg">
+            <Card className="p-8 sm:p-12 text-center bg-white border-2 border-slate-200">
+              <p className="text-slate-500 text-base sm:text-lg">
                 No forms found in this category
               </p>
             </Card>

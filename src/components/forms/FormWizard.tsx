@@ -152,33 +152,33 @@ export default function FormWizard({
     }
 
     return (
-        <div className="max-w-3xl mx-auto py-8 px-4">
+        <div className="max-w-3xl mx-auto py-4 sm:py-6 md:py-8 px-3 sm:px-4">
             <Card>
                 <CardHeader>
-                    <div className="space-y-4">
+                    <div className="space-y-3 sm:space-y-4">
                         <div>
-                            <h1 className="text-3xl font-bold">Prepare {formType}</h1>
-                            <p className="text-gray-600 mt-2">
+                            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">Prepare {formType}</h1>
+                            <p className="text-sm sm:text-base text-gray-600 mt-1 sm:mt-2">
                                 Step {currentStepIndex + 1} of {steps.length}
                             </p>
                         </div>
                         <div className="space-y-2">
-                            <div className="flex justify-between text-sm text-gray-600">
-                                <span>{t(currentStep.title)}</span>
-                                <span>{Math.round(progress)}%</span>
+                            <div className="flex justify-between text-xs sm:text-sm text-gray-600">
+                                <span className="truncate pr-2">{t(currentStep.title)}</span>
+                                <span className="flex-shrink-0">{Math.round(progress)}%</span>
                             </div>
                             <Progress value={progress} className="h-2" />
                         </div>
                         {isSaving && (
-                            <div className="flex items-center gap-2 text-sm text-gray-500">
-                                <Save className="w-4 h-4 animate-pulse" />
+                            <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-500">
+                                <Save className="w-3 h-3 sm:w-4 sm:h-4 animate-pulse" />
                                 <span>Saving...</span>
                             </div>
                         )}
                     </div>
                 </CardHeader>
 
-                <CardContent className="pt-6">
+                <CardContent className="pt-4 sm:pt-6">
                     <FormStep
                         step={currentStep}
                         values={answers}
@@ -187,26 +187,27 @@ export default function FormWizard({
                     />
                 </CardContent>
 
-                <CardFooter className="flex justify-between pt-6">
+                <CardFooter className="flex justify-between pt-4 sm:pt-6 gap-2 sm:gap-0">
                     <Button
                         variant="outline"
                         onClick={handleBack}
                         disabled={currentStepIndex === 0}
+                        className="text-sm sm:text-base px-3 sm:px-4"
                     >
-                        <ChevronLeft className="w-4 h-4 mr-2" />
+                        <ChevronLeft className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
                         Back
                     </Button>
 
-                    <Button onClick={handleNext}>
+                    <Button onClick={handleNext} className="text-sm sm:text-base px-3 sm:px-4">
                         {currentStepIndex === steps.length - 1 ? 'Review Answers' : 'Next'}
                         {currentStepIndex < steps.length - 1 && (
-                            <ChevronRight className="w-4 h-4 ml-2" />
+                            <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 ml-1 sm:ml-2" />
                         )}
                     </Button>
                 </CardFooter>
             </Card>
 
-            <div className="mt-6 text-center text-sm text-gray-500">
+            <div className="mt-4 sm:mt-6 text-center text-xs sm:text-sm text-gray-500 px-4">
                 <p>Your answers are automatically saved as you type.</p>
                 <p className="mt-1">Need help? Click the chat button in the bottom right corner.</p>
             </div>

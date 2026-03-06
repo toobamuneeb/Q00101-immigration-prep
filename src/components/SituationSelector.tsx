@@ -68,18 +68,18 @@ const situations: Situation[] = [
 
 export function SituationSelector() {
   return (
-    <div className="w-full max-w-6xl mx-auto space-y-6">
+    <div className="w-full max-w-6xl mx-auto space-y-4 sm:space-y-6">
       {/* Disclaimer */}
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-500 rounded-lg px-6 py-4 shadow-sm">
-        <div className="flex gap-3">
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-500 rounded-lg px-4 sm:px-6 py-3 sm:py-4 shadow-sm">
+        <div className="flex gap-2 sm:gap-3">
           <div className="flex-shrink-0">
-            <svg className="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+            <svg className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
             </svg>
           </div>
           <div>
-            <p className="text-sm font-semibold text-blue-900 mb-1">Note:</p>
-            <p className="text-sm text-blue-800 leading-relaxed">
+            <p className="text-xs sm:text-sm font-semibold text-blue-900 mb-1">Note:</p>
+            <p className="text-xs sm:text-sm text-blue-800 leading-relaxed">
               Select your situation for navigation only. We do not assess eligibility. Please consult with an immigration attorney or USCIS to determine your eligibility for any immigration benefit.
             </p>
           </div>
@@ -87,7 +87,7 @@ export function SituationSelector() {
       </div>
 
       {/* Situation Cards Grid */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         {situations.map((situation) => (
           <Link key={situation.id} href={situation.href}>
             <Card
@@ -97,26 +97,26 @@ export function SituationSelector() {
                 'hover:border-[rgb(0,102,204)]'
               )}
             >
-              <CardHeader className="pb-4">
+              <CardHeader className="pb-3 sm:pb-4">
                 <div
                   className={cn(
-                    'h-14 w-14 rounded-xl flex items-center justify-center mb-4 border-2 transition-colors',
+                    'h-12 w-12 sm:h-14 sm:w-14 rounded-xl flex items-center justify-center mb-3 sm:mb-4 border-2 transition-colors',
                     situation.color
                   )}
                 >
                   {situation.icon}
                 </div>
-                <CardTitle className="text-lg leading-tight text-slate-900 font-bold">
+                <CardTitle className="text-base sm:text-lg leading-tight text-slate-900 font-bold">
                   {situation.title}
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <CardDescription className="mb-4 text-slate-600 leading-relaxed">
+                <CardDescription className="mb-3 sm:mb-4 text-sm sm:text-base text-slate-600 leading-relaxed">
                   {situation.description}
                 </CardDescription>
-                <div className="flex items-center text-sm font-semibold text-[rgb(0,102,204)] group-hover:gap-3 transition-all">
+                <div className="flex items-center text-xs sm:text-sm font-semibold text-[rgb(0,102,204)] group-hover:gap-3 transition-all">
                   Get started
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="ml-2 h-3 w-3 sm:h-4 sm:w-4 group-hover:translate-x-1 transition-transform" />
                 </div>
               </CardContent>
             </Card>

@@ -105,31 +105,31 @@ export default function ChatWindow({ onClose }: ChatWindowProps) {
   return (
     <div className="flex flex-col h-full bg-white overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b bg-blue-600 text-white">
+      <div className="flex items-center justify-between p-3 sm:p-4 border-b bg-blue-600 text-white">
         <div>
-          <h3 className="font-semibold">AI Assistant</h3>
-          <p className="text-xs text-blue-100">General information only</p>
+          <h3 className="font-semibold text-sm sm:text-base">AI Assistant</h3>
+          <p className="text-[10px] sm:text-xs text-blue-100">General information only</p>
         </div>
         <Button
           variant="ghost"
           size="icon"
           onClick={onClose}
-          className="text-white hover:bg-blue-700"
+          className="text-white hover:bg-blue-700 h-8 w-8 sm:h-10 sm:w-10"
         >
           <span className="sr-only">Close</span>×
         </Button>
       </div>
 
       {/* Messages */}
-      <ScrollArea className="flex-1 min-h-0 p-4">
-        <div className="space-y-4">
+      <ScrollArea className="flex-1 min-h-0 p-3 sm:p-4">
+        <div className="space-y-3 sm:space-y-4">
           {messages.map((message) => (
             <ChatMessage key={message.id} message={message} />
           ))}
           {isLoading && (
             <div className="flex items-center gap-2 text-gray-500">
-              <Loader2 className="w-4 h-4 animate-spin" />
-              <span className="text-sm">Thinking...</span>
+              <Loader2 className="w-3 h-3 sm:w-4 sm:h-4 animate-spin" />
+              <span className="text-xs sm:text-sm">Thinking...</span>
             </div>
           )}
           <div ref={endRef} />
@@ -137,7 +137,7 @@ export default function ChatWindow({ onClose }: ChatWindowProps) {
       </ScrollArea>
 
       {/* Input */}
-      <div className="p-4 border-t">
+      <div className="p-3 sm:p-4 border-t">
         <div className="flex gap-2">
           <Input
             value={input}
@@ -145,13 +145,13 @@ export default function ChatWindow({ onClose }: ChatWindowProps) {
             onKeyDown={handleKeyDown}
             placeholder="Type your question..."
             disabled={isLoading}
-            className="flex-1"
+            className="flex-1 text-sm sm:text-base"
           />
-          <Button onClick={sendMessage} disabled={isLoading || !input.trim()}>
-            <Send className="w-4 h-4" />
+          <Button onClick={sendMessage} disabled={isLoading || !input.trim()} size="icon" className="h-9 w-9 sm:h-10 sm:w-10">
+            <Send className="w-3 h-3 sm:w-4 sm:h-4" />
           </Button>
         </div>
-        <p className="text-xs text-gray-400 mt-2 text-center">
+        <p className="text-[10px] sm:text-xs text-gray-400 mt-2 text-center">
           General information only, not legal advice
         </p>
       </div>

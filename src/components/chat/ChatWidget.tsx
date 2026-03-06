@@ -10,23 +10,23 @@ export default function ChatWidget() {
 
     return (
         <>
-            {/* Chat Window */}
+            {/* Chat Window - Responsive */}
             {isOpen && (
-                <div className="fixed bottom-20 right-4 z-50 w-96 h-[500px] shadow-2xl rounded-lg overflow-hidden">
+                <div className="fixed inset-x-3 bottom-16 sm:bottom-20 sm:right-4 sm:left-auto z-50 sm:w-96 h-[500px] max-h-[calc(100vh-80px)] shadow-2xl rounded-lg overflow-hidden">
                     <ChatWindow onClose={() => setIsOpen(false)} />
                 </div>
             )}
 
-            {/* Toggle Button */}
+            {/* Toggle Button - Responsive */}
             <Button
                 onClick={() => setIsOpen(!isOpen)}
-                className="fixed bottom-4 right-4 z-50 w-14 h-14 rounded-full shadow-lg"
+                className="fixed bottom-3 right-3 sm:bottom-4 sm:right-4 z-50 w-12 h-12 sm:w-14 sm:h-14 rounded-full shadow-lg"
                 size="icon"
             >
                 {isOpen ? (
-                    <X className="w-6 h-6" />
+                    <X className="w-5 h-5 sm:w-6 sm:h-6" />
                 ) : (
-                    <MessageCircle className="w-6 h-6" />
+                    <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6" />
                 )}
             </Button>
         </>

@@ -39,21 +39,21 @@ export function LanguageSwitcher() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="gap-2">
-          <Globe className="h-4 w-4" />
-          <span className="font-medium">{locale === 'en' ? 'EN' : 'ES'}</span>
+        <Button variant="ghost" size="sm" className="gap-0.5 sm:gap-1 lg:gap-2 px-1.5 sm:px-2 lg:px-3 h-8 sm:h-9 lg:h-10 flex-shrink-0">
+          <Globe className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+          <span className="font-medium text-[10px] sm:text-xs lg:text-sm">{locale === 'en' ? 'EN' : 'ES'}</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="w-40 sm:w-48">
         <DropdownMenuItem
           onClick={() => switchLocale('en')}
-          className={locale === 'en' ? 'bg-accent' : ''}
+          className={`text-xs sm:text-sm ${locale === 'en' ? 'bg-accent' : ''}`}
         >
           <span className="mr-2">🇺🇸</span> English
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => switchLocale('es')}
-          className={locale === 'es' ? 'bg-accent' : ''}
+          className={`text-xs sm:text-sm ${locale === 'es' ? 'bg-accent' : ''}`}
         >
           <span className="mr-2">🇪🇸</span> Español
         </DropdownMenuItem>

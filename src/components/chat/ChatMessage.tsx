@@ -24,13 +24,13 @@ export default function ChatMessage({ message }: ChatMessageProps) {
                 line = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
                 // Bullet points
                 if (line.startsWith('• ') || line.startsWith('- ')) {
-                    return `<li class="ml-4">${line.substring(2)}</li>`;
+                    return `<li class="ml-3 sm:ml-4 text-xs sm:text-sm">${line.substring(2)}</li>`;
                 }
                 // Italic disclaimer
                 if (line.startsWith('*') && line.endsWith('*')) {
-                    return `<p class="text-xs text-gray-500 italic mt-2">${line.slice(1, -1)}</p>`;
+                    return `<p class="text-[10px] sm:text-xs text-gray-500 italic mt-2">${line.slice(1, -1)}</p>`;
                 }
-                return `<p>${line}</p>`;
+                return `<p class="text-xs sm:text-sm">${line}</p>`;
             })
             .join('');
     };
@@ -44,14 +44,14 @@ export default function ChatMessage({ message }: ChatMessageProps) {
         >
             <div
                 className={cn(
-                    'max-w-[85%] rounded-lg px-4 py-2',
+                    'max-w-[90%] sm:max-w-[85%] rounded-lg px-3 py-2 sm:px-4 sm:py-2',
                     isUser
                         ? 'bg-blue-600 text-white'
                         : 'bg-gray-100 text-gray-900'
                 )}
             >
                 <div
-                    className="text-sm prose prose-sm max-w-none"
+                    className="prose prose-sm max-w-none"
                     dangerouslySetInnerHTML={{ __html: formatContent(message.content) }}
                 />
             </div>

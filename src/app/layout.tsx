@@ -19,6 +19,12 @@ export const metadata: Metadata = {
   title: "ImmigrationPrep - Prepare USCIS Forms Simply",
   description:
     "Prepare USCIS immigration forms yourself with guided assistance. No lawyer needed. Save thousands.",
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 5,
+    userScalable: true,
+  },
 };
 
 export default async function RootLayout({

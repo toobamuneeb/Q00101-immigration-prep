@@ -78,14 +78,14 @@ export function AuthButton() {
 
   if (!user) {
     return (
-      <div className="flex items-center gap-3">
-        <Link href="/auth/login">
-          <Button variant="ghost" className="font-medium text-slate-700 hover:text-[rgb(0,102,204)] hover:bg-blue-50">
+      <div className="flex items-center gap-0.5 sm:gap-1 lg:gap-2">
+        <Link href="/auth/login" className="flex-shrink-0">
+          <Button variant="ghost" className="font-medium text-slate-700 hover:text-[rgb(0,102,204)] hover:bg-blue-50 text-[10px] sm:text-xs lg:text-sm px-1.5 sm:px-2 lg:px-3 xl:px-4 h-8 sm:h-9 lg:h-10 whitespace-nowrap">
             Log in
           </Button>
         </Link>
-        <Link href="/auth/signup">
-          <Button className="bg-[rgb(0,102,204)] hover:bg-[rgb(0,76,153)] text-white font-semibold shadow-md hover:shadow-lg transition-all">
+        <Link href="/auth/signup" className="flex-shrink-0">
+          <Button className="bg-[rgb(0,102,204)] hover:bg-[rgb(0,76,153)] text-white font-semibold shadow-md hover:shadow-lg transition-all text-[10px] sm:text-xs lg:text-sm px-2 sm:px-3 lg:px-4 h-8 sm:h-9 lg:h-10 whitespace-nowrap">
             Sign Up
           </Button>
         </Link>
@@ -96,36 +96,36 @@ export function AuthButton() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="flex items-center gap-2 border-2 border-slate-300 hover:border-[rgb(0,102,204)] hover:bg-blue-50 font-medium">
-          <UserIcon className="h-4 w-4" />
-          <span className="max-w-[150px] truncate">{user.email}</span>
+        <Button variant="outline" className="flex items-center gap-0.5 sm:gap-1 lg:gap-2 border-2 border-slate-300 hover:border-[rgb(0,102,204)] hover:bg-blue-50 font-medium text-[10px] sm:text-xs lg:text-sm px-1.5 sm:px-2 lg:px-3 h-8 sm:h-9 lg:h-10 max-w-[120px] sm:max-w-[140px] lg:max-w-[180px]">
+          <UserIcon className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+          <span className="truncate">{user.email}</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-56 border-2 border-slate-200 shadow-xl">
-        <DropdownMenuLabel className="font-semibold text-slate-900">My Account</DropdownMenuLabel>
+      <DropdownMenuContent align="end" className="w-48 sm:w-56 border-2 border-slate-200 shadow-xl">
+        <DropdownMenuLabel className="font-semibold text-slate-900 text-xs sm:text-sm">My Account</DropdownMenuLabel>
         <DropdownMenuSeparator className="bg-slate-200" />
         <DropdownMenuItem asChild>
-          <Link href="/dashboard" className="cursor-pointer hover:bg-blue-50 focus:bg-blue-50">
-            <UserIcon className="mr-2 h-4 w-4 text-[rgb(0,102,204)]" />
+          <Link href="/dashboard" className="cursor-pointer hover:bg-blue-50 focus:bg-blue-50 text-xs sm:text-sm">
+            <UserIcon className="mr-2 h-3 w-3 sm:h-4 sm:w-4 text-[rgb(0,102,204)]" />
             <span className="font-medium">Dashboard</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href="/dashboard/my-purchases" className="cursor-pointer hover:bg-blue-50 focus:bg-blue-50">
-            <CreditCardIcon className="mr-2 h-4 w-4 text-[rgb(0,102,204)]" />
+          <Link href="/dashboard/my-purchases" className="cursor-pointer hover:bg-blue-50 focus:bg-blue-50 text-xs sm:text-sm">
+            <CreditCardIcon className="mr-2 h-3 w-3 sm:h-4 sm:w-4 text-[rgb(0,102,204)]" />
             <span className="font-medium">My Purchases</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator className="bg-slate-200" />
         <DropdownMenuItem 
           onClick={handleLogout} 
-          className="cursor-pointer hover:bg-red-50 focus:bg-red-50 text-red-600"
+          className="cursor-pointer hover:bg-red-50 focus:bg-red-50 text-red-600 text-xs sm:text-sm"
           disabled={isPending}
         >
           {isPending ? (
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            <Loader2 className="mr-2 h-3 w-3 sm:h-4 sm:w-4 animate-spin" />
           ) : (
-            <LogOutIcon className="mr-2 h-4 w-4" />
+            <LogOutIcon className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
           )}
           <span className="font-medium">{isPending ? 'Signing out...' : 'Sign Out'}</span>
         </DropdownMenuItem>
